@@ -1,0 +1,12 @@
+{
+	"account_tenure": {
+		"sql" : "account_tenure"
+	},
+	"logins_per_month": {
+		"event_id":  18,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "measure_over_period"
+	}
+}
