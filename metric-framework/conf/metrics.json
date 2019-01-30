@@ -73,13 +73,6 @@
 		"sql" : "measure_over_period"
 	},
 
-	"num_e5_4wk": {
-		"event_id":  5,
-		"fun" : "count(*)",
-		"measwin" : 4,
-		"quotwin" : 4,
-		"sql" : "measure_over_period"
-	},
 	 "num_e36_4wk": {
 		"event_id":  36,
 		"fun" : "count(*)",
