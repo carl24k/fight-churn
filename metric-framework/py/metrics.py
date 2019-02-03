@@ -5,15 +5,21 @@ bind_char='%'
 schema = 'k'
 from_date ='2017-01-01'
 to_date ='2017-12-31'
+one_metric='avg_photos_loaded'
+# one_metric=None
 
 with open('../conf/metrics.json', 'r') as myfile:
 	metric_dict=json.loads(myfile.read())
 
 db = Postgres("postgres://postgres:churn@localhost/postgres")
-db.run('truncate table %s.metric' % schema)
+if one_metric is None:
+	print('Truncating...')
+	db.run('truncate table %s.metric' % schema)
 
 
 for idx, metric in enumerate(metric_dict.keys()):
+	if one_metric is not None and metric != one_metric:
+		continue
 	print('Inserting metric %s' % metric)
 	with open('../sql/%s.sql' % metric_dict[metric]['sql'], 'r') as myfile:
 		sql=myfile.read().replace('\n', ' ')

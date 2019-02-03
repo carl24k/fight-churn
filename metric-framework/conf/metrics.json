@@ -73,6 +73,13 @@
 		"sql" : "measure_over_period"
 	},
 
+	"num_e5_4wk": {
+		"event_id":  5,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "measure_over_period"
+	},
 	 "num_e36_4wk": {
 		"event_id":  36,
 		"fun" : "count(*)",
@@ -111,6 +118,13 @@
 	 "num_e12_4wk": {
 		"event_id":  12,
 		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "measure_over_period"
+	},
+	"avg_photos_loaded": {
+		"event_id":  2,
+		"fun" : "avg(klips_owned)",
 		"measwin" : 4,
 		"quotwin" : 4,
 		"sql" : "measure_over_period"
