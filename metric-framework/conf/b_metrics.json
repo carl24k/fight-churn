@@ -1,0 +1,446 @@
+{
+"Tenure": {
+    "sql" : "account_tenure"
+},
+"CustomerAdded_PerMonth": {
+"event_id":  4,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"TransactionAdded_PerMonth": {
+"event_id":  10,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"AskPresented_PerMonth": {
+"event_id":  1,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ThankYouEmailSent_PerMonth": {
+"event_id":  14,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"AffinityUpdated_PerMonth": {
+"event_id":  9,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"FollowUpEmailSent_PerMonth": {
+"event_id":  3,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ReviewAskDecision_PerMonth": {
+"event_id":  15,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"CustomerPromoter_PerMonth": {
+"event_id":  2,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"AskFulfilled_PerMonth": {
+"event_id":  6,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewCustomerList_PerMonth": {
+"event_id":  83,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"AskActedOn_PerMonth": {
+"event_id":  5,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewMessages_PerMonth": {
+"event_id":  85,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"NotifiedOfMessage_PerMonth": {
+"event_id":  106,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ReportGenerated_PerMonth": {
+"event_id":  17,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ReviewNew_PerMonth": {
+"event_id":  12,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"AddedContact_PerMonth": {
+"event_id":  105,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ReviewUpdated_PerMonth": {
+"event_id":  7,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"DirectMessageSent_PerMonth": {
+"event_id":  112,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ReportSent_PerMonth": {
+"event_id":  18,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewAddCustomer_PerMonth": {
+"event_id":  81,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"DirectMessageReceived_PerMonth": {
+"event_id":  111,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"SentMessage_PerMonth": {
+"event_id":  94,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewSigninPage_PerMonth": {
+"event_id":  108,
+"fun" : "count(*)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewReviews_PerMonth": {
+"event_id":  87,
+"fun" : "count(*)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewCustomerInfo_PerMonth": {
+"event_id":  82,
+"fun" : "count(*)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"LeadAdded_PerMonth": {
+"event_id":  102,
+"fun" : "count(*)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"CustomerDetractor_PerMonth": {
+"event_id":  13,
+"fun" : "count(*)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewStartupErrorPage_PerMonth": {
+"event_id":  110,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewAddFromFile_PerMonth": {
+"event_id":  96,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewManageTeam_PerMonth": {
+"event_id":  84,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewSwitchLocation_PerMonth": {
+"event_id":  92,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewTeamScorecard_PerMonth": {
+"event_id":  89,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewSettingsMessaging_PerMonth": {
+"event_id":  88,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ClickedMessagesButton_PerMonth": {
+"event_id":  97,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewTeamChat_PerMonth": {
+"event_id":  116,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewPrivateFeedback_PerMonth": {
+"event_id":  86,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ToggledSendThankYou_PerMonth": {
+"event_id":  104,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewProfile_PerMonth": {
+"event_id":  90,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"CallReceived_PerMonth": {
+"event_id":  114,
+"fun" : "count(*)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"ViewSigninPage_4WeeksTrailing": {
+"event_id":  108,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewReviews_4WeeksTrailing": {
+"event_id":  87,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewCustomerInfo_4WeeksTrailing": {
+"event_id":  82,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"LeadAdded_4WeeksTrailing": {
+"event_id":  102,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"CustomerDetractor_4WeeksTrailing": {
+"event_id":  13,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewStartupErrorPage_4WeeksTrailing": {
+"event_id":  110,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewAddFromFile_4WeeksTrailing": {
+"event_id":  96,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewManageTeam_4WeeksTrailing": {
+"event_id":  84,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewSwitchLocation_4WeeksTrailing": {
+"event_id":  92,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewTeamScorecard_4WeeksTrailing": {
+"event_id":  89,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewSettingsMessaging_4WeeksTrailing": {
+"event_id":  88,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ClickedMessagesButton_4WeeksTrailing": {
+"event_id":  97,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewTeamChat_4WeeksTrailing": {
+"event_id":  116,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewPrivateFeedback_4WeeksTrailing": {
+"event_id":  86,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ToggledSendThankYou_4WeeksTrailing": {
+"event_id":  104,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"ViewProfile_4WeeksTrailing": {
+"event_id":  90,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+"CallReceived_4WeeksTrailing": {
+"event_id":  114,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"sql" : "measure_over_period"
+},
+
+"CustomerPromoter_QAExMissing": {
+"event_id":  1001,
+"fun" : "count(*)",
+"measwin" : 4,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+}
+}
+

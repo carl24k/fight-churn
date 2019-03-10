@@ -19,10 +19,13 @@ earlier_starts AS
 
 )
 
-insert into metric (account_id,metric_time,metric_type_id,metric_type_name,metric_value)
+insert into metric (account_id,metric_time,metric_name_id,metric_value)
 
 
-SELECT account_id, metric_date,%metric_type_id, 'account_tenure', extract(days from metric_date-min(start_date))
+SELECT account_id, metric_date,%metric_name_id, extract(days from metric_date-min(start_date))
 FROM earlier_starts
 group by account_id, metric_date
-order by account_id, metric_date
+order by account_id, metric_date;
+
+
+insert into metric_name (metric_name_id,metric_name) values (0,'account_tenure');

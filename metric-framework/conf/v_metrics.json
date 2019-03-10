@@ -1,0 +1,93 @@
+{
+"Tenure": {
+    "sql" : "account_tenure"
+},
+  "Cost_Local_PerMonth": {
+"event_id":  40,
+"fun" : "sum(quantity)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Sonar_page_view_PerMonth": {
+"event_id":  50,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Cost_LD_Canada_PerMonth": {
+"event_id":  38,
+"fun" : "sum(quantity)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Cost_Toll_Free_PerMonth": {
+"event_id":  41,
+"fun" : "sum(quantity)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Cost_LD_US_PerMonth": {
+"event_id":  39,
+"fun" : "sum(quantity)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Sonar_login_PerMonth": {
+"event_id":  44,
+"fun" : "count(*)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Cost_International_PerMonth": {
+"event_id":  37,
+"fun" : "sum(quantity)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"Sonar_call_center_report_PerMonth": {
+"event_id":  49,
+"fun" : "count(*)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"conference_phone_number_PerMonth": {
+"event_id":  47,
+"fun" : "sum(duration)",
+"measwin" : 26,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+"conference_call_PerMonth": {
+"event_id":  46,
+"fun" : "sum(duration)",
+"measwin" : 52,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+},
+  "Cost_Local_PerMonth_QAExtreme": {
+"event_id":  1001,
+"fun" : "sum(quantity)",
+"measwin" : 12,
+"quotwin" : 4,
+"minten" : 14,
+"sql" : "measure_over_period_tenscale"
+}
+}
