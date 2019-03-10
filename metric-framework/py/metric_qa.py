@@ -32,7 +32,7 @@ save_path = '../../../fight-churn-output/' + schema + '/'
 engine = sqlalchemy.create_engine("postgres://postgres:churn@localhost/postgres")
 conn = engine.connect()
 
-with open('../sql/metric_qa.sql', 'r') as myfile:
+with open('../sql/qa_metric.sql', 'r') as myfile:
 	sql = myfile.read().replace('\n', ' ')
 
 for idx, metric in enumerate(metric_dict.keys()):

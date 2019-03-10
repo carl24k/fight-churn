@@ -42,7 +42,7 @@ conn = engine.connect()
 
 events = pandas.read_sql_query("select * from %s.event_type" % schema, conn)
 
-with open('../sql/event_qa.sql', 'r') as myfile:
+with open('../sql/qa_event.sql', 'r') as myfile:
 	sql = myfile.read().replace('\n', ' ')
 
 for idx, event in events.iterrows():
