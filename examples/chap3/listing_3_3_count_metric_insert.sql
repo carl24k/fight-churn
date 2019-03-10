@@ -2,7 +2,7 @@ with date_vals AS (
  	select i::timestamp as metric_date 
 from generate_series('2017-01-29', '2017-04-16', '7 day'::interval) i
 )
-insert into metric (account_id,metric_time,metric_type_id,metric_type_name,metric_value)
+insert into metric (account_id,metric_time,metric_name_id,metric_value)
 select account_id, metric_date,1,  count(*)
 from event e inner join date_vals d
 on e.event_time < metric_date 
