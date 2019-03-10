@@ -1,13 +1,13 @@
 with RECURSIVE active_period_params as    
 (
-	select 14 as allowed_gap,    
-	       'FRYR-MM-DD'::date as observe_end,    
-	       '2017-01-01'::date as observe_start    
+	select INTERVAL 'GAP_INTERVAL' as allowed_gap,
+	       'TOYR-MM-DD'::date as observe_end,
+	       'FRYR-MM-DD'::date as observe_start
 ),
 end_dates as    
 (
 	select distinct account_id, start_date, end_date, 
-(end_date + allowed_gap)::date as resignup_max        
+(end_date +  allowed_gap)::date as resignup_max
 	from subscription inner join active_period_params 
 	on end_date between observe_start and observe_end    
 ), 
@@ -33,7 +33,7 @@ churns as
 	cross join active_period_params
 	inner join churns e on s.account_id=e.account_id
 		and s.start_date < e.start_date
-		and s.end_date >= (e.start_date-allowed_gap)
+		and s.end_date >= (e.start_date- allowed_gap)::DATE
 ) 
 insert into active_period (account_id, start_date, churn_date)    
 select account_id, min(start_date) as start_date, churn_date  

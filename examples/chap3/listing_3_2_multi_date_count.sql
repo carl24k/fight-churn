@@ -1,6 +1,6 @@
 with date_vals AS (
   	select i::timestamp as metric_date 
-from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i 
+	from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i 
 )
 select account_id, metric_date, count(*) as n_login 
 from event e inner join date_vals d

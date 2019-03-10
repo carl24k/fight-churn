@@ -2,7 +2,7 @@ with observation_params as
 (
     select                 7  as metric_period,    
     'FRYR-MM-DD'::timestamp as obs_start,    
-    '2017-12-31'::timestamp as obs_end    
+    'TOYR-MM-DD'::timestamp as obs_end    
 )
 select m.account_id, o.observation_date, is_churn,    
 sum(case when metric_type_id=0 then metric_value else 0 end) as account_tenure,    

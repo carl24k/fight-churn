@@ -1,6 +1,6 @@
 with RECURSIVE active_period_params as    
 (
-    select 7  as allowed_gap,     
+    select interval 'GAP_INTERVAL'  as allowed_gap,
     'TOYR-MM-DD'::date as calc_date     
 ),
 active as  
@@ -18,7 +18,7 @@ on start_date <= calc_date
 	cross join active_period_params 
 	inner join active e on s.account_id=e.account_id  
 		and s.start_date < e.start_date  
-		and s.end_date >= (e.start_date-allowed_gap)  
+		and s.end_date >= (e.start_date-allowed_gap)::date  
 
 ) 
 insert into active_period (account_id, start_date, churn_date)     
