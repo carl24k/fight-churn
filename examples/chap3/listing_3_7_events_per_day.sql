@@ -1,7 +1,7 @@
 with
 date_range as (    
 	select i::timestamp as calc_date 
-from generate_series('2017-01-01', '2017-12-31', '1 day'::interval) i
+from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '1 day'::interval) i
 )
 select event_time::date as event_date,   
 	count(*) as n_event,    

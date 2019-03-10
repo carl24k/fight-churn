@@ -1,5 +1,5 @@
 with calc_date as (
-	select '2017-01-28'::timestamp  as the_date   
+	select 'TOYR-MM-DD'::timestamp  as the_date   
 ) 
 select account_id, count(*) as n_login
 from event e inner join calc_date d on

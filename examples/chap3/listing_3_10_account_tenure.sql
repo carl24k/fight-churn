@@ -1,5 +1,5 @@
 with RECURSIVE date_range as (   
-	select '2017-07-01'::date as calc_date    
+	select 'TOYR-MM-DD'::date as calc_date    
 ),  earlier_starts AS (
 	select account_id, min(start_date) as start_date    
 	from subscription inner join date_range  

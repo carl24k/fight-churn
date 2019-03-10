@@ -1,7 +1,7 @@
 with 
 date_range as (     
 	select i::timestamp as calc_date 
-from generate_series('2017-01-08', '2017-12-31', '7 day'::interval) i
+from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
 ), the_metric as (  
 	select * from metric
 	where metric_name_id=4

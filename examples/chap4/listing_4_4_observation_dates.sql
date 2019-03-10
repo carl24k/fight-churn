@@ -2,8 +2,8 @@ with RECURSIVE observation_params as
 (    
 	select interval '1 month' as obs_interval,    
 	       interval '1 week'  as lead_time,     
-	       '2017-01-01'::date as obs_start,     
-	       '2017-12-31'::date as obs_end        
+	       'FRYR-MM-DD'::date as obs_start,     
+	       'TOYR-MM-DD'::date as obs_end        
 ),observations as (    
 	select  account_id,     
 	    (start_date+obs_interval-lead_time)::date as obs_date,    

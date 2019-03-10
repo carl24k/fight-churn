@@ -1,7 +1,7 @@
 with observation_params as     
 (
     select                 7  as metric_period,    
-    '2017-01-01'::timestamp as obs_start,    
+    'FRYR-MM-DD'::timestamp as obs_start,    
     '2017-12-31'::timestamp as obs_end    
 )
 select m.account_id, o.observation_date, is_churn,    

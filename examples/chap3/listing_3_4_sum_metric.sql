@@ -1,6 +1,6 @@
 with date_vals AS (    
 	select i::timestamp as metric_date 
-	from generate_series('2017-01-08', '2017-12-31', '7q day'::interval) i
+	from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7q day'::interval) i
 )
 select account_id, metric_date::date, sum(duration) as local_call_duration    
 from event e inner join date_vals d    

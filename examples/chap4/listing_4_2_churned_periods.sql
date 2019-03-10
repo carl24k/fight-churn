@@ -1,7 +1,7 @@
 with RECURSIVE active_period_params as    
 (
 	select 14 as allowed_gap,    
-	       '2017-12-31'::date as observe_end,    
+	       'FRYR-MM-DD'::date as observe_end,    
 	       '2017-01-01'::date as observe_start    
 ),
 end_dates as    

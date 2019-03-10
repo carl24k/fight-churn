@@ -1,6 +1,6 @@
 with date_vals AS (    
      select i::timestamp as metric_date 
-     from generate_series('2017-12-31', '2017-12-31', '7 day'::interval) i
+     from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
 )
 select account_id, metric_date, 
 (28)::float/(84)::float * count(*) as n_login     

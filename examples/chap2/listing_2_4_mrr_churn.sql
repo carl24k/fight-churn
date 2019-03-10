@@ -1,6 +1,6 @@
 with 
 date_range as (    
-	select  '2017-01-01'::date as start_date, '2018-01-01'::date as end_date
+	select  'FRYR-MM-DD'::date as start_date, 'TOYR-MM-DD'::date as end_date
 ), 
 start_accounts as    
 (

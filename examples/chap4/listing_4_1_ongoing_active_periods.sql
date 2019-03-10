@@ -1,7 +1,7 @@
 with RECURSIVE active_period_params as    
 (
     select 7  as allowed_gap,     
-    '2017-12-31'::date as calc_date     
+    'TOYR-MM-DD'::date as calc_date     
 ),
 active as  
 (
