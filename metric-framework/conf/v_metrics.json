@@ -1,6 +1,6 @@
 {
 "Tenure": {
-    "sql" : "account_tenure"
+    "sql" : "metric_tenure"
 },
   "Cost_Local_PerMonth": {
 "event_id":  40,
@@ -8,7 +8,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Sonar_page_view_PerMonth": {
 "event_id":  50,
@@ -16,7 +16,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Cost_LD_Canada_PerMonth": {
 "event_id":  38,
@@ -24,7 +24,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Cost_Toll_Free_PerMonth": {
 "event_id":  41,
@@ -32,7 +32,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Cost_LD_US_PerMonth": {
 "event_id":  39,
@@ -40,7 +40,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Sonar_login_PerMonth": {
 "event_id":  44,
@@ -48,7 +48,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Cost_International_PerMonth": {
 "event_id":  37,
@@ -56,7 +56,7 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "Sonar_call_center_report_PerMonth": {
 "event_id":  49,
@@ -64,7 +64,7 @@
 "measwin" : 26,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "conference_phone_number_PerMonth": {
 "event_id":  47,
@@ -72,7 +72,7 @@
 "measwin" : 26,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
 "conference_call_PerMonth": {
 "event_id":  46,
@@ -80,7 +80,7 @@
 "measwin" : 52,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 },
   "Cost_Local_PerMonth_QAExtreme": {
 "event_id":  1001,
@@ -88,6 +88,6 @@
 "measwin" : 12,
 "quotwin" : 4,
 "minten" : 14,
-"sql" : "measure_over_period_tenscale"
+"sql" : "metric_over_period_tenscale"
 }
 }
