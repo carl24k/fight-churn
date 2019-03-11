@@ -1,7 +1,7 @@
 with RECURSIVE observation_params as    
 (    
-	select interval '1 month' as obs_interval,    
-	       interval '1 week'  as lead_time,     
+	select interval 'OBS_INTERVAL' as obs_interval,
+	       interval 'LEAD_TIME'  as lead_time,
 	       'FRYR-MM-DD'::date as obs_start,     
 	       'TOYR-MM-DD'::date as obs_end        
 ),observations as (    
