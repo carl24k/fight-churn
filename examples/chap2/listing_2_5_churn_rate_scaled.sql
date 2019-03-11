@@ -30,9 +30,13 @@ start_count as (
 churn_count as ( 
 	select 	count(churned_accounts.*) as n_churn from churned_accounts
 )
-select 
-	n_churn::float/n_start::float as churn_rate, 
-	1.0-n_churn::float/n_start::float as retention_rate, 
-	n_start, 
-	N_churn 
-from start_count, churn_count
+select
+	n_start,   	
+	n_churn, 	
+	n_churn::float/n_start::float as measured_churn,  
+	end_date-start_date as period_days, 
+1.0-power(1.0-n_churn::float/n_start::float,365.0/(end_date-start_date)::float)  
+as annual_churn,
+1.0-power(1.0-n_churn::float/n_start::float,(365.0/12.0)/(end_date-start_date)::float) 
+as monthly_churn
+from start_count, churn_count, date_range

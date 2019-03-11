@@ -37,4 +37,4 @@ select
 	1.0 - retain_mrr /start_mrr as net_mrr_churn_rate,    
 	start_mrr,    
 	retain_mrr
-from start_mrr, end_mrr, retain_mrr
+from start_mrr, retain_mrr

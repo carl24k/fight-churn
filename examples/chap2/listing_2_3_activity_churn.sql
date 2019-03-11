@@ -1,8 +1,8 @@
 with 
 date_range as (    
-	select  '2017-08-01'::TIMESTAMP as start_date,    
-		'2017-09-01'::TIMESTAMP as end_date,    
-		interval '1 months' as max_inactive
+	select  'FRYR-MM-DD'::TIMESTAMP as start_date,    
+		'TOYR-MM-DD'::TIMESTAMP as end_date,    
+		interval 'MAX_INACTIVE' as max_inactive
 ), 
 start_accounts as     
 (

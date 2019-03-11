@@ -48,5 +48,5 @@ select
 	(churn_mrr+downsell_mrr) /start_mrr as mrr_churn_rate,    
 	start_mrr,    
 	churn_mrr, 
-	downsell_mrr,
-from start_mrr, end_mrr, churn_mrr, downsell_mrr
+	downsell_mrr
+from start_mrr, churn_mrr, downsell_mrr

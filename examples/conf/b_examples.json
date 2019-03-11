@@ -1,4 +1,32 @@
 {
+	"chap2" : {
+		"listing_2_1_net_retention" : {
+			"FRYR-MM-DD": "2018-12-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"mode" : "one"
+		},
+		"listing_2_2_churn_rate" : {
+			"FRYR-MM-DD": "2018-12-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"mode" : "one"
+		},
+		"listing_2_3_activity_churn" : {
+			"FRYR-MM-DD": "2018-12-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"MAX_INACTIVE" : "1 month",
+			"mode" : "one"
+		},
+		"listing_2_4_mrr_churn" : {
+			"FRYR-MM-DD": "2018-12-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"mode" : "one"
+		},
+		"listing_2_5_churn_rate_scaled" : {
+			"FRYR-MM-DD": "2018-12-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"mode" : "one"
+		}
+	},
 	"chap4" : {
 		"listing_4_1_ongoing_active_periods": {
 			"TOYR-MM-DD": "2018-12-31",
