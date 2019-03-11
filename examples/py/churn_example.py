@@ -5,13 +5,13 @@ import pandas as pd
 one_example=None
 one_chapter=None
 
-schema = 'b'
+# schema = 'b'
 # schema = 'k'
-# schema = 'v'
+schema = 'v'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
 # one_example='listing_4_1_ongoing_active_periods'
-one_example='listing_2_5_churn_rate_scaled'
+# one_example='listing_2_5_churn_rate_scaled'
 
 one_chapter='chap2'
 
@@ -40,8 +40,10 @@ for chapter in param_dict.keys():
 	if one_chapter is not None and chapter != one_chapter:
 		continue
 
+	chap_params = param_dict[chapter]['params']
+
 	for idx, example in enumerate(param_dict[chapter].keys()):
-		if one_example is not None and example != one_example:
+		if example=='params' or (one_example is not None and example != one_example):
 			continue
 		print('%s %d Running example %s' % (chapter, idx,example))
 
@@ -50,18 +52,21 @@ for chapter in param_dict.keys():
 			sql = "set search_path = '%s'; " % schema;
 			sql=sql + myfile.read().replace('\n', ' ')
 
+			for p in chap_params.keys():
+				sql=sql.replace(p,chap_params[p])
 			param_keys = [p for p in param_dict[chapter][example].keys() if p not in ('listing','mode')]
 			for p in param_keys:
 				sql=sql.replace(p,str(param_dict[chapter][example][p]))
 			if flat_metric_bind in sql:
 				sql=sql.replace(flat_metric_bind,generate_flat_metric_sql(db))
 
-			if param_dict[chapter][example].get('mode', 'run') == 'run':
+			mode = param_dict[chapter][example]['mode'] if 'mode' in param_dict[chapter][example] else chap_params['mode']
+			if mode == 'run':
 				db.run(sql)
-			elif param_dict[chapter][example].get('mode', 'run') == 'one':
+			elif mode == 'one':
 				res = db.one(sql)
 				print(res)
-			elif param_dict[chapter][example].get('mode', 'run') == 'all':
+			elif mode == 'all':
 				res = db.all(sql)
 				df = pd.DataFrame(res)
 				print('Saving...')
