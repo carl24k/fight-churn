@@ -1,0 +1,25 @@
+{
+	"chap4" : {
+		"listing_4_1_ongoing_active_periods": {
+			"TOYR-MM-DD": "2018-12-31",
+			"GAP_INTERVAL": "7 day"
+		},
+		"listing_4_2_churned_periods": {
+			"FRYR-MM-DD": "2018-08-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"GAP_INTERVAL": "7 day"
+		},
+		"listing_4_4_observation_dates": {
+			"FRYR-MM-DD": "2018-08-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"OBS_INTERVAL": "1 month",
+			"LEAD_TIME": "21 day"
+		},
+		"listing_4_5_data_set_create_template": {
+			"FRYR-MM-DD": "2018-08-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"MET_INTERVAL": "7 day",
+			"mode" : "all"
+		}
+	}
+}
