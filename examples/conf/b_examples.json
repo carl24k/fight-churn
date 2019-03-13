@@ -17,6 +17,20 @@
 		"listing_2_5_churn_rate_scaled" : {
 		}
 	},
+	"chap3" : {
+		"params": {
+			"FRYR-MM-DD": "2018-12-01",
+			"TOYR-MM-DD": "2018-12-31",
+			"mode": "all",
+			"EVENT_NAME": "AskPresented"
+		},
+		"listing_3_1_event_count" : {
+		},
+		"listing_3_2_multi_date_count" : {
+		},
+		"listing_3_3_count_metric_insert" : {
+		}
+	},
 	"chap4" : {
 		"params" : {
 			"FRYR-MM-DD": "2018-01-01",
@@ -35,7 +49,7 @@
 		},
 		"listing_4_5_data_set_create_template": {
 			"MET_INTERVAL": "7 day",
-			"mode" : "all"
+			"mode" : "save"
 		}
 	}
 }

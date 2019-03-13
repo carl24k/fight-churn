@@ -5,18 +5,18 @@ import pandas as pd
 one_example=None
 one_chapter=None
 
-# schema = 'b'
-# schema = 'k'
-schema = 'v'
+schema = 'b'
+schema = 'k'
+# schema = 'v'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
 # one_example='listing_4_1_ongoing_active_periods'
-# one_example='listing_2_5_churn_rate_scaled'
+one_example='listing_3_4_sum_metric'
 
-one_chapter='chap2'
+one_chapter='chap3'
 
 
-
+print_num_rows=5
 flat_metric_bind = 'FLAT_METRIC_SELECT'
 flat_metric_template = ', sum(case when metric_name_id=%d then metric_value else 0 end) as %s'
 
@@ -66,8 +66,11 @@ for chapter in param_dict.keys():
 			elif mode == 'one':
 				res = db.one(sql)
 				print(res)
-			elif mode == 'all':
+			elif mode == 'all' or mode == 'save':
 				res = db.all(sql)
 				df = pd.DataFrame(res)
-				print('Saving...')
-				df.to_csv(save_path + example + ' .csv',index=False)
+				if mode=='save':
+					print('Saving...')
+					df.to_csv(save_path + example + ' .csv',index=False)
+				else:
+					print(df.head(print_num_rows))

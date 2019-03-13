@@ -17,6 +17,18 @@
 			"MAX_INACTIVE" : "1 month"
 		}
 	},
+	"chap3" : {
+		"params": {
+			"FRYR-MM-DD": "2017-12-01",
+			"TOYR-MM-DD": "2017-12-31",
+			"mode": "one",
+			"EVENT_NAME": "KlipSavedinEditor"
+		},
+		"listing_3_4_sum_metric" : {
+			"SUM_FIELD" : "time_spent",
+			"mode" : "all"
+		}
+	},
 	"chap4" : {
 		"params" : {
 			"FRYR-MM-DD": "2017-01-01",

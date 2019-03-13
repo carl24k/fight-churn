@@ -1,11 +1,12 @@
 with date_vals AS (    
 	select i::timestamp as metric_date 
-	from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7q day'::interval) i
+	from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
 )
-select account_id, metric_date::date, sum(duration) as local_call_duration    
+select account_id, metric_date::date, sum(SUM_FIELD) as sum_EVENT_NAME_SUM_FIELD
 from event e inner join date_vals d    
 	on e.event_time < metric_date 
 	and e.event_time >= metric_date - interval '28 day'
-where e.event_type_id=40   
+inner join event_type t on t.event_type_id=e.event_type_id
+where t.event_type_name='EVENT_NAME'
 group by account_id, metric_date
 order by account_id, metric_date;
