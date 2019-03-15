@@ -1,0 +1,27 @@
+{
+	"account_tenure": {
+	    "sql" : "metric_tenure"
+	},
+	"Scaled_Sum_PerMonth": {
+		"event_id":  1,
+		"fun" : "sum(event_field)",
+		"measwin" : 13,
+		"quotwin" : 4,
+		"minten" : 14,
+		"sql" : "metric_over_period_tenscale"
+	},
+	"Scaled_Count_PerMonth": {
+		"event_id":  2,
+		"fun" : "count(*)",
+		"measwin" : 13,
+		"quotwin" : 4,
+		"minten" : 14,
+		"sql" : "metric_over_period_tenscale"
+	},
+	"Unscaled_Avg_OverQuarter": {
+		"event_id":  3,
+		"fun" : "avg(event_field)",
+		"measwin" : 13,
+		"sql" : "metric_over_period"
+	}	
+}
