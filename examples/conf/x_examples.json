@@ -1,0 +1,79 @@
+{
+	"chap2" : {
+		"params" : {
+			"FRYR-MM-DD": "2019-01-01",
+			"TOYR-MM-DD": "2019-01-31",
+			"mode" : "one"
+		},
+		"listing_2_1_net_retention" : {
+		},
+		"listing_2_2_churn_rate" : {
+		},
+		"listing_2_4_mrr_churn" : {
+		},
+		"listing_2_5_churn_rate_scaled" : {
+		},
+		"listing_2_3_activity_churn" : {
+			"MAX_INACTIVE" : "1 month"
+		}
+	},
+	"chap3" : {
+		"params": {
+			"FRYR-MM-DD": "2019-01-01",
+			"TOYR-MM-DD": "2019-01-31",
+			"mode": "all",
+			"EVENT_NAME": "MyEvent",
+			"SUM_FIELD" : "duration"
+		},
+		"listing_3_1_event_count" : {
+		},
+		"listing_3_2_multi_date_count" : {
+		},
+		"listing_3_3_count_metric_insert" : {
+		},
+		"listing_3_4_sum_metric" : {
+		},
+		"listing_3_5_metric_stats_over_time" : {
+		},
+		"listing_3_6_metric_coverage" : {
+			"mode" : "save"
+		},
+		"listing_3_7_events_per_day" : {
+		},
+		"listing_3_8_events_per_account" : {
+			"mode" : "save"
+		},
+		"listing_3_9_scaled_events_per_month" : {
+			"OBS_INTERVAL" : "84 day"
+		},
+		"listing_3_10_account_tenure" : {
+		},
+		"listing_3_11_account_tenure_insert" : {
+		},
+		"listing_3_12_tenure_scaled_events_per_month" : {
+			"OBS_DAYS" : 84,
+			"MIN_TENURE" : 28
+		}
+	},
+	"chap4" : {
+		"params" : {
+			"FRYR-MM-DD": "2019-01-01",
+			"TOYR-MM-DD": "2019-12-31",
+			"mode" : "run"
+		},
+		"listing_4_1_ongoing_active_periods": {
+			"GAP_INTERVAL": "7 day"
+		},
+		"listing_4_2_churned_periods": {
+			"GAP_INTERVAL": "7 day"
+		},
+		"listing_4_4_observation_dates": {
+			"OBS_INTERVAL": "1 month",
+			"LEAD_TIME": "21 day"
+		},
+		"listing_4_5_data_set_create_template": {
+			"MET_INTERVAL": "7 day",
+			"mode" : "all"
+		}
+	}
+}
