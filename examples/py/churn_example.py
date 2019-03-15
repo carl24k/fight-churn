@@ -16,7 +16,7 @@ save_path = '../../../fight-churn-output/' + schema + '/'
 # one_example='listing_3_12_tenure_scaled_events_per_month'
 # one_example = 'listing_3_12_tenure_scaled_events_per_month'
 
-one_chapter='chap3'
+# one_chapter='chap3'
 
 
 print_num_rows=5
