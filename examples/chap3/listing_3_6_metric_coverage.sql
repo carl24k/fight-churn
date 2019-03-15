@@ -15,7 +15,7 @@ select metric_name,
 	avg(metric_value) as avg_value,    
 	min(metric_value) as min_value,    
 	max(metric_value) as max_value    
-from metric cross join account_count    
+from metric m cross join account_count
 inner join date_range on    
 	metric_time >= start_date
 	and metric_time <= end_date

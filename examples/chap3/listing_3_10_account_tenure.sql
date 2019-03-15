@@ -16,7 +16,7 @@ with RECURSIVE date_range as (
 		and s.end_date >= (e.start_date-31)    
 	
 ) SELECT account_id, min(start_date) as earliest_start,     
-extract(days from calc_date-min(start_date)) as subscriber_tenure_days    
+calc_date-min(start_date) as subscriber_tenure_days
 FROM earlier_starts cross join date_range    
 group by account_id, calc_date    
 order by account_id;

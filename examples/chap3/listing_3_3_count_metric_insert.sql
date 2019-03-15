@@ -2,7 +2,7 @@ with date_vals AS (
  	select i::timestamp as metric_date 
 from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
 )
--- insert into metric (account_id,metric_time,metric_name_id,metric_value)  -- UNCOMMENT TO ACTUALLY INSERT
+/*  insert into metric (account_id,metric_time,metric_name_id,metric_value)  UNCOMMENT TO ACTUALLY INSERT */
 select account_id, metric_date,1,  count(*) AS metric_value
 from event e inner join date_vals d
 on e.event_time < metric_date 

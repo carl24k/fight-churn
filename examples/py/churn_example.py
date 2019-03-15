@@ -2,16 +2,19 @@ from postgres import Postgres
 import json
 import pandas as pd
 
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-schema = 'b'
-schema = 'k'
-# schema = 'v'
+# schema = 'b'
+# schema = 'k'
+schema = 'v'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
 # one_example='listing_4_1_ongoing_active_periods'
-one_example='listing_3_4_sum_metric'
+# one_example='listing_3_12_tenure_scaled_events_per_month'
+# one_example = 'listing_3_12_tenure_scaled_events_per_month'
 
 one_chapter='chap3'
 
