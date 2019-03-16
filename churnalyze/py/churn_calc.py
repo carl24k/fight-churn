@@ -4,6 +4,15 @@ import numpy as np
 
 
 def behavioral_cohort_plot_data(churn_data, var_to_plot,out_col='is_churn'):
+    """
+    Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
+    The data is binned into 10 ordered bins, and the mean value of the metric and the churn rate are calculated
+    for each bin.
+    :param churn_data: Pandas data frame containing the data set
+    :param var_to_plot: The variable to plot
+    :param out_col:
+    :return:
+    """
     sorted = churn_data.sort_values(by=var_to_plot)
     groups = pd.qcut(sorted[var_to_plot], 10, duplicates='drop')
     midpoints = sorted.groupby(groups)[var_to_plot].mean()
@@ -14,6 +23,13 @@ def behavioral_cohort_plot_data(churn_data, var_to_plot,out_col='is_churn'):
 
 
 def dataset_stats(churn_data,metric_cols,save_path=None):
+    """
+    Take basic stats of the data set.  Saving it is optional.
+    :param churn_data: Pandas data frame containing the data set
+    :param metric_cols: Columns which are metrics (and will have stats taken)
+    :param save_path: If specified, will save to this path plus an extension
+    :return: 
+    """
     
     summary=churn_data[metric_cols].describe()
     summary=summary.transpose()
@@ -29,6 +45,15 @@ def dataset_stats(churn_data,metric_cols,save_path=None):
 
 
 def normalize_skewscale(churn_data, plot_columns,summary, log_scale_skew_thresh=4):
+    """
+    Normalize metric columns of a data set, including logarithmic scaling for columns that have high skew.
+    The churn column is just copied over.
+    :param churn_data:Pandas data frame containing the data set
+    :param plot_columns: Columns which are metrics (and will have stats taken)
+    :param summary: A summary data frame from dataset_stats (optional)
+    :param log_scale_skew_thresh: Threshold above which to apply the scaling transform
+    :return: Data frame with the normalized columns and which columns received the log transform
+    """
     if summary is None:
         summary = dataset_stats(churn_data,plot_columns)
     data_scores=churn_data[plot_columns].copy()
