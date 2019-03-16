@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 
+from churn_const import out_col, no_plot
 
 def behavioral_cohort_plot_data(churn_data, var_to_plot,out_col='is_churn'):
     """
@@ -66,3 +67,8 @@ def normalize_skewscale(churn_data, plot_columns,summary, log_scale_skew_thresh=
     data_scores['is_churn']=churn_data['is_churn']
 
     return data_scores, skewed_columns
+
+
+def churn_metric_columns(all_columns):
+    plot_columns = [c for c in all_columns if c not in no_plot]
+    return plot_columns

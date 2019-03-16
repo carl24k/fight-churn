@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import churn_calc as cc
-from churn_const import save_path, key_cols, no_plot, schema_data_dict
+from churn_const import save_path, schema_data_dict
 
 one_plot=None
 
@@ -22,7 +22,7 @@ def main():
     print('Loaded %s, size=%dx%d with columns:' % (data_file,churn_data.shape[0],churn_data.shape[1]))
     columns=list(churn_data.columns.values)
     print(columns)
-    plot_columns=[c for c in columns if c not in no_plot]
+    plot_columns = cc.churn_metric_columns(columns)
 
     summary = cc.dataset_stats(churn_data,plot_columns)
 
