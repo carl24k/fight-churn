@@ -2,37 +2,29 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import churn_calc as cc
+from churn_const import save_path, key_cols, no_plot, schema_data_dict
 
 one_plot=None
 
 # schema = 'b'
-# data_file = 'BroadlyDataSet1'
-
 schema = 'v'
-data_file = 'VersatureDataSet1'
-
 # schema = 'k'
-# data_file='KlipfolioDataSet1'
 
-# one_plot='account_tenure'
+one_plot='account_tenure'
 
-save_path = '../../../fight-churn-output/' + schema + '/'
-log_scale_skew_thresh=4
-
-key_cols = no_plot = ['account_id', 'observation_date']
-out_col = 'is_churn'
-no_plot.append(out_col)
+data_file = schema_data_dict[schema]
+schema_save_path = save_path(schema)+data_file
 
 
 def main():
-    churn_data = pd.read_csv(save_path+data_file+'.csv',index_col=0)
+    churn_data = pd.read_csv(schema_save_path+'.csv',index_col=0)
 
     print('Loaded %s, size=%dx%d with columns:' % (data_file,churn_data.shape[0],churn_data.shape[1]))
     columns=list(churn_data.columns.values)
     print(columns)
     plot_columns=[c for c in columns if c not in no_plot]
 
-    summary = cc.dataset_stats(churn_data,plot_columns,save_path=save_path+data_file)
+    summary = cc.dataset_stats(churn_data,plot_columns)
 
     data_scores, skewed_columns = cc.normalize_skewscale(churn_data, plot_columns, summary)
 
@@ -72,7 +64,7 @@ def main():
             plt.xlabel('Cohort %s Average Score' % var_to_plot)
             plt.ylim(0, churn_plot_max)
 
-        plt.savefig(save_path + 'churn_vs_' + var_to_plot + '.png')
+        plt.savefig(schema_save_path + 'churn_vs_' + var_to_plot + '.png')
         plt.close()
 
 
