@@ -69,6 +69,9 @@ def normalize_skewscale(churn_data, plot_columns,summary, log_scale_skew_thresh=
     return data_scores, skewed_columns
 
 
-def churn_metric_columns(all_columns):
+def churn_metric_columns(df_columns,verbose=True):
+    all_columns=list(df_columns)
+    if verbose:
+        print(all_columns)
     plot_columns = [c for c in all_columns if c not in no_plot]
     return plot_columns

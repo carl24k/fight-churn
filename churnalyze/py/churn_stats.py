@@ -14,15 +14,12 @@ schema_save_path = save_path(schema)+data_file
 
 def main():
     churn_data = pd.read_csv(schema_save_path+'.csv',index_col=0)
-
     print('Loaded %s, size=%dx%d with columns:' % (data_file,churn_data.shape[0],churn_data.shape[1]))
-    columns=list(churn_data.columns.values)
-    print(columns)
-    plot_columns = cc.churn_metric_columns(columns)
+    stat_columns = cc.churn_metric_columns(churn_data.columns.values)
 
-    summary = cc.dataset_stats(churn_data,plot_columns, save_path=schema_save_path)
+    summary = cc.dataset_stats(churn_data,stat_columns, save_path=schema_save_path)
 
-    data_scores, skewed_columns = cc.normalize_skewscale(churn_data, plot_columns, summary)
+    data_scores, skewed_columns = cc.normalize_skewscale(churn_data, stat_columns, summary)
 
     corr = data_scores.corr()
 
