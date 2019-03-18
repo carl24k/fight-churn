@@ -9,7 +9,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
 
 import churn_calc as cc
-from churn_const import save_path, key_cols, no_plot, schema_data_dict
+from churn_const import save_path, key_cols, no_plot, schema_data_dict, load_mat_file
 
 # schema = 'b'
 # schema = 'v'
@@ -54,7 +54,7 @@ def main():
 
     print('saving loadings')
     save_load_df = pd.DataFrame(load_mat,index=metric_cols,columns=[d for d in range(0,load_mat.shape[1])])
-    save_load_df.to_csv(schema_save_path + '_load_mat.csv')
+    save_load_df.to_csv(save_path(schema, load_mat_file))
 
     reduced_data = np.matmul(data_scores.to_numpy(), load_mat)
 
@@ -62,6 +62,7 @@ def main():
     reduced_corr =  np.corrcoef(np.transpose(reduced_data))
     np.savetxt(schema_save_path + '_reduced_corr.csv',reduced_corr,delimiter=',')
 
+    # https: // stackoverflow.com / questions / 29394377 / minimum - of - numpy - array - ignoring - diagonal
     mask = np.ones(reduced_corr.shape, dtype=bool)
     np.fill_diagonal(mask, 0)
     max_corr = reduced_corr[mask].max()
