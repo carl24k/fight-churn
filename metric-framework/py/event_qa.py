@@ -4,27 +4,28 @@ import matplotlib.dates as mdates
 import json
 import pandas
 
+properties = []
+one_event = None
+
+
 # schema = 'b'
 # from_date ='2018-07-01' # broadly end of  bad event data
 # to_date ='2019-02-01'
-# properties = []
+
 # one_event='Customer_Promoter_QAExMissing'
 # one_event='CustomerPromoter'
 
-schema = 'v'
-from_date ='2018-01-01'
-to_date ='2019-01-01'
-properties = ['quantity','duration']
-one_event='Cost_Local_QAExtreme'
-# one_event='Cost_Local'
-
-# schema = 'k'
+# schema = 'v'
 # from_date ='2017-01-01'
-# to_date ='2018-01-01'
+# to_date ='2019-03-01'
+# properties = ['quantity','duration']
+# one_event='Cost_Local_QAExtreme'
+# one_event='Cost_LD_Canada'
 
-# one_event = None
+schema = 'k'
 
-hideAx=True
+
+hideAx=False
 monthFormat = mdates.DateFormatter('%b')
 
 
@@ -58,7 +59,7 @@ for idx, event in events.iterrows():
 	# print(aSql)
 	res = pandas.read_sql_query(aSql,conn)
 	cleanedName = ''.join(e for e in event['event_type_name'] if e.isalnum())
-	res.to_csv(save_path+cleanedName+'_event_qa.csv',index=False)
+	# res.to_csv(save_path+cleanedName+'_event_qa.csv',index=False)
 
 	if not any(res['n_event'].notnull()):
 		print('\t *** No events for %s' % cleanedName)

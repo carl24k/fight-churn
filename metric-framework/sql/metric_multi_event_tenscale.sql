@@ -8,7 +8,7 @@ from event e inner join metric m
     on m.account_id = e.account_id
     	and event_time <= metric_time
 and event_time >  metric_time-interval '%measwin week'
-where e.event_type_id=%event_id
+where e.event_type_id in (%event_ids)
     and metric_name_id = 0
     and metric_value >= %minten
     and metric_time between '%from_date'::timestamp and '%to_date'::timestamp

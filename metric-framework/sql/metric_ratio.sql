@@ -23,4 +23,3 @@ from den_metric d  left outer join num_metric n
 	on n.account_id=d.account_id
 	and n.metric_time=d.metric_time;
 
-insert into metric_name (metric_name_id,metric_name) values (%metric_name_id,'%metric_name_val');

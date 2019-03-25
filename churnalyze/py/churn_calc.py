@@ -4,7 +4,7 @@ import numpy as np
 
 from churn_const import out_col, no_plot
 
-def behavioral_cohort_plot_data(churn_data, var_to_plot,out_col='is_churn'):
+def behavioral_cohort_plot_data(churn_data, var_to_plot,nbin=10,out_col='is_churn'):
     """
     Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
     The data is binned into 10 ordered bins, and the mean value of the metric and the churn rate are calculated
@@ -15,7 +15,7 @@ def behavioral_cohort_plot_data(churn_data, var_to_plot,out_col='is_churn'):
     :return:
     """
     sorted = churn_data.sort_values(by=var_to_plot)
-    groups = pd.qcut(sorted[var_to_plot], 10, duplicates='drop')
+    groups = pd.qcut(sorted[var_to_plot], nbin, duplicates='drop')
     midpoints = sorted.groupby(groups)[var_to_plot].mean()
     churns = sorted.groupby(groups)[out_col].mean()
     plot_frame = pd.DataFrame({var_to_plot: midpoints.values, 'churn_rate': churns})
@@ -34,8 +34,12 @@ def dataset_stats(churn_data,metric_cols,save_path=None):
     
     summary=churn_data[metric_cols].describe()
     summary=summary.transpose()
+
     skew_stats=churn_data[metric_cols].skew()
     summary['skew']=skew_stats
+
+    nonzero=churn_data.astype(bool).sum(axis=0)
+    summary['nonzero']=nonzero / churn_data.shape[0]
 
     if save_path is not None:
         churn_stat=churn_data['is_churn'].astype(int).describe()

@@ -7,16 +7,16 @@ pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-# schema = 'b'
+schema = 'b'
 # schema = 'k'
-schema = 'v'
+# schema = 'v'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
 # one_example='listing_4_1_ongoing_active_periods'
 # one_example='listing_3_12_tenure_scaled_events_per_month'
-# one_example = 'listing_3_12_tenure_scaled_events_per_month'
+one_example = 'listing_4_5_data_set_create_template'
 
-# one_chapter='chap3'
+one_chapter='chap4'
 
 
 print_num_rows=5

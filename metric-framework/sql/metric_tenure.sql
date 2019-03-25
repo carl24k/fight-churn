@@ -27,5 +27,3 @@ FROM earlier_starts
 group by account_id, metric_date
 order by account_id, metric_date;
 
-
-insert into metric_name (metric_name_id,metric_name) values (0,'account_tenure');

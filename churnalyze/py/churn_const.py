@@ -9,9 +9,9 @@ save_path_base = '../../../fight-churn-output/'
 load_mat_file='load_mat'
 
 schema_data_dict = {
-    'b': 'BroadlyDataSet2',
-    'v': 'VersatureDataSet1',
-    'k': 'KlipfolioDataSet1'
+    'b': 'BroadlyDataSet4',
+    'v': 'VersatureDataSet3',
+    'k': 'KlipfolioDataSet4'
 }
 
 

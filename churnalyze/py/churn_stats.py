@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 import churn_calc as cc
 from churn_const import save_path, key_cols, no_plot, schema_data_dict
 
-# schema = 'b'
+schema = 'b'
 # schema = 'v'
-schema = 'k'
+# schema = 'k'
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file

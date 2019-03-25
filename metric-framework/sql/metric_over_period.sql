@@ -12,6 +12,6 @@ where e.event_type_id=%event_id
 group by account_id, metric_date
 order by account_id, metric_date;
 
-insert into metric_name (metric_name_id,metric_name) values (%metric_name_id,'%metric_name_val');
+
 
 
