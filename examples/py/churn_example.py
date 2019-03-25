@@ -7,16 +7,17 @@ pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-schema = 'b'
+# schema = 'b'
 # schema = 'k'
-# schema = 'v'
+schema = 'v'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
 # one_example='listing_4_1_ongoing_active_periods'
 # one_example='listing_3_12_tenure_scaled_events_per_month'
-one_example = 'listing_4_5_data_set_create_template'
+# one_example = 'listing_4_5_data_set_create_template'
+one_example = 'listing_3_11_mrr_as_metric'
 
-one_chapter='chap4'
+one_chapter='chap3'
 
 
 print_num_rows=5
@@ -62,6 +63,8 @@ for chapter in param_dict.keys():
 				sql=sql.replace(p,str(param_dict[chapter][example][p]))
 			if flat_metric_bind in sql:
 				sql=sql.replace(flat_metric_bind,generate_flat_metric_sql(db))
+
+			# print(sql)
 
 			mode = param_dict[chapter][example]['mode'] if 'mode' in param_dict[chapter][example] else chap_params['mode']
 			if mode == 'run':
