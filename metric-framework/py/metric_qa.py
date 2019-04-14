@@ -25,10 +25,13 @@ schema = 'k'
 # run_mets='mrr'
 # run_mets=['Cost_LD_Canada_PerMonth','Cost_Toll_Free_PerMonth','Cost_LD_US_PerMonth','Cost_International_PerMonth']
 # run_mets='Total_Use_Per_Month'
-run_mets=['Use_Per_Base_Unit','Use_Per_Dollar_MRR','Percent_Canada','Percent_US','Percent_Intl','Percent_TollFree','Dollar_MRR_Per_Call_Unit','Dollar_MRR_Per_Base_Unit']
-run_mets = ['Active_Users_Last_Qtr']
-run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month']
-run_mets=['billing_period']
+# run_mets=['Use_Per_Base_Unit','Use_Per_Dollar_MRR','Percent_Canada','Percent_US','Percent_Intl','Percent_TollFree','Dollar_MRR_Per_Call_Unit','Dollar_MRR_Per_Base_Unit']
+# run_mets = ['Active_Users_Last_Qtr']
+# run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month']
+# run_mets=['billing_period']
+# run_mets=['num_users']
+run_mets=['Total_Tractors_Per_Month','Detractor_Rate','Promoter_Rate']
+run_mets=['User_Utilization']
 
 hideAx=False
 monthFormat = mdates.DateFormatter('%b')

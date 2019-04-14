@@ -18,7 +18,7 @@ select d.account_id, d.metric_time, %metric_name_id,
 	case when den_value > 0
 	    then coalesce(num_value,0.0)/den_value
 	    else %fill_val
-    end as ask_success_rate
+    end as metric_value
 from den_metric d  left outer join num_metric n
 	on n.account_id=d.account_id
 	and n.metric_time=d.metric_time;

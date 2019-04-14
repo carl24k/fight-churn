@@ -4,17 +4,18 @@ import matplotlib.pyplot as plt
 import churn_calc as cc
 from churn_const import save_path, key_cols, no_plot, schema_data_dict
 
-schema = 'b'
+# schema = 'b'
 # schema = 'v'
-# schema = 'k'
+schema = 'k'
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file
 
 
 def main():
-    churn_data = pd.read_csv(schema_save_path+'.csv',index_col=0)
-    print('Loaded %s, size=%dx%d with columns:' % (data_file,churn_data.shape[0],churn_data.shape[1]))
+
+    churn_data = cc.data_load(schema)
+
     stat_columns = cc.churn_metric_columns(churn_data.columns.values)
 
     summary = cc.dataset_stats(churn_data,stat_columns, save_path=schema_save_path)

@@ -2,9 +2,32 @@
 import pandas as pd
 import numpy as np
 
-from churn_const import out_col, no_plot
+from churn_const import out_col, no_plot, save_path, schema_data_dict, skip_metrics,key_cols,max_clips,min_valid
 
-def behavioral_cohort_plot_data(churn_data, var_to_plot,nbin=10,out_col='is_churn'):
+def data_load(schema):
+    data_file = schema_data_dict[schema]
+    schema_save_path = save_path(schema) + data_file
+    churn_data = pd.read_csv(schema_save_path + '.csv')
+    if data_file in skip_metrics:
+        churn_data.drop(skip_metrics[data_file], axis=1,inplace=True)
+    churn_data.set_index(key_cols,inplace=True)
+
+    for metric in max_clips.keys():
+        if metric in churn_data.columns.values:
+            churn_data[metric].clip(upper=max_clips[metric], inplace=True)
+
+    print('%s size before validation of columns: %d' % (data_file, churn_data.shape[0]))
+
+    for metric in min_valid.keys():
+        if metric.lower() in churn_data.columns.values:
+            churn_data=churn_data[churn_data[metric.lower()]>min_valid[metric]]
+
+
+    print('Loaded %s, size=%dx%d with columns:' % (data_file, churn_data.shape[0], churn_data.shape[1]))
+
+    return churn_data
+
+def behavioral_cohort_plot_data(churn_data, var_to_plot,nbin=10,out_col=out_col):
     """
     Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
     The data is binned into 10 ordered bins, and the mean value of the metric and the churn rate are calculated
@@ -49,7 +72,7 @@ def dataset_stats(churn_data,metric_cols,save_path=None):
     return summary
 
 
-def normalize_skewscale(churn_data, plot_columns,summary, log_scale_skew_thresh=4):
+def normalize_skewscale(churn_data, plot_columns,summary, log_scale_skew_thresh=3):
     """
     Normalize metric columns of a data set, including logarithmic scaling for columns that have high skew.
     The churn column is just copied over.
