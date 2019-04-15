@@ -34,8 +34,8 @@ or churn_date is null)
 	from observations o inner join observation_params
 	on (obs_date + obs_interval) <= obs_end    
 	inner join active_period s on s.account_id=o.account_id    
-	and (obs_date + obs_interval) >= s.start_date    
-	and ((obs_date + obs_interval) < s.churn_date or churn_date is null)
+	and  (o.start_date+(obs_count+1)*obs_interval-lead_time)::date >= s.start_date
+	and ((o.start_date+(obs_count+1)*obs_interval-lead_time)::date < s.churn_date or churn_date is null)
 ) 
 insert into observation (account_id, observation_date, is_churn)
 select distinct account_id, obs_date, is_churn
