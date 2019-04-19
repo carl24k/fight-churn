@@ -15,8 +15,8 @@ save_path = '../../../fight-churn-output/' + schema + '/'
 # one_example='listing_4_1_ongoing_active_periods'
 # one_example='listing_3_12_tenure_scaled_events_per_month'
 # one_example = 'listing_3_13_billing_period'
-# one_example = 'listing_4_4_observation_dates'
-one_example = 'listing_4_5_data_set_create_template'
+one_example = 'listing_4_4_observation_dates'
+# one_example = 'listing_4_5_data_set_create_template'
 
 one_chapter='chap4'
 

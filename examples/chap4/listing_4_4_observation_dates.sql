@@ -32,7 +32,7 @@ or churn_date is null)
 			else false 
 		end as is_churn     
 	from observations o inner join observation_params
-	on (obs_date + obs_interval) <= obs_end    
+	on   (o.start_date+(obs_count+1)*obs_interval-lead_time)::date <= obs_end
 	inner join active_period s on s.account_id=o.account_id    
 	and  (o.start_date+(obs_count+1)*obs_interval-lead_time)::date >= s.start_date
 	and ((o.start_date+(obs_count+1)*obs_interval-lead_time)::date < s.churn_date or churn_date is null)
