@@ -37,10 +37,9 @@ def behavioral_cohort_plot_data(churn_data, var_to_plot,nbin=10,out_col=out_col)
     :param out_col:
     :return:
     """
-    sorted = churn_data.sort_values(by=var_to_plot)
-    groups = pd.qcut(sorted[var_to_plot], nbin, duplicates='drop')
-    midpoints = sorted.groupby(groups)[var_to_plot].mean()
-    churns = sorted.groupby(groups)[out_col].mean()
+    groups = pd.qcut(churn_data[var_to_plot], nbin, duplicates='drop')
+    midpoints = churn_data.groupby(groups)[var_to_plot].mean()
+    churns = churn_data.groupby(groups)[out_col].mean()
     plot_frame = pd.DataFrame({var_to_plot: midpoints.values, 'churn_rate': churns})
 
     return plot_frame

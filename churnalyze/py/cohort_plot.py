@@ -15,8 +15,8 @@ font = {'family': 'Brandon Grotesque', 'size': 20}
 matplotlib.rc('font', **font)
 
 # schema = 'b'
-# schema = 'v'
-schema = 'k'
+schema = 'v'
+# schema = 'k'
 
 # run_mets=['Detractor_Rate']
 # run_mets=['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
@@ -39,7 +39,7 @@ schema = 'k'
 # run_mets = ['active_users_per_dollar_mrr']
 # run_mets=['Detractor_Rate','Promoter_Rate']
 # run_mets=['num_users','Active_Users_Last_Qtr','User_Utilization','num_seats']
-# run_mets=['active_users_per_seat']
+run_mets=['cost_international_permonth']
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file

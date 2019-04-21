@@ -9,9 +9,9 @@ pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-schema = 'b'
+# schema = 'b'
 # schema = 'k'
-# schema = 'v'
+schema = 'v'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
 # one_example='listing_4_1_ongoing_active_periods'
@@ -19,7 +19,8 @@ save_path = '../../../fight-churn-output/' + schema + '/'
 # one_example = 'listing_3_13_billing_period'
 # one_example = 'listing_4_4_observation_dates'
 # one_example = 'listing_4_5_data_set_create_template'
-one_example = 'listing_5_1_cohort_plot'
+# one_example = 'listing_5_1_cohort_plot'
+# one_example = 'listing_5_2_dataset_stats'
 
 one_chapter='chap5'
 
