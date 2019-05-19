@@ -1,8 +1,8 @@
 {
 	"chap2" : {
 		"params" : {
-			"FRYR-MM-DD": "2019-04-01",
-			"TOYR-MM-DD": "2019-05-01",
+			"FRYR-MM-DD": "2019-03-01",
+			"TOYR-MM-DD": "2019-04-01",
 			"mode" : "one",
 			"type" : "sql"
 		},
@@ -23,7 +23,7 @@
 			"FRYR-MM-DD": "2019-03-01",
 			"TOYR-MM-DD": "2019-03-30",
 			"mode": "all",
-			"EVENT_NAME": "A",
+			"EVENT_NAME": "like",
 			"SUM_FIELD" : "0",
 			"type" : "sql"
 		},

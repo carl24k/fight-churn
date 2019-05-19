@@ -3,7 +3,7 @@
 from postgres import Postgres
 import os
 
-schema_name='churnsim1'
+schema_name='churnsim2'
 
 db = Postgres("postgres://%s:%s@localhost/%s" % (
 os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))

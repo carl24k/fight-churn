@@ -4,6 +4,7 @@ import matplotlib.dates as mdates
 import json
 import pandas
 from math import ceil
+import os
 
 from metric_util import metricIdSql
 from schema_const import schema_data_dict
@@ -12,7 +13,8 @@ run_mets=None
 
 # schema = 'b'
 # schema = 'v'
-schema = 'k'
+# schema = 'k'
+schema = 'churnsim2'
 
 # run_mets='Cost_Local_PerMonth_QAExtreme'
 # run_mets='CustomerPromoter_PerMonth'
@@ -30,8 +32,8 @@ schema = 'k'
 # run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month']
 # run_mets=['billing_period']
 # run_mets=['num_users']
-run_mets=['Total_Tractors_Per_Month','Detractor_Rate','Promoter_Rate']
-run_mets=['User_Utilization']
+# run_mets=['Total_Tractors_Per_Month','Detractor_Rate','Promoter_Rate']
+# run_mets=['User_Utilization']
 
 hideAx=False
 monthFormat = mdates.DateFormatter('%b')
@@ -44,7 +46,9 @@ with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
 
 save_path = '../../../fight-churn-output/' + schema + '/'
 
-engine = sqlalchemy.create_engine("postgres://postgres:churn@localhost/postgres")
+
+engine = sqlalchemy.create_engine("postgres://%s:%s@localhost/%s" % (
+	os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
 conn = engine.connect()
 
 with open('../sql/qa_metric.sql', 'r') as myfile:

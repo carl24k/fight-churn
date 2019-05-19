@@ -10,11 +10,11 @@ pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-schema='churnsim1'
+schema='churnsim2'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
-one_chapter='chap3'
-one_example='listing_3_1_event_count'
+one_chapter='chap2'
+# one_example='listing_3_8_events_per_account'
 
 example_name_regexp='listing_\\d+_\\d+_(\w+)'
 
@@ -100,7 +100,7 @@ for chapter in param_dict.keys():
     for idx, example in enumerate(param_dict[chapter].keys()):
         if example=='params' or (one_example is not None and example != one_example):
             continue
-        print('%s %d Running example %s' % (chapter, idx,example))
+        print('\n%s %d Running example %s' % (chapter, idx,example))
 
         type = param_dict[chapter][example].get('type', param_dict[chapter]['params']['type']) # chap params should always have type
         if type=='sql':

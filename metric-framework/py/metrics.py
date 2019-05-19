@@ -9,7 +9,8 @@ run_mets=None
 
 # schema = 'b'
 # schema = 'v'
-schema = 'k'
+# schema = 'k'
+schema='churnsim2'
 
 # run_mets='Cost_Local_PerMonth_QAExtreme'
 # run_mets=['account_tenure','mrr']
@@ -22,7 +23,7 @@ schema = 'k'
 # run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month','editor_time_per_user']
 # run_mets=['Customer_added_Per_Dollar','CustomerPromoter_Per_Dollar','Contact_Per_Dollar','Transactions_Per_Dollar','Message_Viewed_Per_Dollar']
 # run_mets=['dollars_per_active_user']
-run_mets=['User_Utilization']
+# run_mets=['User_Utilization']
 # run_mets=['CustomerPromoter_PerMonth','Promoter_Rate']
 
 

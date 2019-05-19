@@ -13,14 +13,14 @@ from utility import UtilityModel
 ##########################################################################
 # CONSTANTS
 
-model_name='churnsim1'
+model_name='churnsim2'
 tmp_sub_file_name='/tmp/%s_tmp_sub.csv' % model_name
 tmp_event_file_name='/tmp/%s_tmp_event.csv' % model_name
 start_date = date(2019,1,1)
 end_date = date(2019,6,1)
-init_customers=100
-monthly_growth_rate = 0.2
-monthly_churn_rate = 0.1
+init_customers=500
+monthly_growth_rate = 0.05
+monthly_churn_rate = 0.04
 mrr=9.99
 
 

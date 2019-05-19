@@ -5,6 +5,13 @@ import numpy as np
 
 from customer import Customer
 
+def is_pos_def(x):
+    '''
+    https://stackoverflow.com/questions/16266720/find-out-if-matrix-is-positive-definite-with-numpy
+    :param x:
+    :return:
+    '''
+    return np.all(np.linalg.eigvals(x) > 0)
 
 class BehaviorModel:
 
@@ -25,6 +32,14 @@ class GaussianBehaviorModel(BehaviorModel):
         self.behave_names=data.index.values
         self.behave_cov=data[self.behave_names]
         self.min_rate=0.01*self.behave_means.min()
+        if not is_pos_def(self.behave_cov):
+            print('Matrix is not positive semi-definite: Multiplying by transpose')
+            weighted_cov=np.matmul(self.behave_cov,np.diag(np.sqrt(self.behave_means)))
+            # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
+            self.behave_cov= np.dot(weighted_cov, weighted_cov.transpose())
+
+
+
 
     def generate_customer(self):
 

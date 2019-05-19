@@ -11,5 +11,9 @@ schema_data_dict = {
     'k': {
         "from_date" :'2018-01-07',
         "to_date" : '2019-01-01'
+    },
+    'churnsim2': {
+        "from_date" :'2019-02-04',
+        "to_date" : '2019-05-06'
     }
 }

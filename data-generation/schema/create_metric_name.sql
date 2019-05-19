@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS  x.metric_name
 (
     metric_name_id integer NOT NULL,
-    metric_name_name text COLLATE pg_catalog."default"
+    metric_name text COLLATE pg_catalog."default"
 )
 WITH (
     OIDS = FALSE
