@@ -10,24 +10,11 @@ pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-# schema = 'b'
-# schema = 'k'
-schema = 'v'
+schema='churnsim1'
 save_path = '../../../fight-churn-output/' + schema + '/'
 
-one_example='listing_2_2_churn_rate'
-# one_example='listing_4_1_ongoing_active_periods'
-# one_example='listing_3_12_tenure_scaled_events_per_month'
-# one_example = 'listing_3_13_billing_period'
-# one_example = 'listing_4_4_observation_dates'
-# one_example = 'listing_4_5_data_set_create_template'
-# one_example = 'listing_5_1_cohort_plot'
-# one_example = 'listing_5_2_dataset_stats'
-# one_example = 'listing_5_2_dataset_stats'
-# one_example = 'listing_5_4_remove_invalid'
-
-
-one_chapter='chap2'
+one_chapter='chap3'
+one_example='listing_3_1_event_count'
 
 example_name_regexp='listing_\\d+_\\d+_(\w+)'
 
@@ -52,6 +39,7 @@ def sql_example(param_dict, chapter, example):
         sql = sql + myfile.read().replace('\n', ' ')
 
         for p in chap_params.keys():
+            if p=='type': continue
             sql = sql.replace(p, chap_params[p])
         param_keys = [p for p in param_dict[chapter][example].keys() if p not in ('listing', 'mode')]
         for p in param_keys:

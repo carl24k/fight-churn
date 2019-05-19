@@ -11,6 +11,9 @@ class BehaviorModel:
     def generate_customer(self):
         raise NotImplementedError('Sub-classes must define generate_customer!')
 
+    def insert_event_types(self,schema_name,db):
+        for idx,e in enumerate(self.behave_names):
+            db.run("INSERT into %s.event_type VALUES (%d,'%s');" % (schema_name,idx,e) )
 
 class GaussianBehaviorModel(BehaviorModel):
 

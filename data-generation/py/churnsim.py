@@ -10,6 +10,9 @@ from customer import Customer
 from behavior import GaussianBehaviorModel
 from utility import UtilityModel
 
+##########################################################################
+# CONSTANTS
+
 model_name='churnsim1'
 tmp_sub_file_name='/tmp/%s_tmp_sub.csv' % model_name
 tmp_event_file_name='/tmp/%s_tmp_event.csv' % model_name
@@ -20,12 +23,9 @@ monthly_growth_rate = 0.2
 monthly_churn_rate = 0.1
 mrr=9.99
 
-db = Postgres("postgres://%s:%s@localhost/%s" % (
-os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
 
-behave_mod=GaussianBehaviorModel(model_name)
-util_mod=UtilityModel(model_name,monthly_churn_rate,behave_mod)
-
+##########################################################################
+# HELPER FUNCTIONS
 
 def simulate_customer(start_of_month):
     events = []
@@ -68,6 +68,16 @@ def create_customers_for_month(month_date,n_to_create,subscription_count):
               (i,len(customer.subscriptions),len(customer.events),str(datetime.now())) )
     return subscription_count
 
+
+##########################################################################
+# MAIN PROGRAM
+
+db = Postgres("postgres://%s:%s@localhost/%s" % (
+os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
+
+behave_mod=GaussianBehaviorModel(model_name)
+behave_mod.insert_event_types(model_name,db)
+util_mod=UtilityModel(model_name,monthly_churn_rate,behave_mod)
 
 print('\nCreating %d initial customers for %s start date' % (init_customers,start_date))
 subscription_count=0
