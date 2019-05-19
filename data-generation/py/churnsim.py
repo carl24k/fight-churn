@@ -10,9 +10,11 @@ from behavior import GaussianBehaviorModel
 from utility import UtilityModel
 
 model_name='churnsim1'
+tmp_sub_file_name='/tmp/%s_tmp_sub.csv' % model_name
+tmp_event_file_name='/tmp/%s_tmp_event.csv' % model_name
 start_date = date(2018,1,1)
 end_date = date(2019,1,1)
-init_customers=500
+init_customers=100
 monthly_growth_rate = 0.06
 monthly_churn_rate = 0.05
 mrr=9.99
@@ -46,21 +48,22 @@ def simulate_customer(start_of_month):
 
 subscription_count=0
 for i in range(init_customers):
-    print('\tSimulating %d' % i)
     customer = simulate_customer(start_date)
-    print('\tInserting %d' % i)
-    with db.get_cursor() as cursor:
+    with open(tmp_sub_file_name,'w') as tmp_file:
         for s in customer.subscriptions:
-            sql="INSERT INTO %s.subscription VALUES (%d,%d,'%s','%s','%s',%f,NULL,NULL,1);" % \
-                (model_name,subscription_count,customer.id,model_name,s[0],s[1],mrr)
-            cursor.run(sql)
+            tmp_file.write("%d,%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
+                (subscription_count,customer.id,model_name,s[0],s[1],mrr) )
             subscription_count+=1
+    with open(tmp_event_file_name,'w') as tmp_file:
         for e in customer.events:
-            sql="INSERT INTO %s.event VALUES (%d,'%s',%d);" % \
-                (model_name,customer.id,e[0],e[1])
-            cursor.run(sql)
+            tmp_file.write("%d,'%s',%d\n" % (customer.id,e[0],e[1]))
     print('Simulated customer %d: %d subscription, %d events @ %s' %
           (i,len(customer.subscriptions),len(customer.events),str(datetime.now())) )
+    print('Loading to db...')
+    sql = "COPY %s.subscription FROM '%s' USING DELIMITERS ',' WITH NULL AS '\\null'" % (model_name,tmp_sub_file_name)
+    db.run(sql)
+    sql = "COPY %s.event FROM '%s' USING DELIMITERS ',' WITH NULL AS '\\null'" % (model_name,tmp_event_file_name)
+    db.run(sql)
 
 print('Created %d initial customers with %d subscriptions\n' % (init_customers,subscription_count))
 
