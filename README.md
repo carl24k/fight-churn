@@ -12,8 +12,22 @@ http://www.fightchurnwithdata.com for more information.
 
 * Python 3 and the required packages (requirements.txt)
 * Postgres
-* Data to analyze (no publicy available data at this time)
 
+#### Python 3
+If you need help installing Python 3, you can refer to this page for Mac:
+* https://docs.python-guide.org/starting/install3/osx/
+For Windows there are resources here:
+* https://www.python.org/downloads/windows/
+
+(If you are on linux I'm going to assume you know how to install your own python...)
+
+#### Postgres
+To install Postgres for Mac following these instructions:
+https://postgresapp.com/downloads.html
+
+I also recommend installing installing pgAdmin to make it easier to import and export data, and run adhoc queries.  
+Follow the instructions  here:
+* https://www.pgadmin.org/download/
 
 ### Installing
 
@@ -27,6 +41,10 @@ the blog posts on http://www.fightchurnwithdata.com for more information:
 
 
 ## Running the Code
+
+### Generating  Artificial Data
+
+Code for generating artificial data to run the code is in the directory data-generation.  Details to come...
 
 ### Book Examples
 
@@ -65,7 +83,7 @@ again after changes.)
 Command line parameters coming soon...
 
 
-### Evemt QA
+### Event QA
 
 Details coming soon...
 

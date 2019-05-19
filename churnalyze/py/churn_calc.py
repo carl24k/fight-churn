@@ -57,11 +57,16 @@ def dataset_stats(churn_data,metric_cols,save_path=None):
     summary=churn_data[metric_cols].describe()
     summary=summary.transpose()
 
-    skew_stats=churn_data[metric_cols].skew()
-    summary['skew']=skew_stats
+    summary['skew'] = churn_data.skew()
+    summary['1%'] = churn_data.quantile(q=0.01)
+    summary['5%'] = churn_data.quantile(q=0.05)
+    summary['10%'] = churn_data.quantile(q=0.10)
+    summary['90%'] = churn_data.quantile(q=0.90)
+    summary['95%'] = churn_data.quantile(q=0.95)
+    summary['99%'] = churn_data.quantile(q=0.99)
+    summary['nonzero'] = churn_data.astype(bool).sum(axis=0) / churn_data.shape[0]
 
-    nonzero=churn_data.astype(bool).sum(axis=0)
-    summary['nonzero']=nonzero / churn_data.shape[0]
+    summary = summary[ ['count','nonzero','mean','std','skew','min','1%','5%','10%','25%','50%','75%','90%','95%','99%','max'] ]
 
     if save_path is not None:
         churn_stat=churn_data['is_churn'].astype(int).describe()

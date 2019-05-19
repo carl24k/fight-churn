@@ -18,3 +18,5 @@ def dataset_stats(data_set_path='',save_path='example.csv'):
 
     if save_path is not None:
         summary.to_csv(save_path,header=True)
+
+    return summary

@@ -2,6 +2,7 @@ from postgres import Postgres
 import json
 from metric_util import metricIdSql
 from schema_const import schema_data_dict
+import os
 
 bind_char='%'
 run_mets=None
@@ -31,7 +32,9 @@ to_date=schema_data_dict[schema]['to_date']
 with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
 	metric_dict=json.loads(myfile.read())
 
-db = Postgres("postgres://postgres:churn@localhost/postgres")
+db = Postgres("postgres://%s:%s@localhost/%s" % (
+os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
+
 if run_mets is None:
 	print('TRUNCATING *Metrics* in schema -> %s <-  ...' % schema)
 	if input("are you sure? (enter %s to proceed) " % schema) == schema:

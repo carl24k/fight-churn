@@ -11,8 +11,10 @@ load_mat_file='load_mat'
 
 schema_data_dict = {
     'b': 'BroadlyDataSet4',
-    'v': 'VersatureDataSet3',
-    'k': 'KlipfolioDataSet4'
+    'v_orig': 'VersatureDataSet3',
+    'v3': 'VersatureDataSet3_0MRRCleaned',
+    'v': 'VersatureDataSet3_0MRRDemo',
+    'k': 'KlipfolioDataSet4',
 }
 
 max_clips = {
@@ -32,6 +34,7 @@ min_valid = {
     # 'base_units' : 1,
     # 'CustomerDetractor_PerMonth' : 0.5
     #, 'num_users' : 1
+    'orientation_switch_permonth' : 1
 }
 
 group_corr_thresh = {

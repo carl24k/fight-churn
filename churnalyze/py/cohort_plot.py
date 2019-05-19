@@ -15,8 +15,8 @@ font = {'family': 'Brandon Grotesque', 'size': 20}
 matplotlib.rc('font', **font)
 
 # schema = 'b'
-schema = 'v'
-# schema = 'k'
+# schema = 'v'
+schema = 'k'
 
 # run_mets=['Detractor_Rate']
 # run_mets=['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
@@ -32,18 +32,19 @@ schema = 'v'
 # run_mets= ['Account_Active_Today_PerMonth'] # k
 # run_mets=['ReviewUpdated_PerMonth','CustomerAdded_PerMonth'] # b
 # run_mets=['ReviewUpdated_PerMonth'] # b
-# run_mets=['Cost_Local_PerMonth'] # v
+# run_mets=['Cost_Local_PerMonth', 'mrr'] # v
 # run_mets=['Cost_Local_PerMonth','base_units','Cost_LD_Canada_PerMonth'] # v
 # run_mets = ['CustomerPromoter_PerMonth','CustomerDetractor_PerMonth','Detractor_Rate']
 # run_mets = ['num_seats','num_users','mrr','active_users_per_seat','active_users_per_dollar_mrr','dollars_per_active_user','Active_Users_Last_Qtr']
 # run_mets = ['active_users_per_dollar_mrr']
 # run_mets=['Detractor_Rate','Promoter_Rate']
 # run_mets=['num_users','Active_Users_Last_Qtr','User_Utilization','num_seats']
-run_mets=['cost_international_permonth']
+# run_mets=['transactionadded_permonth']
+run_mets = ['orientation_switch_permonth']
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file
-nbin=10
+nbin=5
 
 def main():
     churn_data = cc.data_load(schema)
