@@ -81,9 +81,9 @@ After you have cloned this repository
 1. Click **Create**
 1. It should say "The directory ... is not empty.  Would you like to create a project from existing sources?"  Click Yes
 
-![Name the database](/readme_files/pgadmin_createdb2.png)
+![Name the database](/readme_files/pycharm0_existing_sources.png)
 
-#### 1.2.4 Setup Python environment
+#### 1.2.4 Setup Python Project
 
 You should create a Python "virtual environment" for the project (I won't try to go into details here,
 but this allows you to install the packages used for the repo without interfering with anything else
@@ -113,12 +113,52 @@ You will add more packages in a minute, but first finish with the project setup 
 
 ![PyCharm Project Structure](/readme_files/pycharm5_project_structure.png)
 
+Select each folder that contains python source code, and click on the button *Sources*
+(with the blue folder next to it):
 
-#### 1.2.2 Set Database Environment Variables
+![PyCharm Select One Source Folder](/readme_files/pycharm6_source_select.png)
+
+You should select the following folders:
+* churnalyze/py
+* data-generation/py
+* metric-framework/py
+* examples/py
+    * examples/chap5
+    * examples/chap6
+    * examples/chap7
+    * examples/chap8
+    * examples/chap9
+    * examples/chap10
+    * examples/chap11
+    
+When you are done your project preferences should look like this:
+
+![PyCharm Source Folders Selected](/readme_files/pycharm7_sources_selected.png)
 
 
+#### 1.2.5 Installing Python Requirements
 
-#### 1.2.5 Create Directories for Result Data
+Now that you have created a Python project you can easily install the
+required packages.  Start by opening the file requirements.txt in the root
+project folder
+
+#### 1.2.6 Creating Run Configurations and Setting Database Environment Variables
+
+A lot of the python code depends on access to the database you created for the churn data.
+You will set environment variables that will hold your database and login information, so that
+it does not have to be hard coded.  The easiset way to do this in PyCharm is to
+set environment variables when you create a Run Configuration for the executables.
+
+Here is one example of creating a run configuration for one of the programs - 
+
+![PyCharm Requirements](/readme_files/pycharm8_requirements.png)
+
+
+For creating additiona configurations, note thatn PyCharm allows you to duplicate 
+and modify each configuration.)
+
+
+#### 1.2.7 Create Directories for Result Data
 
 
 
