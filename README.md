@@ -11,25 +11,44 @@ http://www.fightchurnwithdata.com for more information.
 ### Prerequisites
 
 * Python 3 and the required packages (requirements.txt)
-* Postgres
+* PostgreSQL
 
 #### Python 3
 If you need help installing Python 3, you can refer to this page for Mac:
 * https://docs.python-guide.org/starting/install3/osx/
+
 For Windows there are resources here:
 * https://www.python.org/downloads/windows/
 
 (If you are on linux I'm going to assume you know how to install your own python...)
 
-#### Postgres
-To install Postgres for Mac following these instructions:
+I also recommend installing an Integrated Development Environment like PyCharm. PyCharm was used to write
+all the code for the book, so this README will include how to setup PyCharm (this is especially useful if you 
+are new to Python, since an IDE can take care of some of the setup for you...)
+
+* https://www.jetbrains.com/pycharm/download
+
+#### PostgreSQL
+To install PostgreSQL for Mac following these instructions:
 https://postgresapp.com/downloads.html
 
 I also recommend installing installing pgAdmin to make it easier to import and export data, and run adhoc queries.  
 Follow the instructions  here:
+
 * https://www.pgadmin.org/download/
 
-### Installing
+Make sure Posgres is running:
+
+![Postgres Running on Mac](/readme_files/postico.png)
+
+### Development Environment Setup
+
+
+
+### Creating Data
+
+
+#### Schema Creation
 
 You will need to create a schema with the tables in the schema folder - you
 can use any tool or method you prefer.  After that you need to load subscription
