@@ -59,8 +59,8 @@
 	},
 	"chap4" : {
 		"params" : {
-			"FRYR-MM-DD": "2019-01-01",
-			"TOYR-MM-DD": "2019-12-31",
+			"FRYR-MM-DD": "2019-03-04",
+			"TOYR-MM-DD": "2019-05-06",
 			"mode" : "run",
 			"type" : "sql"
 		},
@@ -76,7 +76,7 @@
 		},
 		"listing_4_5_data_set_create_template": {
 			"MET_INTERVAL": "7 day",
-			"mode" : "all"
+			"mode" : "save"
 		}
 	}
 }

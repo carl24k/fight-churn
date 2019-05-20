@@ -8,15 +8,16 @@ from churn_const import save_path, schema_data_dict, load_mat_file, renames, ski
 
 run_mets = None
 behave_group = False
-hideAx=True
-allScores=True
+hideAx=False
+allScores=False
 
 font = {'family': 'Brandon Grotesque', 'size': 20}
 matplotlib.rc('font', **font)
 
 # schema = 'b'
 # schema = 'v'
-schema = 'k'
+# schema = 'k'
+schema = 'churnsim2'
 
 # run_mets=['Detractor_Rate']
 # run_mets=['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
@@ -40,7 +41,7 @@ schema = 'k'
 # run_mets=['Detractor_Rate','Promoter_Rate']
 # run_mets=['num_users','Active_Users_Last_Qtr','User_Utilization','num_seats']
 # run_mets=['transactionadded_permonth']
-run_mets = ['orientation_switch_permonth']
+# run_mets = ['orientation_switch_permonth']
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file

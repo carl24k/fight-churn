@@ -15,6 +15,7 @@ schema_data_dict = {
     'v3': 'VersatureDataSet3_0MRRCleaned',
     'v': 'VersatureDataSet3_0MRRDemo',
     'k': 'KlipfolioDataSet4',
+    'churnsim2' : 'churnsim2_dataset'
 }
 
 max_clips = {
@@ -24,7 +25,8 @@ max_clips = {
 ax_scale = {
     'v' : 100.0,
     'k' : 110.0,
-    'b' : 110.0
+    'b' : 110.0,
+    'churnsim2' : 110.0
 }
 
 min_valid = {
@@ -39,7 +41,8 @@ min_valid = {
 
 group_corr_thresh = {
     'KlipfolioDataSet4' : 0.65,
-    'BroadlyDataSet4' : 0.7
+    'BroadlyDataSet4' : 0.7,
+    'churnsim2_dataset' : 0.8
 }
 
 skip_metrics = {
