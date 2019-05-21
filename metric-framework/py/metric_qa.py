@@ -45,6 +45,7 @@ with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
 	metric_dict=json.loads(myfile.read())
 
 save_path = '../../../fight-churn-output/' + schema + '/'
+os.makedirs(save_path,exist_ok=True)
 
 
 engine = sqlalchemy.create_engine("postgres://%s:%s@localhost/%s" % (

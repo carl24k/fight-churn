@@ -1,4 +1,4 @@
-
+import os
 
 log_scale_skew_thresh=4
 key_cols  = ['account_id', 'observation_date']
@@ -74,7 +74,9 @@ renames = {'Cost_Local_PerMonth'.lower() : "Local Calls Per Month",
            }
 
 def save_path(schema,file_name=None):
+    save_path=save_path_base + schema + '/'
+    os.makedirs(save_path, exist_ok=True)
     if file_name is None:
-        return save_path_base + schema + '/'
+        return save_path
     else:
-        return save_path_base + schema + '/' + schema_data_dict[schema] + '_' + file_name + '.csv'
+        return save_path + '/' + schema_data_dict[schema] + '_' + file_name + '.csv'

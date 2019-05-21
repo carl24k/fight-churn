@@ -182,9 +182,9 @@ of the environment variables text box:
 ![PyCharm Add Config](/readme_files/pycharm12_browse_environ.png)
 
 That button launches a dialog to add the environment variables.  You need to add three:
-1.  CHURN_DB
-1.  CHURN_USER
-1.  CHURN_PASS
+1.  CHURN_DB  : the name of the database for your churn analysis schemas
+1.  CHURN_USER : the user name to login to the database
+1.  CHURN_PASS : the password to login to the database
 
 After setting these, your environment variable dialog should look something like this:
 
@@ -207,9 +207,6 @@ Now choose to duplicate your existing Run configuration:
 
 This will make another configuration the same as the existing one - you can rename it and reset the 
 path to a different script, keeping the environment variables you already setup.
-
-#### 1.2.7 Create Directories for Result Data
-
 
 
 ### 1.3 Data Loading / Creation

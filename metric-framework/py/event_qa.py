@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import json
 import pandas
+import os
 
 properties = []
 one_event = None
@@ -37,6 +38,7 @@ else:
 
 
 save_path = '../../../fight-churn-output/' + schema + '/'
+os.makedirs(save_path,exist_ok=True)
 
 engine = sqlalchemy.create_engine("postgres://postgres:churn@localhost/postgres")
 conn = engine.connect()
