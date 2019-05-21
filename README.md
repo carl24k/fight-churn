@@ -136,11 +136,19 @@ When you are done your project preferences should look like this:
 ![PyCharm Source Folders Selected](/readme_files/pycharm7_sources_selected.png)
 
 
-#### 1.2.5 Installing Python Requirements
+#### 1.2.5 Installing Python Package Requirements
 
 Now that you have created a Python project you can easily install the
 required packages.  Start by opening the file requirements.txt in the root
 project folder
+
+![PyCharm Requirements](/readme_files/pycharm8_requirements.png)
+
+Notice that at the top it says: *Install requirements* - click on that and the click
+**Install** in the dialog that comes up. Note that you have to be connected to the internet for
+this to work, and it will take several minutes for all the packages to be downloaded 
+and installed.
+
 
 #### 1.2.6 Creating Run Configurations and Setting Database Environment Variables
 
@@ -149,14 +157,56 @@ You will set environment variables that will hold your database and login inform
 it does not have to be hard coded.  The easiset way to do this in PyCharm is to
 set environment variables when you create a Run Configuration for the executables.
 
-Here is one example of creating a run configuration for one of the programs - 
+Here is one example of creating a run configuration for one of the programs: If you have not created
+any Run Configurations yet, you start with the *Add Configuration* button...
 
-![PyCharm Requirements](/readme_files/pycharm8_requirements.png)
+
+![PyCharm Add Config](/readme_files/pycharm9_add_config.png)
+
+In the Run/Debug Configuration dialog click the **+**  then **Python** to make a new python script configuration.
 
 
-For creating additiona configurations, note thatn PyCharm allows you to duplicate 
-and modify each configuration.)
+![PyCharm Python Config](/readme_files/pycharm10_new_python_config.png)
 
+You will get an empty configuration, and the first thing to do is click on the Folder icon in the 
+script path text box and pick the script path.  The first script everyone will need to run is 
+*data-generation/py/churndb.py*, which creates a schema for an analysis.  After selecting this script, your
+configuration should look like this, with both the script path and the working directory set to 
+wherever the script is on your system:
+
+![PyCharm Script Path](/readme_files/pycharm11_script_path.png)
+
+The next step is to add the environment variables, by clicking on the *Browse* button at the end
+of the environment variables text box:
+
+![PyCharm Add Config](/readme_files/pycharm12_browse_environ.png)
+
+That button launches a dialog to add the environment variables.  You need to add three:
+1.  CHURN_DB
+1.  CHURN_USER
+1.  CHURN_PASS
+
+After setting these, your environment variable dialog should look something like this:
+
+![PyCharm Add Config](/readme_files/pycharm13_environ_vars.png)
+
+Select **OK** and save all the configuration changes.  I'll say more about running this script in the 
+next section on Data Loading / Creation.
+
+For creating additional Run configurations, note that PyCharm allows you to duplicate 
+and modify an existing configuration.  So when you want to make another script with the same environment
+variables open the Configuration Dialog, now by clicking on the run configuration drop down then selecting 
+**Edit Configuration**
+
+
+![PyCharm Add Config](/readme_files/pycharm14_edit_config.png)
+
+Now choose to duplicate your existing Run configuration:
+
+![PyCharm Add Config](/readme_files/pycharm15_copy_config.png)
+
+This will make another configuration the same as the existing one - you can rename it and reset the 
+path to a different script, keeping the environment variables you already setup.
 
 #### 1.2.7 Create Directories for Result Data
 
