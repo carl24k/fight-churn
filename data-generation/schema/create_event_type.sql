@@ -12,3 +12,13 @@ ALTER TABLE x.event_type
     OWNER to postgres;
 
 
+
+CREATE UNIQUE INDEX IF NOT EXISTS  idx_event_type_id
+    ON x.event_type USING btree
+    (event_type_id)
+    TABLESPACE pg_default;
+
+CREATE UNIQUE INDEX IF NOT EXISTS  idx_event_type_name
+    ON x.event_type USING btree
+    (event_type_name)
+    TABLESPACE pg_default;
