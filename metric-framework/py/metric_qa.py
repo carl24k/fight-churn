@@ -7,7 +7,6 @@ from math import ceil
 import os
 
 from metric_util import metricIdSql
-from schema_const import schema_data_dict
 
 run_mets=None
 
@@ -38,11 +37,11 @@ schema = 'churnsim2'
 hideAx=False
 monthFormat = mdates.DateFormatter('%b')
 
-from_date=schema_data_dict[schema]['from_date']
-to_date=schema_data_dict[schema]['to_date']
-
 with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
 	metric_dict=json.loads(myfile.read())
+
+from_date=metric_dict['date_range']['from_date']
+to_date=metric_dict['date_range']['to_date']
 
 save_path = '../../../fight-churn-output/' + schema + '/'
 os.makedirs(save_path,exist_ok=True)
@@ -56,7 +55,7 @@ with open('../sql/qa_metric.sql', 'r') as myfile:
 	sql = myfile.read().replace('\n', ' ')
 
 for idx, metric in enumerate(metric_dict.keys()):
-	if run_mets is not None and metric not in run_mets:
+	if (run_mets is not None and metric not in run_mets)  or metric == 'date_range':
 		continue
 	print('Checking metric %s.%s' % (schema,metric))
 	id = pandas.read_sql_query(metricIdSql(schema, metric),conn)
@@ -102,3 +101,5 @@ for idx, metric in enumerate(metric_dict.keys()):
 	plt.savefig(save_path+'metric_valqa_'+cleanedName+'.png')
 	plt.close()
 
+
+print('Saving results to %s' % save_path)

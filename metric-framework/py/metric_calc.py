@@ -1,37 +1,24 @@
 from postgres import Postgres
 import json
 from metric_util import metricIdSql
-from schema_const import schema_data_dict
 import os
 
 bind_char='%'
-run_mets=None
 
-# schema = 'b'
-# schema = 'v'
-# schema = 'k'
+
 schema='churnsim2'
 
-# run_mets='Cost_Local_PerMonth_QAExtreme'
-# run_mets=['account_tenure','mrr']
-# run_mets=['base_units','extension_units']
-# run_mets=['num_privatelink','num_api_calls','num_dashboards','num_seats']
-# run_mets=['Cost_Local_PerMonth','Cost_LD_Canada_PerMonth','Cost_Toll_Free_PerMonth','Cost_LD_US_PerMonth','Cost_International_PerMonth']
-# run_mets='Total_Use_Per_Month'
-# run_mets=['Use_Per_Base_Unit','Use_Per_Dollar_MRR','Percent_Canada','Percent_US','Percent_Intl','Percent_TollFree','Dollar_MRR_Per_Call_Unit','Dollar_MRR_Per_Base_Unit']
-# run_mets=['billing_period']
-# run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month','editor_time_per_user']
-# run_mets=['Customer_added_Per_Dollar','CustomerPromoter_Per_Dollar','Contact_Per_Dollar','Transactions_Per_Dollar','Message_Viewed_Per_Dollar']
-# run_mets=['dollars_per_active_user']
-# run_mets=['User_Utilization']
-# run_mets=['CustomerPromoter_PerMonth','Promoter_Rate']
+run_mets=None
+# run_mets=['account_tenure','post_per_month']
 
 
-from_date=schema_data_dict[schema]['from_date']
-to_date=schema_data_dict[schema]['to_date']
 
 with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
 	metric_dict=json.loads(myfile.read())
+
+
+from_date=metric_dict['date_range']['from_date']
+to_date=metric_dict['date_range']['to_date']
 
 db = Postgres("postgres://%s:%s@localhost/%s" % (
 os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
@@ -59,7 +46,7 @@ else:
 
 
 for metric in metric_dict.keys():
-	if run_mets is not None and metric not in run_mets:
+	if (run_mets is not None and metric not in run_mets) or metric == 'date_range':
 		continue
 
 	id = db.one(metricIdSql(schema, metric))

@@ -716,10 +716,17 @@ To calculate metrics in batch jobs you need to configure the metrics specificall
 configuration file for your schema.  For a simple example you can take a look at `metric-framework/conf/churnsim2_metrics.json`
 which is setup to run for the default simulated data file.  The configuration is a set of named objects where the
 key is the name of the metric that will be created (the name to be entered in the table `metric_name` in the database)
-and the value is an object containing key/value pairs that are the bind variables for the SQL.  Here is one 
+and the value is an object containing key/value pairs that are the bind variables for the SQL.  Here is an 
 example from the `churnsim2` configuration:
 
 ```
+    "date_range": {
+        "from_date" :"2019-02-04",
+        "to_date" : "2019-05-06"
+    },
+	"account_tenure": {
+	    "sql" : "metric_tenure"
+	},
 	"post_per_month": {
 		"event_id":  0,
 		"fun" : "count(*)",
@@ -729,7 +736,17 @@ example from the `churnsim2` configuration:
 		"sql" : "metric_over_period_tenscale"
 	}
 ```
+The entire configuration is a JSON of name/value pairs that is loaded as a dictionary in Python.  Each name maps
+to another object which contains additional name/value pairs.
 
+The first object in the configuration is a named `date_range` which contains the start and end dates for the
+metrics to be calculated as `from_date` and `to_date`.
+
+The second object is an example of a no-parameter metric, `account_tenure` (described in Chapter 3 of the book).
+The only parameter in the object is the `sql` parmeter which indicates which SQL file (in `metric-framework/sql`)
+is run to make the metric calculation.
+
+The third object in the example configuration is a metric that has multiple parameters.
 This configuration will create a metric named "post_per_month".  The `sql` parameter in the configuration object
  indicates which specific SQL to execute in order to create the metric : in this case it is the sql
   `metric-framework/sqls/metric_over_period_tenscale.sql`.  
@@ -743,9 +760,66 @@ you should spend some time automating that process as well.  Maybe that will be 
 
 ---
 
-#### 3.2.3 Running metrics
+#### 3.2.3 Running Metric Calculations
 
-Once you have configured
+Once you have configured metrics (or if you are using the default `churnsim2`) you calculate the metrics with the
+`metric-framework/metric_calc.py`.  You create a configuration for this script as described in Section 1.2.6 of this
+README.  If you run the default configuration you should see this in your terminal (or the "Run" window in PyCharm):
+
+```
+/Users/cgold/projects/ChurnBook/fight-churn/venv/bin/python /Users/cgold/projects/ChurnBook/fight-churn/metric-framework/py/metric_calc.py
+TRUNCATING *Metrics* in schema -> churnsim2 <-  ...
+are you sure? (enter churnsim2 to proceed)
+```
+
+The program asks because if there were any metrics already saved, this program would wipe them out. If this is the first 
+time there is no data but the script is not smart enough to check - just enter the schema name as shown and hit `<ENTER>`
+and you should see the following, although it will take a bit of time: each metric will take some time to calculate:
+
+```
+/Users/cgold/projects/ChurnBook/fight-churn/venv/bin/python /Users/cgold/projects/ChurnBook/fight-churn/metric-framework/py/metric_calc.py
+TRUNCATING *Metrics* in schema -> churnsim2 <-  ...
+are you sure? (enter churnsim2 to proceed) churnsim2
+Inserting metric churnsim2.account_tenure as id 0
+set search_path = 'churnsim2'; with RECURSIVE date_vals AS (   select i::timestamp as metric_date from generate_series('2019-02-04', '2019-05-06', '7 day'::interval) i ), earlier_starts AS ( 	select account_id, metric_date, start_date 	from subscription inner join date_vals 		on start_date <= metric_date 		and (end_date > metric_date or end_date is null)  	UNION  	select s.account_id, metric_date, s.start_date 	from subscription s inner join earlier_starts e 		on s.account_id=e.account_id 		and s.start_date < e.start_date 		and s.end_date >= (e.start_date-31)  )  insert into metric (account_id,metric_time,metric_name_id,metric_value)   SELECT account_id, metric_date,0, extract(days from metric_date-min(start_date)) FROM earlier_starts group by account_id, metric_date order by account_id, metric_date;  
+Inserting metric churnsim2.post_per_month as id 1
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 1,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=0     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric churnsim2.new_friend_per_month as id 2
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 2,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=1     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric churnsim2.like_per_month as id 3
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 3,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=2     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric churnsim2.view_feed_per_month as id 4
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 4,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=3     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric churnsim2.photo_per_month as id 5
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 5,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=4     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric churnsim2.message_per_month as id 6
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 6,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=5     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric churnsim2.unfriend_per_month as id 7
+set search_path = 'churnsim2';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 7,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=6     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+
+Process finished with exit code 0
+
+```
+
+The program prints out each metric as it inserts them into the metric name table and runs the SQL to insert the results
+into the metric table.
+
+The default of the program is calculate all the metrics for the `churnsim2` schema, but you can control this behavior 
+with a constant saved at the top of the file `metric_calc.py` :
+
+```
+schema='churnsim2'
+
+run_mets=None
+# run_mets=['account_tenure','post_per_month']
+```
+
+If you uncomment the line `run_mets=[...` you can specify any list of metrics and when the script runs it will only calculate
+those metrics.  This is useful because you normally iterate and can create additional metrics after investigating a first
+group.
+
+At this point you should check on the results of the metric calculation you have just run.  You could query the database
+directly, or you can use the script described in the next section.
 
 [(top)](#top)  
 
@@ -756,12 +830,37 @@ Once you have configured
 ### 3.3 Metric QA
 
 
-Details coming soon...
+The script `metric-framework/metric_qa.py` will create plots for metric QA (Quality Assurance) like the ones described
+in Chapter 3 of the book.  To get started, just make a new Run Configuration (Section 1.2.6 of this README) and if
+you are using the default `churnsim2` data set just run it.  You should see the following printout:
 
 
 ```
-python metric_qa.py
+/Users/cgold/projects/ChurnBook/fight-churn/venv/bin/python /Users/cgold/projects/ChurnBook/fight-churn/metric-framework/py/metric_qa.py
+Checking metric churnsim2.account_tenure
+Checking metric churnsim2.post_per_month
+Checking metric churnsim2.new_friend_per_month
+Checking metric churnsim2.like_per_month
+Checking metric churnsim2.view_feed_per_month
+Checking metric churnsim2.photo_per_month
+Checking metric churnsim2.message_per_month
+Checking metric churnsim2.unfriend_per_month
+Saving results to ../../../fight-churn-output/churnsim2/
+
+Process finished with exit code 0
 ```
+
+As described on the last line of the printout, results are saved in a directory named `fight-churn-output`  which is
+alongside the `fight-churn` source directory.  (The confusing printout is the relative path from the 
+script directory.)  Each of the plots produced by the script for the default `churnsim2` simulation data will look roughly
+like this:
+
+
+
+![Metric QA Output](/readme_files/metric_qa.png)
+ 
+ 
+
 
 [(top)](#top)  
 
@@ -775,6 +874,7 @@ python metric_qa.py
 
 Coming Soon! (after Chapter 5 is written...)
 
+---
 ---
 
 ## Authors
