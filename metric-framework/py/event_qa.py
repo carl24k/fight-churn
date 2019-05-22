@@ -15,10 +15,8 @@ one_event = None
 schema = 'churnsim2'
 
 # properties = ['quantity','duration']
-# one_event='Customer_Promoter_QAExMissing'
-# one_event='CustomerPromoter'
-# one_event='Cost_Local_QAExtreme'
-# one_event='Cost_LD_Canada'
+# one_event='post'
+
 
 
 with open('../conf/%s_metrics.json' % schema, 'r') as myfile:

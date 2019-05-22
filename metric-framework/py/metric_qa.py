@@ -8,31 +8,13 @@ import os
 
 from metric_util import metricIdSql
 
-run_mets=None
-
 # schema = 'b'
 # schema = 'v'
 # schema = 'k'
 schema = 'churnsim2'
 
-# run_mets='Cost_Local_PerMonth_QAExtreme'
-# run_mets='CustomerPromoter_PerMonth'
-# run_mets='mrr'
-# run_mets = ['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
-# run_mets=['Klips_Owned_Average','klips_per_tab']
-# run_mets=['extension_units','base_units','mrr']
-# run_mets=['num_seats','num_api_calls','num_dashboards','num_privatelink','mrr']
-# run_mets=['Cost_Local_PerMonth','Cost_LD_Canada_PerMonth','Cost_Toll_Free_PerMonth','Cost_LD_US_PerMonth','Cost_International_PerMonth']
-# run_mets='mrr'
-# run_mets=['Cost_LD_Canada_PerMonth','Cost_Toll_Free_PerMonth','Cost_LD_US_PerMonth','Cost_International_PerMonth']
-# run_mets='Total_Use_Per_Month'
-# run_mets=['Use_Per_Base_Unit','Use_Per_Dollar_MRR','Percent_Canada','Percent_US','Percent_Intl','Percent_TollFree','Dollar_MRR_Per_Call_Unit','Dollar_MRR_Per_Base_Unit']
-# run_mets = ['Active_Users_Last_Qtr']
-# run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month']
-# run_mets=['billing_period']
-# run_mets=['num_users']
-# run_mets=['Total_Tractors_Per_Month','Detractor_Rate','Promoter_Rate']
-# run_mets=['User_Utilization']
+run_mets=None
+# run_mets=['account_tenure','post_per_month']
 
 hideAx=False
 monthFormat = mdates.DateFormatter('%b')
