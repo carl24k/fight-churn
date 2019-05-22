@@ -18,7 +18,6 @@ http://www.fightchurnwithdata.com for more information.
 [3.1 Event QA](#eventqa)  
 [3.2 Batch Metric Calculation](#metcalc)  
 [3.3 Metric QA](#metqa)  
-[3 Metric Calculation Framework](#metrics)  
 [4 Analysis Framework](#analysis)  
 
 
