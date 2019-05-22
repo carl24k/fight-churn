@@ -14,7 +14,12 @@ http://www.fightchurnwithdata.com for more information.
 [2 Running Book Code Listings](#examples)  
 [2.1 Running a Listing](#runlist)  
 [2.2 Configuring How Listings are Run](#conflist)  
-[3 Metric Calculation Framework](#metrics)
+[3 Metric Calculation Framework](#metrics)  
+[3.1 Event QA](#eventqa)  
+[3.2 Batch Metric Calculation](#metcalc)  
+[3.3 Metric QA](#metqa)  
+[3 Metric Calculation Framework](#metrics)  
+[4 Analysis Framework](#analysis)  
 
 
 ---
@@ -257,6 +262,34 @@ using the little green arrow next to the Configuration drop down menu...
 
 (The green bug next to the arrow runs it in debug mode...)
 
+
+---
+#### 1.2.7 Running From the Command Line
+
+If you are not using PyCharm of course you can run all this code from a terminal shell. You will need
+to manually setup a Python virtual environment with the required packages, and  set a few environment variables 
+in your `.bash_profile` or `.bashrc` file (or whatever you use, but I will show this for bash because it seems to be the 
+most common.)    If you are running Python on the command line then I'm going to assume you know what you are doing
+and I will not go over installation of the requirements this way as it is standard (and I provided PyCharm
+instructions, above, in case you are really new to Python.)  
+
+The environment variables are specific to these programs and contain information need to access the
+databse. You should add a few lines like this:
+
+```
+export CHURN_DB=your_db
+export CHURN_DB_USER=your_user
+export CHURN_DB_PASS=your_password
+```
+
+Make sure to open a new terminal or source the `.bashrc` script after making the changes.  You will also
+need to add the code folders you want to run from the project to your `PYTHONPATH` environement variable;
+note that because the code (particularly the examples) add code from packages defined in other directories
+you really need to add these paths (it is not sufficient to simply run the script from the directory it is in.)
+
+The rest of the README is written for people using PyCharm, but you can always run the same commands
+illustrated from the terminal...
+
 ---
 ---
 
@@ -448,6 +481,9 @@ binds variables (for SQL) or passes parameters (for Python) and executes the cod
 * The code (listings from the book) are in the folders `chapN` under the examples directory.
 * Exactly what examples to run and what parametes are used are set in JSON files in the directory `examples/conf`.
  
+So you can use this utility as you go through the book - if you want to actually run the code
+from any example on your local database, this is the easiest way to do it.
+ 
 [(top)](#top)  
 
 ---
@@ -563,57 +599,162 @@ The following summarizes the configuration:
 
 ## 3 Calculating Metrics with the Framework
 
-First you need to configure some metrics specifically for your event data in a
-configuration file for your schema.  See the examples
-_metric-example/conf/x_metrics.json_ where the "x" is replaced with your
-schema name.  Then running _metrics.py_ in the metric-framework folder will 1)
-truncate the metrics in the metric table and 2) insert new metrics defined by
-whatever is in  the file _metric-example/conf/yourschema_metrics.json_.  
+Running the code listing by listing is useful for when you are learning the techniques described the book. But once you have 
+mastered the basics and you are trying to actually analyze churn for a live product or service you will need a more
+efficient way to operate.  The code described in this section is a partially automated framework for calculating metrics
+on events, and performing quality assurance (QA) checks associated with this process.  So these are all the topics
+described in chapter 3, but this is a more scalable system for applying the techniques to a large data set than the 
+example by example framework described in the last section.
 
 ---
 
-### 3.1 Calculating Metrics in Batch
+<a name="eventqa"/>
+
+
+### 3.1 Event QA
+
+As described in the book, the first step in calculating metrics should actually be running some tests on your event
+data.  This section of the code contains a script that will automatically run generate a QA plot for each event type,
+as described in chapter 3.
+
+The script that does is `metric-framework/event_qa.py`.  To run it, make a Run Configuration as described in Section 
+1.2.6.  If you are running for the default simulated data set, `chursim2` then the script is ready to run - just launch
+it.  You should see output like the following:
+
+```
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/metric-framework/py/event_qa.py
+Checking event post
+Checking event new_friend
+Checking event like
+Checking event view_feed
+Checking event photo
+Checking event message
+Checking event unfriend
+Saving results to ../../../fight-churn-output/churnsim2/
+
+Process finished with exit code 0
+```
+
+The output is a set of of png images shown in the folder indicated by the relative path on the last line: It is a 
+folder nmaed `fight-churn-output` that is located adjacent to the repository folder.  The figures will look
+like this:
+
+ 
+![Event QA Output](/readme_files/event_qa.png)
+ 
+[(top)](#top)  
 
 ---
 
-#### 3.1.1 Running metrics
+<a name="metcalc"/>
+
+### 3.2 Calculating Metrics in Batch Jobs
+
+After you are satisfied with the event data that has been loaded and is correct you can calculate metrics in batch jobs.
+There are three parts to the metric framework:
+
+1. Metric calculation SQL's in the `metric-framework/sql` folder
+1. Metric configurations in JSONfiles in the `metric-framework/conf` folder
+1. An execution program in pyton, `metric-framework/metric_calc.py`
+
+
+#### 3.2.1 Metric SQL's
+
+SQL's to calculate metrics are in the `metric-framework/sql` folder. These are the SQL's described in Chapter 3
+(Measuring Customers) and Chapter 7 (Advanced Behavioral Metrics).  
+
+* The SQL's all have bind parameters prefaced by `%`
+
+For example, the metric for counting the number of events or aggregating an event property is:
 
 ```
-python metrics.py
+set search_path = '%schema';
+with date_vals AS (
+  select i::timestamp as metric_date from generate_series('%from_date', '%to_date', '7 day'::interval) i
+)
+
+insert into metric (account_id,metric_time,metric_name_id,metric_value)
+
+select account_id, metric_date,%metric_name_id, (%quotwin)::float/(%measwin::float) *  %fun
+from event e inner join date_vals d
+on e.event_time <= metric_date and e.event_time > metric_date - interval '%measwin week'
+where e.event_type_id=%event_id
+group by account_id, metric_date
+order by account_id, metric_date;
 ```
 
-If you want to run just one metric you can uncomment the variable
-*one_metric*.   Note that when running one metric currently you need to take
-care of deleting values yourself (if you find yourself running the same metric
-again after changes.)
+The bind variables in the metric are:
+1. `%schema`
+1. `%from_date`
+1. `%to_date`
+1. `%event_id`
+1. `%metric_name_id`
+1. `%quotwin`
+1. `%measwin`
+1. `%fun`
 
-Command line parameters coming soon...
+These will be substituted by the program based on the configurations when it is run. 
+For details of what the SQL does and the meaning of bind parameters read the book.
+
+At the time of this writing the following metrics are available:
+
+1. metric_multi_event_tenscale.sql
+1. metric_over_period.sql
+1. metric_over_period_tenscale.sql
+1. metric_ratio.sql
+1. metric_subscription_billperiod.sql
+1. metric_subscription_mrr.sql
+1. metric_subscription_product_quantity.sql
+1. metric_subscription_unit_quantity.sql
+1. metric_tenure.sql
+
+---
+
+#### 3.2.2 Configuring Metrics
+
+To calculate metrics in batch jobs you need to configure the metrics specifically for your event data in a
+configuration file for your schema.  For a simple example you can take a look at `metric-framework/conf/churnsim2_metrics.json`
+which is setup to run for the default simulated data file.  The configuration is a set of named objects where the
+key is the name of the metric that will be created (the name to be entered in the table `metric_name` in the database)
+and the value is an object containing key/value pairs that are the bind variables for the SQL.  Here is one 
+example from the `churnsim2` configuration:
+
+```
+	"post_per_month": {
+		"event_id":  0,
+		"fun" : "count(*)",
+		"measwin" : 8,
+		"quotwin" : 4,
+		"minten" : 2,
+		"sql" : "metric_over_period_tenscale"
+	}
+```
+
+This configuration will create a metric named "post_per_month".  The `sql` parameter in the configuration object
+ indicates which specific SQL to execute in order to create the metric : in this case it is the sql
+  `metric-framework/sqls/metric_over_period_tenscale.sql`.  
+ The other fields in the configuration  object will all be matched to bind variables in the SQL.
+
+Each metric you create requires one configuration and the easiest way to create them is copy/paste and then modify
+the existing configurations. For more examples of metric configurations (the `churnsim2` only has one example repeated)
+look at the other sample file `metric-framework/conf/x_metrics.json`. 
+(Unless you really need to make a lot - then its not so easy to make them manually and
+you should spend some time automating that process as well.  Maybe that will be a future feature in this framework...)
+
+---
+
+#### 3.2.3 Running metrics
+
+Once you have configured
 
 [(top)](#top)  
 
 ---
 
-#### 3.1.2 Configuring Metrics
-
-
-[(top)](#top)  
-
----
-
-### 3.2 Event QA
-
-Details coming soon...
-
-
-```
-python event_qa.py
-```
-
-
-[(top)](#top)  
-
+<a name="metqa"/>
 
 ### 3.3 Metric QA
+
 
 Details coming soon...
 
@@ -627,10 +768,12 @@ python metric_qa.py
 ---
 ---
 
+<a name="analysis"/>
+
 
 ## 4 Analysis Framework
 
-Coming Soon...
+Coming Soon! (after Chapter 5 is written...)
 
 ---
 
