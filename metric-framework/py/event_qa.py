@@ -5,26 +5,25 @@ import json
 import pandas
 import os
 
+from schema_const import schema_data_dict
+
 properties = []
 one_event = None
 
 
 # schema = 'b'
-# from_date ='2018-07-01' # broadly end of  bad event data
-# to_date ='2019-02-01'
+# schema = 'v'
+schema = 'churnsim2'
 
+# properties = ['quantity','duration']
 # one_event='Customer_Promoter_QAExMissing'
 # one_event='CustomerPromoter'
-
-# schema = 'v'
-# from_date ='2017-01-01'
-# to_date ='2019-03-01'
-# properties = ['quantity','duration']
 # one_event='Cost_Local_QAExtreme'
 # one_event='Cost_LD_Canada'
 
-schema = 'k'
 
+from_date=schema_data_dict[schema]['from_date']
+to_date=schema_data_dict[schema]['to_date']
 
 hideAx=False
 monthFormat = mdates.DateFormatter('%b')
@@ -39,8 +38,8 @@ else:
 
 save_path = '../../../fight-churn-output/' + schema + '/'
 os.makedirs(save_path,exist_ok=True)
-
-engine = sqlalchemy.create_engine("postgres://postgres:churn@localhost/postgres")
+engine = sqlalchemy.create_engine("postgres://%s:%s@localhost/%s" % (
+	os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
 conn = engine.connect()
 
 events = pandas.read_sql_query("select * from %s.event_type" % schema, conn)
