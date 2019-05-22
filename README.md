@@ -11,7 +11,9 @@ http://www.fightchurnwithdata.com for more information.
 [1.1 Prerequisites](#prereq)    
 [1.2 Development Environment Setup](#devenv)      
 [1.3 Data Creation / Loading](#data)  
-[2 Running Book Code Examples](#examples)  
+[2 Running Book Code Listings](#examples)  
+[2.1 Running a Listing](#runlist)  
+[2.2 Configuring How Listings are Run](#conflist)  
 [3 Metric Calculation Framework](#metrics)
 
 
@@ -37,8 +39,14 @@ better please help help out! :)
 
 ### 1.1 Prerequisites
 
+Required:
+
 * Python 3 and the required packages (requirements.txt)
 * PostgreSQL
+
+Recommended:
+* PyCharm (Community Edition)
+* PgAdmin
 
 ---
 #### 1.1.1 Python 3
@@ -439,8 +447,14 @@ You can run the book examples with the python script `examples/churn_example.py`
 binds variables (for SQL) or passes parameters (for Python) and executes the code.  
 * The code (listings from the book) are in the folders `chapN` under the examples directory.
 * Exactly what examples to run and what parametes are used are set in JSON files in the directory `examples/conf`.
+ 
+[(top)](#top)  
 
-### 2.1 Running a Book Listing
+---
+
+<a name="runlist"/>
+
+### 2.1 Running a Listing
 
 Start by making a Run Configuration, following the instructions in Section 1.2.6.
 
@@ -448,24 +462,99 @@ The script is preset to run the first code example, listing 2.1 from chapter 2, 
 simulated data set `churnsim2`.  If you have created a simulated dataset named `churnsim2` as described
 in section 1.3.2 you can run your configuration as is and you should see a result like this:
 
+```
+chap2 1 Running example listing_2_1_net_retention
+set search_path = 'churnsim2'; with  date_range as (     	select  '2019-03-01'::date as start_date, '2019-04-01'::date as end_date ),  start_accounts as     ( 	select  account_id, sum (mrr) as total_mrr     	from subscription s inner join date_range d on 		s.start_date <= d.start_date     		and (s.end_date > d.start_date or s.end_date is null) 	group by account_id     ), end_accounts as     ( 	select account_id, sum(mrr) as total_mrr       	from subscription s inner join date_range d on 		s.start_date <= d.end_date     		and (s.end_date > d.end_date or s.end_date is null) 	group by account_id     ),  retained_accounts as      ( 	select s.account_id, sum(e.total_mrr) as total_mrr      	from start_accounts s  	inner join end_accounts e on s.account_id=e.account_id   	group by s.account_id     ), start_mrr as (     	select sum (start_accounts.total_mrr) as start_mrr from start_accounts ),  retain_mrr as (     	select sum(retained_accounts.total_mrr) as retain_mrr  from retained_accounts ) select  	retain_mrr /start_mrr as net_mrr_retention_rate,     	1.0 - retain_mrr /start_mrr as net_mrr_churn_rate,     	start_mrr,     	retain_mrr from start_mrr, retain_mrr 
+Record(net_mrr_retention_rate=0.954724409448819, net_mrr_churn_rate=0.0452755905511807, start_mrr=5074.91999999994, retain_mrr=4845.14999999994)
+```
 
-You modify what the script will run for by simply
-changing the constants at the top of the file 
-(a command line option system is on the to do list.)  Note these variables:
+The first line shows you what chapter and listing are being run.  The second line is the SQL being executed (this is a SQL
+example).  The final line prints out the result - the net retention rate, calculated with the SQL.  Because the data
+was randomly simulated your result on the last line won't be exactly the same as that one, but it should be similar.
+
+You change what the script will run for by simply editing the constants at the top of the file 
+(a command line option feature is on the to do list.)  Note these variables:
 
 * `schema` : the name of the churn data schema to run on
 * `one_chapter` : run only examples from this chapter, if specified.  Set to `None` for all chapters.
 * `one_example` : run only the named example
 
+The most common thing you will do is run a different example on the same schema and chapter, so you would edit this line:
 
-### 2.2 Configuring listings to run
+`one_example='listing_2_1_net_retention'`
 
-To see what examples are available to run you can peruse the 
+to whatever example you want. So for example, to run listing 2.2 you can change the variable to:
 
 
+`one_example='listing_2_2_churn_rate'`
+
+To see what examples are available to run, peruse the code in the chapter folders below `example`.  But note that your
+schema must be *configured* to run each example, as described in the next  section.  The `churnsim2` (default) schema
+has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
+configuration.
+ 
 [(top)](#top)  
 
 ---
+
+<a name="conflist"/>
+
+### 2.2 Configuring How Listings Run
+
+Your schema must be *configured* to run each example.  The `churnsim2` (default) schema
+has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
+configuration. Also if you want to change how the examples are run on `churnsim2` this section will explain how to do it.
+
+The configuration files are all in folder `examples/conf` and each schema has a configuration file that must have a name
+that is `<schema_name>_examples.json`.  So the configuration for the `churnsim2` data set is in the file `churnsim2_examples.json`.
+The configuration his a JSON with the following structure:
+
+1. The top level are keys for the chapters, "chap2", "chap3", etc.
+1. The next level is a set of objects representing each listing in the chapter
+    * The key for each object is the listing name, beginning with "listing_<chapter>_<number>"
+    * The values for each object are parameters that apply to running that listing.  
+    There are a few possible types of parameters.
+        1. Variables which are substituted in SQL, or passed as values to python functions
+        1. Control parameters (described more below)
+1. There is a special object of chapter default parameters in each chapter, with the key `params`. The defaults for the 
+chapter will automatically be applied to every example -  parameters specified in each listing are override the
+defaults.
+
+As mentioned, there are two special control parameters which are are *not* parameters of the listing:
+1. `type` : must be either `sql` or `python` and controls how the listing is executed
+1. `mode` : controls how the result of the program is handled:
+    * `mode=one` : A SQL expected to return one result, print it
+    * `mode=run` : A SQL expected to return many results, print the first 5 lines
+    * `mode=save`: A SQL expected to return many results, save the result in a csv file
+
+Below is an example of the beginning of the example configuration for the `churnsim2` simualted data set:
+
+```
+	"chap2" : {
+		"params" : {
+			"FRYR-MM-DD": "2019-03-01",
+			"TOYR-MM-DD": "2019-04-01",
+			"mode" : "one",
+			"type" : "sql"
+		},
+		"listing_2_1_net_retention" : {
+		},
+		"listing_2_2_churn_rate" : {
+		},
+		...
+```
+
+The following summarizes the configuration:
+*  `listing_2_1_net_retention` and `listing_2_2_churn_rate` are enabled
+* Both listing will run with the parameters shown in the `params` section: 
+    * The strings for start and from date and to date in the queries will be set as shown
+    * The examples are SQL
+    * The examples will print one result
+
+(More to come on running Python listings when Chapter 5 is released...) 
+ 
+[(top)](#top)  
+
 ---
 ---
 
@@ -481,8 +570,13 @@ schema name.  Then running _metrics.py_ in the metric-framework folder will 1)
 truncate the metrics in the metric table and 2) insert new metrics defined by
 whatever is in  the file _metric-example/conf/yourschema_metrics.json_.  
 
-Currently everything is hard coded, so you *must* set the postgres connection string, the 
-schema, and date range in the file.  
+---
+
+### 3.1 Calculating Metrics in Batch
+
+---
+
+#### 3.1.1 Running metrics
 
 ```
 python metrics.py
@@ -495,8 +589,18 @@ again after changes.)
 
 Command line parameters coming soon...
 
+[(top)](#top)  
 
-### Event QA
+---
+
+#### 3.1.2 Configuring Metrics
+
+
+[(top)](#top)  
+
+---
+
+### 3.2 Event QA
 
 Details coming soon...
 
@@ -505,7 +609,11 @@ Details coming soon...
 python event_qa.py
 ```
 
-### Metric QA
+
+[(top)](#top)  
+
+
+### 3.3 Metric QA
 
 Details coming soon...
 
@@ -513,8 +621,18 @@ Details coming soon...
 ```
 python metric_qa.py
 ```
----
+
 [(top)](#top)  
+
+---
+---
+
+
+## 4 Analysis Framework
+
+Coming Soon...
+
+---
 
 ## Authors
 
@@ -524,6 +642,7 @@ python metric_qa.py
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
 
-* Coming soon
+
+
+[(top)](#top)  
