@@ -1,9 +1,22 @@
 # fight-churn
 
+<a name="top"/>
+
 This is code for the (forthcoming) book "Fighting Churn With Data: The
 Subscribed Institute Guide to Data Driven Customer Engagement".  See
 http://www.fightchurnwithdata.com for more information.
 
+**Table of Contents**  
+[1 Getting Started](#start)  
+[1.1 Prerequisites](#prereq)    
+[1.2 Development Environment Setup](#devenv)      
+[1.3 Data Creation / Loading](#data)  
+[2 Running Book Code Examples](#examples)  
+[3 Metric Calculation Framework](#metrics)
+
+
+---
+<a name="start"/>
 
 ## 1 Getting Started
 
@@ -16,11 +29,18 @@ way, or just not how you would have done it, please be patient.  Same goes for t
 of some of the code - I'm doing the best I can with the time I've got.  If you want to make things
 better please help help out! :)
 
+
+---
+---
+
+<a name="prereq"/>
+
 ### 1.1 Prerequisites
 
 * Python 3 and the required packages (requirements.txt)
 * PostgreSQL
 
+---
 #### 1.1.1 Python 3
 If you need help installing Python 3, you can refer to this page for Mac:
 * https://docs.python-guide.org/starting/install3/osx/
@@ -37,6 +57,7 @@ are new to Python, since an IDE can take care of some of the setup for you...)
 
 * https://www.jetbrains.com/pycharm/download
 
+---
 #### 1.1.2 PostgreSQL
 To install PostgreSQL for Mac following these instructions:
 
@@ -51,6 +72,11 @@ Make sure Posgres is running - here's what it looks like if you installed with P
 
 ![Postgres Running on Mac](/readme_files/postico.png)
 
+---
+---
+
+<a name="devenv"/>
+
 ### 1.2 Development Environment Setup
 
 Before you can load data or run the code you have to do some setup on your system. If you never have 
@@ -59,6 +85,7 @@ when you begin to work with a new technology.  If already know how to do this so
 to igonre my instructions, which are primarily written for beginners to use GUI tools to get up and
 running.
 
+---
 #### 1.2.1 Creating a Database
 
 You might want to create a new database to hold all of the churn data schemas you create. 
@@ -74,6 +101,7 @@ appropriate settings in your environment variable, section 1.2.6 below):
 ![Name the database](/readme_files/pgadmin_createdb2.png)
 
 
+---
 #### 1.2.3 Create a PyCharm Project
 
 After you have cloned this repository
@@ -85,6 +113,7 @@ After you have cloned this repository
 
 ![Name the database](/readme_files/pycharm0_existing_sources.png)
 
+---
 #### 1.2.4 Setup Python Project
 
 You should create a Python "virtual environment" for the project (I won't try to go into details here,
@@ -139,6 +168,7 @@ When you are done your project preferences should look like this:
 
 (At the time of creation of these instructions, later chapters have not been written.)
 
+---
 #### 1.2.5 Installing Python Package Requirements
 
 Now that you have created a Python project you can easily install the
@@ -153,6 +183,7 @@ this to work, and it will take several minutes for all the packages to be downlo
 and installed.
 
 
+---
 #### 1.2.6 Creating Run Configurations and Setting Database Environment Variables
 
 A lot of the python code depends on access to the database you created for the churn data.
@@ -218,6 +249,11 @@ using the little green arrow next to the Configuration drop down menu...
 
 (The green bug next to the arrow runs it in debug mode...)
 
+---
+---
+
+<a name="data"/>
+
 ### 1.3 Data Loading / Creation
 
 To run any of the code in the book you need to get some data loaded into your database.
@@ -242,6 +278,7 @@ customer data like this tends to be very sensitive information for the companies
 and so far there are no offers of data that can be made publicly available. (**If you have
 such data that you would be willing to make publicly available please contact the author.**)
 
+---
 #### 1.3.1 Schema Creation
 
 Regardless of where you get your data from, you need to create the database schema and tables that it
@@ -279,6 +316,7 @@ in PgAdmin:
 
 If you made it this far then congratulations!  You just ran your first bit of the fight-churn code.
 
+---
 #### 1.3.2 Generating Simulated Data
 
 If you don't have your own data to analyze then you should use the simulator program to create a 
@@ -329,6 +367,8 @@ churn=#
 
 ```
 
+Yours won't look exactly like that, because its a random simulation and the results are different every time.
+But it should be a similar overall number.
 (If you don't know how to launch a SQL prompt on your launch the PostgreSQL app and double click on
 the database.  Mine doesn't actually launch the terminal directly, but it points in the right direction....)
 
@@ -338,6 +378,7 @@ the database.  Mine doesn't actually launch the terminal directly, but it points
 
 Nice work!  Now you have the data you need to learn the techniques in the book!
 
+---
 #### 1.3.3 Loading Your Own Data (If you have it)
 
 If you have your own data that you want to analyze then you need to load it into the `subscription` and 
@@ -382,23 +423,54 @@ listing for the table you want to import into:
 
 ![Mac PostgreSQL terminal launch](/readme_files/mac_launch_psql_terminal.png)
 
+[(top)](#top)  
+
 ---
 ---
+---
+
+<a name="examples"/>
 
 ## 2 Running the Code from Book Examples
 
-You can run the book examples with the project under _examples_.  
+You can run the book examples with the python script `examples/churn_example.py`.
 
-```
-python churn_example.py
-```
+* This script reads SQL and Python source code, and either
+binds variables (for SQL) or passes parameters (for Python) and executes the code.  
+* The code (listings from the book) are in the folders `chapN` under the examples directory.
+* Exactly what examples to run and what parametes are used are set in JSON files in the directory `examples/conf`.
 
-Currently everything is hard coded.  If you want to run just one example or
-chapter you can uncomment the variables *one_chapter* and/or *one_example*.
-Command line parameters coming soon...
+### 2.1 Running a Book Listing
+
+Start by making a Run Configuration, following the instructions in Section 1.2.6.
+
+The script is preset to run the first code example, listing 2.1 from chapter 2, for the
+simulated data set `churnsim2`.  If you have created a simulated dataset named `churnsim2` as described
+in section 1.3.2 you can run your configuration as is and you should see a result like this:
+
+
+You modify what the script will run for by simply
+changing the constants at the top of the file 
+(a command line option system is on the to do list.)  Note these variables:
+
+* `schema` : the name of the churn data schema to run on
+* `one_chapter` : run only examples from this chapter, if specified.  Set to `None` for all chapters.
+* `one_example` : run only the named example
+
+
+### 2.2 Configuring listings to run
+
+To see what examples are available to run you can peruse the 
+
+
+[(top)](#top)  
 
 ---
 ---
+---
+
+<a name="metrics"/>
+
 
 ## 3 Calculating Metrics with the Framework
 
@@ -441,6 +513,8 @@ Details coming soon...
 ```
 python metric_qa.py
 ```
+---
+[(top)](#top)  
 
 ## Authors
 
