@@ -13,7 +13,8 @@ schema_data_dict = {
     'b': 'BroadlyDataSet4',
     'v_orig': 'VersatureDataSet3',
     'v3': 'VersatureDataSet3_0MRRCleaned',
-    'v': 'VersatureDataSet3_0MRRDemo',
+    'v2': 'VersatureDataSet3_0MRRDemo',
+    'v': 'VersatureDataSet2',
     'k': 'KlipfolioDataSet4',
     'churnsim2' : 'churnsim2_dataset'
 }
@@ -23,7 +24,7 @@ max_clips = {
 }
 
 ax_scale = {
-    'v' : 100.0,
+    'v' : 75.0,
     'k' : 110.0,
     'b' : 110.0,
     'churnsim2' : 110.0

@@ -12,9 +12,9 @@ import churn_calc as cc
 from churn_const import save_path, key_cols, no_plot, schema_data_dict, load_mat_file, skip_metrics, group_corr_thresh
 
 # schema = 'b'
-# schema = 'v'
-schema = 'k'
-schema = 'churnsim2'
+schema = 'v'
+# schema = 'k'
+# schema = 'churnsim2'
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file

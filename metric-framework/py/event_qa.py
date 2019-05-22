@@ -5,7 +5,6 @@ import json
 import pandas
 import os
 
-from schema_const import schema_data_dict
 
 properties = []
 one_event = None
@@ -22,8 +21,12 @@ schema = 'churnsim2'
 # one_event='Cost_LD_Canada'
 
 
-from_date=schema_data_dict[schema]['from_date']
-to_date=schema_data_dict[schema]['to_date']
+with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
+	metric_dict=json.loads(myfile.read())
+
+
+from_date=metric_dict['date_range']['from_date']
+to_date=metric_dict['date_range']['to_date']
 
 hideAx=False
 monthFormat = mdates.DateFormatter('%b')
@@ -97,3 +100,4 @@ for idx, event in events.iterrows():
 	plt.close()
 
 
+print('Saving results to %s' % save_path)

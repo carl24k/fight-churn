@@ -14,8 +14,8 @@ schema='churnsim2'
 save_path = '../../../fight-churn-output/' + schema + '/'
 os.makedirs(save_path,exist_ok=True)
 
-one_chapter='chap4'
-one_example='listing_4_5_data_set_create_template'
+one_chapter='chap2'
+one_example='listing_2_1_net_retention'
 
 example_name_regexp='listing_\\d+_\\d+_(\w+)'
 

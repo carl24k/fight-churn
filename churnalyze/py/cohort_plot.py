@@ -7,8 +7,8 @@ import churn_calc as cc
 from churn_const import save_path, schema_data_dict, load_mat_file, renames, skip_metrics,key_cols, no_plot, ax_scale
 
 run_mets = None
-behave_group = False
-hideAx=False
+behave_group = True
+hideAx=True
 allScores=False
 
 font = {'family': 'Brandon Grotesque', 'size': 20}
@@ -17,7 +17,7 @@ matplotlib.rc('font', **font)
 # schema = 'b'
 # schema = 'v'
 # schema = 'k'
-schema = 'churnsim2'
+schema = 'v'
 
 # run_mets=['Detractor_Rate']
 # run_mets=['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
@@ -45,7 +45,7 @@ schema = 'churnsim2'
 
 data_file = schema_data_dict[schema]
 schema_save_path = save_path(schema)+data_file
-nbin=5
+nbin=8
 
 def main():
     churn_data = cc.data_load(schema)
@@ -61,7 +61,7 @@ def main():
         num_weights = load_mat_df.astype(bool).sum(axis=0)
         load_mat_df = load_mat_df.loc[:,num_weights>1]
         grouped_columns=['Metric Group %d' % (d+1) for d in range(0,load_mat_df.shape[1])]
-        churn_data_reduced = pd.DataFrame(np.matmul(data_scores[plot_columns].to_numpy(), load_mat_df.to_numpy()),columns=grouped_columns)
+        churn_data_reduced = pd.DataFrame(np.matmul(data_scores[plot_columns].to_numpy(), load_mat_df.to_numpy()),columns=grouped_columns,index=churn_data.index)
         churn_data_reduced['is_churn']=churn_data['is_churn']
         churn_data = churn_data_reduced
         plot_columns = grouped_columns
