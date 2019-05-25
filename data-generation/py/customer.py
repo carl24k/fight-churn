@@ -6,14 +6,29 @@ from random import randrange
 class Customer:
     id_counter=0
     def __init__(self,behavior_rates):
+        '''
+        Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
+        Each customer also has a unique integer id which will become the account_id in the database, and holds its
+        own subscriptions and events.
+        :param behavior_rates: ndarray of behavior rates, which are assumed to be PER MONTH
+        '''
         self.behave_per_month=behavior_rates
         self.behave_per_day = (1.0/30.0)*self.behave_per_month
-        self.id=Customer.id_counter
-        Customer.id_counter+=1
+        self.id=Customer.id_counter # set the id to the current class variable
+        Customer.id_counter+=1 # increment the class variable
         self.subscriptions=[]
         self.events=[]
 
     def generate_events(self,start_date,end_date):
+        '''
+        Generate a sequence of events at the customers daily rates.  Each count for an event on a day is droing from
+        a poisson distribution with the customers average rate.  If the number is greater than zero, that number of events
+        are created as tuples of time stamps and the event index (which is the database type id).  The time of the
+        event is randomly set to anything on the 24 hour range.
+        :param start_date: datetime.date for start of simulation
+        :param end_date: datetime.date for end of simulation
+        :return: The total count of each event, the list of all of the event tuples
+        '''
 
         delta = end_date - start_date
 
