@@ -7,29 +7,9 @@ import os
 import sys
 
 
-properties = []
-one_event = None
-
-
-# schema = 'b'
-# schema = 'v'
-schema = 'churnsim2'
-
-# properties = ['quantity','duration']
-# one_event='post'
-
-if len(properties)>0:
-	property_term = ','.join(['sum(%s) as %s' % (p,p) for p in properties])
-	property_term = ', ' + property_term
-else:
-	property_term=''
-
-hideAx=False
-monthFormat = mdates.DateFormatter('%b')
-
 class EventChecker:
 
-	def __init__(self,schema):
+	def __init__(self,schema,properties=[]):
 
 		with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
 			self.metric_dict=json.loads(myfile.read())
@@ -52,6 +32,11 @@ class EventChecker:
 		with open('../sql/qa_event.sql', 'r') as myfile:
 			self.qa_sql = myfile.read().replace('\n', ' ')
 
+		if len(properties) > 0:
+			self.property_term = ','.join(['sum(%s) as %s' % (p, p) for p in properties])
+			self.property_term = ', ' + self.property_term
+		else:
+			self.property_term = ''
 
 	def make_one_event_sql(self,event):
 		print('Checking event %s' % event['event_type_name'])
@@ -59,10 +44,10 @@ class EventChecker:
 		aSql = aSql.replace('%schema', self.schema)
 		aSql = aSql.replace('%from_date', self.from_date)
 		aSql = aSql.replace('%to_date', self.to_date)
-		aSql = aSql.replace('%property_term', property_term)
+		aSql = aSql.replace('%property_term', self.property_term)
 		return aSql
 
-	def check_one_event_qa(self,event):
+	def check_one_event_qa(self,event,hideAx=False):
 		aSql = self.make_one_event_sql(event)
 
 		# print(aSql)
@@ -76,6 +61,8 @@ class EventChecker:
 
 		valid_properties = [any(res[p].notnull()) for p in properties]
 		n_valid_property = sum([int(v) for v in valid_properties])
+
+		monthFormat = mdates.DateFormatter('%b')
 
 		if n_valid_property > 0:
 			plt.figure(figsize=(5, 8))
@@ -106,10 +93,10 @@ class EventChecker:
 		plt.savefig(self.save_path + 'event_qa_' + cleanedName + '.png')
 		plt.close()
 
-	def check_events(self,one_event=None):
+	def check_events(self,events_2check=None):
 
 		for idx, event in self.events.iterrows():
-			if one_event is not None and event['event_type_name']!=one_event:
+			if events_2check is not None and event['event_type_name'] not in events_2check:
 				continue
 
 			self.check_one_event_qa(event)
@@ -124,14 +111,19 @@ use them. Otherwise defaults are hard coded
 if __name__ == "__main__":
 
 	schema = 'churnsim2'
+
+	properties = []
+	# properties = ['quantity','duration']
+
+	schema = 'churnsim2'
 	events_2check = None
-	# Example of running just a few metrics - uncomment this line...
-	# events_2check=['account_tenure','post_per_month']
+	# Example of running just a few events - uncomment this line...
+	events_2check=['post','like']
 
 	if len(sys.argv)>=2:
 		schema=sys.argv[1]
 	if len(sys.argv)>=3:
 		events_2check=sys.argv[2:]
 
-	event_check = EventChecker(schema)
+	event_check = EventChecker(schema,properties)
 	event_check.check_events(events_2check)
