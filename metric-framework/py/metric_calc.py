@@ -24,6 +24,8 @@ class MetricCalculator:
 		self.from_date = self.metric_dict['date_range']['from_date']
 		self.to_date = self.metric_dict['date_range']['to_date']
 
+		self.non_metrics=('date_range','event_properties')
+
 		self.URI="postgres://%s:%s@localhost/%s" % (
 			os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB'])
 		self.db = Postgres(self.URI)
@@ -145,7 +147,7 @@ class MetricCalculator:
 		'''
 
 		for metric in self.metric_dict.keys():
-			if (run_mets is not None and metric not in run_mets) or metric == 'date_range':
+			if (run_mets is not None and metric not in run_mets) or metric in self.non_metrics:
 				continue
 
 			self.metric_qa_plot(metric,hideAx)
@@ -189,7 +191,7 @@ class MetricCalculator:
 		'''
 
 		for metric in self.metric_dict.keys():
-			if (run_mets is not None and metric not in run_mets) or metric == 'date_range':
+			if (run_mets is not None and metric not in run_mets) or metric in self.non_metrics:
 				continue
 
 			self.run_one_metric_calculation(metric)

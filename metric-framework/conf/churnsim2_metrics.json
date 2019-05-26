@@ -3,6 +3,7 @@
         "from_date" :"2019-02-04",
         "to_date" : "2019-05-06"
     },
+	"event_properties" : [],
 	"account_tenure": {
 	    "sql" : "metric_tenure"
 	},
