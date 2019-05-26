@@ -416,7 +416,7 @@ the database.  Mine doesn't actually launch the terminal directly, but it points
 ![Mac PostgreSQL terminal launch](/readme_files/mac_launch_psql_terminal.png)
 
 
-Nice work!  Now you have the data you need to learn the techniques in the book!
+Great!  Now you have the data you need to run the code and learn the techniques in the book.
 
 ---
 #### 1.3.3 Loading Your Own Data (If you have it)
@@ -498,30 +498,78 @@ simulated data set `churnsim2`.  If you have created a simulated dataset named `
 in section 1.3.2 you can run your configuration as is and you should see a result like this:
 
 ```
-chap2 1 Running example listing_2_1_net_retention
-set search_path = 'churnsim2'; with  date_range as (     	select  '2019-03-01'::date as start_date, '2019-04-01'::date as end_date ),  start_accounts as     ( 	select  account_id, sum (mrr) as total_mrr     	from subscription s inner join date_range d on 		s.start_date <= d.start_date     		and (s.end_date > d.start_date or s.end_date is null) 	group by account_id     ), end_accounts as     ( 	select account_id, sum(mrr) as total_mrr       	from subscription s inner join date_range d on 		s.start_date <= d.end_date     		and (s.end_date > d.end_date or s.end_date is null) 	group by account_id     ),  retained_accounts as      ( 	select s.account_id, sum(e.total_mrr) as total_mrr      	from start_accounts s  	inner join end_accounts e on s.account_id=e.account_id   	group by s.account_id     ), start_mrr as (     	select sum (start_accounts.total_mrr) as start_mrr from start_accounts ),  retain_mrr as (     	select sum(retained_accounts.total_mrr) as retain_mrr  from retained_accounts ) select  	retain_mrr /start_mrr as net_mrr_retention_rate,     	1.0 - retain_mrr /start_mrr as net_mrr_churn_rate,     	start_mrr,     	retain_mrr from start_mrr, retain_mrr 
-Record(net_mrr_retention_rate=0.954724409448819, net_mrr_churn_rate=0.0452755905511807, start_mrr=5074.91999999994, retain_mrr=4845.14999999994)
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/examples/py/churn_example.py
+
+Running chap2 listing listing_2_1_net_retention
+SQL:
+----------
+set search_path = 'churnsim2'; with 
+date_range as (    
+	select  '2019-03-01'::date as start_date, '2019-04-01'::date as end_date
+), 
+start_accounts as    
+(
+	select  account_id, sum (mrr) as total_mrr    
+	from subscription s inner join date_range d on
+		s.start_date <= d.start_date    
+		and (s.end_date > d.start_date or s.end_date is null)
+	group by account_id    
+),
+end_accounts as    
+(
+	select account_id, sum(mrr) as total_mrr      
+	from subscription s inner join date_range d on
+		s.start_date <= d.end_date    
+		and (s.end_date > d.end_date or s.end_date is null)
+	group by account_id    
+), 
+retained_accounts as     
+(
+	select s.account_id, sum(e.total_mrr) as total_mrr     
+	from start_accounts s 
+	inner join end_accounts e on s.account_id=e.account_id  
+	group by s.account_id    
+),
+start_mrr as (    
+	select sum (start_accounts.total_mrr) as start_mrr from start_accounts
+), 
+retain_mrr as (    
+	select sum(retained_accounts.total_mrr) as retain_mrr 
+from retained_accounts
+)
+select 
+	retain_mrr /start_mrr as net_mrr_retention_rate,    
+	1.0 - retain_mrr /start_mrr as net_mrr_churn_rate,    
+	start_mrr,    
+	retain_mrr
+from start_mrr, retain_mrr
+
+----------
+RESULT:
+Record(net_mrr_retention_rate=0.96039603960396, net_mrr_churn_rate=0.0396039603960396, start_mrr=1008.99, retain_mrr=969.030000000001)
+
+Process finished with exit code 0
 ```
 
-The first line shows you what chapter and listing are being run.  The second line is the SQL being executed (this is a SQL
+The first line shows you what chapter and listing are being run.  Next it shows the SQL being run (this is a SQL
 example).  The final line prints out the result - the net retention rate, calculated with the SQL.  Because the data
 was randomly simulated your result on the last line won't be exactly the same as that one, but it should be similar.
 
-You change what the script will run for by simply editing the constants at the top of the file 
+You change what the script will run for by simply editing the constants in the "main" portion **at the bottom of the file** 
 (a command line option feature is on the to do list.)  Note these variables:
 
 * `schema` : the name of the churn data schema to run on
-* `one_chapter` : run only examples from this chapter, if specified.  Set to `None` for all chapters.
-* `one_example` : run only the named example
+* `chapter` : the chapter to run a listing from
+* `listing` : the number of the listing to run
 
 The most common thing you will do is run a different example on the same schema and chapter, so you would edit this line:
 
-`one_example='listing_2_1_net_retention'`
+`listing=1`
 
 to whatever example you want. So for example, to run listing 2.2 you can change the variable to:
 
 
-`one_example='listing_2_2_churn_rate'`
+`listing=2`
 
 To see what examples are available to run, peruse the code in the chapter folders below `example`.  But note that your
 schema must be *configured* to run each example, as described in the next  section.  The `churnsim2` (default) schema
