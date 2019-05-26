@@ -471,7 +471,7 @@ listing for the table you want to import into:
 
 <a name="examples"/>
 
-## 2 Running the Code from Book Listings
+## 2 Running the Code from the Book Listings
 
 You can run the book listings with the python script `listings/run_churn_listing.py`.
 
@@ -580,10 +580,10 @@ Alternatively, the script accepts command line parameters.  To run this way, pro
 
 **Note:**
 If you want to run listings from the command line, you also need to setup your Python virtual environment
-and added the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  
+and add the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  
 Command line setup is not covered in this README at this time (but if you want to add such instructions please contribute!)
 
-You can also set command line argument in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command 
+You can also set command line arguments in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command 
 line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
 
 To see what listings are available to run, peruse the code in the chapter folders below `listing`.  But note that your
@@ -621,8 +621,9 @@ defaults.
 As mentioned, there are two special control parameters which are are *not* parameters of the listing:
 1. `type` : must be either `sql` or `python` and controls how the listing is executed
 1. `mode` : controls how the result of the program is handled:
+    * `mode=run` : A SQL expected to return no results (like an insert)
     * `mode=one` : A SQL expected to return one result, print it
-    * `mode=run` : A SQL expected to return many results, print the first 5 lines
+    * `mode=top` : A SQL expected to return many results, print the first 5 lines
     * `mode=save`: A SQL expected to return many results, save the result in a csv file
 
 Below is an example of the beginning of the listing configuration for the `churnsim2` simulated data set:
