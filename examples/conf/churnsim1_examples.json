@@ -74,7 +74,7 @@
 			"OBS_INTERVAL": "1 month",
 			"LEAD_TIME": "21 day"
 		},
-		"listing_4_A_data_set_create_analysis": {
+		"listing_4_A_data_set_4analysis": {
 			"MET_INTERVAL": "7 day",
 			"mode" : "top"
 		}

@@ -14,4 +14,5 @@ def cohort_plot(data_set_path='', metric_to_plot='',save_path='example.png',nbin
     plt.xlabel('Cohort Average of  "%s"' % metric_to_plot)
     plt.ylabel('Cohort Churn Rate (%)')
     plt.savefig(save_path)
+    print('Saving plot to %s' % save_path)
     plt.close()

@@ -78,9 +78,22 @@
 			"MET_INTERVAL": "7 day",
 			"mode" : "top"
 		},
-		"listing_4_A_data_set_create_analysis": {
+		"listing_4_A_data_set_4analysis": {
 			"MET_INTERVAL": "7 day",
 			"mode" : "save"
+		}
+	},
+	"chap5" : {
+		"params": {
+			"data_set_path" : "/Users/cgold/projects/ChurnBook/fight-churn-output/churnsim2/listing_4_A_data_set_4analysis.csv",
+			"type" : "py"
+		},
+		"listing_5_1_cohort_plot" : {
+			"metric_to_plot" : "post_per_month"
+		},
+		"listing_5_2_dataset_stats" : {
+		},
+		"listing_5_3_metric_scores" : {
 		}
 	}
 }
