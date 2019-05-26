@@ -191,25 +191,16 @@ def load_and_check_listing_params(schema, chapter, listing):
     print('No params for listing %d, chapter %d in %s_listings.json' % (listing,chapter,schema))
     exit(-3)
 
-'''
-####################################################################################################
-The main script for running Fight Churn With Data examples:
-1. If there are command line arguments, use them. Otherwise defaults are hard coded
-2. Load the dictionary of parameters for this schema
-3. Check the type of the listing (SQL or Python) and call the executor function
-'''
 
-if __name__ == "__main__":
-
-    schema = 'churnsim2'
-    chapter = 2
-    listing = 1
-
-    if len(sys.argv)==4:
-        schema=sys.argv[1]
-        chapter=sys.argv[2]
-        listing=sys.argv[3]
-
+def run_one_listing(schema,chapter,listing):
+    '''
+    Load the dictionary of parameters for this schema
+    Check the type of the listing (SQL or Python) and call the executor function
+    :param schema: string
+    :param chapter: number
+    :param listing: number (or sometimes a string)
+    :return:
+    '''
     # Get arguments
     listing_params = load_and_check_listing_params(schema,chapter,listing)
 
@@ -223,4 +214,24 @@ if __name__ == "__main__":
         python_listing(listing_params)
     else:
         raise Exception('Unsupported type %s' % type)
+
+'''
+####################################################################################################
+The main script for running Fight Churn With Data examples: If there are command line arguments, 
+use them. Otherwise defaults are hard coded
+
+'''
+
+if __name__ == "__main__":
+
+    schema = 'churnsim2'
+    chapter = 2
+    listing = 1
+
+    if len(sys.argv)==4:
+        schema=sys.argv[1]
+        chapter=sys.argv[2]
+        listing=sys.argv[3]
+
+    run_one_listing(schema,chapter,listing)
 
