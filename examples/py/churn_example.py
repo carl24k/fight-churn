@@ -10,12 +10,7 @@ pd.set_option('display.width', 1000)
 one_example=None
 one_chapter=None
 
-schema='churnsim2'
-save_path = '../../../fight-churn-output/' + schema + '/'
-os.makedirs(save_path,exist_ok=True)
 
-one_chapter='chap2'
-one_example='listing_2_1_net_retention'
 
 example_name_regexp='listing_\\d+_\\d+_(\w+)'
 
@@ -84,29 +79,36 @@ def python_example(param_dict,chapter,example):
         print('Bad function name')
 
 
+if __name__ == "__main__":
 
-with open('../conf/%s_examples.json' % schema, 'r') as myfile:
-    param_dict=json.loads(myfile.read())
+    schema = 'churnsim2'
+    save_path = '../../../fight-churn-output/' + schema + '/'
+    os.makedirs(save_path,exist_ok=True)
 
-if one_chapter is not None:
-    assert one_chapter in param_dict, 'No chapter %s' % one_chapter
-if one_example is not None and one_chapter is not None:
-    assert one_example in param_dict[one_chapter], 'No example %s in chapter %s' % (one_example, one_chapter)
+    chapter = 2
+    listing = 1
+    chapter_key='chap%d' % chapter
+    listing_prefix='listing_%d_%d_' % (chapter,listing )
 
-for chapter in param_dict.keys():
-    if one_chapter is not None and chapter != one_chapter:
-        continue
+    with open('../conf/%s_examples.json' % schema, 'r') as myfile:
+        param_dict=json.loads(myfile.read())
+
+    if not chapter_key in param_dict:
+        print('No params for chapter %d in %s_examples.json' % (chapter,schema))
+        exit(-1)
 
 
-    for idx, example in enumerate(param_dict[chapter].keys()):
-        if example=='params' or (one_example is not None and example != one_example):
+    for example in param_dict[chapter_key].keys():
+
+        if example=='params' or not listing_prefix in example:
             continue
-        print('\n%s %d Running example %s' % (chapter, idx,example))
 
-        type = param_dict[chapter][example].get('type', param_dict[chapter]['params']['type']) # chap params should always have type
+        print('\nRunning %s listing %s' % (chapter_key,example))
+
+        type = param_dict[chapter_key][example].get('type', param_dict[chapter_key]['params']['type']) # chap params should always have type
         if type=='sql':
-            sql_example(param_dict,chapter,example)
+            sql_example(param_dict,chapter_key,example)
         elif type=='py':
-            python_example(param_dict,chapter,example)
+            python_example(param_dict,chapter_key,example)
         else:
             raise Exception('Unsupported type %s' % type)
