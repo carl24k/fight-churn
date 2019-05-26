@@ -91,21 +91,26 @@ if __name__ == "__main__":
     chapter_key='chap%d' % chapter
     listing_prefix='listing_%d_%d_' % (chapter,listing )
 
-    with open('../conf/%s_examples.json' % schema, 'r') as myfile:
+    conf_path='../conf/%s_examples.json' % schema
+    if not os.path.isfile(conf_path):
+        print('No params %s to run listings on schema %s' % (conf_path,schema))
+        exit(-1)
+
+    with open(conf_path, 'r') as myfile:
         param_dict=json.loads(myfile.read())
 
     if not chapter_key in param_dict:
         print('No params for chapter %d in %s_examples.json' % (chapter,schema))
-        exit(-1)
+        exit(-2)
 
-
+    found_listing = False
     for example in param_dict[chapter_key].keys():
 
         if example=='params' or not listing_prefix in example:
             continue
 
         print('\nRunning %s listing %s' % (chapter_key,example))
-
+        found_listing=True
         type = param_dict[chapter_key][example].get('type', param_dict[chapter_key]['params']['type']) # chap params should always have type
         if type=='sql':
             sql_example(param_dict,chapter_key,example)
@@ -113,3 +118,8 @@ if __name__ == "__main__":
             python_example(param_dict,chapter_key,example)
         else:
             raise Exception('Unsupported type %s' % type)
+        exit(0)
+
+    if not found_listing:
+        print('No params for listing %d, chapter %d in %s_examples.json' % (listing,chapter,schema))
+        exit(-3)
