@@ -1,7 +1,11 @@
 from postgres import Postgres
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import json
+import pandas
 import os
 import sys
+from math import ceil
 
 
 class MetricCalculator:
@@ -20,9 +24,12 @@ class MetricCalculator:
 		self.from_date = self.metric_dict['date_range']['from_date']
 		self.to_date = self.metric_dict['date_range']['to_date']
 
-		self.db = Postgres("postgres://%s:%s@localhost/%s" % (
-			os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
+		self.URI="postgres://%s:%s@localhost/%s" % (
+			os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB'])
+		self.db = Postgres(self.URI)
 
+		with open('../sql/qa_metric.sql', 'r') as myfile:
+			self.qa_sql = myfile.read().replace('\n', ' ')
 
 	def remove_old_metrics_from_db(self, run_mets=None):
 		'''
@@ -79,6 +86,70 @@ class MetricCalculator:
 		return id
 
 
+	def metric_qa_plot(self,metric,hideAx=False):
+
+		save_path = '../../../fight-churn-output/' + self.schema + '/'
+		os.makedirs(save_path, exist_ok=True)
+
+		print('Checking metric %s.%s' % (self.schema, metric))
+		id = self.get_metric_id(metric)
+		aSql = self.qa_sql.replace('%metric_name_id', str(id))
+		aSql = aSql.replace('%schema', self.schema)
+		aSql = aSql.replace('%from_date', self.from_date)
+		aSql = aSql.replace('%to_date', self.to_date)
+
+		# print(aSql)
+		res = pandas.read_sql_query(aSql, self.URI)
+		if res.shape[0] == 0 or res['avg_val'].isnull().values.all():
+			print('\t*** No result for %s' % metric)
+			return
+
+		cleanedName = ''.join(e for e in metric if e.isalnum())
+		# res.to_csv(save_path+cleanedName+'_metric_qa.csv',index=False) # uncomment to save details
+
+		plt.figure(figsize=(8, 10))
+		plt.subplot(4, 1, 1)
+		plt.plot('calc_date', 'max_val', data=res, marker='', color='red', linewidth=2, label="max")
+		if hideAx: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
+		plt.ylim(0, ceil(1.1 * res['max_val'].dropna().max()))
+		plt.legend()
+		plt.title(metric)
+		plt.subplot(4, 1, 2)
+		plt.plot('calc_date', 'avg_val', data=res, marker='', color='green', linewidth=2, label='avg')
+		if hideAx: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
+		plt.ylim(0, ceil(1.1 * res['avg_val'].dropna().max()))
+		plt.legend()
+		plt.subplot(4, 1, 3)
+		plt.plot('calc_date', 'min_val', data=res, marker='', color='blue', linewidth=2, label='min')
+		if hideAx: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
+		# plt.ylim(0, ceil(2*res['min_val'].dropna().max()))
+		plt.legend()
+		plt.subplot(4, 1, 4)
+		plt.plot('calc_date', 'n_calc', data=res, marker='', color='black', linewidth=2, label="n_calc")
+		plt.ylim(0, ceil(1.1 * res['n_calc'].dropna().max()))
+		plt.legend()
+		if hideAx:
+			plt.gca().get_yaxis().set_visible(False)  # Hiding y axis labels on the count
+			monthFormat = mdates.DateFormatter('%b')
+			plt.gca().get_xaxis().set_major_formatter(monthFormat)
+		plt.savefig(save_path + 'metric_valqa_' + cleanedName + '.png')
+		plt.close()
+
+	def qa_metrics(self,run_mets=None,hideAx=False):
+		'''
+		Loops over the configured metrics and makes the QA plot of each.  If a list was provided, it only runs the ones
+		in the list.
+		:param run_mets: list of strings, metric names; or else None meaning calculate all configured metrics
+		:param hideAx: boolean to indicate hiding the axes (used to make book plots)
+		:return:
+		'''
+
+		for metric in self.metric_dict.keys():
+			if (run_mets is not None and metric not in run_mets) or metric == 'date_range':
+				continue
+
+			self.metric_qa_plot(metric,hideAx)
+
 	def run_one_metric_calculation(self,metric):
 		'''
 		Calculate one metric, by name.  First adds the id, then loads the raw sql from the file.  To set the bind
@@ -133,11 +204,13 @@ use them. Otherwise defaults are hard coded
 if __name__ == "__main__":
 
 	schema = 'churnsim2'
-	# run_mets = None
-	run_mets=['account_tenure','post_per_month']
+	run_mets = None
+	# Example of running just a few metrics - uncomment this line...
+	# run_mets=['account_tenure','post_per_month']
 
-	if len(sys.argv)>=3:
+	if len(sys.argv)>=2:
 		schema=sys.argv[1]
+	if len(sys.argv)>=3:
 		run_mets=sys.argv[2:]
 
 	met_calc = MetricCalculator(schema)
