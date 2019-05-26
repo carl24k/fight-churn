@@ -15,17 +15,17 @@ from utility import UtilityModel
 
 class ChurnSimulation:
 
-    def __init__(self):
+    def __init__(self, model, start, end, init_customers, growth, churn, mrr):
 
-        self.model_name='test2'
+        self.model_name=model
         self.tmp_sub_file_name='/tmp/%s_tmp_sub.csv' % self.model_name
         self.tmp_event_file_name='/tmp/%s_tmp_event.csv' % self.model_name
-        self.start_date = date(2019,1,1)
-        self.end_date = date(2019,6,1)
-        self.init_customers=500
-        self.monthly_growth_rate = 0.05
-        self.monthly_churn_rate = 0.04
-        self.mrr=9.99
+        self.start_date = start
+        self.end_date = end
+        self.init_customers=init_customers
+        self.monthly_growth_rate = growth
+        self.monthly_churn_rate = churn
+        self.mrr=mrr
         self.behave_mod=GaussianBehaviorModel(self.model_name)
         self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate,self.behave_mod)
         self.subscription_count = 0
@@ -117,6 +117,15 @@ class ChurnSimulation:
 
 if __name__ == "__main__":
 
-    churn_sim = ChurnSimulation()
+    model_name = 'test2'
+    start = date(2019, 1, 1)
+    end = date(2019, 6, 1)
+    init = 500
+    growth_rate = 0.05
+    churn_rate = 0.04
+    mrr = 9.99
+
+
+    churn_sim = ChurnSimulation(model_name, start, end, init,growth_rate,churn_rate, mrr)
     churn_sim.run_simulation()
 
