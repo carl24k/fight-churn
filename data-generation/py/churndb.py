@@ -1,4 +1,17 @@
+'''
+Creates a schema and the tables for Fighting Churn With Data in a PostgreSQL database.
 
+The schema name to create is specified by the constant `schema_name` - change that to
+create a different schema.
+
+The database and login information are in environment variables:
+CHURN_DB
+CHURN_DB_USER
+CHURN_DB_PASS
+
+The SQL statements to create the tables are the adjacent directory ../schema
+
+'''
 
 from postgres import Postgres
 import os
