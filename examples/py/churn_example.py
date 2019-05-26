@@ -32,7 +32,7 @@ def sql_example(param_dict, chapter, example):
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
         sql = "set search_path = '%s'; " % schema;
-        sql = sql + myfile.read().replace('\n', ' ')
+        sql = sql + myfile.read()
 
         for p in chap_params.keys():
             if p=='type': continue
@@ -43,7 +43,8 @@ def sql_example(param_dict, chapter, example):
         if flat_metric_bind in sql:
             sql = sql.replace(flat_metric_bind, generate_flat_metric_sql(db))
 
-        print(sql)
+        print('SQL:\n----------\n'+sql+'\n----------\nRESULT:')
+        sql = sql.replace('\n', ' ')
 
         mode = param_dict[chapter][example]['mode'] if 'mode' in param_dict[chapter][example] else chap_params['mode']
         if mode == 'run':
