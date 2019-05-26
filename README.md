@@ -473,12 +473,12 @@ listing for the table you want to import into:
 
 ## 2 Running the Code from Book Examples
 
-You can run the book examples with the python script `examples/churn_example.py`.
+You can run the book listings with the python script `examples/run_churn_listing.py`.
 
 * This script reads SQL and Python source code, and either
 binds variables (for SQL) or passes parameters (for Python) and executes the code.  
 * The code (listings from the book) are in the folders `chapN` under the examples directory.
-* Exactly what examples to run and what parametes are used are set in JSON files in the directory `examples/conf`.
+* Exactly what examples to run and what parametes are used are set in JSON files in the directory `listings/conf`.
  
 So you can use this utility as you go through the book - if you want to actually run the code
 from any example on your local database, this is the easiest way to do it.
@@ -491,14 +491,15 @@ from any example on your local database, this is the easiest way to do it.
 
 ### 2.1 Running a Listing
 
-Start by making a Run Configuration, following the instructions in Section 1.2.6.
+Start by making a Run Configuration for the script `examples/run_churn_listing.py`, 
+following the instructions in Section 1.2.6.
 
 The script is preset to run the first code example, listing 2.1 from chapter 2, for the
 simulated data set `churnsim2`.  If you have created a simulated dataset named `churnsim2` as described
 in section 1.3.2 you can run your configuration as is and you should see a result like this:
 
 ```
-/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/examples/py/churn_example.py
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/examples/py/run_churn_listing.py
 
 Running chap2 listing listing_2_1_net_retention
 SQL:
@@ -598,12 +599,12 @@ configuration.
 
 ### 2.2 Configuring How Listings Run
 
-Your schema must be *configured* to run each example.  The `churnsim2` (default) schema
+Your schema must be *configured* to run each listing.  The `churnsim2` (default) schema
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
-configuration. Also if you want to change how the examples are run on `churnsim2` this section will explain how to do it.
+configuration. Also if you want to change how the listings are run on `churnsim2` this section will explain how to do it.
 
-The configuration files are all in folder `examples/conf` and each schema has a configuration file that must have a name
-that is `<schema_name>_examples.json`.  So the configuration for the `churnsim2` data set is in the file `churnsim2_examples.json`.
+The configuration files are all in folder `listings/conf` and each schema has a configuration file that must have a name
+that is `<schema_name>_listings.json`.  So the configuration for the `churnsim2` data set is in the file `churnsim2_listings.json`.
 The configuration his a JSON with the following structure:
 
 1. The top level are keys for the chapters, "chap2", "chap3", etc.
@@ -614,7 +615,7 @@ The configuration his a JSON with the following structure:
         1. Variables which are substituted in SQL, or passed as values to python functions
         1. Control parameters (described more below)
 1. There is a special object of chapter default parameters in each chapter, with the key `params`. The defaults for the 
-chapter will automatically be applied to every example -  parameters specified in each listing are override the
+chapter will automatically be applied to every listing -  parameters specified in each listing are override the
 defaults.
 
 As mentioned, there are two special control parameters which are are *not* parameters of the listing:
@@ -624,7 +625,7 @@ As mentioned, there are two special control parameters which are are *not* param
     * `mode=run` : A SQL expected to return many results, print the first 5 lines
     * `mode=save`: A SQL expected to return many results, save the result in a csv file
 
-Below is an example of the beginning of the example configuration for the `churnsim2` simualted data set:
+Below is an example of the beginning of the listing configuration for the `churnsim2` simualted data set:
 
 ```
 	"chap2" : {
@@ -645,8 +646,8 @@ The following summarizes the configuration:
 *  `listing_2_1_net_retention` and `listing_2_2_churn_rate` are enabled
 * Both listing will run with the parameters shown in the `params` section: 
     * The strings for start and from date and to date in the queries will be set as shown
-    * The examples are SQL
-    * The examples will print one result
+    * The listings are SQL
+    * The listings will print one result
 
 (More to come on running Python listings when Chapter 5 is released...) 
  
