@@ -471,17 +471,17 @@ listing for the table you want to import into:
 
 <a name="examples"/>
 
-## 2 Running the Code from Book Examples
+## 2 Running the Code from Book Listings
 
-You can run the book listings with the python script `examples/run_churn_listing.py`.
+You can run the book listings with the python script `listings/run_churn_listing.py`.
 
 * This script reads SQL and Python source code, and either
 binds variables (for SQL) or passes parameters (for Python) and executes the code.  
-* The code (listings from the book) are in the folders `chapN` under the examples directory.
-* Exactly what examples to run and what parametes are used are set in JSON files in the directory `listings/conf`.
+* The code (listings from the book) are in the folders `chapN` under the listings directory.
+* Exactly what listings to run and what parametes are used are set in JSON files in the directory `listings/conf`.
  
 So you can use this utility as you go through the book - if you want to actually run the code
-from any example on your local database, this is the easiest way to do it.
+from any listing on your local database, this is the easiest way to do it.
  
 [(top)](#top)  
 
@@ -491,15 +491,15 @@ from any example on your local database, this is the easiest way to do it.
 
 ### 2.1 Running a Listing
 
-Start by making a Run Configuration for the script `examples/run_churn_listing.py`, 
+Start by making a Run Configuration for the script `listings/run_churn_listing.py`, 
 following the instructions in Section 1.2.6.
 
-The script is preset to run the first code example, listing 2.1 from chapter 2, for the
+The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
 simulated data set `churnsim2`.  If you have created a simulated dataset named `churnsim2` as described
 in section 1.3.2 you can run your configuration as is and you should see a result like this:
 
 ```
-/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/examples/py/run_churn_listing.py
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/listings/py/run_churn_listing.py
 
 Running chap2 listing listing_2_1_net_retention
 SQL:
@@ -553,7 +553,7 @@ Process finished with exit code 0
 ```
 
 The first line shows you what chapter and listing are being run.  Next it shows the SQL being run (this is a SQL
-example).  The final line prints out the result - the net retention rate, calculated with the SQL.  Because the data
+listing).  The final line prints out the result - the net retention rate, calculated with the SQL.  Because the data
 was randomly simulated your result on the last line won't be exactly the same as that one, but it should be similar.
 
 One way you  can change what the script will run for by simply editing the constants in the "main" portion 
@@ -563,7 +563,7 @@ One way you  can change what the script will run for by simply editing the const
 * `chapter` : the chapter to run a listing from
 * `listing` : the number of the listing to run
 
-The most common thing you will do is run a different example on the same schema and chapter, so you would edit this line:
+The most common thing you will do is run a different listing on the same schema and chapter, so you would edit this line:
 
 `listing=1`
 
@@ -579,15 +579,15 @@ Alternatively, the script accepts command line parameters.  To run this way, pro
 1. The third command line parameter is the listing number 
 
 **Note:**
-If you want to run examples from the command line, you also need to setup your Python virtual environment
+If you want to run listings from the command line, you also need to setup your Python virtual environment
 and added the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  
 Command line setup is not covered in this README at this time (but if you want to add such instructions please contribute!)
 
 You can also set command line argument in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command 
 line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
 
-To see what examples are available to run, peruse the code in the chapter folders below `example`.  But note that your
-schema must be *configured* to run each example, as described in the next  section.  The `churnsim2` (default) schema
+To see what listings are available to run, peruse the code in the chapter folders below `listing`.  But note that your
+schema must be *configured* to run each listing, as described in the next  section.  The `churnsim2` (default) schema
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
 configuration.
  
@@ -625,7 +625,7 @@ As mentioned, there are two special control parameters which are are *not* param
     * `mode=run` : A SQL expected to return many results, print the first 5 lines
     * `mode=save`: A SQL expected to return many results, save the result in a csv file
 
-Below is an example of the beginning of the listing configuration for the `churnsim2` simualted data set:
+Below is an example of the beginning of the listing configuration for the `churnsim2` simulated data set:
 
 ```
 	"chap2" : {
