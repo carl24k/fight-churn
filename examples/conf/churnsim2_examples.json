@@ -22,7 +22,7 @@
 		"params": {
 			"FRYR-MM-DD": "2019-03-01",
 			"TOYR-MM-DD": "2019-03-30",
-			"mode": "all",
+			"mode": "top",
 			"EVENT_NAME": "like",
 			"SUM_FIELD" : "0",
 			"type" : "sql"
@@ -74,7 +74,11 @@
 			"OBS_INTERVAL": "1 month",
 			"LEAD_TIME": "21 day"
 		},
-		"listing_4_5_data_set_create_template": {
+		"listing_4_5_data_set_create": {
+			"MET_INTERVAL": "7 day",
+			"mode" : "top"
+		},
+		"listing_4_A_data_set_create_analysis": {
 			"MET_INTERVAL": "7 day",
 			"mode" : "save"
 		}

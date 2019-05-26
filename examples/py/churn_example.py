@@ -13,6 +13,13 @@ print_num_rows=5
 flat_metric_bind = 'FLAT_METRIC_SELECT'
 
 def generate_flat_metric_sql(db):
+    '''
+    Helper function for saving a data set for analysis. This flattens the metrics table to form a data set and it
+    needs to add a sql clause for every metric in the schema.  This does that by actually querying the metric, table,
+    and constructing the sql from a table.
+    :param db:
+    :return:
+    '''
 
     flat_metric_template = ', sum(case when metric_name_id=%d then metric_value else 0 end) as %s'
 
@@ -49,12 +56,13 @@ def sql_example(param_dict, chapter, example):
         elif mode == 'one':
             res = db.one(sql)
             print(res)
-        elif mode == 'all' or mode == 'save':
+        elif mode == 'top' or mode == 'save':
             res = db.all(sql)
             df = pd.DataFrame(res)
             if mode == 'save':
-                print('Saving...')
-                df.to_csv(save_path + example + ' .csv', index=False)
+                csv_path=save_path + example + '.csv'
+                print('Saving: %s' % csv_path)
+                df.to_csv(csv_path, index=False)
             else:
                 print(df.head(print_num_rows))
 
@@ -82,19 +90,19 @@ def python_example(param_dict,chapter,example):
 if __name__ == "__main__":
 
     schema = 'churnsim2'
-    chapter = 2
-    listing = 1
+    chapter = 4
+    listing = 'A'
 
     if len(sys.argv)==4:
         schema=sys.argv[1]
-        chapter=int(sys.argv[2])
-        listing=int(sys.argv[3])
+        chapter=sys.argv[2]
+        listing=sys.argv[3]
 
     save_path = '../../../fight-churn-output/' + schema + '/'
     os.makedirs(save_path,exist_ok=True)
 
-    chapter_key='chap%d' % chapter
-    listing_prefix='listing_%d_%d_' % (chapter,listing )
+    chapter_key='chap{}'.format(chapter)
+    listing_prefix='listing_{c}_{l}_'.format(c=chapter,l=listing)
 
     conf_path='../conf/%s_examples.json' % schema
     if not os.path.isfile(conf_path):
