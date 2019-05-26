@@ -5,6 +5,7 @@ from random import randrange
 from postgres import Postgres
 from math import ceil
 import os
+import tempfile
 
 from customer import Customer
 from behavior import GaussianBehaviorModel
@@ -39,8 +40,8 @@ class ChurnSimulation:
         self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate,self.behave_mod)
 
         self.subscription_count = 0
-        self.tmp_sub_file_name='/tmp/%s_tmp_sub.csv' % self.model_name
-        self.tmp_event_file_name='/tmp/%s_tmp_event.csv' % self.model_name
+        self.tmp_sub_file_name='%s/%s_tmp_sub.csv' % ( tempfile.gettempdir(),self.model_name)
+        self.tmp_event_file_name='%s/%s_tmp_event.csv' % ( tempfile.gettempdir(), self.model_name)
 
         self.db = Postgres("postgres://%s:%s@localhost/%s" % (
         os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
