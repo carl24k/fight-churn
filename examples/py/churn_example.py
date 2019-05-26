@@ -7,6 +7,10 @@ import re
 import os
 import sys
 
+'''
+####################################################################################################
+Constants
+'''
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
@@ -14,6 +18,10 @@ print_num_rows=5
 
 reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter')
 
+'''
+####################################################################################################
+Functions
+'''
 
 def generate_flat_metric_sql(db, schema):
     '''
@@ -124,6 +132,7 @@ def python_listing(param_dict):
     else:
         print('Could not parse listing name %s in schema %s' % ( param_dict['name'], param_dict['schema']))
         exit(-6)
+
 
 def load_and_check_listing_params(schema, chapter, listing):
     '''
