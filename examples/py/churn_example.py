@@ -152,7 +152,7 @@ def load_and_check_listing_params(schema, chapter, listing):
     listing_prefix='listing_{c}_{l}_'.format(c=chapter,l=listing)
 
     # Error if there is no file for this schema
-    conf_path='../conf/%s_examples.json' % schema
+    conf_path='../conf/%s_listings.json' % schema
     if not os.path.isfile(conf_path):
         print('No params %s to run listings on schema %s' % (conf_path,schema))
         exit(-1)
@@ -162,7 +162,7 @@ def load_and_check_listing_params(schema, chapter, listing):
 
     # Error if there is no key for this chapter in the dictionary
     if not chapter_key in param_dict:
-        print('No params for chapter %d in %s_examples.json' % (chapter,schema))
+        print('No params for chapter %d in %s_listings.json' % (chapter,schema))
         exit(-2)
 
     # Find the parameters for this specific listing
@@ -188,7 +188,7 @@ def load_and_check_listing_params(schema, chapter, listing):
         return listing_params
 
     # Another error if it didn't find a listing
-    print('No params for listing %d, chapter %d in %s_examples.json' % (listing,chapter,schema))
+    print('No params for listing %d, chapter %d in %s_listings.json' % (listing,chapter,schema))
     exit(-3)
 
 '''
@@ -202,7 +202,7 @@ The main script for running Fight Churn With Data examples:
 if __name__ == "__main__":
 
     schema = 'churnsim2'
-    chapter = 5
+    chapter = 2
     listing = 1
 
     if len(sys.argv)==4:
