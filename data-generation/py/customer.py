@@ -44,4 +44,6 @@ class Customer:
                     new_event=(event_time,event_idx)
                     events.append(new_event )
 
-        return counts, events
+        self.events.extend(events)
+
+        return counts
