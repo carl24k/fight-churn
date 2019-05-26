@@ -4,21 +4,18 @@ import pandas as pd
 from importlib import import_module
 import re
 import os
+import sys
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
-one_example=None
-one_chapter=None
-
-
-
-example_name_regexp='listing_\\d+_\\d+_(\w+)'
-
 print_num_rows=5
+
 flat_metric_bind = 'FLAT_METRIC_SELECT'
-flat_metric_template = ', sum(case when metric_name_id=%d then metric_value else 0 end) as %s'
 
 def generate_flat_metric_sql(db):
+
+    flat_metric_template = ', sum(case when metric_name_id=%d then metric_value else 0 end) as %s'
+
     res = db.all('select * from %s.metric_name;' % schema)
     sql=''.join( [ flat_metric_template % (row[0], row[1]) for row in res])
     return sql
@@ -63,6 +60,8 @@ def sql_example(param_dict, chapter, example):
 
 def python_example(param_dict,chapter,example):
 
+    example_name_regexp = 'listing_\\d+_\\d+_(\w+)'
+
     chap_params = param_dict[chapter]['params']
     example_params = param_dict[chapter][example]
     for k in chap_params.keys():
@@ -83,11 +82,17 @@ def python_example(param_dict,chapter,example):
 if __name__ == "__main__":
 
     schema = 'churnsim2'
+    chapter = 2
+    listing = 1
+
+    if len(sys.argv)==4:
+        schema=sys.argv[1]
+        chapter=int(sys.argv[2])
+        listing=int(sys.argv[3])
+
     save_path = '../../../fight-churn-output/' + schema + '/'
     os.makedirs(save_path,exist_ok=True)
 
-    chapter = 2
-    listing = 1
     chapter_key='chap%d' % chapter
     listing_prefix='listing_%d_%d_' % (chapter,listing )
 
@@ -104,18 +109,18 @@ if __name__ == "__main__":
         exit(-2)
 
     found_listing = False
-    for example in param_dict[chapter_key].keys():
+    for listing_name in param_dict[chapter_key].keys():
 
-        if example=='params' or not listing_prefix in example:
+        if listing_name=='params' or not listing_prefix in listing_name:
             continue
 
-        print('\nRunning %s listing %s' % (chapter_key,example))
+        print('\nRunning %s listing %s on schema %s' % (chapter_key,listing_name,schema))
         found_listing=True
-        type = param_dict[chapter_key][example].get('type', param_dict[chapter_key]['params']['type']) # chap params should always have type
+        type = param_dict[chapter_key][listing_name].get('type', param_dict[chapter_key]['params']['type']) # chap params should always have type
         if type=='sql':
-            sql_example(param_dict,chapter_key,example)
+            sql_example(param_dict,chapter_key,listing_name)
         elif type=='py':
-            python_example(param_dict,chapter_key,example)
+            python_example(param_dict,chapter_key,listing_name)
         else:
             raise Exception('Unsupported type %s' % type)
         exit(0)

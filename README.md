@@ -555,8 +555,8 @@ The first line shows you what chapter and listing are being run.  Next it shows 
 example).  The final line prints out the result - the net retention rate, calculated with the SQL.  Because the data
 was randomly simulated your result on the last line won't be exactly the same as that one, but it should be similar.
 
-You change what the script will run for by simply editing the constants in the "main" portion **at the bottom of the file** 
-(a command line option feature is on the to do list.)  Note these variables:
+One way you  can change what the script will run for by simply editing the constants in the "main" portion 
+**at the bottom of the file**.  Note these variables:
 
 * `schema` : the name of the churn data schema to run on
 * `chapter` : the chapter to run a listing from
@@ -566,10 +566,24 @@ The most common thing you will do is run a different example on the same schema 
 
 `listing=1`
 
-to whatever example you want. So for example, to run listing 2.2 you can change the variable to:
-
+to whatever listing you want. So for example, to run listing 2.2 you can change the variable to:
 
 `listing=2`
+
+Alternatively, the script accepts command line parameters.  To run this way, provide the following three parameters 
+(all required) and it will use those instead of the hard coded constants:
+
+1. The first command line parameter is the schema
+1. The second command line parameter is the chapter number
+1. The third command line parameter is the listing number 
+
+**Note:**
+If you want to run examples from the command line, you also need to setup your Python virtual environment
+and added the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  
+Command line setup is not covered in this README at this time (but if you want to add such instructions please contribute!)
+
+You can also set command line argument in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command 
+line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
 
 To see what examples are available to run, peruse the code in the chapter folders below `example`.  But note that your
 schema must be *configured* to run each example, as described in the next  section.  The `churnsim2` (default) schema
