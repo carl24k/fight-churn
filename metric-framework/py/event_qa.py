@@ -115,6 +115,7 @@ class EventChecker:
 				plt.gca().get_yaxis().set_visible(False)
 				plt.gca().get_xaxis().set_major_formatter(self.monthFormat)
 
+
 	def check_one_event_qa(self,event,hideAx=False):
 		'''
 		Run the query and make the plot to check quality of one event.  First the query is formed with make_one_event_sql,
@@ -169,10 +170,10 @@ use them. Otherwise defaults are hard coded
 
 if __name__ == "__main__":
 
-	schema = 'v'
+	schema = 'churnsim2'
 	events_2check = None
 	# Example of running just a few events - uncomment this line...
-	events_2check=['Cost_LD_Canada']
+	events_2check=['post','like']
 
 	if len(sys.argv)>=2:
 		schema=sys.argv[1]

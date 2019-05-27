@@ -705,6 +705,10 @@ like this:
  
 ![Event QA Output](/readme_files/event_qa.png)
  
+ 
+You can also configure the QA to run on numeric event properties, if you events have any.  See the `event_properties`
+field in the metric configuration described in section 3.2.2 below.
+ 
 [(top)](#top)  
 
 ---
@@ -786,7 +790,8 @@ example from the `churnsim2` configuration:
     "date_range": {
         "from_date" :"2019-02-04",
         "to_date" : "2019-05-06"
-    },
+    },,
+	"event_properties" : [],
 	"account_tenure": {
 	    "sql" : "metric_tenure"
 	},
@@ -805,11 +810,14 @@ to another object which contains additional name/value pairs.
 The first object in the configuration is a named `date_range` which contains the start and end dates for the
 metrics to be calculated as `from_date` and `to_date`.
 
-The second object is an example of a no-parameter metric, `account_tenure` (described in Chapter 3 of the book).
+The second object is a list of properties that are in the event table - these will be included in the Event QA (described
+above) if there are any.  (In the future there will be a simulated data set with event properties, but not yet...)
+
+The third object is an example of a no-parameter metric, `account_tenure` (described in Chapter 3 of the book).
 The only parameter in the object is the `sql` parmeter which indicates which SQL file (in `metric-framework/sql`)
 is run to make the metric calculation.
 
-The third object in the example configuration is a metric that has multiple parameters.
+The second object in the example configuration is a metric that has multiple parameters.
 This configuration will create a metric named "post_per_month".  The `sql` parameter in the configuration object
  indicates which specific SQL to execute in order to create the metric : in this case it is the sql
   `metric-framework/sqls/metric_over_period_tenscale.sql`.  
