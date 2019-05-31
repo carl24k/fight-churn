@@ -100,7 +100,20 @@ running.
 ---
 #### 1.2.1 Creating a Database
 
-You might want to create a new database to hold all of the churn data schemas you create. 
+The first thing you need to do is connect to your server.  You can do that in PgAdmin by control (right) clicking
+on the root of the Servers tree and selecting *Connect*
+
+![Connect to Server in PgAdmin](/readme_files/pgadmin_connect.png)
+
+A dialog will open. Assuming you are working on a PostgreSQL database installed on your own computer then  
+in the first tab (*General*) name your connection `localhost`, and on the second tab (*Connection*) enter the
+address `127.0.0.1` (which is the IP address to connect to a database locally.) You should also enter your
+user name and password.  So your dialog should look like the one below - then hit *Save*.
+
+![Connect to Server in PgAdmin](/readme_files/pgadmin_connect_details.png)
+
+
+Next you should create a new database to hold all of the churn data schemas you create. 
 You will probably create multiple schemas as you work on the exmaples in the book and/or your own
 data so this will help keep these organized.  An easy way to create a database is in PgAdmin - right click
 on the *Databases* node under *localhost* in the tree:
