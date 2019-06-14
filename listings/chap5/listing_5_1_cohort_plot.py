@@ -1,11 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib
 
-def cohort_plot(data_set_path='', metric_to_plot='',save_path='example.png',nbin=10):
+def cohort_plot(data_set_path='', metric_to_plot='',save_path='example.png',ncohort=10):
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
-    groups = pd.qcut(churn_data[metric_to_plot], nbin, duplicates='drop')
+    groups = pd.qcut(churn_data[metric_to_plot], ncohort, duplicates='drop')
     cohort_means = churn_data.groupby(groups)[metric_to_plot].mean()
     cohort_churns = churn_data.groupby(groups)['is_churn'].mean()
     plot_frame = pd.DataFrame({metric_to_plot: cohort_means.values, 'churn_rate': cohort_churns})

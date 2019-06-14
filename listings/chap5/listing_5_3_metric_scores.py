@@ -22,3 +22,5 @@ def metric_scores(data_set_path='',skew_thresh=4.0,save_path='scores.csv'):
 
     if save_path is not None:
         data_scores.to_csv(save_path,header=True)
+
+    return data_scores
