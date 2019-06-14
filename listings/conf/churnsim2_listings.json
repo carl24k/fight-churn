@@ -45,16 +45,11 @@
 		"listing_3_8_events_per_account" : {
 			"mode" : "save"
 		},
-		"listing_3_9_scaled_events_per_month" : {
-			"OBS_INTERVAL" : "84 day"
+		"listing_3_9_account_tenure" : {
 		},
-		"listing_3_10_account_tenure" : {
+		"listing_3_10_account_tenure_insert" : {
 		},
-		"listing_3_11_account_tenure_insert" : {
-		},
-		"listing_3_12_tenure_scaled_events_per_month" : {
-			"OBS_DAYS" : 84,
-			"MIN_TENURE" : 28
+		"listing_3_11_mrr" : {
 		}
 	},
 	"chap4" : {
