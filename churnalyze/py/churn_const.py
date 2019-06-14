@@ -1,13 +1,6 @@
 import os
 
-log_scale_skew_thresh=4
-key_cols  = ['account_id', 'observation_date']
-out_col = 'is_churn'
-no_plot = list(key_cols)
-no_plot.append(out_col)
-save_path_base = '../../../fight-churn-output/'
 
-load_mat_file='load_mat'
 
 schema_data_dict = {
     'b': 'BroadlyDataSet4',
@@ -73,11 +66,3 @@ renames = {'Cost_Local_PerMonth'.lower() : "Local Calls Per Month",
            'Num_Users'.lower() : 'Licensed Users',
            'User_Utilization'.lower() : 'License Utilization'
            }
-
-def save_path(schema,file_name=None):
-    save_path=save_path_base + schema + '/'
-    os.makedirs(save_path, exist_ok=True)
-    if file_name is None:
-        return save_path
-    else:
-        return save_path + '/' + schema_data_dict[schema] + '_' + file_name + '.csv'

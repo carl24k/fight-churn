@@ -1,73 +1,51 @@
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 from math import ceil
-import churn_calc as cc
+from churn_calc import ChurnCalculator
 from churn_const import save_path, schema_data_dict, load_mat_file, renames, skip_metrics,key_cols, no_plot, ax_scale
 
-run_mets = None
-behave_group = True
-hideAx=True
-allScores=False
 
-font = {'family': 'Brandon Grotesque', 'size': 20}
-matplotlib.rc('font', **font)
+class CohortAnalyzer:
 
-# schema = 'b'
-# schema = 'v'
-# schema = 'k'
-schema = 'v'
+    def __init__(self,schema):
+        run_mets = None
+        behave_group = True
+        hideAx=True
+        allScores=False
 
-# run_mets=['Detractor_Rate']
-# run_mets=['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
-# run_mets=['mrr']
-# run_mets=['account_tenure']
-# run_mets=['mrr','Use_Per_Base_Unit','Use_Per_Dollar_MRR','Percent_Canada','Percent_US','Percent_Intl','Percent_TollFree','Dollar_MRR_Per_Call_Unit','Dollar_MRR_Per_Base_Unit','Base_Units_per_Dollar_MRR_Per']
-# run_mets=['account_tenure','Active_Users_Last_Qtr']
-# run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month']
-# run_mets=['active_users_per_dollar_mrr']
-# run_mets=['Customer_added_Per_Dollar','CustomerPromoter_Per_Dollar','Contact_Per_Dollar','Transactions_Per_Dollar','Message_Viewed_Per_Dollar']
+        font = {'family': 'Brandon Grotesque', 'size': 20}
+        matplotlib.rc('font', **font)
 
-# For data council deck
-# run_mets= ['Account_Active_Today_PerMonth'] # k
-# run_mets=['ReviewUpdated_PerMonth','CustomerAdded_PerMonth'] # b
-# run_mets=['ReviewUpdated_PerMonth'] # b
-# run_mets=['Cost_Local_PerMonth', 'mrr'] # v
-# run_mets=['Cost_Local_PerMonth','base_units','Cost_LD_Canada_PerMonth'] # v
-# run_mets = ['CustomerPromoter_PerMonth','CustomerDetractor_PerMonth','Detractor_Rate']
-# run_mets = ['num_seats','num_users','mrr','active_users_per_seat','active_users_per_dollar_mrr','dollars_per_active_user','Active_Users_Last_Qtr']
-# run_mets = ['active_users_per_dollar_mrr']
-# run_mets=['Detractor_Rate','Promoter_Rate']
-# run_mets=['num_users','Active_Users_Last_Qtr','User_Utilization','num_seats']
-# run_mets=['transactionadded_permonth']
-# run_mets = ['orientation_switch_permonth']
 
-data_file = schema_data_dict[schema]
-schema_save_path = save_path(schema)+data_file
-nbin=8
+        schema = 'churnsim2'
 
-def main():
-    churn_data = cc.data_load(schema)
-    plot_columns = cc.churn_metric_columns(churn_data.columns.values)
+        data_file = schema_data_dict[schema]
+        schema_save_path = save_path(schema)+data_file
+        nbin=8
 
-    summary = cc.dataset_stats(churn_data,plot_columns)
-    data_scores, skewed_columns = cc.normalize_skewscale(churn_data, plot_columns, summary)
+
+
+def main(cc,hideAx=False,allScores=False,behave_group=False):
+
+    plot_columns = cc.churn_metric_columns()
+
+    data_scores, skewed_columns = cc.normalize_skewscale()
+
     if allScores:
         skewed_columns={c:True for c in plot_columns }
 
     if behave_group:
-        load_mat_df = pd.read_csv(save_path(schema, load_mat_file),index_col=0)
-        num_weights = load_mat_df.astype(bool).sum(axis=0)
-        load_mat_df = load_mat_df.loc[:,num_weights>1]
-        grouped_columns=['Metric Group %d' % (d+1) for d in range(0,load_mat_df.shape[1])]
-        churn_data_reduced = pd.DataFrame(np.matmul(data_scores[plot_columns].to_numpy(), load_mat_df.to_numpy()),columns=grouped_columns,index=churn_data.index)
-        churn_data_reduced['is_churn']=churn_data['is_churn']
-        churn_data = churn_data_reduced
-        plot_columns = grouped_columns
+        cc.group_behaviors()
+        churn_data = cc.churn_data_reduced
+        plot_columns = cc.grouped_columns
         the_one_plot=None
         skewed_columns={c:False for c in plot_columns }
     else:
+        churn_data = cc.churn_data
+        plot_columns = cc.metric_columns
         the_one_plot=[l.lower() for l in run_mets] if run_mets is not None else None
 
 
@@ -140,4 +118,17 @@ def main():
 
 
 if __name__ == "__main__":
+    schema = 'churnsim2'
+    run_mets = None
+    # Example of running just a few metrics - uncomment this line...
+    # run_mets=['account_tenure','post_per_month']
+
+    if len(sys.argv) >= 2:
+        schema = sys.argv[1]
+    if len(sys.argv) >= 3:
+        run_mets = sys.argv[2:]
+
+    churn_calc = ChurnCalculator(schema)
+    schema
+    cohorts = CohortAnalyzer()
     main()
