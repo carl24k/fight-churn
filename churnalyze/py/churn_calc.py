@@ -66,7 +66,7 @@ class ChurnCalculator:
         self.data_set_name, self.churn_data.shape[0], self.churn_data.shape[1]))
         print('|'.join(self.metric_columns))
 
-    def behavioral_cohort_plot_data(self, var_to_plot, nbin=10, out_col=churn_out_col):
+    def behavioral_cohort_plot_data(self, var_to_plot, use_score=False, nbin=10, out_col=churn_out_col):
         """
         Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
         The data is binned into 10 ordered bins, and the mean value of the metric and the churn rate are calculated
@@ -76,9 +76,14 @@ class ChurnCalculator:
         :return:
         """
 
-        groups = pd.qcut(self.churn_data[var_to_plot], nbin, duplicates='drop')
-        midpoints = self.churn_data.groupby(groups)[var_to_plot].mean()
-        churns = self.churn_data.groupby(groups)[out_col].mean()
+        if not use_score:
+            data=self.churn_data
+        else:
+            data,_=self.normalize_skewscale()
+
+        groups = pd.qcut(data[var_to_plot], nbin, duplicates='drop')
+        midpoints = data.groupby(groups)[var_to_plot].mean()
+        churns = data.groupby(groups)[out_col].mean()
         plot_frame = pd.DataFrame({var_to_plot: midpoints.values, 'churn_rate': churns})
 
         return plot_frame
