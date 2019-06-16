@@ -140,8 +140,8 @@ class ChurnCalculator:
         if self.data_scores is None:
             self.dataset_stats()  # make sure summary is created
             self.data_scores = self.churn_data[self.metric_columns].copy()
-            skewed_columns = (self.summary['skew'] > log_scale_skew_thresh) & (self.summary['min'] >= 0)
-            for col, do_scale in skewed_columns.iteritems():
+            self.skewed_columns = (self.summary['skew'] > log_scale_skew_thresh) & (self.summary['min'] >= 0)
+            for col, do_scale in self.skewed_columns.iteritems():
                 if do_scale:
                     self.data_scores[col] = np.log(1.0 + self.data_scores[col])
 
