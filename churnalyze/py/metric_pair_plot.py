@@ -2,6 +2,7 @@ import sys
 import matplotlib.pyplot as plt
 import matplotlib
 import argparse
+from itertools import permutations
 
 from churn_calc import ChurnCalculator
 
@@ -34,6 +35,7 @@ def plot_pair(cc,args,metric1,metric2):
         met2_label='score('+metric2+')'
         save_name = metric1 + 'S_vs_' + metric2 + 'S'
 
+    print('Plotting ' + save_name)
     corr = met1_data.corr(met2_data)
 
     plt.figure(figsize=(6, 4))
@@ -49,7 +51,7 @@ def plot_pair(cc,args,metric1,metric2):
         save_name += '_noax'
 
     plt.grid()
-    plt.savefig(cc.save_path(save_name, ext='png'))
+    plt.savefig(cc.save_path(save_name, ext='png',subdir='pair_scatter_plots'))
     plt.close()
 
 if __name__ == "__main__":
@@ -63,3 +65,11 @@ if __name__ == "__main__":
 
     if args.metrics is not None:
         plot_pair(churn_calc, args, args.metrics[0],args.metrics[1])
+    else:
+        all_mets = churn_calc.metric_columns
+        nmet=len(all_mets)
+        if input("Plot all pairs of %d metrics (%d) : are you sure? (enter %s to proceed) " % (nmet,nmet*(nmet-1),args.schema)) != args.schema:
+            exit(0)
+        plot_pairs = permutations(all_mets,2)
+        for pair in plot_pairs:
+            plot_pair(churn_calc,args,pair[0],pair[1])

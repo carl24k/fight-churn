@@ -187,8 +187,10 @@ class ChurnCalculator:
         # the_one_plot = None
         # skewed_columns = {c: False for c in plot_columns}
 
-    def save_path(self, file_name=None,ext='csv'):
+    def save_path(self, file_name=None,ext='csv',subdir=None):
         save_path = ChurnCalculator.save_path_base + self.schema + '/'
+        if subdir is not None:
+            save_path += subdir + '/'
         os.makedirs(save_path, exist_ok=True)
         if self.data_set_name is None and file_name is not None:
             return save_path + '/' + file_name + '.' + ext
