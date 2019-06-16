@@ -9,10 +9,13 @@ def is_pos_def(x):
     '''
     Quick check of whether the given matrix is positive definite
     https://stackoverflow.com/questions/16266720/find-out-if-matrix-is-positive-definite-with-numpy
+    https://stackoverflow.com/questions/42908334/checking-if-a-matrix-is-symmetric-in-numpy
     :param x:
     :return: true/false
     '''
-    return np.all(np.linalg.eigvals(x) > 0)
+    rtol = 1e-05
+    atol = 1e-08
+    return np.all(np.linalg.eigvals(x) > 0) and np.allclose(x, x.T, rtol=rtol, atol=atol)
 
 class BehaviorModel:
 
@@ -70,9 +73,17 @@ class GaussianBehaviorModel(BehaviorModel):
         self.min_rate=0.01*self.behave_means.min()
         if not is_pos_def(self.behave_cov):
             print('Matrix is not positive semi-definite: Multiplying by transpose')
-            weighted_cov=np.matmul(self.behave_cov,np.diag(np.sqrt(self.behave_means)))
             # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
-            self.behave_cov= np.dot(weighted_cov, weighted_cov.transpose())
+            self.behave_cov= np.dot(self.behave_cov, self.behave_cov.transpose())
+        if all(self.behave_cov.abs() <= 1.0):
+            print('Scaling correlation by behavior means...')
+            # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
+            scaling=self.behave_means.abs() * np.sqrt(self.behave_means.abs())
+            self.behave_cov=np.matmul(self.behave_cov,np.diag(scaling))
+
+        # For debugging
+        # np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
+
 
 
 
