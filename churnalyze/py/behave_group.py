@@ -9,7 +9,6 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
 
 import churn_calc as cc
-from churn_const import save_path, key_cols, no_plot, schema_data_dict, load_mat_file, skip_metrics, group_corr_thresh
 
 # schema = 'b'
 schema = 'v'

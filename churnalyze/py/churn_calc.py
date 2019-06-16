@@ -37,6 +37,14 @@ class ChurnCalculator:
             return self.conf['default'][name]
         return None
 
+    def get_renames(self):
+        renames=self.get_conf('renames')
+        if isinstance(renames,dict) and len(renames)>0:
+            orig_renames=list(renames.keys())
+            for k in orig_renames:
+                renames[k.lower()]=renames[k]
+        return renames
+
     def data_load(self):
         data_set_path = self.save_path()
         self.churn_data = pd.read_csv(data_set_path)

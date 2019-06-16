@@ -26,7 +26,7 @@ parser.add_argument("--fontsize", type=int, help="The font to use for plots", de
 def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
 
     print('Plotting churn vs %s' % var_to_plot)
-    renames = cc.get_conf('renames')
+    renames = cc.get_renames()
     if var_to_plot not in renames:
         renames[var_to_plot] = var_to_plot
 

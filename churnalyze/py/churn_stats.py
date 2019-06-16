@@ -1,9 +1,6 @@
-# import pandas as pd
 import sys
-# import matplotlib.pyplot as plt
 
 from churn_calc import ChurnCalculator
-# from churn_const import  schema_data_dict
 
 
 def main():

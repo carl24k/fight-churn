@@ -2,7 +2,7 @@
   "default" : {
     "dataset" : "churnsim2_dataset",
     "ax_scale" : 110,
-    "group_corr_thresh" : 0.7,
+    "group_corr_thresh" : 0.8,
     "renames" : {
             }
   }
