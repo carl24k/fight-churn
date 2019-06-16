@@ -137,8 +137,14 @@ class ChurnCalculator:
             data=self.churn_data[self.metrics_plus_churn]
 
         corr = data.corr()
+
         if save:
-            corr.to_csv(self.save_path('corr'))
+            save_name = 'corr'
+            if use_scores:
+                save_name += '_scores'
+            full_save_path = self.save_path(save_name)
+            print('Saving result to ' + full_save_path)
+            corr.to_csv(full_save_path)
 
 
     def normalize_skewscale(self, log_scale_skew_thresh=4):
@@ -193,10 +199,10 @@ class ChurnCalculator:
             save_path += subdir + '/'
         os.makedirs(save_path, exist_ok=True)
         if self.data_set_name is None and file_name is not None:
-            return save_path + '/' + file_name + '.' + ext
+            return save_path  + file_name + '.' + ext
         elif file_name is  None and self.data_set_name is not None:
-            return save_path + '/' + self.data_set_name + '.' + ext
+            return save_path  + self.data_set_name + '.' + ext
         elif file_name is  not None and self.data_set_name is not None:
-            return save_path + '/' + self.data_set_name + '_' + file_name + '.' + ext
+            return save_path  + self.data_set_name + '_' + file_name + '.' + ext
         else:
             raise Exception("Must provide file name or previously set the datset ")

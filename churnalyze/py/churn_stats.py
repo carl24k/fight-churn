@@ -14,6 +14,7 @@ def main():
     churn_calc = ChurnCalculator(schema)
     churn_calc.dataset_stats(save=True)
     churn_calc.dataset_corr(save=True)
+    churn_calc.dataset_corr(save=True,use_scores=False)
 
 if __name__ == "__main__":
     main()
