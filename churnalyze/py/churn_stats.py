@@ -9,7 +9,7 @@ from churn_calc import ChurnCalculator
 def main():
 
 
-    schema = 'b'
+    schema = 'churnsim2'
     run_mets = None
     # Example of running just a few metrics - uncomment this line...
     # run_mets=['account_tenure','post_per_month']

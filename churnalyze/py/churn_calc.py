@@ -41,7 +41,7 @@ class ChurnCalculator:
         data_set_path = self.save_path()
         self.churn_data = pd.read_csv(data_set_path)
         skip_metrics = self.get_conf('skip_metrics')
-        if len(skip_metrics) > 0:
+        if skip_metrics is not None and isinstance(skip_metrics,list) > 0:
             self.churn_data.drop(skip_metrics, axis=1, inplace=True)
         self.churn_data.set_index(self.key_cols, inplace=True)
 
@@ -110,7 +110,9 @@ class ChurnCalculator:
             # Adding churn % stats in a saved version, but not for further analysis
             churn_stat = self.churn_data['is_churn'].astype(int).describe()
             churn_stat.to_csv(save_path + '_churnrate.csv', header=True)
-            self.summary.to_csv(save_path + '_summary.csv', header=True)
+            full_save_name=save_path + '_summary.csv'
+            self.summary.to_csv(full_save_name, header=True)
+            print('Saved result to ' + full_save_name)
 
         return self.summary
 
