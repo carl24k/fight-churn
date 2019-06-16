@@ -53,7 +53,7 @@ def sql_listing(param_dict):
 
     flat_metric_bind = 'FLAT_METRIC_SELECT'
 
-    with open('../chap%d/%s.sql' % (param_dict['chapter'], param_dict['name']), 'r') as myfile:
+    with open('../../listings/chap%d/%s.sql' % (param_dict['chapter'], param_dict['name']), 'r') as myfile:
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
         # prefix the search path onto the listing, which does not specify the schema
@@ -152,7 +152,7 @@ def load_and_check_listing_params(schema, chapter, listing):
     listing_prefix='listing_{c}_{l}_'.format(c=chapter,l=listing)
 
     # Error if there is no file for this schema
-    conf_path='../conf/%s_listings.json' % schema
+    conf_path='../../listings/conf/%s_listings.json' % schema
     if not os.path.isfile(conf_path):
         print('No params %s to run listings on schema %s' % (conf_path,schema))
         exit(-1)
