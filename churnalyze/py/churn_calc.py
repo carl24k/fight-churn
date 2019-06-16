@@ -60,6 +60,8 @@ class ChurnCalculator:
                     self.churn_data = self.churn_data[self.churn_data[metric.lower()] > min_valid[metric]]
 
         self.metric_columns = self.churn_metric_columns()
+        self.metrics_plus_churn = list(self.metric_columns)
+        self.metrics_plus_churn.append(self.churn_out_col)
         print('Loaded %s, size=%dx%d with columns:' % (
         self.data_set_name, self.churn_data.shape[0], self.churn_data.shape[1]))
         print('|'.join(self.metric_columns))
@@ -81,7 +83,7 @@ class ChurnCalculator:
 
         return plot_frame
 
-    def dataset_stats(self, save_path=None):
+    def dataset_stats(self, save=False):
         """
         Take basic stats of the data set.  Saving it is optional.
         :param metric_cols: Columns which are metrics (and will have stats taken)
@@ -106,15 +108,25 @@ class ChurnCalculator:
                 ['count', 'nonzero', 'mean', 'std', 'skew', 'min', '1%', '5%', '10%', '25%', '50%', '75%', '90%', '95%',
                  '99%', 'max']]
 
-        if save_path is not None:
+        if save:
             # Adding churn % stats in a saved version, but not for further analysis
             churn_stat = self.churn_data['is_churn'].astype(int).describe()
-            churn_stat.to_csv(save_path + '_churnrate.csv', header=True)
-            full_save_name=save_path + '_summary.csv'
-            self.summary.to_csv(full_save_name, header=True)
-            print('Saved result to ' + full_save_name)
+            churn_stat.to_csv(self.save_path('churnrate'), header=True)
+            self.summary.to_csv(self.save_path('summary'), header=True)
+            print('Saved result to ' + self.save_path('summary'))
 
         return self.summary
+
+    def dataset_corr(self,use_scores=True,save=False):
+        if use_scores:
+            data,skew_cols = self.normalize_skewscale()
+        else:
+            data=self.churn_data[self.metrics_plus_churn]
+
+        corr = data.corr()
+        if save:
+            corr.to_csv(self.save_path('corr'))
+
 
     def normalize_skewscale(self, log_scale_skew_thresh=4):
         """
