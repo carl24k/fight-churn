@@ -10,4 +10,5 @@ on metric_time between obs_start and obs_end
 inner join observation o on m.account_id = o.account_id
     and m.metric_time > (o.observation_date - metric_period)::timestamp    
     and m.metric_time <= o.observation_date::timestamp
-group by m.account_id, metric_time, observation_date, is_churn    
+group by m.account_id, metric_time, observation_date, is_churn
+order by account_id, observation_date

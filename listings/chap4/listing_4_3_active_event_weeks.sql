@@ -3,7 +3,7 @@ WITH
 	select i::timestamp as period_start, i::timestamp + '7 day'::interval as period_end 
 	from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
 )
-insert into active_periods (account_id, start_date, end_date)    
+insert into active_period (account_id, start_date, churn_date)
 select account_id, 
 period_start::date,     
 period_end::date
