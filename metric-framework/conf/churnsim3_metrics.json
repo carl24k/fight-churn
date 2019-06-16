@@ -1,0 +1,50 @@
+{
+    "date_range": {
+        "from_date" :"2019-02-04",
+        "to_date" : "2019-05-06"
+    },
+	"event_properties" : [],
+	"account_tenure": {
+	    "sql" : "metric_tenure"
+	},
+	"compose_per_month": {
+		"event_id":  0,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"minten" : 4,
+		"sql" : "metric_over_period_tenscale"
+	},
+	"like_per_month": {
+		"event_id":  1,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"minten" : 4,
+		"sql" : "metric_over_period_tenscale"
+	},
+	"read_per_month": {
+		"event_id":  2,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"minten" : 4,
+		"sql" : "metric_over_period_tenscale"
+	},
+	"reply_per_month": {
+		"event_id":  3,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"minten" : 4,
+		"sql" : "metric_over_period_tenscale"
+	},
+	"send_per_month": {
+		"event_id":  4,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"minten" : 4,
+		"sql" : "metric_over_period_tenscale"
+	}
+}
