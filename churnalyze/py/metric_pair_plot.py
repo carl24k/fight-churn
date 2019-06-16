@@ -14,35 +14,42 @@ parser.add_argument("--hide_ax", action="store_true", default=False,help="Hide a
 parser.add_argument("--score", action="store_true", default=False,help="Plot Scores vs Scores")
 
 parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Brandon Grotesque')
-parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=20)
+parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=14)
+
+
 
 def plot_pair(cc,args,metric1,metric2):
 
     if not args.score:
         met1_data = cc.churn_data[metric1]
         met2_data = cc.churn_data[metric2]
+        met1_label=metric1
+        met2_label=metric2
+        save_name = metric1 + '_vs_' + metric2
     else:
         scores,_ = cc.normalize_skewscale()
         met1_data = scores[metric1]
         met2_data = scores[metric2]
+        met1_label='score('+metric1+')'
+        met2_label='score('+metric2+')'
+        save_name = metric1 + 'S_vs_' + metric2 + 'S'
 
     corr = met1_data.corr(met2_data)
 
     plt.figure(figsize=(6, 4))
-    plt.scatter(met1_data,met2_data, marker='o')
-    plt.xlabel(metric1)
-    plt.ylabel(metric2)
+    plt.scatter(met1_data,met2_data, marker='.')
+    plt.xlabel(met1_label)
+    plt.ylabel(met2_label)
+    plt.tight_layout()
     plt.title('Correlation = %.2f' % corr)
 
-
-    if args.hide_ax:
-    #     plt.gca().get_yaxis().set_ticks(
-    #         [0.25 * churn_plot_max, 0.5 * churn_plot_max, 0.75 * churn_plot_max, 1.0 * churn_plot_max])
+    if args.hide_ax and not args.score:
         plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
         plt.gca().get_xaxis().set_ticklabels([])  # Hiding y axis labels on the count
+        save_name += '_noax'
 
     plt.grid()
-    plt.savefig(cc.save_path(metric1 + '_vs_' + metric2, ext='png'))
+    plt.savefig(cc.save_path(save_name, ext='png'))
     plt.close()
 
 if __name__ == "__main__":
