@@ -3,6 +3,11 @@ import pandas as pd
 import numpy as np
 import json
 
+# for the behavioral grouping
+from collections import Counter
+from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.spatial.distance import squareform
+
 
 class ChurnCalculator:
     # misc constants set as class variables
@@ -133,8 +138,12 @@ class ChurnCalculator:
     def dataset_corr(self,use_scores=True,save=False):
         if use_scores:
             data,skew_cols = self.normalize_skewscale()
-        else:
+            if not save:
+                data=data.drop(self.churn_out_col,axis=1)
+        elif save:
             data=self.churn_data[self.metrics_plus_churn]
+        else:
+            data=self.churn_data[self.metric_columns]
 
         corr = data.corr()
 
@@ -146,6 +155,7 @@ class ChurnCalculator:
             print('Saving result to ' + full_save_path)
             corr.to_csv(full_save_path)
 
+        return corr
 
     def normalize_skewscale(self, log_scale_skew_thresh=4):
         """
@@ -173,6 +183,51 @@ class ChurnCalculator:
         all_columns = list(self.churn_data.columns.values)
         plot_columns = [c for c in all_columns if c not in ChurnCalculator.no_plot_cols]
         return plot_columns
+
+    def calc_behavior_groups(self):
+
+        # This actually caculates the clusters
+        corr = self.dataset_corr()
+        dissimilarity = 1.0 - corr
+        hierarchy = linkage(squareform(dissimilarity), method='single')
+        thresh = 1.0 - self.get_conf('group_corr_thresh')
+        labels = fcluster(hierarchy, thresh, criterion='distance')
+        clusters = set(labels) # The unique list of the group labels
+
+        # Relabel the clusters so the cluster with the most columns is first
+        cluster_count = Counter(labels)
+        cluster_order = {cluster[0]: idx for idx, cluster in enumerate(cluster_count.most_common())}
+        relabeled_clusters = [cluster_order[l] for l in labels]
+        relabeled_count = Counter(relabeled_clusters)
+
+        labeled_columns = pd.DataFrame({'group': relabeled_clusters, 'column': self.metric_columns}).sort_values(
+            ['group', 'column'],
+            ascending=[True, True])
+
+        load_mat = np.zeros((len(self.metric_columns), len(clusters)))
+        for row in labeled_columns.iterrows():
+            orig_col = self.metric_columns.index(row[1][1])
+            load_mat[orig_col, row[1][0]] = 1.0 / np.sqrt(relabeled_count[row[1][0]])
+
+        loadmat_df = pd.DataFrame(load_mat, index=self.metric_columns, columns=[d for d in range(0, load_mat.shape[1])])
+        loadmat_df['name'] = loadmat_df.index
+        sort_cols = list(loadmat_df.columns.values)
+        sort_order = [False] * loadmat_df.shape[1]
+        sort_order[-1] = True
+        loadmat_df = loadmat_df.sort_values(sort_cols, ascending=sort_order)
+
+        print('saving loadings')
+        loadmat_df = loadmat_df.drop('name', axis=1)
+        loadmat_df.to_csv(self.save_path(self.load_mat_file))
+
+        print('saving re-ordered correlation')
+        ordered_corr = corr[labeled_columns.column].reindex(labeled_columns.column)
+        ordered_corr.to_csv(self.save_path('ordered_corr'))
+
+        print('saving reduced data correlation')
+        self.group_behaviors()
+        reduced_corr = self.churn_data_reduced.corr()
+        reduced_corr.to_csv(self.save_path('reduced_corr'))
 
     def group_behaviors(self):
 
