@@ -103,7 +103,7 @@ def plot_dataset_cohorts(cc,args):
         skewed_columns={c:True for c in plot_columns }
 
     if args.behave_group:
-        cc.group_behaviors()
+        cc.apply_behavior_grouping()
         plot_columns = cc.grouped_columns
         the_one_plot=None
         skewed_columns={c:False for c in plot_columns }

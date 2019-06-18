@@ -10,6 +10,24 @@ from scipy.spatial.distance import squareform
 
 
 class ChurnCalculator:
+    '''
+    Object that performs a variety a churn analysis calculations. It encapsulates all the operations for one schema
+    and data set. The schema is the data universe that generated the data set which could be either a company, a product,
+     or a simulated data set. If this is run as in the book Fighting  Churn With Data this would be the name of the
+     database schema.
+
+     For each schema there must be a configuration file in the adjacent directory named <schema>_churnalyze.json.
+     See examples and the repository ReadMe for details on what has to go in the configuration, and the member function
+     get_conf for access to the configuration contents in the code.
+
+     The general process is to create a churn calculator which loads a data set, and then call member functions to
+     do the various analytic tasks. The churn calculator saves csv files of results, but does not make plots - plotting
+     is done in the various executable functions that use the ChurnCalculator.
+
+     There is no main function in this file - there are main functions in all of the other files in this folder (and
+     some of them are quite simple - they create the ChurnCalculator, call a function and exit. Others have a bit more
+     content, particularly when it involves generating plots.)
+    '''
     # misc constants set as class variables
     key_cols = ['account_id', 'observation_date']
     churn_out_col = 'is_churn'
@@ -19,13 +37,18 @@ class ChurnCalculator:
     no_plot_cols.append(churn_out_col)
 
     def __init__(self, schema):
+        '''
+        Opens the Json configuration and gets the name of the default dataset, and loads that data set.
+        Also sets None for the various analytic result objects.
+        :param schema: The name for the universe of data.
+        '''
         self.schema = schema
         self.data_set_name = None
         self.churn_data = None
+        # Open the configuration
         with open('../conf/%s_churnalyze.json' % schema, 'r') as myfile:
             self.conf = json.loads(myfile.read())
-        self.data_set_name = self.get_conf('dataset')
-        self.data_load()
+        self.data_load(self.get_conf('dataset'))
         # derived data created by calling functions
         self.summary = None
         self.data_scores = None
@@ -34,6 +57,13 @@ class ChurnCalculator:
         self.reduced_cols = None
 
     def get_conf(self, name):
+        '''
+        Retrieves one param from the configuration. If there is a dataset already set then it will look for the param
+        in the json member for the dataset and return it if found.  Otherwise it looks in the 'default' entry.
+        (So don't name your dataset "default")
+        :param name: key for the configuration. assumed to be a string
+        :return:
+        '''
         if self.data_set_name is not None:
             if self.data_set_name in self.conf:
                 if name in self.conf[self.data_set_name]:
@@ -43,6 +73,19 @@ class ChurnCalculator:
         return None
 
     def get_renames(self):
+        '''
+        Renaming utility for metrics to make more re-usable versions for the plots. There has to be an entry named
+        "renames" in the configuration, and presumable it would be in the default configuration (although it is possible
+        to have different dataset specific versions.) The renamings are simple string : string pairs where the key
+        is the metric column name produced in the dataset, and the value is the desired string to appear in plots and
+        graphs.
+
+        By default every entry in the renaming is duplicated if necessary with a lower case version, so you
+        can put cased versions in the configuration (possibly copied from imported event types) and it will still work
+        with lower cased data frame column names.  Producing those entries is the task of this function, apart from
+        simply loading the configuration.
+        :return:
+        '''
         renames=self.get_conf('renames')
         if isinstance(renames,dict) and len(renames)>0:
             orig_renames=list(renames.keys())
@@ -50,14 +93,34 @@ class ChurnCalculator:
                 renames[k.lower()]=renames[k]
         return renames
 
-    def data_load(self):
+    def data_load(self,new_data_set):
+        '''
+        Loads the data set from a file - the member variable is set and then save_path with no parameters returns the
+        data file path. After loading the index is set to two column primary key (account id and observation date.)
+        There are also some other functions performed based on settings in the configuration:
+        1. Skip metrics: any metrics listed in the skip_metrics configuration are dropped
+        2. max_clips: if metrics are specified with a maximum value to clip, the clipping is applied.
+        3. min_valid: if min_valid values for metrics are specified, those observations failing the test are removed
+
+        Note: After the skipping, two member variables "metric_columns" and "metric_columns_plus_churn" are set that
+        contain lists of the columns being used.
+        :return:
+        '''
+        self.data_set_name=new_data_set
         data_set_path = self.save_path()
         self.churn_data = pd.read_csv(data_set_path)
+        self.churn_data.set_index(self.key_cols, inplace=True)
+
         skip_metrics = self.get_conf('skip_metrics')
         if skip_metrics is not None and isinstance(skip_metrics,list) > 0:
             self.churn_data.drop(skip_metrics, axis=1, inplace=True)
-        self.churn_data.set_index(self.key_cols, inplace=True)
 
+        # After skipping, set the lists of columns that are currently used
+        self.metric_columns = self.churn_metric_columns()
+        self.metrics_plus_churn = list(self.metric_columns)
+        self.metrics_plus_churn.append(self.churn_out_col)
+
+        # Clipping, if any is specified
         max_clips = self.get_conf('max_clips')
         if max_clips is not None and isinstance(max_clips, dict):
             for metric in max_clips.keys():
@@ -66,15 +129,14 @@ class ChurnCalculator:
 
         print('%s size before validation of columns: %d' % (self.data_set_name, self.churn_data.shape[0]))
 
+        # Validation accoring to minimum values if any is specified
         min_valid = self.get_conf('min_valid')
         if min_valid is not None and isinstance(min_valid, dict):
             for metric in min_valid.keys():
                 if metric.lower() in self.churn_data.columns.values:
                     self.churn_data = self.churn_data[self.churn_data[metric.lower()] > min_valid[metric]]
 
-        self.metric_columns = self.churn_metric_columns()
-        self.metrics_plus_churn = list(self.metric_columns)
-        self.metrics_plus_churn.append(self.churn_out_col)
+        # Print out the final status
         print('Loaded %s, size=%dx%d with columns:' % (
         self.data_set_name, self.churn_data.shape[0], self.churn_data.shape[1]))
         print('|'.join(self.metric_columns))
@@ -82,13 +144,14 @@ class ChurnCalculator:
     def behavioral_cohort_plot_data(self, var_to_plot, use_score=False, nbin=10, out_col=churn_out_col):
         """
         Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
-        The data is binned into 10 ordered bins, and the mean value of the metric and the churn rate are calculated
-        for each bin.
+        The data is binned into ordered bins with pcqut, and the mean value of the metric and the churn rate
+        are calculated for each bin with the groupby function. The result is returned in a data frame.
         :param var_to_plot: The variable to plot
-        :param out_col:
+        :param use_score: Use the scored version of the data
+        :param nbin: Number of cohorts
+        :param out_col: the outcome, presumably churn
         :return:
         """
-
         if not use_score:
             data=self.churn_data
         else:
@@ -104,8 +167,7 @@ class ChurnCalculator:
     def dataset_stats(self, save=False):
         """
         Take basic stats of the data set.  Saving it is optional.
-        :param metric_cols: Columns which are metrics (and will have stats taken)
-        :param save_path: If specified, will save to this path plus an extension
+        :param save: If specified, will save to this path plus an extension
         :return:
         """
 
@@ -136,8 +198,16 @@ class ChurnCalculator:
         return self.summary
 
     def dataset_corr(self,use_scores=True,save=False):
+        '''
+        Calculate a correlation matrix on the current data set. Optionally use the scored version of the data.
+        If the save flag is set, the churn variable is saved so you can see correlation with churn. But if not saving
+        churn is not included, since it is assumed this is the correlation matrix for behavioral grouping.
+        :param use_scores: use the scores
+        :param save: save it to a csv, and you are then include the churn variable
+        :return: The correlation, as a panda data frame
+        '''
         if use_scores:
-            data,skew_cols = self.normalize_skewscale()
+            data,_ = self.normalize_skewscale()
             if not save:
                 data=data.drop(self.churn_out_col,axis=1)
         elif save:
@@ -160,14 +230,14 @@ class ChurnCalculator:
     def normalize_skewscale(self, log_scale_skew_thresh=4):
         """
         Normalize metric columns of a data set, including logarithmic scaling for columns that have high skew.
-        The churn column is just copied over.
-        :param plot_columns: Columns which are metrics (and will have stats taken)
-        :param summary: A summary data frame from dataset_stats (optional)
+        After logarithmic scaling, the normal approach to standardization is taken: substract the man and divide
+        by the standard deviation. The churn column is just copied over at the end.
         :param log_scale_skew_thresh: Threshold above which to apply the scaling transform
-        :return: Data frame with the normalized columns and which columns received the log transform
+        :return: The correlation, as a panda data frame. Also a Series of boolean which indicates which columns were
+        skewed above the threshold.
         """
         if self.data_scores is None:
-            self.dataset_stats()  # make sure summary is created
+            self.dataset_stats()  # make sure summary is already created
             self.data_scores = self.churn_data[self.metric_columns].copy()
             self.skewed_columns = (self.summary['skew'] > log_scale_skew_thresh) & (self.summary['min'] >= 0)
             for col, do_scale in self.skewed_columns.iteritems():
@@ -180,13 +250,51 @@ class ChurnCalculator:
         return self.data_scores, self.skewed_columns
 
     def churn_metric_columns(self):
+        '''
+        Helper function to take all the columns in the loaded data frame and remove the ones that are not metrics
+        :return: The list of columns
+        '''
         all_columns = list(self.churn_data.columns.values)
         plot_columns = [c for c in all_columns if c not in ChurnCalculator.no_plot_cols]
         return plot_columns
 
     def calc_behavior_groups(self):
+        '''
+        Calculate groupings for correlated behaviors based on heirarchical clustering.  This scipy functions:
+        linkage and fcluster to do the actual clustering, so most of this code is concerned with reformatting the output
+        into a weight matrix (loading matrix) that can be used to perform dimension reduction on the dataset.
 
-        # This actually caculates the clusters
+        There are no parameters or return values - this operates on the preloaded member variables and and saves the
+        results in files, in particular the loading matrix. Other results saved for inspection are a re-ordered version
+        of the correlation matrix and the correlation matrix of the dimension reduced data set.
+
+        The process is as follows:
+        1. Get the correlation. The clustering works in terms of dissimilarity, so use 1.0 minus the correlation
+        2. squareform reformats the dissimilarity matrix into the vector form required for linkage
+        3. the linkage function returns a heirarchy based on the correlation matrix which is a representation of which
+            elements are closest to each other, using the dissimilarity as distances.
+        4. The threshold for a cluster is also set as a correlation (more intuitive) so the threshold for the clustering
+            is 1.0 minus thethreshold
+        5. fcluster decides on the cluster using the previously calculated heirarchy, and the specified threshold.
+            fcluster. fcluster returns a series which are the class labels for each column as an ndarray
+
+        The above completes the clustering.  The remainder is processing and reformatting the output.
+        6. At this point it is not known how many clusters there are, so a set is created to find the unique elements
+        7. A Counter is used to calculate the number of elements in each cluster
+        8. A dictionary is made from the original cluster labels to their position in the new order user the Counter
+            objects most_common method. A counter based on the relabeled clusters is also created for later use
+        9. To faciliate construction of the weight matrix a two column data frame is created listing the mapping of the
+            metric column names to the final (reordered) cluster assignments - named "labeled_columns"
+        10. The weight matrix is created as a numpy zero matrix and then filled in by looking up the elements in the
+            labeled_columns
+            KEY STEP: Using the relabled_count to make the entries the appropriate sum of squares weight.
+        11. After construction, the weight matrix is converted to a data frame with the column name as the index
+            The group entries are in the columns.
+        12. After creation, the loading matrix is sorted by the clustering and the metric names for readability
+        :return:
+        '''
+
+        # This actually calculates the clusters
         corr = self.dataset_corr()
         dissimilarity = 1.0 - corr
         hierarchy = linkage(squareform(dissimilarity), method='single')
@@ -225,14 +333,20 @@ class ChurnCalculator:
         ordered_corr.to_csv(self.save_path('ordered_corr'))
 
         print('saving reduced data correlation')
-        self.group_behaviors()
+        self.apply_behavior_grouping()
         reduced_corr = self.churn_data_reduced.corr()
         reduced_corr.to_csv(self.save_path('reduced_corr'))
 
-    def group_behaviors(self):
+    def apply_behavior_grouping(self):
+        '''
+        Produce a reduced version of the data by applying a previously saved weight matrix. This has to be applied to
+        the normalized data, so that is created (if that has not already happened on this invocation.) Results are
+        saved in member variables for use by other functions, for example cohort plotting.
+        :return:
+        '''
 
         self.normalize_skewscale()  # make sure scores are created
-
+        # Load the previously saved loading matrix, created by
         load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
         num_weights = load_mat_df.astype(bool).sum(axis=0)
         load_mat_df = load_mat_df.loc[:, num_weights > 1]
@@ -243,12 +357,16 @@ class ChurnCalculator:
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = grouped_columns
 
-        # churn_data = churn_data_reduced
-        # plot_columns = grouped_columns
-        # the_one_plot = None
-        # skewed_columns = {c: False for c in plot_columns}
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
+        '''
+        Makes a path from the schema and dataset to save the various
+        outputs from the code
+        :param file_name:
+        :param ext:
+        :param subdir:
+        :return:
+        '''
         save_path = ChurnCalculator.save_path_base + self.schema + '/'
         if subdir is not None:
             save_path += subdir + '/'
