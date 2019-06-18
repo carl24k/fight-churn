@@ -10,42 +10,52 @@ parser = argparse.ArgumentParser()
 # Main run control arguments
 parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim2')
 parser.add_argument("--metrics", type=str,nargs=2, help="Two metrics to plot (if not plotting all pairs)")
+
+
 # Additional options
-parser.add_argument("--hide_ax", action="store_true", default=False,help="Hide axis labeling for publication of case studies")
+parser.add_argument("--hideax", action="store_true", default=False,help="Hide axis labeling for publication of case studies")
 parser.add_argument("--score", action="store_true", default=False,help="Plot Scores vs Scores")
 
 parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Brandon Grotesque')
 parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=14)
 
+parser.add_argument("--ylim", type=float, nargs=2, help="The y maximum", default=None)
+parser.add_argument("--xlim", type=float, nargs=2, help="The y maximum", default=None)
 
 
 def plot_pair(cc,args,metric1,metric2):
 
+    renames = cc.get_renames()
+
+    met1_label = metric1 if not metric1 in renames else renames[metric1]
+    met2_label = metric2 if not metric2 in renames else renames[metric2]
     if not args.score:
         met1_data = cc.churn_data[metric1]
         met2_data = cc.churn_data[metric2]
-        met1_label=metric1
-        met2_label=metric2
         save_name = metric1 + '_vs_' + metric2
     else:
         scores,_ = cc.normalize_skewscale()
         met1_data = scores[metric1]
         met2_data = scores[metric2]
-        met1_label='score('+metric1+')'
-        met2_label='score('+metric2+')'
+        met1_label='Score('+met1_label+')'
+        met2_label='Score('+met2_label+')'
         save_name = metric1 + 'S_vs_' + metric2 + 'S'
 
     print('Plotting ' + save_name)
     corr = met1_data.corr(met2_data)
 
-    plt.figure(figsize=(6, 4))
+    plt.figure(figsize=(6, 6))
     plt.scatter(met1_data,met2_data, marker='.')
     plt.xlabel(met1_label)
     plt.ylabel(met2_label)
     plt.tight_layout()
     plt.title('Correlation = %.2f' % corr)
+    if args.ylim is not None:
+        plt.ylim(args.ylim[0],args.ylim[1])
+    if args.xlim is not None:
+        plt.xlim(args.xlim[0],args.xlim[1])
 
-    if args.hide_ax and not args.score:
+    if args.hideax and not args.score:
         plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
         plt.gca().get_xaxis().set_ticklabels([])  # Hiding y axis labels on the count
         save_name += '_noax'
