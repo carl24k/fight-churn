@@ -1,32 +1,25 @@
-import pandas as pd
-import matplotlib.pyplot as plt
+import sys
 
-import churn_calc as cc
-from churn_const import save_path, key_cols, no_plot, schema_data_dict
-
-# schema = 'b'
-# schema = 'v'
-schema = 'k'
-schema = 'churnsim2'
-
-data_file = schema_data_dict[schema]
-schema_save_path = save_path(schema)+data_file
+from churn_calc import ChurnCalculator
 
 
 def main():
+    '''
+    Creates churn calculator and runs the statistics and correlation functions.
+    The schema name is taken from the first command line argument.
+    The dataset and all other parameters are then taken from the schema configuration.
+    :return: None
+    '''
 
-    churn_data = cc.data_load(schema)
+    schema = 'churnsim2'
 
-    stat_columns = cc.churn_metric_columns(churn_data.columns.values)
+    if len(sys.argv) >= 2:
+        schema = sys.argv[1]
 
-    summary = cc.dataset_stats(churn_data,stat_columns, save_path=schema_save_path)
-
-    data_scores, skewed_columns = cc.normalize_skewscale(churn_data, stat_columns, summary)
-
-    corr = data_scores.corr()
-
-    corr.to_csv(schema_save_path + '_corr.csv')
-
+    churn_calc = ChurnCalculator(schema)
+    churn_calc.dataset_stats(save=True)
+    churn_calc.dataset_corr(save=True)
+    churn_calc.dataset_corr(save=True,use_scores=False)
 
 if __name__ == "__main__":
     main()

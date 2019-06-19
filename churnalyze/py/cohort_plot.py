@@ -1,143 +1,161 @@
+import sys
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 from math import ceil
-import churn_calc as cc
-from churn_const import save_path, schema_data_dict, load_mat_file, renames, skip_metrics,key_cols, no_plot, ax_scale
+import argparse
 
-run_mets = None
-behave_group = True
-hideAx=True
-allScores=False
+from churn_calc import ChurnCalculator
 
-font = {'family': 'Brandon Grotesque', 'size': 20}
-matplotlib.rc('font', **font)
 
-# schema = 'b'
-# schema = 'v'
-# schema = 'k'
-schema = 'v'
+parser = argparse.ArgumentParser()
+# Main run control arguments
+parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim2')
+parser.add_argument("--nbin", type=int, help="The number of bins",default=10)
+parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
+# Additional options
+parser.add_argument("--hide_ax", action="store_true", default=False,help="Hide axis labeling for publication of case studies")
+parser.add_argument("--always_score", action="store_true", default=False,help="Plot cohorts using scored metrics for all (not just skewed)")
+parser.add_argument("--behave_group", action="store_true", default=False,help="Plot cohorts for behavioral groups")
+parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Brandon Grotesque')
+parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=20)
 
-# run_mets=['Detractor_Rate']
-# run_mets=['klips_per_tab','data_sources_per_tab','time_per_edit','dashboard_views_per_day','edits_per_view']
-# run_mets=['mrr']
-# run_mets=['account_tenure']
-# run_mets=['mrr','Use_Per_Base_Unit','Use_Per_Dollar_MRR','Percent_Canada','Percent_US','Percent_Intl','Percent_TollFree','Dollar_MRR_Per_Call_Unit','Dollar_MRR_Per_Base_Unit','Base_Units_per_Dollar_MRR_Per']
-# run_mets=['account_tenure','Active_Users_Last_Qtr']
-# run_mets=['active_users_per_seat','active_users_per_dollar_mrr','dollars_per_dashboard','dashboards_per_dollar_mrr','dash_views_per_user_per_month']
-# run_mets=['active_users_per_dollar_mrr']
-# run_mets=['Customer_added_Per_Dollar','CustomerPromoter_Per_Dollar','Contact_Per_Dollar','Transactions_Per_Dollar','Message_Viewed_Per_Dollar']
 
-# For data council deck
-# run_mets= ['Account_Active_Today_PerMonth'] # k
-# run_mets=['ReviewUpdated_PerMonth','CustomerAdded_PerMonth'] # b
-# run_mets=['ReviewUpdated_PerMonth'] # b
-# run_mets=['Cost_Local_PerMonth', 'mrr'] # v
-# run_mets=['Cost_Local_PerMonth','base_units','Cost_LD_Canada_PerMonth'] # v
-# run_mets = ['CustomerPromoter_PerMonth','CustomerDetractor_PerMonth','Detractor_Rate']
-# run_mets = ['num_seats','num_users','mrr','active_users_per_seat','active_users_per_dollar_mrr','dollars_per_active_user','Active_Users_Last_Qtr']
-# run_mets = ['active_users_per_dollar_mrr']
-# run_mets=['Detractor_Rate','Promoter_Rate']
-# run_mets=['num_users','Active_Users_Last_Qtr','User_Utilization','num_seats']
-# run_mets=['transactionadded_permonth']
-# run_mets = ['orientation_switch_permonth']
 
-data_file = schema_data_dict[schema]
-schema_save_path = save_path(schema)+data_file
-nbin=8
+def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
+    '''
+    Makes a plot of churn rates in behavioral cohorts for the dataset contained in the churn calculator.
+    The function ChurnCalculator.behavioral_cohort_analysis actually calculates the cohorts, churn ratesa and
+    average values and this function is concerned with presentation.
 
-def main():
-    churn_data = cc.data_load(schema)
-    plot_columns = cc.churn_metric_columns(churn_data.columns.values)
+    Command line arguments control other features:
+    1. Plot the grouped behavioral metrics or plain metrics,
+    2. Always plot scored metrics, or the default of plotting scores only for skewed metrics
+    3. Hide the axes scales (for use on case study data)
+    4. Number of bins to suggest for cohorts (defaults to 10)
 
-    summary = cc.dataset_stats(churn_data,plot_columns)
-    data_scores, skewed_columns = cc.normalize_skewscale(churn_data, plot_columns, summary)
-    if allScores:
+    There is also a plot scaling configuration in the schema_churnalyze.json - this will give a uniform maximum to
+    all of the cohort plots, by scaling the churn rate. That way the different cohort plots are easier to compare.
+    Usually scaling it to 2x the maximum churn rate is good, but this parameter allows adjustment. The parameter is
+    given as an integer where 200 means set the maximum to 2x the churn rate, 300 means 3x the churn rate, etc.
+    The code here also ensures that the chosen maximum is a whole number of percents (as a decimal) i.e. 0.10 or 0.11
+     but not 0.1085 or some odd number of decimal places.
+
+    :param cc: ChurnCalculator object created from schema given on the command line
+    :param args: Command line arguments from argparse (defined at the top of this file)
+    :param var_to_plot: string name of the metric to plot the cohorts of
+    :param plot_score: boolean indicates scored version of metric should be plotted as well
+    :return:
+    '''
+
+    print('Plotting churn vs %s' % var_to_plot)
+    renames = cc.get_renames()
+    if var_to_plot not in renames:
+        renames[var_to_plot] = var_to_plot
+
+    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin)
+    ax_scale=cc.get_conf('ax_scale',default=200)
+    churn_plot_max = ceil(cc.churn_rate() * ax_scale) / 100.0
+
+    if args.behave_group or not plot_score:
+        plt.figure(figsize=(6, 4))
+        plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
+                 marker='o', color='red', linewidth=2, label=var_to_plot)
+        plt.gcf().subplots_adjust(bottom=0.2)
+        plt.xlabel('Cohort Average of  "%s"' % renames[var_to_plot])
+        plt.ylim(0, churn_plot_max)
+        if args.hide_ax:
+            plt.gca().get_yaxis().set_ticks(
+                [0.25 * churn_plot_max, 0.5 * churn_plot_max, 0.75 * churn_plot_max, 1.0 * churn_plot_max])
+            plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
+            plt.ylabel('Cohort Churn (Relative)')
+        else:
+            plt.ylabel('Cohort Churn Rate (%)')
+        plt.grid()
+
+    else:
+        score_frame = cc.behavioral_cohort_analysis(var_to_plot, use_score=True, nbin=args.nbin)
+        plt.figure(figsize=(10, 10))
+        plt.subplot(2, 1, 1)
+        plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
+                 marker='o', color='red', linewidth=2, label=var_to_plot)
+        plt.ylabel('Cohort Churn Rate (%)')
+        plt.xlabel('Cohort Average of  "%s"' % renames[var_to_plot])
+        plt.grid()
+        plt.ylim(0, churn_plot_max)
+        if args.hide_ax:
+            plt.gca().get_yaxis().set_ticks(
+                [0.25 * churn_plot_max, 0.5 * churn_plot_max, 0.75 * churn_plot_max, 1.0 * churn_plot_max])
+            plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
+            plt.ylabel('Cohort Churn (Relative)')
+        else:
+            plt.ylabel('Cohort Churn Rate (%)')
+
+        plt.subplot(2, 1, 2)
+        plt.plot(var_to_plot, 'churn_rate', data=score_frame,
+                 marker='o', color='blue', linewidth=2, label='score(%s)' % var_to_plot)
+        plt.xlabel('Cohort Average of  "%s" (SCORE)' % renames[var_to_plot])
+        plt.grid()
+        plt.ylim(0, churn_plot_max)
+        if args.hide_ax:
+            plt.gca().get_yaxis().set_ticks(
+                [0.25 * churn_plot_max, 0.5 * churn_plot_max, 0.75 * churn_plot_max, 1.0 * churn_plot_max])
+            plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
+            plt.ylabel('Cohort Churn (Relative)')
+        else:
+            plt.ylabel('Cohort Churn Rate (%)')
+
+    save_name = 'churn_vs_' + var_to_plot
+    if args.hide_ax:
+        save_name+='noax.png'
+
+    plt.savefig(cc.save_path(save_name, ext='png'))
+    plt.close()
+
+
+def plot_dataset_cohorts(cc,args):
+    '''
+    This function will run all columns, unless a list of metrics was supplied in the args in which case only those
+    listed are plotted. Options to plot all cohorts with scored versions or to apply behavioral grouping are applied
+    at the data set level, before looping over individual metrics and calling the plot_one_cohort_churn function.
+
+    Note that column headers in the dataset are assumed to be all lower case so metric names are lower cased to make sure.
+    :param cc: ChurnCalculator object created from schema given on the command line
+    :param args: Command line arguments from argparse (defined at the top of this file)
+    :return:
+    '''
+
+    plot_columns = cc.churn_metric_columns()
+    data_scores, skewed_columns = cc.normalize_skewscale()
+
+    if args.always_score:
         skewed_columns={c:True for c in plot_columns }
 
-    if behave_group:
-        load_mat_df = pd.read_csv(save_path(schema, load_mat_file),index_col=0)
-        num_weights = load_mat_df.astype(bool).sum(axis=0)
-        load_mat_df = load_mat_df.loc[:,num_weights>1]
-        grouped_columns=['Metric Group %d' % (d+1) for d in range(0,load_mat_df.shape[1])]
-        churn_data_reduced = pd.DataFrame(np.matmul(data_scores[plot_columns].to_numpy(), load_mat_df.to_numpy()),columns=grouped_columns,index=churn_data.index)
-        churn_data_reduced['is_churn']=churn_data['is_churn']
-        churn_data = churn_data_reduced
-        plot_columns = grouped_columns
-        the_one_plot=None
+    if args.behave_group:
+        cc.apply_behavior_grouping()
+        plot_columns = cc.grouped_columns
+        list_to_plot=None
         skewed_columns={c:False for c in plot_columns }
     else:
-        the_one_plot=[l.lower() for l in run_mets] if run_mets is not None else None
+        plot_columns = cc.metric_columns
+        list_to_plot=[l.lower() for l in args.metrics] if args.metrics is not None else None
 
 
     for var_to_plot in plot_columns:
-        if the_one_plot is not None and var_to_plot not in the_one_plot: continue
+        if list_to_plot is not None and var_to_plot not in list_to_plot: continue
+        plot_one_cohort_churn(cc,args,var_to_plot,skewed_columns[var_to_plot])
 
-        print('Plotting churn vs %s' % var_to_plot)
-        if var_to_plot not in renames:
-            renames[var_to_plot]=var_to_plot
-
-        plot_frame=cc.behavioral_cohort_plot_data(churn_data,var_to_plot,nbin=nbin)
-        bins_used=plot_frame.shape[0]
-        bins_zero=nbin-bins_used
-        churn_plot_max = ceil(plot_frame['churn_rate'].max()* ax_scale[schema])/100.0
-
-        if behave_group or not skewed_columns[var_to_plot]:
-            plt.figure(figsize=(6,4))
-            plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
-                     marker='o', color='red', linewidth=2, label=var_to_plot)
-            plt.gcf().subplots_adjust(bottom=0.2)
-            plt.xlabel('Cohort Average of  "%s"' % renames[var_to_plot])
-            # plt.title('Churn vs. Cohorts of %s' % var_to_plot)
-            plt.ylim(0, churn_plot_max)
-            if hideAx:
-                plt.gca().get_yaxis().set_ticks([ 0.25*churn_plot_max, 0.5*churn_plot_max, 0.75*churn_plot_max, 1.0*churn_plot_max])
-                plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
-                plt.ylabel('Cohort Churn (Relative)')
-            else:
-                plt.ylabel('Cohort Churn Rate (%)')
-            plt.grid()
-
-        else:
-            score_frame = cc.behavioral_cohort_plot_data(data_scores, var_to_plot,nbin=nbin)
-            plt.figure(figsize=(10, 10))
-            plt.subplot(2, 1, 1)
-            plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
-                     marker='o', color='red', linewidth=2, label=var_to_plot)
-            plt.ylabel('Cohort Churn Rate (%)')
-            plt.xlabel('Cohort Average of  "%s"' % renames[var_to_plot])
-            plt.grid()
-            # plt.title('Churn vs. Cohorts of %s' % var_to_plot)
-            plt.ylim(0, churn_plot_max)
-            if hideAx:
-                plt.gca().get_yaxis().set_ticks([ 0.25*churn_plot_max, 0.5*churn_plot_max, 0.75*churn_plot_max, 1.0*churn_plot_max])
-                plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
-                plt.ylabel('Cohort Churn (Relative)')
-            else:
-                plt.ylabel('Cohort Churn Rate (%)')
-
-            plt.subplot(2, 1, 2)
-            plt.plot(var_to_plot, 'churn_rate', data=score_frame,
-                     marker='o', color='blue', linewidth=2, label='score(%s)'%var_to_plot)
-            plt.xlabel('Cohort Average of  "%s" (SCORE)' % renames[var_to_plot])
-            plt.grid()
-            plt.ylim(0, churn_plot_max)
-            if hideAx:
-                plt.gca().get_yaxis().set_ticks([ 0.25*churn_plot_max, 0.5*churn_plot_max, 0.75*churn_plot_max, 1.0*churn_plot_max])
-                plt.gca().get_yaxis().set_ticklabels([])  # Hiding y axis labels on the count
-                plt.ylabel('Cohort Churn (Relative)')
-            else:
-                plt.ylabel('Cohort Churn Rate (%)')
-
-        if hideAx:
-            saveName = schema_save_path + 'churn_vs_' + var_to_plot + '_noax.png'
-        else:
-            saveName = schema_save_path + 'churn_vs_' + var_to_plot + '.png'
-
-        plt.savefig(saveName)
-        plt.close()
 
 
 if __name__ == "__main__":
-    main()
+
+    # Uses parse args definitions at the top of this file.
+    args, _ = parser.parse_known_args()
+
+    font = {'family': args.fontfamily, 'size': args.fontsize}
+    matplotlib.rc('font', **font)
+
+    churn_calc = ChurnCalculator(args.schema)
+    plot_dataset_cohorts(churn_calc,args)
+
