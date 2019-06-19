@@ -197,6 +197,10 @@ class ChurnCalculator:
 
         return self.summary
 
+    def churn_rate(self):
+        self.dataset_stats() # make sure the churn stat is calculated
+        return self.churn_stat['mean']
+
     def dataset_corr(self,use_scores=True,save=False):
         '''
         Calculate a correlation matrix on the current data set. Optionally use the scored version of the data.
