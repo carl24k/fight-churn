@@ -141,7 +141,7 @@ class ChurnCalculator:
         self.data_set_name, self.churn_data.shape[0], self.churn_data.shape[1]))
         print('|'.join(self.metric_columns))
 
-    def behavioral_cohort_plot_data(self, var_to_plot, use_score=False, nbin=10, out_col=churn_out_col):
+    def behavioral_cohort_analysis(self, var_to_plot, use_score=False, nbin=10, out_col=churn_out_col):
         """
         Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
         The data is binned into ordered bins with pcqut, and the mean value of the metric and the churn rate
@@ -188,10 +188,12 @@ class ChurnCalculator:
                 ['count', 'nonzero', 'mean', 'std', 'skew', 'min', '1%', '5%', '10%', '25%', '50%', '75%', '90%', '95%',
                  '99%', 'max']]
 
+            self.churn_stat = self.churn_data['is_churn'].astype(int).describe()
+
         if save:
             # Adding churn % stats in a saved version, but not for further analysis
-            churn_stat = self.churn_data['is_churn'].astype(int).describe()
-            churn_stat.to_csv(self.save_path('churnrate'), header=True)
+
+            self.churn_stat.to_csv(self.save_path('churnrate'), header=True)
             self.summary.to_csv(self.save_path('summary'), header=True)
             print('Saved result to ' + self.save_path('summary'))
 
@@ -278,11 +280,13 @@ class ChurnCalculator:
         3. the linkage function returns a heirarchy based on the correlation matrix which is a representation of which
             elements are closest to each other, using the dissimilarity as distances.
         4. The threshold for a cluster is also set as a correlation (more intuitive) so the threshold for the clustering
-            is 1.0 minus thethreshold
-        5. fcluster decides on the cluster using the previously calculated heirarchy, and the specified threshold.
-            fcluster. fcluster returns a series which are the class labels for each column as an ndarray
+            is 1.0 minus the threshold
+        5. fcluster determines the cluster using the previously calculated hierarchy, and the specified threshold.
+            fcluster returns a series which are the class labels for each column as an ndarray
 
-        The above completes the clustering.  The remainder is processing and reformatting the output.
+        The above completes the clustering.  The remainder is processing and reformatting the output. In particular,
+        the clusters will be reordered so #1 has the most metrics, #2 has second most, etc. Then the weight matrix is
+        created from that cluster order
         6. At this point it is not known how many clusters there are, so a set is created to find the unique elements
         7. A Counter is used to calculate the number of elements in each cluster
         8. A dictionary is made from the original cluster labels to their position in the new order user the Counter
@@ -291,10 +295,15 @@ class ChurnCalculator:
             metric column names to the final (reordered) cluster assignments - named "labeled_columns"
         10. The weight matrix is created as a numpy zero matrix and then filled in by looking up the elements in the
             labeled_columns
-            KEY STEP: Using the relabled_count to make the entries the appropriate sum of squares weight.
+            KEY STEP: Using the relabled_count to make the entries the inverse sum of squares weight.
         11. After construction, the weight matrix is converted to a data frame with the column name as the index
             The group entries are in the columns.
-        12. After creation, the loading matrix is sorted by the clustering and the metric names for readability
+        12. After creation, the weight matrix is sorted by the clustering and the metric names for readability
+        13. The weight matrix is saved
+
+        A few useful results are also saved at the end:
+        14. The correlation matrix is re-ordered according to the blocks
+        15. The correlation matrix of the grouped (reduced) data set is saved
         :return:
         '''
 
@@ -313,8 +322,7 @@ class ChurnCalculator:
         relabeled_count = Counter(relabeled_clusters)
 
         labeled_columns = pd.DataFrame({'group': relabeled_clusters, 'column': self.metric_columns}).sort_values(
-            ['group', 'column'],
-            ascending=[True, True])
+            ['group', 'column'], ascending=[True, True])
 
         load_mat = np.zeros((len(self.metric_columns), len(clusters)))
         for row in labeled_columns.iterrows():
@@ -383,3 +391,4 @@ class ChurnCalculator:
             return save_path  + self.data_set_name + '_' + file_name + '.' + ext
         else:
             raise Exception("Must provide file name or previously set the datset ")
+

@@ -4,7 +4,12 @@ from churn_calc import ChurnCalculator
 
 
 def main():
-
+    '''
+    Creates churn calculator and runs the statistics and correlation functions.
+    The schema name is taken from the first command line argument.
+    The dataset and all other parameters are then taken from the schema configuration.
+    :return: None
+    '''
 
     schema = 'churnsim2'
 

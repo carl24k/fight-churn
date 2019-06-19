@@ -24,6 +24,20 @@ parser.add_argument("--xlim", type=float, nargs=2, help="The y maximum", default
 
 
 def plot_pair(cc,args,metric1,metric2):
+    '''
+    Uses matplotlib scatter to plot two metrics from a churn calculator data set.
+    Command line arguments control the choice to plot the metric as scores versus the metric on
+    the natural scale, as well as options to hide the axes and choose limits.
+
+    Note that if the metrics are listed in the "renames" section of the JSON configuration then those names
+    will be shown in the displayed labels.
+
+    :param cc: A churn calculator object
+    :param args: The command line arguments produced by argparse
+    :param metric1: The first metric name (string)
+    :param metric2: The second metric name (string)
+    :return:
+    '''
 
     renames = cc.get_renames()
 
@@ -65,6 +79,10 @@ def plot_pair(cc,args,metric1,metric2):
     plt.close()
 
 if __name__ == "__main__":
+    '''
+    Uses parse args definitions at the top of this file. If no metrics are specified in the args then
+    it will offer to plot all the pairs.
+    '''
 
     args, _ = parser.parse_known_args()
 
@@ -78,7 +96,8 @@ if __name__ == "__main__":
     else:
         all_mets = churn_calc.metric_columns
         nmet=len(all_mets)
-        if input("Plot all pairs of %d metrics (%d) : are you sure? (enter %s to proceed) " % (nmet,nmet*(nmet-1),args.schema)) != args.schema:
+        if input("Plot all pairs of %d metrics (%d plots) : are you sure? (enter %s to proceed) " %
+                 (nmet,nmet*(nmet-1),args.schema)) != args.schema:
             exit(0)
         plot_pairs = permutations(all_mets,2)
         for pair in plot_pairs:
