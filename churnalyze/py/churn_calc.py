@@ -56,7 +56,7 @@ class ChurnCalculator:
         self.churn_data_reduced = None
         self.reduced_cols = None
 
-    def get_conf(self, name):
+    def get_conf(self, name, default=None):
         '''
         Retrieves one param from the configuration. If there is a dataset already set then it will look for the param
         in the json member for the dataset and return it if found.  Otherwise it looks in the 'default' entry.
@@ -70,7 +70,7 @@ class ChurnCalculator:
                     return self.conf[self.data_set_name][name]
         if name in self.conf['default']:
             return self.conf['default'][name]
-        return None
+        return default
 
     def get_renames(self):
         '''
