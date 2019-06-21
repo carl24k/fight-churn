@@ -1,0 +1,15 @@
+{
+	"chap6" : {
+		"params": {
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset.csv",
+			"type": "py",
+			"save_path" : "../../../fight-churn-output/churnsim3/"
+		},
+		"listing_6_1_metric_pair_plot" : {
+			"metric1" : "read_per_month",
+			"metric2" : "reply_per_month"
+		},
+		"listing_6_2_dataset_correlation_matrix" : {
+		}
+	}
+}
