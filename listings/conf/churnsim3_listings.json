@@ -1,15 +1,28 @@
 {
+	"chap5" : {
+		"params": {
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset.csv",
+			"type" : "py"
+		},
+		"listing_5_2_dataset_stats" : {
+		},
+		"listing_5_3_metric_scores" : {
+		}
+	},
 	"chap6" : {
 		"params": {
 			"data_set_path": "../../data/chursim3_chap6fig2_dataset.csv",
-			"type": "py",
-			"save_path" : "../../../fight-churn-output/churnsim3/"
+			"type": "py"
 		},
 		"listing_6_1_metric_pair_plot" : {
 			"metric1" : "read_per_month",
 			"metric2" : "reply_per_month"
 		},
 		"listing_6_2_dataset_correlation_matrix" : {
+		},
+		"listing_6_3_apply_behavior_groups" : {
+		},
+		"listing_6_4_find_metric_groups" : {
 		}
 	}
 }
