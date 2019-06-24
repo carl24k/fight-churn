@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def apply_behavior_groups(data_set_path='',load_mat_path='',save=True):
+def apply_metric_groups(data_set_path='',load_mat_path='',save=True):
 
     score_save_path = data_set_path.replace('.csv', '_scores.csv')
     churn_data = pd.read_csv(score_save_path)
