@@ -7,6 +7,7 @@ import json
 from collections import Counter
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
+from sklearn.decomposition import PCA
 
 
 class ChurnCalculator:
@@ -141,7 +142,7 @@ class ChurnCalculator:
         self.data_set_name, self.churn_data.shape[0], self.churn_data.shape[1]))
         print('|'.join(self.metric_columns))
 
-    def behavioral_cohort_analysis(self, var_to_plot, use_score=False, nbin=10, out_col=churn_out_col):
+    def behavioral_cohort_analysis(self, var_to_plot, use_group=False, use_score=False, nbin=10, out_col=churn_out_col):
         """
         Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
         The data is binned into ordered bins with pcqut, and the mean value of the metric and the churn rate
@@ -152,8 +153,11 @@ class ChurnCalculator:
         :param out_col: the outcome, presumably churn
         :return:
         """
-        if not use_score:
+        if not use_score and not use_group:
             data=self.churn_data
+        elif use_group:
+            # this assumes it has already been setup
+            data=self.churn_data_reduced
         else:
             data,_=self.normalize_skewscale()
 
@@ -327,7 +331,7 @@ class ChurnCalculator:
         load_mat = np.zeros((len(self.metric_columns), len(clusters)))
         for row in labeled_columns.iterrows():
             orig_col = self.metric_columns.index(row[1][1])
-            load_mat[orig_col, row[1][0]] = 1.0 / np.sqrt(relabeled_count[row[1][0]])
+            load_mat[orig_col, row[1][0]] = 1.0 / float(relabeled_count[row[1][0]])
 
         loadmat_df = pd.DataFrame(load_mat, index=self.metric_columns, columns=[d for d in range(0, load_mat.shape[1])])
         loadmat_df['name'] = loadmat_df.index
@@ -349,6 +353,18 @@ class ChurnCalculator:
         reduced_corr = self.churn_data_reduced.corr()
         reduced_corr.to_csv(self.save_path('reduced_corr'))
 
+        print('Fitting PCA components')
+        pca  = PCA()
+        pca.fit(self.data_scores.drop('is_churn',axis=1))
+        pca_cols=[d for d in range(0,pca.components_.shape[1])]
+        component_df = pd.DataFrame(np.transpose(pca.components_),index=self.metric_columns,columns=pca_cols)
+        component_df['name'] = component_df.index
+        # sort_cols=list(component_df.columns.values)
+        # component_df=component_df.sort_values(sort_cols,ascending=[True]*len(sort_cols))
+        component_df=component_df.reindex(loadmat_df.index)
+        component_df.to_csv(self.save_path('pca_loadings'))
+
+
     def apply_behavior_grouping(self):
         '''
         Produce a reduced version of the data by applying a previously saved weight matrix. This has to be applied to
@@ -362,12 +378,13 @@ class ChurnCalculator:
         load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
         num_weights = load_mat_df.astype(bool).sum(axis=0)
         load_mat_df = load_mat_df.loc[:, num_weights > 1]
-        grouped_columns = ['Metric Group %d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
+        self.grouped_columns = ['Metric Group %d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
         self.churn_data_reduced = pd.DataFrame(
             np.matmul(self.data_scores[self.metric_columns].to_numpy(), load_mat_df.to_numpy()),
-            columns=grouped_columns, index=self.churn_data.index)
+            columns=self.grouped_columns, index=self.churn_data.index)
+        self.churn_data_reduced=self.churn_data_reduced/self.churn_data_reduced.std()
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
-        self.reduced_cols = grouped_columns
+        self.reduced_cols = self.grouped_columns
 
 
     def save_path(self, file_name=None,ext='csv',subdir=None):

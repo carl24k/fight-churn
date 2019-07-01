@@ -19,10 +19,13 @@
 			"metric2" : "reply_per_month"
 		},
 		"listing_6_2_dataset_correlation_matrix" : {
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset_group3_scores.csv"
 		},
 		"listing_6_3_apply_metric_groups" : {
 		},
 		"listing_6_4_find_metric_groups" : {
+			"group_corr_thresh" : 0.7,
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset_group2_scores.csv"
 		}
 	}
 }
