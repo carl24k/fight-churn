@@ -62,8 +62,8 @@ def plot_pair(cc,args,metric1,metric2):
     plt.scatter(met1_data,met2_data, marker='.')
     plt.xlabel(met1_label)
     plt.ylabel(met2_label)
-    plt.tight_layout()
     plt.title('Correlation = %.2f' % corr)
+    plt.tight_layout()
     if args.ylim is not None:
         plt.ylim(args.ylim[0],args.ylim[1])
     if args.xlim is not None:

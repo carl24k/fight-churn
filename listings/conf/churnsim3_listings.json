@@ -80,15 +80,31 @@
 	},
 	"chap5" : {
 		"params": {
-			"data_set_path" : "/Users/cgold/projects/ChurnBook/fight-churn-output/churnsim2/listing_4_A_data_set_4analysis.csv",
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset.csv",
 			"type" : "py"
-		},
-		"listing_5_1_cohort_plot" : {
-			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_2_dataset_stats" : {
 		},
 		"listing_5_3_metric_scores" : {
+		}
+	},
+	"chap6" : {
+		"params": {
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset.csv",
+			"type": "py"
+		},
+		"listing_6_1_metric_pair_plot" : {
+			"metric1" : "read_per_month",
+			"metric2" : "reply_per_month"
+		},
+		"listing_6_2_dataset_correlation_matrix" : {
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset_group3_scores.csv"
+		},
+		"listing_6_3_apply_metric_groups" : {
+		},
+		"listing_6_4_find_metric_groups" : {
+			"group_corr_thresh" : 0.7,
+			"data_set_path": "../../data/chursim3_chap6fig2_dataset_group2_scores.csv"
 		}
 	}
 }

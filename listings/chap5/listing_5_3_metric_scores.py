@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from listing_5_2_dataset_stats import dataset_stats
 
-def metric_scores(data_set_path='',skew_thresh=4.0,save_path='scores.csv'):
+def metric_scores(data_set_path='',skew_thresh=4.0,save=True):
 
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
@@ -20,7 +20,9 @@ def metric_scores(data_set_path='',skew_thresh=4.0,save_path='scores.csv'):
     data_scores=(data_scores-data_scores.mean())/data_scores.std()
     data_scores['is_churn']=churn_data['is_churn']
 
-    if save_path is not None:
-        data_scores.to_csv(save_path,header=True)
+    if save:
+        score_save_path=data_set_path.replace('.csv','_scores.csv')
+
+        data_scores.to_csv(score_save_path,header=True)
 
     return data_scores

@@ -54,7 +54,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
     if var_to_plot not in renames:
         renames[var_to_plot] = var_to_plot
 
-    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin)
+    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin,use_score=plot_score,use_group=args.behave_group)
     ax_scale=cc.get_conf('ax_scale',default=200)
     churn_plot_max = ceil(cc.churn_rate() * ax_scale) / 100.0
 
@@ -108,7 +108,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
 
     save_name = 'churn_vs_' + var_to_plot
     if args.hide_ax:
-        save_name+='noax.png'
+        save_name+='noax'
 
     plt.savefig(cc.save_path(save_name, ext='png'))
     plt.close()
@@ -133,6 +133,7 @@ def plot_dataset_cohorts(cc,args):
         skewed_columns={c:True for c in plot_columns }
 
     if args.behave_group:
+        cc.calc_behavior_groups()
         cc.apply_behavior_grouping()
         plot_columns = cc.grouped_columns
         list_to_plot=None
