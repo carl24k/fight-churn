@@ -1,0 +1,4 @@
+﻿behavior,mean,low_road,high_road,off_road
+low_road,100,2000,-1500,0
+high_road,100,-1500,2000,-750
+off_road,100,0,-750,2000

@@ -1,0 +1,28 @@
+{
+    "date_range": {
+        "from_date" :"2019-02-04",
+        "to_date" : "2019-05-06"
+    },
+	"event_properties" : [],
+	"low_road_per_month": {
+		"event_id":  0,
+		"fun" : "count(*)",
+		"measwin" : 2,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	},
+	"high_road_per_month": {
+		"event_id":  1,
+		"fun" : "count(*)",
+		"measwin" : 2,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	},
+	"off_road_per_month": {
+		"event_id":  2,
+		"fun" : "count(*)",
+		"measwin" : 2,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	}
+}

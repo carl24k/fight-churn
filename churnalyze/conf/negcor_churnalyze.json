@@ -1,0 +1,9 @@
+{
+  "default" : {
+    "dataset" : "listing_4_A_data_set_4analysis",
+    "ax_scale" : 200,
+    "group_corr_thresh" : 0.8,
+    "renames" : {
+            }
+  }
+}

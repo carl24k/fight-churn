@@ -75,14 +75,14 @@ class GaussianBehaviorModel(BehaviorModel):
             print('Matrix is not positive semi-definite: Multiplying by transpose')
             # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
             self.behave_cov= np.dot(self.behave_cov, self.behave_cov.transpose())
-        if all(self.behave_cov.abs() <= 1.0):
+        elif (np.absolute(self.behave_cov.to_numpy()) <= 1.0).all():
             print('Scaling correlation by behavior means...')
             # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
             scaling=self.behave_means.abs() * np.sqrt(self.behave_means.abs())
             self.behave_cov=np.matmul(self.behave_cov,np.diag(scaling))
 
         # For debugging
-        # np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
+        np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
 
 
 
@@ -97,4 +97,5 @@ class GaussianBehaviorModel(BehaviorModel):
         customer_rates=np.random.multivariate_normal(mean=self.behave_means,cov=self.behave_cov)
         customer_rates=customer_rates.clip(min=self.min_rate) # clip : no negative rates!
         new_customer= Customer(customer_rates)
+        print(customer_rates)
         return new_customer
