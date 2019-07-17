@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def metric_pair_plot(data_set_path='', metric1='',metric2='',save_path='./'):
+def metric_pair_plot(data_set_path='', metric1='',metric2=''):
 
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
@@ -17,7 +17,9 @@ def metric_pair_plot(data_set_path='', metric1='',metric2='',save_path='./'):
     plt.ylabel(metric2)
     plt.title('Correlation = %.2f' % corr)
     plt.tight_layout()
-    save_name = save_path + '/' + metric1 + '_vs_' + metric2 + '.png'
+    plt.grid()
+
+    save_name = data_set_path.replace('.csv', '_' + metric1 + '_vs_' + metric2 + '.png')
     plt.savefig(save_name )
     print('Saving plot to %s' % save_name)
     plt.close()
