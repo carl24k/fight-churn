@@ -4,7 +4,7 @@ from listing_5_3_metric_scores import metric_scores
 
 def apply_metric_groups(data_set_path='',save=True):
 
-    score_data = metric_scores(data_set_path)
+    score_data = metric_scores(data_set_path,save=False)
     data_2group = score_data.drop('is_churn',axis=1)
 
     load_mat_df = pd.read_csv(data_set_path.replace('.csv', '_load_mat.csv'), index_col=0)

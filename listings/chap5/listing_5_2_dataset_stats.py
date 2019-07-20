@@ -1,6 +1,6 @@
 import pandas as pd
 
-def dataset_stats(data_set_path='',save_path='example.csv'):
+def dataset_stats(data_set_path='',save=True):
 
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
@@ -16,7 +16,9 @@ def dataset_stats(data_set_path='',save_path='example.csv'):
 
     summary = summary[ ['count','nonzero','mean','std','skew','min','1%','25%','50%','75%','99%','max'] ]
 
-    if save_path is not None:
+    if save:
+        save_path = data_set_path.replace('.csv', '_summarystats.csv')
         summary.to_csv(save_path,header=True)
+        print('Saving results to %s' % save_path)
 
     return summary

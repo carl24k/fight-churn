@@ -5,8 +5,8 @@ date_range as (
 ), account_count as (    
 	select count(distinct account_id) as n_account    
 	from subscription s inner join date_range d on
-	 s.start_date <= d.start_date    
-	and (s.end_date >= d.end_date or s.end_date is null)    
+	 s.start_date <= d.end_date
+	and (s.end_date >= d.start_date or s.end_date is null)
 )
 select metric_name, 
 	count(distinct account_id) as count_with_metric,    

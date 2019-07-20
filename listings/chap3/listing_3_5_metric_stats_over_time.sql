@@ -5,7 +5,7 @@ from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
 ), the_metric as (  
 	select * from metric m
 	inner join metric_name n on m.metric_name_id = n.metric_name_id
-	where n.metric_name = 'METRIC_NAME'
+	where n.metric_name = 'metric_to_query'
 )
 select calc_date,  avg(metric_value), count(the_metric.*) as n_calc,
 min(metric_value), max(metric_value)    

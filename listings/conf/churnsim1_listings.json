@@ -23,7 +23,7 @@
 			"FRYR-MM-DD": "2019-03-01",
 			"TOYR-MM-DD": "2019-03-30",
 			"mode": "top",
-			"EVENT_NAME": "A",
+			"event_to_query": "A",
 			"SUM_FIELD" : "0",
 			"type" : "sql"
 		},

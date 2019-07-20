@@ -8,6 +8,6 @@ select event_time::date as event_date,
   	sum(SUM_FIELD) as total_EVENT_NAME_SUM_FIELD
 from date_range left outer join event e on calc_date=event_time::date
 inner join event_type t on t.event_type_id=e.event_type_id
-where t.event_type_name='EVENT_NAME'
+where t.event_type_name='event_to_query'
 group by event_date    
 order by event_date

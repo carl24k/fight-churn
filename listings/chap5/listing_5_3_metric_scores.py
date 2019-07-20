@@ -9,7 +9,7 @@ def metric_scores(data_set_path='',skew_thresh=4.0,save=True):
     data_scores = churn_data.copy()
     data_scores.drop('is_churn',axis=1)
 
-    stats = dataset_stats(data_set_path)
+    stats = dataset_stats(data_set_path,save=False)
     stats=stats.drop('is_churn')
     skewed_columns=(stats['skew']>skew_thresh) & (stats['min'] >= 0)
     skewed_columns=skewed_columns[skewed_columns]
