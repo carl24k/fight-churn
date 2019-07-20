@@ -149,7 +149,8 @@ def load_and_check_listing_params(schema, chapter, listing):
     '''
 
     chapter_key='chap{}'.format(chapter)
-    listing_prefix='listing_{c}_{l}_'.format(c=chapter,l=listing)
+    listing_prefix='^listing_{c}_{l}_'.format(c=chapter,l=listing)
+    listing_re=re.compile(listing_prefix)
 
     # Error if there is no file for this schema
     conf_path='../../listings/conf/%s_listings.json' % schema
@@ -165,31 +166,34 @@ def load_and_check_listing_params(schema, chapter, listing):
         print('No params for chapter %d in %s_listings.json' % (chapter,schema))
         exit(-2)
 
-    # Find the parameters for this specific listing
-    for listing_name in param_dict[chapter_key].keys():
+    matches = list(filter(listing_re.match, param_dict[chapter_key].keys()))
+    if len(matches)==0:
+        print('No params for listing %d, chapter %d in %s_listings.json' % (listing, chapter, schema))
+        exit(-3)
 
-        if listing_name=='params' or not listing_prefix in listing_name:
-            continue
+    if len(matches)>1:
+        print('Multiple configurations found matching listing %d, chapter %d in %s_listings.json' % (listing, chapter, schema))
+        exit(-4)
 
-        # Start with the chapter default parameters
-        listing_params = copy(param_dict[chapter_key]['params'])
+    listing_name = matches[0]
+    # Start with the chapter default parameters
+    listing_params = copy(param_dict[chapter_key]['params'])
 
-        # If there are specific parameters for this listing, add them here
-        if len(param_dict[chapter_key][listing_name])>0:
-            for k in param_dict[chapter_key][listing_name].keys():
-                listing_params[k]=param_dict[chapter_key][listing_name][k]
+    # If there are specific parameters for this listing, add them here
+    if len(param_dict[chapter_key][listing_name])>0:
+        for k in param_dict[chapter_key][listing_name].keys():
+            listing_params[k]=param_dict[chapter_key][listing_name][k]
 
-        # Add the other contextual information
-        listing_params['schema'] = schema
-        listing_params['name'] = listing_name
-        listing_params['chapter']=chapter
-        listing_params['listing']=listing
+    # Add the other contextual information
+    listing_params['schema'] = schema
+    listing_params['name'] = listing_name
+    listing_params['chapter']=chapter
+    listing_params['listing']=listing
 
-        return listing_params
+    return listing_params
 
     # Another error if it didn't find a listing
-    print('No params for listing %d, chapter %d in %s_listings.json' % (listing,chapter,schema))
-    exit(-3)
+
 
 
 def run_one_listing(schema,chapter,listing):
@@ -225,8 +229,8 @@ use them. Otherwise defaults are hard coded
 if __name__ == "__main__":
 
     schema = 'churnsim2'
-    chapter = 2
-    listing = 1
+    chapter = 3
+    listing = 13
 
     if len(sys.argv)==4:
         schema=sys.argv[1]
