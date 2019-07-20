@@ -12,7 +12,7 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
 	},
 	"new_friend_per_month": {
@@ -20,7 +20,7 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
 	},
 	"like_per_month": {
@@ -28,7 +28,7 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
 	},
 	"view_feed_per_month": {
@@ -36,7 +36,7 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
 	},
 	"photo_per_month": {
@@ -44,7 +44,7 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
 	},
 	"message_per_month": {
@@ -52,7 +52,7 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
 	},
 	"unfriend_per_month": {
@@ -60,7 +60,19 @@
 		"fun" : "count(*)",
 		"measwin" : 8,
 		"quotwin" : 4,
-		"minten" : 2,
+		"minten" : 4,
 		"sql" : "metric_over_period_tenscale"
-	}
+	},
+    "unfriend_per_post" : {
+        "sql" : "metric_ratio",
+        "num_metric" : "unfriend_per_month",
+        "den_metric" : "post_per_month",
+        "fill_val" : 0
+    },
+    "unfriend_per_message" : {
+        "sql" : "metric_ratio",
+        "num_metric" : "unfriend_per_month",
+        "den_metric" : "message_per_month",
+        "fill_val" : 0
+    }
 }

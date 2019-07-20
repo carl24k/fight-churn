@@ -13,7 +13,7 @@ def remove_obsevations(schema):
 
 if __name__ == "__main__":
 
-    schema = 'churnsim3'
+    schema = 'churnsim2'
 
     if len(sys.argv)==2:
         schema=sys.argv[1]

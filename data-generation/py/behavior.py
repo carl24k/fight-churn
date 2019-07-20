@@ -71,15 +71,18 @@ class GaussianBehaviorModel(BehaviorModel):
         self.behave_names=data.index.values
         self.behave_cov=data[self.behave_names]
         self.min_rate=0.01*self.behave_means.min()
+        corr_scale=(np.absolute(self.behave_cov.to_numpy()) <= 1.0).all()
         if not is_pos_def(self.behave_cov):
             print('Matrix is not positive semi-definite: Multiplying by transpose')
             # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
             self.behave_cov= np.dot(self.behave_cov, self.behave_cov.transpose())
-        elif (np.absolute(self.behave_cov.to_numpy()) <= 1.0).all():
+
+        if corr_scale:
             print('Scaling correlation by behavior means...')
             # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
-            scaling=self.behave_means.abs() * np.sqrt(self.behave_means.abs())
+            scaling=np.sqrt( self.behave_means.abs() * np.sqrt(self.behave_means.abs()))
             self.behave_cov=np.matmul(self.behave_cov,np.diag(scaling))
+            self.behave_cov=np.matmul(np.diag(scaling),self.behave_cov)
 
         # For debugging
         np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
@@ -97,5 +100,5 @@ class GaussianBehaviorModel(BehaviorModel):
         customer_rates=np.random.multivariate_normal(mean=self.behave_means,cov=self.behave_cov)
         customer_rates=customer_rates.clip(min=self.min_rate) # clip : no negative rates!
         new_customer= Customer(customer_rates)
-        print(customer_rates)
+        # print(customer_rates)
         return new_customer

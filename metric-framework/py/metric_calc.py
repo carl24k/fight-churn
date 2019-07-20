@@ -209,6 +209,7 @@ if __name__ == "__main__":
 	run_mets = None
 	# Example of running just a few metrics - uncomment this line...
 	# run_mets=['account_tenure','post_per_month']
+	# run_mets = ['unfriend_per_post','unfriend_per_message']
 
 	if len(sys.argv)>=2:
 		schema=sys.argv[1]
