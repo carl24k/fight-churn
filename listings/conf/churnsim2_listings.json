@@ -34,28 +34,32 @@
 		"listing_3_3_count_metric_insert" : {
 			"mode": "run"
 		},
-		"listing_3_5_metric_stats_over_time" : {
+		"listing_3_4_metric_name_insert" : {
+			"mode": "run",
+			"new_metric_name" : "like_per_month"
+		},
+		"listing_3_6_metric_stats_over_time" : {
 			"mode" : "save",
 			"metric_to_query" : "like_per_month"
 		},
-		"listing_3_6_metric_coverage" : {
+		"listing_3_7_metric_coverage" : {
 			"mode" : "save"
 		},
-		"listing_3_7_events_per_day" : {
+		"listing_3_8_events_per_day" : {
 			"mode" : "save",
 			"FRYR-MM-DD": "2019-01-01",
 			"TOYR-MM-DD": "2019-06-30"
 		},
-		"listing_3_8_events_per_account" : {
+		"listing_3_9_events_per_account" : {
 			"mode" : "top"
 		},
-		"listing_3_9_account_tenure" : {
+		"listing_3_10_account_tenure" : {
 		},
-		"listing_3_10_account_tenure_insert" : {
+		"listing_3_11_account_tenure_insert" : {
 		},
-		"listing_3_11_mrr" : {
+		"listing_3_12_mrr" : {
 		},
-		"listing_3_13_billing_period" : {
+		"listing_3_14_billing_period" : {
 		}
 	},
 	"chap4" : {
