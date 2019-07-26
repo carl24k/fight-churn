@@ -41,7 +41,7 @@ churn_mrr as (
 	select 	sum(churned_accounts.total_mrr) as churn_mrr from churned_accounts
 ), 
 downsell_mrr as (    
-	select sum(downsell_accounts.downsell_amount) as downsell_mrr 
+	select coalesce(sum(downsell_accounts.downsell_amount),0.0) as downsell_mrr
 from downsell_accounts
 )
 select 
