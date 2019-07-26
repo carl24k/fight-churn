@@ -229,8 +229,8 @@ use them. Otherwise defaults are hard coded
 if __name__ == "__main__":
 
     schema = 'churnsim2'
-    chapter = 3
-    listing = 13
+    chapter = 2
+    listing = 1
 
     if len(sys.argv)==4:
         schema=sys.argv[1]

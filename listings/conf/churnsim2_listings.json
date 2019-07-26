@@ -36,7 +36,8 @@
 		},
 		"listing_3_4_metric_name_insert" : {
 			"mode": "run",
-			"new_metric_name" : "like_per_month"
+			"new_metric_name" : "like_per_month",
+			"new_metric_id" : 0
 		},
 		"listing_3_6_metric_stats_over_time" : {
 			"mode" : "save",
