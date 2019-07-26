@@ -720,8 +720,13 @@ like this:
  
  
 You can also configure the QA to run on numeric event properties, if you events have any.  See the `event_properties`
-field in the metric configuration described in section 3.2.2 below.
- 
+field in the metric configuration described in section 3.2.2 (below). 
+
+Note that the metric QA uses the metric configuration to run - it takes the start and end dates for the QA from the 
+configuration. So if you are running on your own data you need to create the metric configuration (described in 
+detail in the next section) before you can run this QA. (For the defaulted simulated data a configuration is already 
+there for you.)
+
 [(top)](#top)  
 
 ---
@@ -735,8 +740,22 @@ There are three parts to the metric framework:
 
 1. Metric calculation SQL's in the `metric-framework/sql` folder
 1. Metric configurations in JSONfiles in the `metric-framework/conf` folder
-1. An execution program in pyton, `metric-framework/metric_calc.py`
+1. An execution program in python, `metric-framework/metric_calc.py`
 
+Here is a high level overview of how it works:
+* The SQL's calculate the metrics desribed in the book, but they have to be configured
+with things like the type name for an event or the time window for a measurement.
+* The configuration of what parameters to bind in the SQL's are stored in  JSON in the `conf` directorynd
+* Each database schema has its own configuration file, so if you are using the default simulated data
+`churnsim2` then the configuration for all of the metrics will be in `conf/churnsim2_metrics.json`. If you
+ have loaded your own data in a schema called `saasco` you need to make and fill out a configuration 
+ `conf/saasco_metrics.json`, etc.
+* Each metric that will be calculated must have its own entry in the JSON for its schema, and there 
+is also a block of start and end date paramerters that are common to al the metrics.
+* The Python program `metric-framework/metric_calc.py` reads the configuration for the schema passed as a parameter 
+and calculates the metrics.
+
+The following sections provide details about each part of the framework.
 
 #### 3.2.1 Metric SQL's
 
@@ -774,7 +793,8 @@ The bind variables in the metric are:
 1. `%fun`
 
 These will be substituted by the program based on the configurations when it is run. 
-For details of what the SQL does and the meaning of bind parameters read the book.
+Details of what the SQL does and the meaning of bind parameters are in the related sections
+of chapter 3 and 7 in the book.
 
 At the time of this writing the following metrics are available:
 
@@ -939,6 +959,8 @@ alongside the `fight-churn` source directory.  (The confusing printout is the re
 script directory.)  Each of the plots produced by the script for the default `churnsim2` simulation data will look roughly
 like this:
 
+Note that the metric QA uses the metric configuration to run - it only runs on metrics that
+are listed in the configuration and takes the start and end dates for the QA from the configuration.
 
 
 ![Metric QA Output](/readme_files/metric_qa.png)
