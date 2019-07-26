@@ -1,1 +1,1 @@
-insert into metric_name ('new_metric_name',metric_name_id);
+insert into metric_name values (new_metric_id,'new_metric_name');
