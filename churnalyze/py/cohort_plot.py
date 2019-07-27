@@ -53,8 +53,8 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
     renames = cc.get_renames()
     if var_to_plot not in renames:
         renames[var_to_plot] = var_to_plot
-
-    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin,use_score=plot_score,use_group=args.behave_group)
+    # First plot should always be the unscored version
+    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin,use_score=False,use_group=args.behave_group)
     ax_scale=cc.get_conf('ax_scale',default=200)
     churn_plot_max = ceil(cc.churn_rate() * ax_scale) / 100.0
 
