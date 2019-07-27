@@ -31,7 +31,9 @@ class ChurnCalculator:
      content, particularly when it involves generating plots.)
     '''
     # misc constants set as class variables
-    key_cols = ['account_id', 'observation_date']
+    ACCOUNT_ID_COL='account_id'
+    OBSERVE_DATE_COL='observation_date'
+    key_cols = [ACCOUNT_ID_COL, OBSERVE_DATE_COL]
     churn_out_col = 'is_churn'
     save_path_base = '../../../fight-churn-output/'
     load_mat_file = 'load_mat'
@@ -111,8 +113,8 @@ class ChurnCalculator:
         self.data_set_name=new_data_set
         data_set_path = self.save_path()
         self.churn_data = pd.read_csv(data_set_path)
+        self.observe_dates=pd.to_datetime(self.churn_data[self.OBSERVE_DATE_COL],format='%Y-%m-%d')
         self.churn_data.set_index(self.key_cols, inplace=True)
-
         skip_metrics = self.get_conf('skip_metrics')
         if skip_metrics is not None and isinstance(skip_metrics,list) > 0:
             self.churn_data.drop(skip_metrics, axis=1, inplace=True)
@@ -387,18 +389,28 @@ class ChurnCalculator:
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = self.grouped_columns
 
-    def fit_logistic_model(self, groups=True, to_date=None):
+    def fit_logistic_model(self, fit_asof_dt, groups=True):
 
         if groups:
             self.apply_behavior_grouping()
-            self.logit = sm.Logit(self.churn_data_reduced['is_churn'],
-                                  self.churn_data_reduced[self.metric_columns])
+            X = self.churn_data_reduced[self.grouped_columns]
+            y = self.churn_data_reduced['is_churn']
         else:
             self.normalize_skewscale()
-            self.logit = sm.Logit(self.data_scores['is_churn'],
-                                  self.data_scores[self.metric_columns])
+            X = self.data_scores[self.metric_columns]
+            y = self.data_scores['is_churn']
 
-        result = self.logit.fit()
+        # before_asof.reindex(X.index)
+        X[self.OBSERVE_DATE_COL]=self.observe_dates.values
+        train_data = X.loc[X[self.OBSERVE_DATE_COL]<fit_asof_dt]
+        X.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
+        train_data.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
+
+        train_outcome = y[self.observe_dates.values < np.datetime64(fit_asof_dt)]
+
+        self.logit = sm.Logit(train_outcome, train_data)
+
+        result = self.logit.fit_regularized(alpha=100.0)
         print(result.summary())
 
 
