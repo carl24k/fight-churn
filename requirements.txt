@@ -6,6 +6,7 @@ kiwisolver==1.0.1
 matplotlib==3.0.2
 numpy==1.16.0
 pandas==0.24.0
+patsy==0.5.1
 postgres==2.2.2
 psycopg2==2.7.6.1
 psycopg2-binary==2.7.6.1
@@ -18,4 +19,5 @@ scipy==1.2.1
 six==1.12.0
 sklearn==0.0
 SQLAlchemy==1.2.17
+statsmodels==0.10.1
 urllib3==1.24.1

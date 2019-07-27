@@ -8,7 +8,8 @@ from collections import Counter
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
 from sklearn.decomposition import PCA
-
+from sklearn.linear_model import LogisticRegression
+import statsmodels.api as sm
 
 class ChurnCalculator:
     '''
@@ -385,6 +386,20 @@ class ChurnCalculator:
         self.churn_data_reduced=self.churn_data_reduced/self.churn_data_reduced.std()
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = self.grouped_columns
+
+    def fit_logistic_model(self, groups=True, to_date=None):
+
+        if groups:
+            self.apply_behavior_grouping()
+            self.logit = sm.Logit(self.churn_data_reduced['is_churn'],
+                                  self.churn_data_reduced[self.metric_columns])
+        else:
+            self.normalize_skewscale()
+            self.logit = sm.Logit(self.data_scores['is_churn'],
+                                  self.data_scores[self.metric_columns])
+
+        result = self.logit.fit()
+        print(result.summary())
 
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
