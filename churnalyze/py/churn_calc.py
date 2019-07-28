@@ -2,13 +2,15 @@ import os
 import pandas as pd
 import numpy as np
 import json
+import datetime as dt
 
 # for the behavioral grouping
 from collections import Counter
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
 from sklearn.decomposition import PCA
-from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import auc, roc_curve
+from sklearn.linear_model import Lasso, LogisticRegression
 import statsmodels.api as sm
 
 class ChurnCalculator:
@@ -389,7 +391,9 @@ class ChurnCalculator:
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = self.grouped_columns
 
-    def fit_logistic_model(self, fit_asof_dt, groups=True):
+    def fit_logistic_model(self, groups=True):
+
+        fit_asof_dt = dt.datetime.strptime(self.get_conf('reg_test_date'), '%Y-%m-%d')
 
         if groups:
             self.apply_behavior_grouping()
@@ -400,19 +404,30 @@ class ChurnCalculator:
             X = self.data_scores[self.metric_columns]
             y = self.data_scores['is_churn']
 
-        # before_asof.reindex(X.index)
         X[self.OBSERVE_DATE_COL]=self.observe_dates.values
-        train_data = X.loc[X[self.OBSERVE_DATE_COL]<fit_asof_dt]
+        train_data = pd.DataFrame(X.loc[X[self.OBSERVE_DATE_COL]<fit_asof_dt])
+        test_data = pd.DataFrame(X.loc[X[self.OBSERVE_DATE_COL]>=fit_asof_dt])
         X.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
         train_data.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
+        test_data.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
+
 
         train_outcome = y[self.observe_dates.values < np.datetime64(fit_asof_dt)]
+        test_outcome = y[self.observe_dates.values >= np.datetime64(fit_asof_dt)]
 
-        self.logit = sm.Logit(train_outcome, train_data)
+        cost_test = [1.0/2.0**x for x in range(0,10)]
 
-        result = self.logit.fit_regularized(alpha=100.0)
-        print(result.summary())
+        for c in cost_test:
 
+            clf = LogisticRegression(penalty='l1', solver='liblinear',C=c,fit_intercept=True)
+            clf.fit(train_data,train_outcome)
+            ncoef= np.count_nonzero(clf.coef_)
+            test_pred = clf.predict_proba(test_data)
+
+            fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:,1])
+            accuracy = auc(fpr, tpr)
+
+            print('C=%f, AUC=%f, ncoef=%d' % (c,accuracy,ncoef) )
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
         '''
