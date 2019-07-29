@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import json
 import datetime as dt
+from math import sqrt
 
 # for the behavioral grouping
 from collections import Counter
@@ -11,7 +12,8 @@ from scipy.spatial.distance import squareform
 from sklearn.decomposition import PCA
 from sklearn.metrics import auc, roc_curve
 from sklearn.linear_model import Lasso, LogisticRegression
-import statsmodels.api as sm
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 
 class ChurnCalculator:
     '''
@@ -391,14 +393,7 @@ class ChurnCalculator:
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = self.grouped_columns
 
-    def make_dated_samples(self,groups=True,train_from_dt=None,train_to_dt=None,test_to_dt=None):
-
-        if train_to_dt is None:
-            train_to_dt = dt.datetime.strptime(self.get_conf('reg_test_date'), '%Y-%m-%d')
-        if train_from_dt is None:
-            train_from_dt = self.observe_dates.min()
-        if test_to_dt is None:
-            test_to_dt = self.observe_dates.max()
+    def prepare_xy(self,groups=True):
 
         if groups:
             self.apply_behavior_grouping()
@@ -408,6 +403,19 @@ class ChurnCalculator:
             self.normalize_skewscale()
             X = self.data_scores[self.metric_columns]
             y = self.data_scores['is_churn']
+
+        return X,y
+
+    def make_dated_samples(self,groups=True,train_from_dt=None,train_to_dt=None,test_to_dt=None):
+
+        if train_to_dt is None:
+            train_to_dt = dt.datetime.strptime(self.get_conf('reg_test_date'), '%Y-%m-%d')
+        if train_from_dt is None:
+            train_from_dt = self.observe_dates.min()
+        if test_to_dt is None:
+            test_to_dt = self.observe_dates.max()
+
+        X,y = self.prepare_xy(groups)
 
         X[self.OBSERVE_DATE_COL] = self.observe_dates.values
         train_data = pd.DataFrame(X.loc[ (X[self.OBSERVE_DATE_COL] < train_to_dt)
@@ -423,7 +431,7 @@ class ChurnCalculator:
 
         return train_data, test_data, train_outcome, test_outcome
 
-    def test_logistic_model_params(self, groups=True):
+    def test_logistic_model_params_manual(self, groups=True):
 
         train_data, test_data, train_outcome, test_outcome = self.make_dated_samples(groups=groups)
 
@@ -437,9 +445,8 @@ class ChurnCalculator:
             clf.fit(train_data,train_outcome)
             ncoefs[idx] = np.count_nonzero(clf.coef_)
             test_pred = clf.predict_proba(test_data)
-
             fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:,1])
-            aucs[idx] = auc(fpr, tpr)
+            aucs[idx] = self.calc_auc(clf,test_data,test_outcome)
 
             print('C=%f, AUC=%f, ncoef=%d' % (c,aucs[idx],ncoefs[idx]) )
 
@@ -452,6 +459,59 @@ class ChurnCalculator:
         result_dict.to_csv(save_path,index=False)
         print('Saved result to ' + save_path)
         return result_dict
+
+    def test_logistic_model_params(self, groups=True):
+        X,y = self.prepare_xy(groups)
+
+        PARAMS = {
+            'C' : [1.0/2.0**x for x in range(0,10)]
+        }
+
+        lr = LogisticRegression(penalty='l1', solver='liblinear',fit_intercept=True)
+        tscv = TimeSeriesSplit(n_splits=3)
+        gsearch = GridSearchCV(estimator=lr, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=4,verbose=5,
+                               return_train_score=True)
+        gsearch.fit(X,y)
+
+        result_df = pd.DataFrame(gsearch.cv_results_)
+        if groups:
+            save_path=self.save_path('logreg_param_test_groups')
+        else:
+            save_path=self.save_path('logreg_param_test_nogroup')
+        result_df.to_csv(save_path,index=False)
+        print('Saved result to ' + save_path)
+        return result_df
+
+    def test_forest_model_params(self,groups=True):
+
+        X,y = self.prepare_xy(groups)
+
+        n_features_def=int(sqrt(X.shape[1]))
+
+        PARAMS = {
+            'max_features': [int(n_features_def*0.5),n_features_def, int(n_features_def*1.5), n_features_def*2],
+            'n_estimators': [10,25,50,100,150]
+        }
+
+        rf = RandomForestClassifier()
+        tscv = TimeSeriesSplit(n_splits=3)
+        gsearch = GridSearchCV(estimator=rf, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=4,verbose=5,
+                               return_train_score=True)
+        gsearch.fit(X,y)
+
+        result_df = pd.DataFrame(gsearch.cv_results_)
+        if groups:
+            save_path=self.save_path('randforest_param_test_groups')
+        else:
+            save_path=self.save_path('randforest_param_test_nogroup')
+        result_df.to_csv(save_path,index=False)
+        print('Saved result to ' + save_path)
+        return result_df
+
+    def calc_auc(self,model,test_data,test_outcome):
+        test_pred = model.predict_proba(test_data)
+        fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:, 1])
+        return auc(fpr, tpr)
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
         '''
