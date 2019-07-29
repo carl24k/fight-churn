@@ -14,7 +14,7 @@ def main(args):
     '''
 
     churn_calc = ChurnCalculator(args.schema)
-    churn_calc.fit_logistic_model(groups=not args.nogroup)
+    churn_calc.test_logistic_model_params(groups=not args.nogroup)
 
 if __name__ == "__main__":
     args, _ = parser.parse_known_args()

@@ -382,7 +382,7 @@ class ChurnCalculator:
         # Load the previously saved loading matrix, created by
         load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
         num_weights = load_mat_df.astype(bool).sum(axis=0)
-        load_mat_df = load_mat_df.loc[:, num_weights > 1]
+        # load_mat_df = load_mat_df.loc[:, num_weights > 1]
         self.grouped_columns = ['Metric Group %d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
         self.churn_data_reduced = pd.DataFrame(
             np.matmul(self.data_scores[self.metric_columns].to_numpy(), load_mat_df.to_numpy()),
@@ -391,9 +391,14 @@ class ChurnCalculator:
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = self.grouped_columns
 
-    def fit_logistic_model(self, groups=True):
+    def make_dated_samples(self,groups=True,train_from_dt=None,train_to_dt=None,test_to_dt=None):
 
-        fit_asof_dt = dt.datetime.strptime(self.get_conf('reg_test_date'), '%Y-%m-%d')
+        if train_to_dt is None:
+            train_to_dt = dt.datetime.strptime(self.get_conf('reg_test_date'), '%Y-%m-%d')
+        if train_from_dt is None:
+            train_from_dt = self.observe_dates.min()
+        if test_to_dt is None:
+            test_to_dt = self.observe_dates.max()
 
         if groups:
             self.apply_behavior_grouping()
@@ -404,30 +409,49 @@ class ChurnCalculator:
             X = self.data_scores[self.metric_columns]
             y = self.data_scores['is_churn']
 
-        X[self.OBSERVE_DATE_COL]=self.observe_dates.values
-        train_data = pd.DataFrame(X.loc[X[self.OBSERVE_DATE_COL]<fit_asof_dt])
-        test_data = pd.DataFrame(X.loc[X[self.OBSERVE_DATE_COL]>=fit_asof_dt])
-        X.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
-        train_data.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
-        test_data.drop([self.OBSERVE_DATE_COL],axis=1,inplace=True)
+        X[self.OBSERVE_DATE_COL] = self.observe_dates.values
+        train_data = pd.DataFrame(X.loc[ (X[self.OBSERVE_DATE_COL] < train_to_dt)
+                                         & (X[self.OBSERVE_DATE_COL] >= train_from_dt)])
+        test_data = pd.DataFrame(X.loc[ (X[self.OBSERVE_DATE_COL] >= train_to_dt)
+                                         & (X[self.OBSERVE_DATE_COL] <= test_to_dt)])
+        X.drop([self.OBSERVE_DATE_COL], axis=1, inplace=True)
+        train_data.drop([self.OBSERVE_DATE_COL], axis=1, inplace=True)
+        test_data.drop([self.OBSERVE_DATE_COL], axis=1, inplace=True)
 
+        train_outcome = y[self.observe_dates.values < np.datetime64(train_to_dt)]
+        test_outcome = y[self.observe_dates.values >= np.datetime64(train_to_dt)]
 
-        train_outcome = y[self.observe_dates.values < np.datetime64(fit_asof_dt)]
-        test_outcome = y[self.observe_dates.values >= np.datetime64(fit_asof_dt)]
+        return train_data, test_data, train_outcome, test_outcome
+
+    def test_logistic_model_params(self, groups=True):
+
+        train_data, test_data, train_outcome, test_outcome = self.make_dated_samples(groups=groups)
 
         cost_test = [1.0/2.0**x for x in range(0,10)]
+        aucs = [0]*len(cost_test)
+        ncoefs = [0]*len(cost_test)
 
-        for c in cost_test:
+        for idx,c in enumerate(cost_test):
 
             clf = LogisticRegression(penalty='l1', solver='liblinear',C=c,fit_intercept=True)
             clf.fit(train_data,train_outcome)
-            ncoef= np.count_nonzero(clf.coef_)
+            ncoefs[idx] = np.count_nonzero(clf.coef_)
             test_pred = clf.predict_proba(test_data)
 
             fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:,1])
-            accuracy = auc(fpr, tpr)
+            aucs[idx] = auc(fpr, tpr)
 
-            print('C=%f, AUC=%f, ncoef=%d' % (c,accuracy,ncoef) )
+            print('C=%f, AUC=%f, ncoef=%d' % (c,aucs[idx],ncoefs[idx]) )
+
+        result_dict = pd.DataFrame.from_dict({'C':cost_test,'AUC':aucs,'NCoef':ncoefs})
+
+        if groups:
+            save_path=self.save_path('logistic_param_test_groups')
+        else:
+            save_path=self.save_path('logistic_param_test_nogroup')
+        result_dict.to_csv(save_path,index=False)
+        print('Saved result to ' + save_path)
+        return result_dict
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
         '''
