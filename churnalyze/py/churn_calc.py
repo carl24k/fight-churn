@@ -490,7 +490,8 @@ class ChurnCalculator:
 
         PARAMS = {
             'max_features': [int(n_features_def*0.5),n_features_def, int(n_features_def*1.5), n_features_def*2],
-            'n_estimators': [10,25,50,100,150]
+            'max_depth' : [5,10,20,40],
+            'n_estimators': [50,100,150]
         }
 
         rf = RandomForestClassifier()
