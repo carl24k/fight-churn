@@ -526,9 +526,9 @@ class ChurnCalculator:
         X,y = self.prepare_xy(groups)
 
         PARAMS = {
-            'max_depth': [2,4,6],
-            'learning_rate': [0.2,0.3,0.4],
-            'n_estimators': [40,80,120],
+            'max_depth': [1,2,4,6],
+            'learning_rate': [0.1,0.2,0.3,0.4],
+            'n_estimators': [20,40,80,120],
             'min_child_weight' : [3,6,9]
         }
 
