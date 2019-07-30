@@ -14,6 +14,7 @@ from sklearn.metrics import auc, roc_curve
 from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
+import xgboost as xgb
 
 class ChurnCalculator:
     '''
@@ -397,12 +398,19 @@ class ChurnCalculator:
 
         if groups:
             self.apply_behavior_grouping()
-            X = self.churn_data_reduced[self.grouped_columns]
-            y = self.churn_data_reduced['is_churn']
+            dat= pd.DataFrame(self.churn_data_reduced)
+            cols=self.grouped_columns
         else:
             self.normalize_skewscale()
-            X = self.data_scores[self.metric_columns]
-            y = self.data_scores['is_churn']
+            dat = pd.DataFrame(self.data_scores)
+            cols = self.metric_columns
+
+        # The result has to be sorted by date for the TimeSeriesSplit to work properly
+        dat['temp_obs_date'] = self.observe_dates.values
+        dat.sort_values('temp_obs_date',inplace=True)
+
+        X = dat[cols]
+        y = dat['is_churn']
 
         return X,y
 
@@ -430,6 +438,11 @@ class ChurnCalculator:
         test_outcome = y[self.observe_dates.values >= np.datetime64(train_to_dt)]
 
         return train_data, test_data, train_outcome, test_outcome
+
+    def calc_auc(self,model,test_data,test_outcome):
+        test_pred = model.predict_proba(test_data)
+        fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:, 1])
+        return auc(fpr, tpr)
 
     def test_logistic_model_params_manual(self, groups=True):
 
@@ -469,7 +482,7 @@ class ChurnCalculator:
 
         lr = LogisticRegression(penalty='l1', solver='liblinear',fit_intercept=True)
         tscv = TimeSeriesSplit(n_splits=3)
-        gsearch = GridSearchCV(estimator=lr, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=4,verbose=5,
+        gsearch = GridSearchCV(estimator=lr, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
                                return_train_score=True)
         gsearch.fit(X,y)
 
@@ -496,7 +509,7 @@ class ChurnCalculator:
 
         rf = RandomForestClassifier()
         tscv = TimeSeriesSplit(n_splits=3)
-        gsearch = GridSearchCV(estimator=rf, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=4,verbose=5,
+        gsearch = GridSearchCV(estimator=rf, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
                                return_train_score=True)
         gsearch.fit(X,y)
 
@@ -509,10 +522,32 @@ class ChurnCalculator:
         print('Saved result to ' + save_path)
         return result_df
 
-    def calc_auc(self,model,test_data,test_outcome):
-        test_pred = model.predict_proba(test_data)
-        fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:, 1])
-        return auc(fpr, tpr)
+    def test_xgb_model_params(self,groups=True):
+        X,y = self.prepare_xy(groups)
+
+        PARAMS = {
+            'max_depth': [2,4,6],
+            'learning_rate': [0.2,0.3,0.4],
+            'n_estimators': [40,80,120],
+            'min_child_weight' : [3,6,9]
+        }
+
+        xgbmod = xgb.XGBClassifier(objective='binary:logistic')
+        tscv = TimeSeriesSplit(n_splits=3)
+        gsearch = GridSearchCV(estimator=xgbmod, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
+                               return_train_score=True)
+
+        gsearch.fit(X, y)
+
+        result_df = pd.DataFrame(gsearch.cv_results_)
+        if groups:
+            save_path = self.save_path('xgboost_param_test_groups')
+        else:
+            save_path = self.save_path('xgboost_param_test_nogroup')
+        result_df.to_csv(save_path, index=False)
+        print('Saved result to ' + save_path)
+        return result_df
+
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
         '''
