@@ -383,13 +383,20 @@ class ChurnCalculator:
         saved in member variables for use by other functions, for example cohort plotting.
         :return:
         '''
+        N_GROUP_CHAR=7
+        MAX_GROUP_NAME=10
 
         self.normalize_skewscale()  # make sure scores are created
         # Load the previously saved loading matrix, created by
         load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
         num_weights = load_mat_df.astype(bool).sum(axis=0)
-        # load_mat_df = load_mat_df.loc[:, num_weights > 1]
-        self.grouped_columns = ['Metric Group %d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
+        solo_metics =     (num_weights==1).to_numpy().nonzero()[0]
+        grouped_metrics = (num_weights>1 ).to_numpy().nonzero()[0]
+        self.grouped_columns = ['G%d_' % (d + 1) for d in np.nditer(grouped_metrics)]
+        for m in grouped_metrics:
+            group_cols = load_mat_df.iloc[:,m].to_numpy().nonzero()[0]
+            self.grouped_columns[m] += '_'.join([self.metric_columns[i][:7].replace('_','') for i in group_cols[:MAX_GROUP_NAME]])
+        self.grouped_columns.extend([self.metric_columns[i] for i in solo_metics])
         self.churn_data_reduced = pd.DataFrame(
             np.matmul(self.data_scores[self.metric_columns].to_numpy(), load_mat_df.to_numpy()),
             columns=self.grouped_columns, index=self.churn_data.index)
