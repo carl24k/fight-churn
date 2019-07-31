@@ -376,6 +376,19 @@ class ChurnCalculator:
         component_df.to_csv(self.save_path('pca_loadings'))
 
 
+    def setup_group_column_names(self,load_mat_df):
+        N_GROUP_CHAR=7
+        MAX_GROUP_NAME=10
+        num_weights = load_mat_df.astype(bool).sum(axis=0)
+        solo_metics = (num_weights == 1).to_numpy().nonzero()[0]
+        grouped_metrics = (num_weights > 1).to_numpy().nonzero()[0]
+        self.grouped_columns = ['G%d_' % (d + 1) for d in np.nditer(grouped_metrics)]
+        for m in grouped_metrics:
+            group_cols = load_mat_df.iloc[:, m].to_numpy().nonzero()[0]
+            self.grouped_columns[m] += '_'.join(
+                [self.metric_columns[i][:N_GROUP_CHAR].replace('_', '') for i in group_cols[:MAX_GROUP_NAME]])
+        self.grouped_columns.extend([self.metric_columns[i] for i in solo_metics])
+
     def apply_behavior_grouping(self):
         '''
         Produce a reduced version of the data by applying a previously saved weight matrix. This has to be applied to
@@ -383,20 +396,11 @@ class ChurnCalculator:
         saved in member variables for use by other functions, for example cohort plotting.
         :return:
         '''
-        N_GROUP_CHAR=7
-        MAX_GROUP_NAME=10
 
         self.normalize_skewscale()  # make sure scores are created
         # Load the previously saved loading matrix, created by
         load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
-        num_weights = load_mat_df.astype(bool).sum(axis=0)
-        solo_metics =     (num_weights==1).to_numpy().nonzero()[0]
-        grouped_metrics = (num_weights>1 ).to_numpy().nonzero()[0]
-        self.grouped_columns = ['G%d_' % (d + 1) for d in np.nditer(grouped_metrics)]
-        for m in grouped_metrics:
-            group_cols = load_mat_df.iloc[:,m].to_numpy().nonzero()[0]
-            self.grouped_columns[m] += '_'.join([self.metric_columns[i][:7].replace('_','') for i in group_cols[:MAX_GROUP_NAME]])
-        self.grouped_columns.extend([self.metric_columns[i] for i in solo_metics])
+        self.setup_group_column_names(load_mat_df)
         self.churn_data_reduced = pd.DataFrame(
             np.matmul(self.data_scores[self.metric_columns].to_numpy(), load_mat_df.to_numpy()),
             columns=self.grouped_columns, index=self.churn_data.index)
