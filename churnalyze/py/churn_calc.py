@@ -39,6 +39,9 @@ class ChurnCalculator:
     ACCOUNT_ID_COL='account_id'
     OBSERVE_DATE_COL='observation_date'
     key_cols = [ACCOUNT_ID_COL, OBSERVE_DATE_COL]
+    RANDOM_FOREST = 'ranfor'
+    LOGISTIC_REGRESSION = 'logreg'
+    XGBOOST = 'xgb'
     churn_out_col = 'is_churn'
     save_path_base = '../../../fight-churn-output/'
     load_mat_file = 'load_mat'
@@ -473,81 +476,51 @@ class ChurnCalculator:
         print('Saved result to ' + save_path)
         return result_dict
 
-    def test_logistic_model_params(self, groups=True):
+    def crossvalidate_churn_model(self,model_code,groups=True):
         X,y = self.prepare_xy(groups)
-
-        PARAMS = {
-            'C' : [1.0/2.0**x for x in range(0,10)]
-        }
-
-        lr = LogisticRegression(penalty='l1', solver='liblinear',fit_intercept=True)
+        params = self.cv_params(model_code)
+        model = self.model_instance(model_code)
         tscv = TimeSeriesSplit(n_splits=3)
-        gsearch = GridSearchCV(estimator=lr, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
+        gsearch = GridSearchCV(estimator=model, param_grid=params, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
                                return_train_score=True)
-        gsearch.fit(X,y)
-
-        result_df = pd.DataFrame(gsearch.cv_results_)
-        if groups:
-            save_path=self.save_path('logreg_param_test_groups')
-        else:
-            save_path=self.save_path('logreg_param_test_nogroup')
-        result_df.to_csv(save_path,index=False)
-        print('Saved result to ' + save_path)
-        return result_df
-
-    def test_forest_model_params(self,groups=True):
-
-        X,y = self.prepare_xy(groups)
-
-        n_features_def=int(sqrt(X.shape[1]))
-
-        PARAMS = {
-            'max_features': [int(n_features_def*0.5),n_features_def, int(n_features_def*1.5), n_features_def*2],
-            'max_depth' : [5,10,20,40],
-            'n_estimators': [50,100,150]
-        }
-
-        rf = RandomForestClassifier()
-        tscv = TimeSeriesSplit(n_splits=3)
-        gsearch = GridSearchCV(estimator=rf, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
-                               return_train_score=True)
-        gsearch.fit(X,y)
-
-        result_df = pd.DataFrame(gsearch.cv_results_)
-        if groups:
-            save_path=self.save_path('randforest_param_test_groups')
-        else:
-            save_path=self.save_path('randforest_param_test_nogroup')
-        result_df.to_csv(save_path,index=False)
-        print('Saved result to ' + save_path)
-        return result_df
-
-    def test_xgb_model_params(self,groups=True):
-        X,y = self.prepare_xy(groups)
-
-        PARAMS = {
-            'max_depth': [1,2,4,6],
-            'learning_rate': [0.1,0.2,0.3,0.4],
-            'n_estimators': [20,40,80,120],
-            'min_child_weight' : [3,6,9]
-        }
-
-        xgbmod = xgb.XGBClassifier(objective='binary:logistic')
-        tscv = TimeSeriesSplit(n_splits=3)
-        gsearch = GridSearchCV(estimator=xgbmod, param_grid=PARAMS, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
-                               return_train_score=True)
-
         gsearch.fit(X, y)
-
         result_df = pd.DataFrame(gsearch.cv_results_)
-        if groups:
-            save_path = self.save_path('xgboost_param_test_groups')
-        else:
-            save_path = self.save_path('xgboost_param_test_nogroup')
+        save_file_name = model_code + ('_CV_group' if groups else '_CV_nogroup')
+        save_path = self.save_path(save_file_name)
         result_df.to_csv(save_path, index=False)
         print('Saved result to ' + save_path)
         return result_df
 
+    def cv_params(self,model_code,**kwargs):
+        n_features_def=int(sqrt(kwargs.get('n_feature',20)))
+        CV_PARAMS = {
+            self.LOGISTIC_REGRESSION : {
+                'C': [1.0 / 2.0 ** x for x in range(0, 10)]
+            },
+            self.RANDOM_FOREST : {
+                'max_features': [int(n_features_def*0.5),n_features_def, int(n_features_def*1.5), n_features_def*2],
+                'max_depth' : [5,10,20,40],
+                'n_estimators': [50,100,150]
+            },
+            self.XGBOOST : {
+                'max_depth': [1,2,4,6],
+                'learning_rate': [0.1,0.2,0.3,0.4],
+                'n_estimators': [20,40,80,120],
+                'min_child_weight' : [3,6,9]
+            }
+        }
+        assert model_code in CV_PARAMS,"No params for model code %s" % model_code
+        return CV_PARAMS[model_code]
+
+    def model_instance(self,model_code):
+        if model_code==self.LOGISTIC_REGRESSION:
+            return LogisticRegression(penalty='l1', solver='liblinear',fit_intercept=True)
+        elif model_code==self.RANDOM_FOREST:
+            return RandomForestClassifier()
+        elif model_code==self.XGBOOST:
+            return xgb.XGBClassifier(objective='binary:logistic')
+        else:
+            raise "No model for model code %s" % model_code
 
     def save_path(self, file_name=None,ext='csv',subdir=None):
         '''
