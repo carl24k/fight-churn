@@ -428,31 +428,6 @@ class ChurnCalculator:
 
         return X,y
 
-    def make_dated_samples(self,groups=True,train_from_dt=None,train_to_dt=None,test_to_dt=None):
-
-        if train_to_dt is None:
-            train_to_dt = dt.datetime.strptime(self.get_conf('reg_test_date'), '%Y-%m-%d')
-        if train_from_dt is None:
-            train_from_dt = self.observe_dates.min()
-        if test_to_dt is None:
-            test_to_dt = self.observe_dates.max()
-
-        X,y = self.prepare_xy(groups)
-
-        X[self.OBSERVE_DATE_COL] = self.observe_dates.values
-        train_data = pd.DataFrame(X.loc[ (X[self.OBSERVE_DATE_COL] < train_to_dt)
-                                         & (X[self.OBSERVE_DATE_COL] >= train_from_dt)])
-        test_data = pd.DataFrame(X.loc[ (X[self.OBSERVE_DATE_COL] >= train_to_dt)
-                                         & (X[self.OBSERVE_DATE_COL] <= test_to_dt)])
-        X.drop([self.OBSERVE_DATE_COL], axis=1, inplace=True)
-        train_data.drop([self.OBSERVE_DATE_COL], axis=1, inplace=True)
-        test_data.drop([self.OBSERVE_DATE_COL], axis=1, inplace=True)
-
-        train_outcome = y[self.observe_dates.values < np.datetime64(train_to_dt)]
-        test_outcome = y[self.observe_dates.values >= np.datetime64(train_to_dt)]
-
-        return train_data, test_data, train_outcome, test_outcome
-
     def calc_auc(self,model,test_data,test_outcome):
         test_pred = model.predict_proba(test_data)
         fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:, 1])
@@ -460,22 +435,16 @@ class ChurnCalculator:
 
     def fit_logistic_model(self, cost_param, groups=True):
 
-        train_data, test_data, train_outcome, test_outcome = self.make_dated_samples(groups=groups)
+        X,y = self.prepare_xy(groups=groups)
 
         clf = LogisticRegression(penalty='l1', solver='liblinear',C=cost_param,fit_intercept=True)
-        clf.fit(train_data,train_outcome)
+        clf.fit(X,y)
         ncoefs = np.count_nonzero(clf.coef_)
 
-        if test_data.shape[0]>0:
-            test_pred = clf.predict_proba(test_data)
-            fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:,1])
-            auc = self.calc_auc(clf,test_data,test_outcome)
-            print('Log Reg C=%f: AUC=%f, ncoef=%d' % (cost_param,auc,ncoefs) )
-        else:
-            print('Log Reg C=%f: ncoef=%d' % (cost_param,ncoefs) )
+        print('Log Reg C=%f: ncoef=%d' % (cost_param,ncoefs) )
 
         full_list = ['offset']
-        full_list.extend(train_data.columns.values)
+        full_list.extend(X.columns.values)
         all_coef=[float(clf.intercept_)]
         all_coef.extend(list(clf.coef_[0]))
         results_dict ={'metric':full_list,'coef': all_coef}
