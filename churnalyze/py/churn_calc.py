@@ -454,34 +454,33 @@ class ChurnCalculator:
         fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:, 1])
         return auc(fpr, tpr)
 
-    def test_logistic_model_params_manual(self, groups=True):
+    def fit_logistic_model(self, cost_param, groups=True):
 
         train_data, test_data, train_outcome, test_outcome = self.make_dated_samples(groups=groups)
 
-        cost_test = [1.0/2.0**x for x in range(0,10)]
-        aucs = [0]*len(cost_test)
-        ncoefs = [0]*len(cost_test)
+        clf = LogisticRegression(penalty='l1', solver='liblinear',C=cost_param,fit_intercept=True)
+        clf.fit(train_data,train_outcome)
+        ncoefs = np.count_nonzero(clf.coef_)
 
-        for idx,c in enumerate(cost_test):
-
-            clf = LogisticRegression(penalty='l1', solver='liblinear',C=c,fit_intercept=True)
-            clf.fit(train_data,train_outcome)
-            ncoefs[idx] = np.count_nonzero(clf.coef_)
+        if test_data.shape[0]>0:
             test_pred = clf.predict_proba(test_data)
             fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:,1])
-            aucs[idx] = self.calc_auc(clf,test_data,test_outcome)
-
-            print('C=%f, AUC=%f, ncoef=%d' % (c,aucs[idx],ncoefs[idx]) )
-
-        result_dict = pd.DataFrame.from_dict({'C':cost_test,'AUC':aucs,'NCoef':ncoefs})
-
-        if groups:
-            save_path=self.save_path('logistic_param_test_groups')
+            auc = self.calc_auc(clf,test_data,test_outcome)
+            print('Log Reg C=%f: AUC=%f, ncoef=%d' % (cost_param,auc,ncoefs) )
         else:
-            save_path=self.save_path('logistic_param_test_nogroup')
-        result_dict.to_csv(save_path,index=False)
+            print('Log Reg C=%f: ncoef=%d' % (cost_param,ncoefs) )
+
+        full_list = ['offset']
+        full_list.extend(train_data.columns.values)
+        all_coef=[float(clf.intercept_)]
+        all_coef.extend(list(clf.coef_[0]))
+        results_dict ={'metric':full_list,'coef': all_coef}
+        result_df = pd.DataFrame.from_dict(results_dict)
+        save_file_name = ('logreg_coef_C%.3f' % cost_param) + ('_group' if groups else '_nogroup')
+        save_path = self.save_path(save_file_name)
+        result_df.to_csv(save_path,index=False)
         print('Saved result to ' + save_path)
-        return result_dict
+        return result_df
 
     def crossvalidate_churn_model(self,model_code,groups=True):
         X,y = self.prepare_xy(groups)
@@ -494,7 +493,7 @@ class ChurnCalculator:
         result_df = pd.DataFrame(gsearch.cv_results_)
         save_file_name = model_code + ('_CV_group' if groups else '_CV_nogroup')
         save_path = self.save_path(save_file_name)
-        result_df.to_csv(save_path, index=False)
+        result_df.to_csv(save_path)
         print('Saved result to ' + save_path)
         return result_df
 
