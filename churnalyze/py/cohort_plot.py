@@ -110,7 +110,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
     if args.hide_ax:
         save_name+='noax'
 
-    plt.savefig(cc.save_path(save_name, ext='png'))
+    plt.savefig(cc.save_path(save_name, ext='png', subdir=cc.grouping_correlation_subdir(args.behave_group)))
     plt.close()
 
 

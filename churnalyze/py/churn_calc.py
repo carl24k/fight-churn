@@ -11,7 +11,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
 from sklearn.decomposition import PCA
 from sklearn.metrics import auc, roc_curve
-from sklearn.linear_model import Lasso, LogisticRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 import xgboost as xgb
@@ -352,17 +352,18 @@ class ChurnCalculator:
         loadmat_df = loadmat_df.sort_values(sort_cols, ascending=sort_order)
 
         print('saving loadings')
+        sub_dir_name = self.grouping_correlation_subdir()
         loadmat_df = loadmat_df.drop('name', axis=1)
-        loadmat_df.to_csv(self.save_path(self.load_mat_file))
+        loadmat_df.to_csv(self.save_path(self.load_mat_file,subdir=sub_dir_name))
 
         print('saving re-ordered correlation')
         ordered_corr = corr[labeled_columns.column].reindex(labeled_columns.column)
-        ordered_corr.to_csv(self.save_path('ordered_corr'))
+        ordered_corr.to_csv(self.save_path('ordered_corr',subdir=sub_dir_name))
 
         print('saving reduced data correlation')
         self.apply_behavior_grouping()
         reduced_corr = self.churn_data_reduced.corr()
-        reduced_corr.to_csv(self.save_path('reduced_corr'))
+        reduced_corr.to_csv(self.save_path('reduced_corr',subdir=sub_dir_name))
 
         print('Fitting PCA components')
         pca  = PCA()
@@ -373,8 +374,13 @@ class ChurnCalculator:
         # sort_cols=list(component_df.columns.values)
         # component_df=component_df.sort_values(sort_cols,ascending=[True]*len(sort_cols))
         component_df=component_df.reindex(loadmat_df.index)
-        component_df.to_csv(self.save_path('pca_loadings'))
+        component_df.to_csv(self.save_path('pca_loadings',subdir=sub_dir_name))
 
+    def grouping_correlation_subdir(self,use_groups=True):
+        if use_groups:
+            return 'gc%.3f' % self.get_conf('group_corr_thresh')
+        else:
+            return 'gc___'
 
     def setup_group_column_names(self,load_mat_df):
         N_GROUP_CHAR=7
@@ -401,7 +407,8 @@ class ChurnCalculator:
 
         self.normalize_skewscale()  # make sure scores are created
         # Load the previously saved loading matrix, created by
-        load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
+        load_mat_path = self.save_path(ChurnCalculator.load_mat_file,subdir=self.grouping_correlation_subdir())
+        load_mat_df = pd.read_csv(load_mat_path, index_col=0)
         self.setup_group_column_names(load_mat_df)
 
         ndarray_2group = self.data_scores[load_mat_df.index.values].to_numpy()
@@ -431,11 +438,6 @@ class ChurnCalculator:
 
         return X,y
 
-    def calc_auc(self,model,test_data,test_outcome):
-        test_pred = model.predict_proba(test_data)
-        fpr, tpr, thresholds = roc_curve(test_outcome, test_pred[:, 1])
-        return auc(fpr, tpr)
-
     def fit_logistic_model(self, cost_param, groups=True):
 
         X,y = self.prepare_xy(groups=groups)
@@ -452,8 +454,9 @@ class ChurnCalculator:
         all_coef.extend(list(clf.coef_[0]))
         results_dict ={'metric':full_list,'coef': all_coef}
         result_df = pd.DataFrame.from_dict(results_dict)
-        save_file_name = ('logreg_coef_C%.3f' % cost_param) + ('_group' if groups else '_nogroup')
-        save_path = self.save_path(save_file_name)
+        save_file_name = 'logreg_coef_C%.3f' % cost_param
+        save_path = self.save_path(save_file_name, subdir=self.grouping_correlation_subdir(groups))
+
         result_df.to_csv(save_path,index=False)
         print('Saved result to ' + save_path)
         return result_df
@@ -467,8 +470,10 @@ class ChurnCalculator:
                                return_train_score=True)
         gsearch.fit(X, y)
         result_df = pd.DataFrame(gsearch.cv_results_)
-        save_file_name = model_code + ('_CV_group' if groups else '_CV_nogroup')
-        save_path = self.save_path(save_file_name)
+
+        save_file_name = model_code + '_CV'
+        save_path = self.save_path(save_file_name, subdir=self.grouping_correlation_subdir(groups))
+
         result_df.to_csv(save_path)
         print('Saved result to ' + save_path)
         return result_df
