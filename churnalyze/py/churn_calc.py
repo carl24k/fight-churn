@@ -401,9 +401,10 @@ class ChurnCalculator:
         # Load the previously saved loading matrix, created by
         load_mat_df = pd.read_csv(self.save_path(ChurnCalculator.load_mat_file), index_col=0)
         self.setup_group_column_names(load_mat_df)
-        self.churn_data_reduced = pd.DataFrame(
-            np.matmul(self.data_scores[self.metric_columns].to_numpy(), load_mat_df.to_numpy()),
-            columns=self.grouped_columns, index=self.churn_data.index)
+
+        ndarray_2group = self.data_scores[load_mat_df.index.values].to_numpy()
+        self.churn_data_reduced = pd.DataFrame(np.matmul(ndarray_2group, load_mat_df.to_numpy()),
+                                               columns=self.grouped_columns, index=self.churn_data.index)
         self.churn_data_reduced=self.churn_data_reduced/self.churn_data_reduced.std()
         self.churn_data_reduced['is_churn'] = self.churn_data['is_churn']
         self.reduced_cols = self.grouped_columns
