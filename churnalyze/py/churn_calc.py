@@ -380,14 +380,16 @@ class ChurnCalculator:
         N_GROUP_CHAR=7
         MAX_GROUP_NAME=10
         num_weights = load_mat_df.astype(bool).sum(axis=0)
-        solo_metics = (num_weights == 1).to_numpy().nonzero()[0]
+        weight_on_met = load_mat_df.sum(axis=1)
+        solo_metics = (weight_on_met == 1).to_numpy().nonzero()[0]
         grouped_metrics = (num_weights > 1).to_numpy().nonzero()[0]
         self.grouped_columns = ['G%d_' % (d + 1) for d in np.nditer(grouped_metrics)]
         for m in grouped_metrics:
             group_cols = load_mat_df.iloc[:, m].to_numpy().nonzero()[0]
             self.grouped_columns[m] += '_'.join(
-                [self.metric_columns[i][:N_GROUP_CHAR].replace('_', '') for i in group_cols[:MAX_GROUP_NAME]])
-        self.grouped_columns.extend([self.metric_columns[i] for i in solo_metics])
+                [load_mat_df.index.values[i][:N_GROUP_CHAR].replace('_', '') for i in group_cols[:MAX_GROUP_NAME]])
+
+        self.grouped_columns.extend([load_mat_df.index.values[i] for i in solo_metics])
 
     def apply_behavior_grouping(self):
         '''
