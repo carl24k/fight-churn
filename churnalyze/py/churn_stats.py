@@ -16,7 +16,11 @@ def main():
     if len(sys.argv) >= 2:
         schema = sys.argv[1]
 
-    churn_calc = ChurnCalculator(schema)
+    dataset = None
+    if len(sys.argv) >= 3:
+        dataset = sys.argv[2]
+
+    churn_calc = ChurnCalculator(schema,dataset)
     churn_calc.dataset_stats(save=True)
     churn_calc.dataset_corr(save=True)
     churn_calc.dataset_corr(save=True,use_scores=False)

@@ -48,7 +48,7 @@ class ChurnCalculator:
     no_plot_cols = list(key_cols)
     no_plot_cols.append(churn_out_col)
 
-    def __init__(self, schema):
+    def __init__(self, schema,ds=None):
         '''
         Opens the Json configuration and gets the name of the default dataset, and loads that data set.
         Also sets None for the various analytic result objects.
@@ -60,7 +60,8 @@ class ChurnCalculator:
         # Open the configuration
         with open('../conf/%s_churnalyze.json' % schema, 'r') as myfile:
             self.conf = json.loads(myfile.read())
-        self.data_load(self.get_conf('dataset'))
+        self.data_set_name = ds if ds is not None else self.get_conf('dataset')
+        self.data_load(self.data_set_name)
         # derived data created by calling functions
         self.summary = None
         self.data_scores = None
@@ -123,7 +124,7 @@ class ChurnCalculator:
         self.churn_data = pd.read_csv(data_set_path)
         self.observe_dates=pd.to_datetime(self.churn_data[self.OBSERVE_DATE_COL],format='%Y-%m-%d')
         self.churn_data.set_index(self.key_cols, inplace=True)
-        skip_metrics = self.get_conf('skip_metrics')
+        skip_metrics = [s.lower() for s in self.get_conf('skip_metrics')]
         if skip_metrics is not None and isinstance(skip_metrics,list) > 0:
             self.churn_data.drop(skip_metrics, axis=1, inplace=True)
 

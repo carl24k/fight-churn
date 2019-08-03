@@ -12,6 +12,7 @@ from churn_calc import ChurnCalculator
 parser = argparse.ArgumentParser()
 # Main run control arguments
 parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim2')
+parser.add_argument("--data", type=str, help="The name of the dataset", default=None)
 parser.add_argument("--nbin", type=int, help="The number of bins",default=10)
 parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
 # Additional options
@@ -157,6 +158,6 @@ if __name__ == "__main__":
     font = {'family': args.fontfamily, 'size': args.fontsize}
     matplotlib.rc('font', **font)
 
-    churn_calc = ChurnCalculator(args.schema)
+    churn_calc = ChurnCalculator(args.schema, args.data)
     plot_dataset_cohorts(churn_calc,args)
 
