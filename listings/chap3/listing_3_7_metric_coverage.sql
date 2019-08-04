@@ -14,7 +14,9 @@ select metric_name,
 	100.0*(count(distinct account_id))::float/n_account::float as pcnt_with_metric    ,
 	avg(metric_value) as avg_value,    
 	min(metric_value) as min_value,    
-	max(metric_value) as max_value    
+	max(metric_value) as max_value,
+	min(metric_time)  as earliest_metric,
+	max(metric_time) as last_metric
 from metric m cross join account_count
 inner join date_range on    
 	metric_time >= start_date
