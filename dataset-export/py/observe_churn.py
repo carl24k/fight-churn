@@ -11,6 +11,11 @@ TOBIND = 'TOYR-MM-DD'
 INTBIND = 'MET_INTERVAL'
 
 def remove_obsevations(schema):
+    '''
+    Truncate the active period and observtions tables to prepare for a new dataset generation
+    :param schema:
+    :return:
+    '''
     print('Removing old active_period and observation entries...')
     db = Postgres("postgres://%s:%s@localhost/%s" % (
         os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
@@ -42,28 +47,36 @@ if __name__ == "__main__":
     parser.add_argument("--interval", type=str, help="Interval between metrics", default='7 day')
     args, _ = parser.parse_known_args()
 
+    # Clean up any data from old runs
     remove_obsevations(args.schema)
 
+    # Create active periods and observations using the exact listings from the book
+    # You must configure these with a JSON in listings/conf/<schema>_listings.json
     run_one_listing(args.schema,4,1)
     run_one_listing(args.schema,4,2)
     run_one_listing(args.schema,4,4)
 
+    # Load the base SQL from the adjacent sql directory
     sql = "set search_path = '%s'; " % args.schema;
     with open('../sql/export_dataset.sql' , 'r') as myfile:
         sql += myfile.read()
 
+    # Fill in the standard bind parameters with the arguments
     sql = sql.replace(FRBIND,args.frdt)
     sql = sql.replace(TOBIND,args.todt)
     sql = sql.replace(INTBIND,args.interval)
 
+    # Generate the SQL that flattens the metrics (KEY STEP)
     db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
     sql = sql.replace(METRIC_BIND, generate_flat_metric_sql(db, args.schema))
     print('EXPORT SQL:\n----------\n' + sql + '\n----------\n')
     sql = sql.replace('\n', ' ')
 
+    # Execute the query and get the result into a data frame
     res = db.all(sql)
     df = pd.DataFrame(res)
 
+    # Save to a csv
     save_path = '../../../fight-churn-output/' + args.schema + '/'
     os.makedirs(save_path,exist_ok=True)
     csv_path=save_path +  args.schema + '_dataset.csv'
