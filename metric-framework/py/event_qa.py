@@ -173,7 +173,7 @@ if __name__ == "__main__":
 	schema = 'churnsim2'
 	events_2check = None
 	# Example of running just a few events - uncomment this line...
-	events_2check=['post','like']
+	# events_2check=['post','like']
 
 	if len(sys.argv)>=2:
 		schema=sys.argv[1]
