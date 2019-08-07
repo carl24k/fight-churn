@@ -23,20 +23,6 @@ reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter')
 Functions
 '''
 
-def generate_flat_metric_sql(db, schema):
-    '''
-    Helper function for saving a data set for analysis. This flattens the metrics table to form a data set and it
-    needs to add a sql clause for every metric in the schema.  This does that by actually querying the metric, table,
-    and constructing the sql from a table.
-    :param db:
-    :return:
-    '''
-
-    flat_metric_template = ', sum(case when metric_name_id=%d then metric_value else 0 end) as %s'
-
-    res = db.all('select * from %s.metric_name;' % schema)
-    sql=''.join( [ flat_metric_template % (row[0], row[1]) for row in res])
-    return sql
 
 
 def sql_listing(param_dict):
@@ -51,7 +37,6 @@ def sql_listing(param_dict):
     :return:
     '''
 
-    flat_metric_bind = 'FLAT_METRIC_SELECT'
 
     with open('../../listings/chap%d/%s.sql' % (param_dict['chapter'], param_dict['name']), 'r') as myfile:
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
@@ -66,10 +51,6 @@ def sql_listing(param_dict):
         param_keys = [p for p in param_dict.keys() if p not in reserved_param_keywords]
         for p in param_keys:
             sql = sql.replace(p, str(param_dict[p]))
-
-        # special case for generating sql causes based on the metrics in the database
-        if flat_metric_bind in sql:
-            sql = sql.replace(flat_metric_bind, generate_flat_metric_sql(db,param_dict['schema']))
 
         # Print the sql (then remove the newlines)
         print('SQL:\n----------\n'+sql+'\n----------\nRESULT:')
@@ -229,8 +210,8 @@ use them. Otherwise defaults are hard coded
 if __name__ == "__main__":
 
     schema = 'churnsim2'
-    chapter = 2
-    listing = 1
+    chapter = 4
+    listing = 5
 
     if len(sys.argv)==4:
         schema=sys.argv[1]
