@@ -21,7 +21,7 @@ schema_name='churnsim2'
 db = Postgres("postgres://%s:%s@localhost/%s" % (
 os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
 
-tables=['event','subscription','event_type','metric','metric_name','active_period','observation']
+tables=['event','subscription','event_type','metric','metric_name','active_period','observation','active_week']
 
 print('Creating schema %s (if not exists)...' % schema_name)
 db.run('CREATE SCHEMA IF NOT EXISTS %s;' % schema_name)

@@ -18,7 +18,8 @@ http://www.fightchurnwithdata.com for more information.
 [3.1 Event QA](#eventqa)  
 [3.2 Batch Metric Calculation](#metcalc)  
 [3.3 Metric QA](#metqa)  
-[4 Analysis Framework](#analysis)  
+[4 Dataset Export](#dataset)  
+[5 Analysis Framework](#analysis)  
 
 
 ---
@@ -966,7 +967,50 @@ are listed in the configuration and takes the start and end dates for the QA fro
 ![Metric QA Output](/readme_files/metric_qa.png)
  
  
+[(top)](#top)  
 
+---
+---
+
+<a name="dataset"/>
+
+
+## 4 Dataset Export
+
+Chapter four of the book explains how to create a churn dataset from a database schema 
+containing subscriptions and metrics. You can run each step of the process with the framework for running listings
+(described above). But there are a few problems with doing it that way when you are iterating on different versions
+of a dataset for a real project.
+
+1. You want to run all the steps at once, not one at a time
+1. The code does not clean out the results of prior runs, so you need to manually clear out the tables between executations.
+1. The final select statement in the listings is hard coded to the metrics from one particular simualted data set
+
+The code in the folder `dataset-export` handles these problems by making a single script that does everything. The python
+script is `dataset-export/observe_churn.py`. To get started, just make a new Run Configuration 
+(Section 1.2.6 of this README) and if you are using the default `churnsim2` data set just run it. The script prints out 
+the SQL from each step, just like the script that runs the book SQL listings.  When it is done it should print
+that it is saving the dataset:
+
+```
+...
+Saving: ../../../fight-churn-output/churnsim2/churnsim2_dataset.csv
+```
+
+If you want to run this for your own dataset it accepts command line arguments to change the defaults:
+
+* `--schema` : The name of the schema to run against
+* `--frdt` : The earliest date to export, in the format YYYY-MM-DD
+* `--todt` : The latest date to export, in the format YYYY-MM-DD
+* `--interval` : The interval between the metric observations. Typically 7 days (if you followed the guidelines in the
+ book.) Note that this is just telling the code about the metrics.
+
+ALSO NOTE: You must set up the chapter 4 listing configurations (as described above) to use this! Thats because the
+script actually imports and runs the listings 4.1, 4.2 and 4.4 as they are written. The `observe-churn.py` only differs
+from the listing program in the final step where it does the export.
+
+---
+---
 
 [(top)](#top)  
 
@@ -976,7 +1020,7 @@ are listed in the configuration and takes the start and end dates for the QA fro
 <a name="analysis"/>
 
 
-## 4 Analysis Framework
+## 5 Analysis Framework
 
 Coming Soon! (after Chapter 5 is written...)
 

@@ -76,13 +76,15 @@
 		"listing_4_2_churned_periods": {
 			"GAP_INTERVAL": "7 day"
 		},
+		"listing_4_3_active_event_weeks": {
+		},
 		"listing_4_4_observation_dates": {
 			"OBS_INTERVAL": "1 month",
 			"LEAD_TIME": "5 day"
 		},
 		"listing_4_5_data_set_create": {
 			"MET_INTERVAL": "7 day",
-			"mode" : "top"
+			"mode" : "save"
 		},
 		"listing_4_A_data_set_4analysis": {
 			"MET_INTERVAL": "7 day",

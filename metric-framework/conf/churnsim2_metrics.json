@@ -1,67 +1,60 @@
 {
     "date_range": {
-        "from_date" :"2019-02-04",
+        "from_date" :"2019-03-04",
         "to_date" : "2019-05-06"
     },
 	"event_properties" : [],
-	"account_tenure": {
-	    "sql" : "metric_tenure"
-	},
 	"post_per_month": {
 		"event_id":  0,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
+	},
+	"account_tenure": {
+	    "sql" : "metric_tenure"
 	},
 	"new_friend_per_month": {
 		"event_id":  1,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
 	},
 	"like_per_month": {
 		"event_id":  2,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
 	},
 	"view_feed_per_month": {
 		"event_id":  3,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
 	},
 	"photo_per_month": {
 		"event_id":  4,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
 	},
 	"message_per_month": {
 		"event_id":  5,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
 	},
 	"unfriend_per_month": {
 		"event_id":  6,
 		"fun" : "count(*)",
-		"measwin" : 8,
+		"measwin" : 4,
 		"quotwin" : 4,
-		"minten" : 4,
-		"sql" : "metric_over_period_tenscale"
+		"sql" : "metric_over_period"
 	},
     "unfriend_per_post" : {
         "sql" : "metric_ratio",
