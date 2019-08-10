@@ -12,10 +12,13 @@ def main():
     :return: None
     '''
     schema = 'churnsim2'
+    data=None
     if len(sys.argv) >= 2:
         schema = sys.argv[1]
+    if len(sys.argv) >= 3:
+        data = sys.argv[2]
 
-    churn_calc = ChurnCalculator(schema)
+    churn_calc = ChurnCalculator(schema,data)
 
     churn_calc.calc_behavior_groups()
 
