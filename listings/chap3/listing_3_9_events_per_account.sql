@@ -11,9 +11,9 @@ date_range as (
 select event_type_name, 
     count(*) as n_event,    
     n_account as n_account,  
-    count(*)/n_account as events_per_account,    
+    count(*)::float/n_account::float as events_per_account,
 extract(days from end_date-start_date)::float/28 as n_months,    
-(count(*)/n_account)/(extract(days from end_date-start_date)::float/28.0)  as events_per_account_per_month    
+(count(*)::float/n_account::float)/(extract(days from end_date-start_date)::float/28.0)  as events_per_account_per_month
 from event e cross join account_count    
 inner join event_type t on t.event_type_id=e.event_type_id
 inner join date_range ON    
