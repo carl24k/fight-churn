@@ -11,9 +11,6 @@
 		"quotwin" : 4,
 		"sql" : "metric_over_period"
 	},
-	"account_tenure": {
-	    "sql" : "metric_tenure"
-	},
 	"new_friend_per_month": {
 		"event_id":  1,
 		"fun" : "count(*)",
@@ -28,6 +25,27 @@
 		"quotwin" : 4,
 		"sql" : "metric_over_period"
 	},
+	"adview_per_month": {
+		"event_id":  3,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	},
+	"dislike_per_month": {
+		"event_id":  4,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	},
+	"unfriend_per_month": {
+		"event_id":  5,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	},
 	"message_per_month": {
 		"event_id":  6,
 		"fun" : "count(*)",
@@ -37,27 +55,6 @@
 	},
 	"reply_per_month": {
 		"event_id":  7,
-		"fun" : "count(*)",
-		"measwin" : 4,
-		"quotwin" : 4,
-		"sql" : "metric_over_period"
-	},
-	"dislike_per_month": {
-		"event_id":  3,
-		"fun" : "count(*)",
-		"measwin" : 4,
-		"quotwin" : 4,
-		"sql" : "metric_over_period"
-	},
-	"adview_per_month": {
-		"event_id":  4,
-		"fun" : "count(*)",
-		"measwin" : 4,
-		"quotwin" : 4,
-		"sql" : "metric_over_period"
-	},
-	"unfriend_per_month": {
-		"event_id":  5,
 		"fun" : "count(*)",
 		"measwin" : 4,
 		"quotwin" : 4,
@@ -106,5 +103,8 @@
         "num_metric" : "adview_per_month",
         "den_metric" : "new_friend_per_month",
         "fill_val" : 0
-    }
+    },
+	"account_tenure": {
+	    "sql" : "metric_tenure"
+	}
 }

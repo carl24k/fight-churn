@@ -52,7 +52,7 @@ class BehaviorModel:
 
 class GaussianBehaviorModel(BehaviorModel):
 
-    def __init__(self,name):
+    def __init__(self,name,random_seed):
         '''
         This behavior model uses a mean and (pseudo) covariance matrix to generate customers with event rates.
         The parameters are passed on a csv file that should be located in a `conf` directory adjacent to the code.
@@ -65,13 +65,15 @@ class GaussianBehaviorModel(BehaviorModel):
         :param name:
         '''
         self.name=name
-        data=pd.read_csv('../conf/'+name+'_behavior.csv')
+        data=pd.read_csv('../conf/'+name+'_model.csv')
         data.set_index(['behavior'],inplace=True)
         self.behave_means=data['mean']
         self.behave_names=data.index.values
         self.behave_cov=data[self.behave_names]
         self.min_rate=0.01*self.behave_means.min()
         corr_scale=(np.absolute(self.behave_cov.to_numpy()) <= 1.0).all()
+        if random_seed is not None:
+            np.random.seed(random_seed)
         if not is_pos_def(self.behave_cov):
             print('Matrix is not positive semi-definite: Multiplying by transpose')
             # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
@@ -84,9 +86,12 @@ class GaussianBehaviorModel(BehaviorModel):
             self.behave_cov=np.matmul(self.behave_cov,np.diag(scaling))
             self.behave_cov=np.matmul(np.diag(scaling),self.behave_cov)
 
+
         # For debugging
         np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
-
+        std_ = np.sqrt(np.diag(self.behave_cov))
+        corr = self.behave_cov / np.outer(std_, std_)
+        np.savetxt('../conf/'+name+ '_behavior_corr.csv', corr,delimiter=',')
 
 
 

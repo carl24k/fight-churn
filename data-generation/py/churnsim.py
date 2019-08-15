@@ -1,7 +1,7 @@
 
 from datetime import date, timedelta, datetime
 from dateutil.relativedelta import *
-from random import randrange
+import random
 from postgres import Postgres
 from math import ceil
 import os
@@ -14,7 +14,7 @@ from utility import UtilityModel
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers, growth, churn, mrr):
+    def __init__(self, model, start, end, init_customers, growth, churn, mrr,seed):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -36,7 +36,7 @@ class ChurnSimulation:
         self.monthly_churn_rate = churn
         self.mrr=mrr
 
-        self.behave_mod=GaussianBehaviorModel(self.model_name)
+        self.behave_mod=GaussianBehaviorModel(self.model_name,seed)
         self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate,self.behave_mod)
 
         self.subscription_count = 0
@@ -69,7 +69,7 @@ class ChurnSimulation:
 
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
-        this_month=start_of_month + timedelta(days=randrange((end_range-start_of_month).days))
+        this_month=start_of_month + timedelta(days=random.randrange((end_range-start_of_month).days))
 
         churned = False
         while not churned:
@@ -172,15 +172,18 @@ class ChurnSimulation:
 
 if __name__ == "__main__":
 
-    model_name = 'churnsim2'
-    start = date(2019, 1, 1)
-    end = date(2019, 6, 1)
+    model_name = 'churnsim9'
+    start = date(2020, 1, 1)
+    end = date(2020, 6, 1)
     init = 2000
     growth_rate = 0.15
     churn_rate = 0.10
     mrr = 9.99
+    random_seed = 2
+    if random_seed is not None:
+        random.seed(random_seed) # for random
 
 
-    churn_sim = ChurnSimulation(model_name, start, end, init,growth_rate,churn_rate, mrr)
+    churn_sim = ChurnSimulation(model_name, start, end, init,growth_rate,churn_rate, mrr,random_seed)
     churn_sim.run_simulation()
 

@@ -33,7 +33,7 @@ class UtilityModel:
         '''
         self.name=name
         self.churn_rate = churn_rate
-        data=pd.read_csv('../conf/'+name+'_utility.csv')
+        data=pd.read_csv('../conf/'+name+'_model.csv')
         data.set_index(['behavior'],inplace=True)
         self.linear_utility=data['util']
         self.behave_names=data.index.values
@@ -42,9 +42,11 @@ class UtilityModel:
         self.utility_interactions=data[self.behave_names]
 
         # pick the constant so the mean behavior has the target churn rate
-        expected_utility=self.utility_function(behavior_model.behave_means)
+        self.expected_utility=self.utility_function(behavior_model.behave_means)
+        assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
         r=1.0-self.churn_rate
-        self.kappa=-log(1.0/r-1.0)/expected_utility
+        self.kappa = -2.0/self.expected_utility
+        self.offset=-log(1.0/r-1.0) + self.kappa*self.expected_utility
 
     def utility_function(self,behavior):
         '''
@@ -53,7 +55,6 @@ class UtilityModel:
         :param behavior:
         :return:
         '''
-        # ToDo: add interaction term
         utility= np.dot(behavior,self.linear_utility)
         return utility
 
@@ -66,5 +67,5 @@ class UtilityModel:
         :return:
         '''
         u=self.utility_function(event_counts)
-        churn_prob=1.0-1.0/(1.0+exp(-self.kappa*u))
+        churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
         return uniform(0, 1) < churn_prob
