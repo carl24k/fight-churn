@@ -1,6 +1,0 @@
-﻿behavior,mean,compose,like,read,reply,send
-compose,100,1,0.1,0.1,0.1,0.9
-like,100,0.1,1,0.5,0.1,0.1
-read,100,0.1,0.5,1,0.9,0.1
-reply,100,0.1,0.1,0.9,1,0.1
-send,100,0.9,0.1,0.1,0.1,1

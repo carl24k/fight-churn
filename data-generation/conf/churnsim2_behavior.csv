@@ -1,8 +1,0 @@
-﻿behavior,mean,post,new_friend,like,view_feed,photo,message,unfriend
-post,500,1,0.7,0.4,0.6,0.5,0.1,-0.2
-new_friend,25,0.7,1,0.4,0.5,0.4,0.6,0
-like,200,0.4,0.4,1,0.7,0.2,0,-0.1
-view_feed,1000,0.6,0.5,0.7,1,0.3,0.3,-0.1
-photo,300,0.5,0.4,0.2,0.3,1,0.5,0
-message,50,0.1,0.6,0,0.3,0.5,1,0.4
-unfriend,3,-0.2,0,-0.1,-0.1,0,0.4,1

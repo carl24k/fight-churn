@@ -1,0 +1,9 @@
+﻿behavior,util,post,new_friend,like,dislike,adview,unfriend,message,reply
+post,0.2,0,0,0,0,0,0,0,0
+new_friend,2,0,0,0,0,0,0,0,0
+like,0.1,0,0,0,0,0,0,0,0
+dislike,0,0,0,0,0,0,0,0,0
+adview,-0.5,0,0,0,0,0,0,0,0
+unfriend,-10,0,0,0,0,0,0,0,0
+message,0.2,0,0,0,0,0,0,0,0
+reply,0.2,0,0,0,0,0,0,0,0
