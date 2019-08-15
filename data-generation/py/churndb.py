@@ -16,7 +16,7 @@ The SQL statements to create the tables are the adjacent directory ../schema
 from postgres import Postgres
 import os
 
-schema_name='churnsim2'
+schema_name='churnsim9'
 
 db = Postgres("postgres://%s:%s@localhost/%s" % (
 os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))

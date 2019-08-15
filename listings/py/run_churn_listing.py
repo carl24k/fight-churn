@@ -209,9 +209,9 @@ use them. Otherwise defaults are hard coded
 
 if __name__ == "__main__":
 
-    schema = 'churnsim2'
     chapter = 4
     listing = 5
+    schema = 'churnsim9'
 
     if len(sys.argv)==4:
         schema=sys.argv[1]

@@ -10,7 +10,7 @@ use them. Otherwise defaults are hard coded
 
 if __name__ == "__main__":
 
-	schema = 'churnsim2'
+	schema = 'churnsim9'
 	run_mets = None
 	# Example of running just a few metrics - uncomment this line...
 	# run_mets=['account_tenure','post_per_month']

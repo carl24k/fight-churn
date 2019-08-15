@@ -170,7 +170,7 @@ use them. Otherwise defaults are hard coded
 
 if __name__ == "__main__":
 
-	schema = 'churnsim2'
+	schema = 'churnsim9'
 	events_2check = None
 	# Example of running just a few events - uncomment this line...
 	# events_2check=['post','like']
