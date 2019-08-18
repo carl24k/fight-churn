@@ -2,6 +2,8 @@
 
 import pandas as pd
 import numpy as np
+import os
+from shutil import copyfile
 
 from customer import Customer
 
@@ -65,19 +67,22 @@ class GaussianBehaviorModel(BehaviorModel):
         :param name:
         '''
         self.name=name
-        data=pd.read_csv('../conf/'+name+'_model.csv')
-        data.set_index(['behavior'],inplace=True)
-        self.behave_means=data['mean']
-        self.behave_names=data.index.values
-        self.behave_cov=data[self.behave_names]
+        model_path='../conf/'+name+'_model.csv'
+        model=pd.read_csv(model_path)
+        model.set_index(['behavior'],inplace=True)
+        self.behave_means=model['mean']
+        self.behave_names=model.index.values
+        self.behave_cov=model[self.behave_names]
         self.min_rate=0.01*self.behave_means.min()
         corr_scale=(np.absolute(self.behave_cov.to_numpy()) <= 1.0).all()
         if random_seed is not None:
             np.random.seed(random_seed)
         if not is_pos_def(self.behave_cov):
-            print('Matrix is not positive semi-definite: Multiplying by transpose')
-            # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
-            self.behave_cov= np.dot(self.behave_cov, self.behave_cov.transpose())
+            if input("Matrix is not positive semi-definite: Multiply by transpose? (enter Y to proceed)") in ('y','Y'):
+                # https://stackoverflow.com/questions/619335/a-simple-algorithm-for-generating-positive-semidefinite-matrices
+                self.behave_cov= np.dot(self.behave_cov, self.behave_cov.transpose())
+            else:
+                exit(0)
 
         if corr_scale:
             print('Scaling correlation by behavior means...')
@@ -86,12 +91,17 @@ class GaussianBehaviorModel(BehaviorModel):
             self.behave_cov=np.matmul(self.behave_cov,np.diag(scaling))
             self.behave_cov=np.matmul(np.diag(scaling),self.behave_cov)
 
+        # Save to a csv
+        save_path = '../../../fight-churn-output/' + name + '/'
+        os.makedirs(save_path, exist_ok=True)
+        copy_path = save_path + name + '_simulation_model.csv'
+        copyfile(model_path, copy_path)
 
         # For debugging
-        np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
-        std_ = np.sqrt(np.diag(self.behave_cov))
-        corr = self.behave_cov / np.outer(std_, std_)
-        np.savetxt('../conf/'+name+ '_behavior_corr.csv', corr,delimiter=',')
+        # np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
+        # std_ = np.sqrt(np.diag(self.behave_cov))
+        # corr = self.behave_cov / np.outer(std_, std_)
+        # np.savetxt('../conf/'+name+ '_behavior_corr.csv', corr,delimiter=',')
 
 
 
