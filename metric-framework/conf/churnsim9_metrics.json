@@ -104,6 +104,16 @@
         "den_metric" : "new_friend_per_month",
         "fill_val" : 0
     },
+    "total_opinions" : {
+        "sql" : "metric_total",
+        "metric_names" : "'like_per_month','dislike_per_month'"
+    },
+    "dislike_percent" : {
+        "sql" : "metric_ratio",
+        "num_metric" : "dislike_per_month",
+        "den_metric" : "total_opinions",
+        "fill_val" : 0
+    },
 	"account_tenure": {
 	    "sql" : "metric_tenure"
 	}

@@ -1,7 +1,7 @@
 {
   "default" : {
     "dataset": "churnsim9_dataset",
-    "ax_scale": 250,
+    "ax_scale": 200,
     "group_corr_thresh": 0.7,
     "renames": {
     },
