@@ -6,6 +6,13 @@ import pandas
 import os
 import sys
 from math import ceil
+import argparse
+
+parser = argparse.ArgumentParser()
+# Run control arguments
+parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
+parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
+parser.add_argument("--nowarn", action="store_true", default=False,help="Plot cohorts using scored metrics for all (not just skewed)")
 
 
 class MetricCalculator:
@@ -33,7 +40,7 @@ class MetricCalculator:
 		with open('../sql/qa_metric.sql', 'r') as myfile:
 			self.qa_sql = myfile.read().replace('\n', ' ')
 
-	def remove_old_metrics_from_db(self, run_mets=None):
+	def remove_old_metrics_from_db(self, run_mets=None, no_warn=False):
 		'''
 		Delete values of existing metrics. If no metrics are specified, it truncates the metric table. Otherwise
 		just delete the specified metrics.
@@ -42,14 +49,13 @@ class MetricCalculator:
 		'''
 		if run_mets is None:
 			print('TRUNCATING *Metrics* in schema -> %s <-  ...' % schema)
-			if input("are you sure? (enter %s to proceed) " % schema) == schema:
-				self.db.run('truncate table %s.metric' % schema)
-				self.db.run('truncate table %s.metric_name' % schema)
-			else:
+			if not no_warn and input("are you sure? (enter %s to proceed) " % schema) == schema:
 				exit(0)
+			self.db.run('truncate table %s.metric' % schema)
+			self.db.run('truncate table %s.metric_name' % schema)
 		else:
 			if isinstance(run_mets,str): run_mets=[run_mets]
-			if len(run_mets)>1:
+			if len(run_mets)>1 and not no_warn:
 				print('DELETING * %d * Metrics in schema -> %s <-  ...' % (len(run_mets),schema))
 				if input("are you sure? (enter %s to proceed) " % schema) != schema:
 					exit(0)
@@ -205,18 +211,13 @@ use them. Otherwise defaults are hard coded
 
 if __name__ == "__main__":
 
-	schema = 'churnsim9'
-	run_mets = None
-	# Example of running just a few metrics - uncomment this line...
-	# run_mets=['account_tenure','post_per_month']
-	# run_mets = ['unfriend_per_post','unfriend_per_message']
+	args, _ = parser.parse_known_args()
 
-	if len(sys.argv)>=2:
-		schema=sys.argv[1]
-	if len(sys.argv)>=3:
-		run_mets=sys.argv[2:]
+	schema=args.schema
+	run_mets = args.metrics
+	no_warn = args.nowarn
 
 	met_calc = MetricCalculator(schema)
-	met_calc.remove_old_metrics_from_db(run_mets)
+	met_calc.remove_old_metrics_from_db(run_mets,no_warn)
 	met_calc.calculate_metrics(run_mets)
 
