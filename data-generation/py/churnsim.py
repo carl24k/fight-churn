@@ -175,7 +175,7 @@ if __name__ == "__main__":
     model_name = 'churnsim9'
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
-    init = 7500
+    init = 10000
     growth_rate = 0.15
     churn_rate = 0.10
     mrr = 9.99
