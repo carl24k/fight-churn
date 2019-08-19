@@ -138,6 +138,10 @@
 		"listing_7_2_total_metric" : {
 			"METRIC_LIST" : " 'like_per_month', 'dislike_per_month' "
 		},
+		"listing_7_3_percent_change_metric" : {
+			"METRIC_TO_MEASURE" : "post_per_month",
+			"PERIOD_WEEKS" : 4
+		},
 		"listing_7_5_scaled_events_per_month" : {
 			"EVENT_TO_QUERY" : "unfriend",
 			"OBS_PERIOD" : 84,
