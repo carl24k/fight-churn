@@ -6,6 +6,18 @@ from copy import copy
 import re
 import os
 import sys
+import argparse
+
+'''
+####################################################################################################
+Arguments
+'''
+parser = argparse.ArgumentParser()
+# Run control arguments
+parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
+parser.add_argument("--chapter", type=int, help="The chapter of the listing", default=2)
+parser.add_argument("--listing", type=int, help="The number of the listing", default=1)
+
 
 '''
 ####################################################################################################
@@ -115,7 +127,7 @@ def python_listing(param_dict):
         exit(-6)
 
 
-def load_and_check_listing_params(schema, chapter, listing):
+def load_and_check_listing_params(args):
     '''
     Loads the JSON of parameters for this schema, and gets the parameters for the specified listing. It raises errors if
     it cannot find what it is looking for. Once it finds the entry for this listing, it starts with the chapter default
@@ -128,6 +140,9 @@ def load_and_check_listing_params(schema, chapter, listing):
     :param listing: listing number (or in some cases a letter)
     :return: dictionary of name value pairs for the example
     '''
+    schema = args.schema
+    chapter = args.chapter
+    listing = args.listing
 
     chapter_key='chap{}'.format(chapter)
     listing_prefix='^listing_{c}_{l}_'.format(c=chapter,l=listing)
@@ -177,7 +192,7 @@ def load_and_check_listing_params(schema, chapter, listing):
 
 
 
-def run_one_listing(schema,chapter,listing):
+def run_one_listing(args):
     '''
     Load the dictionary of parameters for this schema
     Check the type of the listing (SQL or Python) and call the executor function
@@ -187,9 +202,9 @@ def run_one_listing(schema,chapter,listing):
     :return:
     '''
     # Get arguments
-    listing_params = load_and_check_listing_params(schema,chapter,listing)
+    listing_params = load_and_check_listing_params(args)
 
-    print('\nRunning %d listing %s on schema %s' % (chapter,listing_params['name'],schema))
+    print('\nRunning %d listing %s on schema %s' % (args.chapter,listing_params['name'],args.schema))
 
     # Run the executor function for sql or for python...
     type = listing_params.get('type', listing_params['type']) # chap params should always have type
@@ -208,15 +223,7 @@ use them. Otherwise defaults are hard coded
 '''
 
 if __name__ == "__main__":
+    args, _ = parser.parse_known_args()
 
-    chapter = 4
-    listing = 5
-    schema = 'churnsim9'
-
-    if len(sys.argv)==4:
-        schema=sys.argv[1]
-        chapter=sys.argv[2]
-        listing=sys.argv[3]
-
-    run_one_listing(schema,chapter,listing)
+    run_one_listing(args)
 
