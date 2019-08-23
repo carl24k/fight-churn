@@ -17,6 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
 parser.add_argument("--chapter", type=int, help="The chapter of the listing", default=2)
 parser.add_argument("--listing", type=int, help="The number of the listing", default=1)
+parser.add_argument("--insert", action="store_true", default=False,help="Use the insert version of a metric SQL, if available")
 
 
 '''
@@ -110,6 +111,7 @@ def python_listing(param_dict):
 
     # Find the function name from the listing name
     example_name_regexp = 'listing_\\d+_\\d+_(\w+)'
+
     m = re.search(example_name_regexp, param_dict['name'])
 
     if m:
@@ -145,7 +147,11 @@ def load_and_check_listing_params(args):
     listing = args.listing
 
     chapter_key='chap{}'.format(chapter)
-    listing_prefix='^listing_{c}_{l}_'.format(c=chapter,l=listing)
+    if not args.insert:
+        listing_prefix='^listing_{c}_{l}_'.format(c=chapter,l=listing)
+    else:
+        listing_prefix='^insert_{c}_{l}_'.format(c=chapter,l=listing)
+
     listing_re=re.compile(listing_prefix)
 
     # Error if there is no file for this schema
@@ -185,6 +191,8 @@ def load_and_check_listing_params(args):
     listing_params['name'] = listing_name
     listing_params['chapter']=chapter
     listing_params['listing']=listing
+    if args.insert: # force the right mode forn insert sqls
+        listing_params['mode']='run'
 
     return listing_params
 

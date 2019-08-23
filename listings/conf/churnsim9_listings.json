@@ -135,8 +135,17 @@
 			"NUM_METRIC" : "adview_per_month",
 			"DEN_METRIC" : "post_per_month"
 		},
+		"insert_7_1_ratio_metric" : {
+			"NUM_METRIC" : "adview_per_month",
+			"DEN_METRIC" : "post_per_month",
+			"NEW_ID" : 21
+		},
 		"listing_7_2_total_metric" : {
 			"METRIC_LIST" : " 'like_per_month', 'dislike_per_month' "
+		},
+		"insert_7_2_total_metric" : {
+			"METRIC_LIST" : " 'like_per_month', 'dislike_per_month' ",
+			"NEW_ID" : 22
 		},
 		"listing_7_3_percent_change_metric" : {
 			"METRIC_TO_MEASURE" : "post_per_month",
