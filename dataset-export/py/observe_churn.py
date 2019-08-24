@@ -46,15 +46,21 @@ if __name__ == "__main__":
     parser.add_argument("--todt", type=str, help="Latest date to export", default='2019-05-06')
     parser.add_argument("--interval", type=str, help="Interval between metrics", default='7 day')
     args, _ = parser.parse_known_args()
+    argd = vars(args)
 
     # Clean up any data from old runs
     remove_obsevations(args.schema)
 
     # Create active periods and observations using the exact listings from the book
     # You must configure these with a JSON in listings/conf/<schema>_listings.json
-    run_one_listing(args.schema,4,1)
-    run_one_listing(args.schema,4,2)
-    run_one_listing(args.schema,4,4)
+    argd['chapter']=4
+    argd['insert']=False
+    argd['listing']=1
+    run_one_listing(args)
+    argd['listing']=2
+    run_one_listing(args)
+    argd['listing']=4
+    run_one_listing(args)
 
     # Load the base SQL from the adjacent sql directory
     sql = "set search_path = '%s'; " % args.schema;
