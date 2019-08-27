@@ -27,7 +27,7 @@ Constants
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
-print_num_rows=5
+print_num_rows=10
 
 reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter')
 

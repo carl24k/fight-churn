@@ -152,11 +152,12 @@ class MetricCalculator:
 		:return:
 		'''
 
-		for metric in self.metric_dict.keys():
-			if (run_mets is not None and metric not in run_mets) or metric in self.non_metrics:
-				continue
-
-			self.metric_qa_plot(metric,hideAx)
+		if run_mets is None:
+			for metric in self.metric_dict.keys():
+				self.metric_qa_plot(metric,hideAx)
+		else:
+			for metric in run_mets:
+				self.metric_qa_plot(metric,hideAx)
 
 	def run_one_metric_calculation(self,metric):
 		'''
