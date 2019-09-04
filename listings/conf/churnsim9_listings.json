@@ -190,11 +190,20 @@
 			"NEW_ID" : 25
 		},
 		"listing_7_7_tenure_scaled_events_per_month" : {
-			"EVENT_TO_QUERY" : "message",
+			"EVENT_TO_QUERY" : "unfriend",
 			"OBS_PERIOD" : 84,
 			"QUOTE_PERIOD" : 28,
 			"MIN_TENURE" : 14,
+			"FRYR-MM-DD": "2020-05-10",
+			"TOYR-MM-DD": "2020-05-10",
 			"mode" : "save"
+		},
+		"insert_7_7_tenure_scaled_events_per_month" : {
+			"EVENT_TO_QUERY" : "unfriend",
+			"OBS_PERIOD" : 84,
+			"QUOTE_PERIOD" : 28,
+			"MIN_TENURE" : 14,
+			"NEW_ID" : 26
 		}
 	}
 }
