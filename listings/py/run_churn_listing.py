@@ -18,6 +18,7 @@ parser.add_argument("--schema", type=str, help="The name of the schema", default
 parser.add_argument("--chapter", type=int, help="The chapter of the listing", default=2)
 parser.add_argument("--listing", type=int, help="The number of the listing", default=1)
 parser.add_argument("--insert", action="store_true", default=False,help="Use the insert version of a metric SQL, if available")
+parser.add_argument("--version", help="Alternative listing _parameter_ verions (optional)")
 
 
 '''
@@ -145,12 +146,17 @@ def load_and_check_listing_params(args):
     schema = args.schema
     chapter = args.chapter
     listing = args.listing
+    version = args.version
 
     chapter_key='chap{}'.format(chapter)
     if not args.insert:
         listing_prefix='^listing_{c}_{l}_'.format(c=chapter,l=listing)
     else:
         listing_prefix='^insert_{c}_{l}_'.format(c=chapter,l=listing)
+    if version is not None:
+        listing_prefix += '_{v}_\\w'.format(v=version)
+    else:
+        listing_prefix += '\\w'
 
     listing_re=re.compile(listing_prefix)
 
