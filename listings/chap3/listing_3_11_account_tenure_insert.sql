@@ -19,8 +19,8 @@ earlier_starts AS
 		and s.end_date >= (e.start_date-31)
 
 )
-insert into metric (account_id,metric_time,metric_name_id,metric_name,metric_value)
-SELECT account_id, metric_date, 0 as metric_name_id, metric_date-min(start_date) as account_tenure
+insert into metric (account_id,metric_time,metric_name_id, metric_value)
+SELECT account_id, metric_date, 1 as metric_name_id, extract(days from metric_date-min(start_date)) as metric_value
 FROM earlier_starts
 group by account_id, metric_date
 order by account_id, metric_date

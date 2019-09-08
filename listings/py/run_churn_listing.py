@@ -149,14 +149,12 @@ def load_and_check_listing_params(args):
     version = args.version
 
     chapter_key='chap{}'.format(chapter)
-    if not args.insert:
-        listing_prefix='^listing_{c}_{l}_'.format(c=chapter,l=listing)
-    else:
+    if not args.insert and version is None:
+        listing_prefix='^listing_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
+    elif version is None:
         listing_prefix='^insert_{c}_{l}_'.format(c=chapter,l=listing)
-    if version is not None:
-        listing_prefix += '_{v}_\\w'.format(v=version)
     else:
-        listing_prefix += '\\w'
+        listing_prefix='^listing_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
 
     listing_re=re.compile(listing_prefix)
 
@@ -194,9 +192,16 @@ def load_and_check_listing_params(args):
 
     # Add the other contextual information
     listing_params['schema'] = schema
-    listing_params['name'] = listing_name
     listing_params['chapter']=chapter
     listing_params['listing']=listing
+    if args.version is None:
+        listing_params['name'] = listing_name
+    else:
+        # For a versioned set of parameters, the listing file name must be the original...
+        version_prefix='listing_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
+        listing_prefix='listing_{c}_{l}_'.format(c=chapter,l=listing)
+        listing_params['name'] = listing_name.replace(version_prefix,listing_prefix)
+
     if args.insert: # force the right mode forn insert sqls
         listing_params['mode']='run'
 

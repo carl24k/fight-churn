@@ -32,7 +32,8 @@
 		"listing_3_2_multi_date_count" : {
 		},
 		"listing_3_3_count_metric_insert" : {
-			"mode": "run"
+			"mode": "run",
+			"new_metric_id" : 0
 		},
 		"listing_3_4_metric_name_insert" : {
 			"mode": "run",
@@ -57,6 +58,7 @@
 		"listing_3_10_account_tenure" : {
 		},
 		"listing_3_11_account_tenure_insert" : {
+			"mode" : "run"
 		},
 		"listing_3_4_1_metric_name_insert" : {
 			"mode": "run",
@@ -70,7 +72,8 @@
 
 		"listing_3_3_2_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "newfriend"
+			"event_to_query": "newfriend",
+			"new_metric_id" : 2
 		},
 		"listing_3_4_2_metric_name_insert" : {
 			"mode": "run",
@@ -80,17 +83,19 @@
 
 		"listing_3_3_3_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "like"
+			"event_to_query": "post",
+			"new_metric_id" : 3
 		},
 		"listing_3_4_3_metric_name_insert" : {
 			"mode": "run",
-			"new_metric_name" : "like_per_month",
+			"new_metric_name" : "post_per_month",
 			"new_metric_id" : 3
 		},
 
 		"listing_3_3_4_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "adview"
+			"event_to_query": "adview",
+			"new_metric_id" : 4
 		},
 		"listing_3_4_4_metric_name_insert" : {
 			"mode": "run",
@@ -100,7 +105,8 @@
 
 		"listing_3_3_5_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "dislike"
+			"event_to_query": "dislike",
+			"new_metric_id" : 5
 		},
 		"listing_3_4_5_metric_name_insert" : {
 			"mode": "run",
@@ -110,7 +116,8 @@
 
 		"listing_3_3_6_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "unfriend"
+			"event_to_query": "unfriend",
+			"new_metric_id" : 6
 		},
 		"listing_3_4_6_metric_name_insert" : {
 			"mode": "run",
@@ -120,7 +127,8 @@
 
 		"listing_3_3_7_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "message"
+			"event_to_query": "message",
+			"new_metric_id" : 7
 		},
 		"listing_3_4_7_metric_name_insert" : {
 			"mode": "run",
@@ -130,7 +138,8 @@
 
 		"listing_3_3_8_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "reply"
+			"event_to_query": "reply",
+			"new_metric_id" : 8
 		},
 		"listing_3_4_8_metric_name_insert" : {
 			"mode": "run",
