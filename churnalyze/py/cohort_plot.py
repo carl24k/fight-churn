@@ -15,13 +15,17 @@ parser.add_argument("--schema", type=str, help="The name of the schema", default
 parser.add_argument("--data", type=str, help="The name of the dataset", default=None)
 parser.add_argument("--nbin", type=int, help="The number of bins",default=10)
 parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
+parser.add_argument("--bins", type=float, nargs='*', help="Specific bins")
+
+
 # Additional options
 parser.add_argument("--noax", action="store_true", default=False,help="Hide axis labeling for publication of case studies")
 parser.add_argument("--score", action="store_true", default=False,help="Plot cohorts using scored metrics for all (not just skewed)")
 parser.add_argument("--noscore", action="store_true", default=False,help="Never plot the score, even for skewed metrics")
 parser.add_argument("--group", action="store_true", default=False,help="Plot cohorts for behavioral groups")
-parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Brandon Grotesque')
+parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Arial')
 parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=20)
+parser.add_argument("--format", type=str, help="Format to save in", default='png')
 
 
 
@@ -56,7 +60,8 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
     if var_to_plot not in renames:
         renames[var_to_plot] = var_to_plot
     # First plot should always be the unscored version
-    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin,use_score=False,use_group=args.group)
+    plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin,bins=args.bins,
+                                               use_score=False,use_group=args.group)
     ax_scale=cc.get_conf('ax_scale',default=200)
     churn_plot_max = ceil(cc.churn_rate() * ax_scale) / 100.0
 
@@ -77,7 +82,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
         plt.grid()
 
     else:
-        score_frame = cc.behavioral_cohort_analysis(var_to_plot, use_score=True, nbin=args.nbin)
+        score_frame = cc.behavioral_cohort_analysis(var_to_plot, use_score=True, nbin=args.nbin,bins=args.bins)
         plt.figure(figsize=(10, 10))
         plt.subplot(2, 1, 1)
         plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
@@ -113,7 +118,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
         save_name+='noax'
 
     plt.tight_layout()
-    plt.savefig(cc.save_path(save_name, ext='png', subdir=cc.grouping_correlation_subdir(args.group)))
+    plt.savefig(cc.save_path(save_name, ext=args.format, subdir=cc.grouping_correlation_subdir(args.group)))
     plt.close()
 
 

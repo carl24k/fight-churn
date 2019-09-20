@@ -179,7 +179,7 @@
 	},
 	"chap5" : {
 		"params": {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
+			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"type" : "py"
 		},
 		"_listing_5_1_cohort_plot" : {

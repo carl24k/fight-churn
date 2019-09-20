@@ -66,6 +66,8 @@ class ChurnCalculator:
         self.summary = None
         self.data_scores = None
         self.skewed_columns = None
+        self.mean_4scale = None
+        self.std_4scale = None
         self.churn_data_reduced = None
         self.reduced_cols = None
 
@@ -154,7 +156,8 @@ class ChurnCalculator:
         self.data_set_name, self.churn_data.shape[0], self.churn_data.shape[1]))
         print('|'.join(self.metric_columns))
 
-    def behavioral_cohort_analysis(self, var_to_plot, use_group=False, use_score=False, nbin=10, out_col=churn_out_col):
+    def behavioral_cohort_analysis(self, var_to_plot, use_group=False, use_score=False,
+                                   nbin=10, bins=None, out_col=churn_out_col):
         """
         Make a data frame with two columns prepared to be the plot points for a behavioral cohort plot.
         The data is binned into ordered bins with pcqut, and the mean value of the metric and the churn rate
@@ -171,9 +174,16 @@ class ChurnCalculator:
             # this assumes it has already been setup
             data=self.churn_data_reduced
         else:
-            data,_=self.normalize_skewscale()
+            data,skewed_columns=self.normalize_skewscale()
+            if bins is not None:
+                bins = self.normalize_bins(bins,var_to_plot)
 
-        groups = pd.qcut(data[var_to_plot], nbin, duplicates='drop')
+
+        if bins is not None:
+            groups = pd.cut(data[var_to_plot], bins=bins, right=True,include_lowest=True, duplicates='drop')
+        else:
+            groups = pd.qcut(data[var_to_plot], nbin, duplicates='drop')
+
         midpoints = data.groupby(groups)[var_to_plot].mean()
         churns = data.groupby(groups)[out_col].mean()
         plot_frame = pd.DataFrame({var_to_plot: midpoints.values, 'churn_rate': churns})
@@ -271,10 +281,27 @@ class ChurnCalculator:
                         # log(yi+(yi^2+1)^1/2)
                         self.data_scores[col] = np.log(self.data_scores[col] + np.sqrt(np.power(self.data_scores[col],2) + 1.0) )
 
-            self.data_scores = (self.data_scores - self.data_scores.mean()) / self.data_scores.std()
+            self.mean_4scale = self.data_scores.mean()
+            self.std_4scale = self.data_scores.std()
+            self.data_scores = (self.data_scores - self.mean_4scale) / self.std_4scale
             self.data_scores['is_churn'] = self.churn_data['is_churn']
 
         return self.data_scores, self.skewed_columns
+
+    def normalize_bins(self,bins,metric):
+        '''
+        Requires the skewed columns, so it is assuming you just normalized the data
+        :param bins:
+        :param metric:
+        :param skewed_columns:
+        :return:
+        '''
+        assert self.skewed_columns is not None, "Normalize the data before normalizing cohort bins"
+        bins = np.array(bins)
+        if metric in self.skewed_columns:
+            bins = np.log(1.0+bins)
+        bins = (bins - self.mean_4scale[metric]) / self.std_4scale[metric]
+        return bins
 
     def churn_metric_columns(self):
         '''
