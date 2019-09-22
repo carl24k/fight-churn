@@ -11,7 +11,7 @@ def cohort_plot(data_set_path='', metric_to_plot='',save=True,ncohort=10):
     plt.figure(figsize=(6, 4))
     plt.plot(metric_to_plot, 'churn_rate', data=plot_frame,marker='o', color='red', linewidth=2, label=metric_to_plot)
     plt.xlabel('Cohort Average of  "%s"' % metric_to_plot)
-    plt.ylabel('Cohort Churn Rate (%)')
+    plt.ylabel('Cohort Churn Rate')
     plt.grid()
     plt.gca().set_ylim(bottom=0)
     if save:
