@@ -291,5 +291,14 @@
 			"MIN_TENURE" : 14,
 			"NEW_ID" : 26
 		}
+	},
+	"chap8" : {
+		"params": {
+			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
+			"type": "py"
+		},
+		"listing_8_1_logistic_regression" : {
+
+		}
 	}
 }
