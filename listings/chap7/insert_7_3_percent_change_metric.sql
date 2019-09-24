@@ -1,6 +1,5 @@
 
-INSERT into metric_name values (NEW_ID,concat('pcnt_change_METRIC_TO_MEASURE_',
-    cast(PERIOD_WEEKS as text) ))
+INSERT into metric_name values (NEW_ID,'NEW_NAME')
 ON CONFLICT DO NOTHING;
 
 with end_metric as (

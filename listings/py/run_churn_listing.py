@@ -82,7 +82,7 @@ def sql_listing(param_dict):
             if  param_dict['mode']  == 'save':
                 save_path = '../../../fight-churn-output/' + param_dict['schema'] + '/'
                 os.makedirs(save_path,exist_ok=True)
-                csv_path=save_path +  param_dict['name']  + '.csv'
+                csv_path=save_path + param_dict['schema'] + '_' +  param_dict['name'].replace(param_dict['prefix'],'')  + '.csv'
                 print('Saving: %s' % csv_path)
                 df.to_csv(csv_path, index=False)
             else:
@@ -151,9 +151,11 @@ def load_and_check_listing_params(args):
     chapter_key='chap{}'.format(chapter)
     if not args.insert and version is None:
         listing_prefix='^listing_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
-    elif version is None:
-        listing_prefix='^insert_{c}_{l}_'.format(c=chapter,l=listing)
-    else:
+    elif args.insert and version is None:
+        listing_prefix='^insert_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
+    elif args.insert and version is not None:
+        listing_prefix='^insert_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
+    elif not args.insert and version is not None:
         listing_prefix='^listing_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
 
     listing_re=re.compile(listing_prefix)
@@ -196,11 +198,14 @@ def load_and_check_listing_params(args):
     listing_params['listing']=listing
     if args.version is None:
         listing_params['name'] = listing_name
+        if listing_params['type']=='sql': listing_params['prefix'] = 'listing_{c}_{l}_'.format(c=chapter,l=listing)
     else:
+        pre = 'listing' if not args.insert else 'insert'
         # For a versioned set of parameters, the listing file name must be the original...
-        version_prefix='listing_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
-        listing_prefix='listing_{c}_{l}_'.format(c=chapter,l=listing)
+        version_prefix='{p}_{c}_{l}_{v}_'.format(p=pre,c=chapter,l=listing,v=version)
+        listing_prefix='{p}_{c}_{l}_'.format(p=pre,c=chapter,l=listing)
         listing_params['name'] = listing_name.replace(version_prefix,listing_prefix)
+        if listing_params['type']=='sql': listing_params['prefix']=version_prefix
 
     if args.insert: # force the right mode forn insert sqls
         listing_params['mode']='run'

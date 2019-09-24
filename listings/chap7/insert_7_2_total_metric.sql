@@ -1,6 +1,6 @@
 
 
-INSERT into metric_name values (NEW_ID,concat('total_',METRIC_LIST))
+INSERT into metric_name values (NEW_ID,'NEW_NAME')
 ON CONFLICT DO NOTHING;
 
 insert into metric (account_id,metric_time,metric_name_id,metric_value)

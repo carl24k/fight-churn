@@ -1,6 +1,6 @@
 
 
-INSERT into metric_name values (NEW_ID,concat('ratio_','NUM_METRIC_','DEN_METRIC'))
+INSERT into metric_name values (NEW_ID,'NEW_NAME')
 ON CONFLICT DO NOTHING;
 
 with num_metric as (
