@@ -302,6 +302,13 @@
 			"QUOTE_PERIOD" : 28,
 			"MIN_TENURE" : 14,
 			"NEW_ID" : 27
+		},
+		"listing_7_9_dataset": {
+			"MET_INTERVAL": "7 day",
+			"mode" : "save",
+			"FRYR-MM-DD": "2020-03-01",
+			"TOYR-MM-DD": "2020-05-10",
+			"type" : "sql"
 		}
 	},
 	"chap8" : {
