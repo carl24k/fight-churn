@@ -1,6 +1,6 @@
 {
     "date_range": {
-        "from_date" :"2020-01-01",
+        "from_date" :"2020-01-05",
         "to_date" : "2020-05-10"
     },
 	"event_properties" : [],

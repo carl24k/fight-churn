@@ -139,12 +139,12 @@ class MetricCalculator:
 		plt.plot('calc_date', 'n_calc', data=res, marker='', color='black', linewidth=2, label="n_calc")
 		plt.ylim(0, ceil(1.1 * res['n_calc'].dropna().max()))
 		plt.legend()
+		plt.gca().figure.autofmt_xdate()
 		if hideAx:
 			plt.gca().get_yaxis().set_visible(False)  # Hiding y axis labels on the count
 			monthFormat = mdates.DateFormatter('%b')
 			plt.gca().get_xaxis().set_major_formatter(monthFormat)
 		plt.savefig(save_path + 'metric_valqa_' + cleanedName + '.png')
-		print('saved to %s' % save_path)
 		plt.close()
 
 	def qa_metrics(self,run_mets=None,hideAx=False):
