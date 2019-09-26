@@ -101,12 +101,13 @@ class MetricCalculator:
 
 		print('Checking metric %s.%s' % (self.schema, metric))
 		id = self.get_metric_id(metric)
+		assert id is not None, "No ID found for metric %s" % metric
 		aSql = self.qa_sql.replace('%metric_name_id', str(id))
 		aSql = aSql.replace('%schema', self.schema)
 		aSql = aSql.replace('%from_date', self.from_date)
 		aSql = aSql.replace('%to_date', self.to_date)
 
-		# print(aSql)
+		print(aSql)
 		res = pandas.read_sql_query(aSql, self.URI)
 		if res.shape[0] == 0 or res['avg_val'].isnull().values.all():
 			print('\t*** No result for %s' % metric)
@@ -154,6 +155,7 @@ class MetricCalculator:
 
 		if run_mets is None:
 			for metric in self.metric_dict.keys():
+				if metric in self.non_metrics: continue
 				self.metric_qa_plot(metric,hideAx)
 		else:
 			for metric in run_mets:

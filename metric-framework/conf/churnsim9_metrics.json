@@ -1,6 +1,6 @@
 {
     "date_range": {
-        "from_date" :"2020-03-01",
+        "from_date" :"2020-01-01",
         "to_date" : "2020-05-10"
     },
 	"event_properties" : [],
@@ -11,7 +11,7 @@
 		"quotwin" : 4,
 		"sql" : "metric_over_period"
 	},
-	"new_friend_per_month": {
+	"newfriend_per_month": {
 		"event_id":  1,
 		"fun" : "count(*)",
 		"measwin" : 4,
@@ -82,7 +82,7 @@
     "unfriend_per_newfriend" : {
         "sql" : "metric_ratio",
         "num_metric" : "unfriend_per_month_qtrwin",
-        "den_metric" : "new_friend_per_month",
+        "den_metric" : "newfriend_per_month",
         "fill_val" : 0
     },
 
@@ -101,7 +101,7 @@
     "adview_per_newfriend" : {
         "sql" : "metric_ratio",
         "num_metric" : "adview_per_month",
-        "den_metric" : "new_friend_per_month",
+        "den_metric" : "newfriend_per_month",
         "fill_val" : 0
     },
     "total_opinions" : {
