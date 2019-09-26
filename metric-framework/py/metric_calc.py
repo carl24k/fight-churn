@@ -101,7 +101,9 @@ class MetricCalculator:
 
 		print('Checking metric %s.%s' % (self.schema, metric))
 		id = self.get_metric_id(metric)
-		assert id is not None, "No ID found for metric %s" % metric
+		if id is None:
+			"No ID found for metric %s" % metric
+			return
 		aSql = self.qa_sql.replace('%metric_name_id', str(id))
 		aSql = aSql.replace('%schema', self.schema)
 		aSql = aSql.replace('%from_date', self.from_date)
@@ -142,6 +144,7 @@ class MetricCalculator:
 			monthFormat = mdates.DateFormatter('%b')
 			plt.gca().get_xaxis().set_major_formatter(monthFormat)
 		plt.savefig(save_path + 'metric_valqa_' + cleanedName + '.png')
+		print('saved to %s' % save_path)
 		plt.close()
 
 	def qa_metrics(self,run_mets=None,hideAx=False):
