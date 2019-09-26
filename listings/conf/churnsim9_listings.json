@@ -20,8 +20,8 @@
 	},
 	"chap3" : {
 		"params": {
-			"FRYR-MM-DD": "2020-04-01",
-			"TOYR-MM-DD": "2020-05-06",
+			"FRYR-MM-DD": "2020-03-01",
+			"TOYR-MM-DD": "2020-05-10",
 			"mode": "top",
 			"event_to_query": "like",
 			"SUM_FIELD" : "0",
@@ -210,7 +210,7 @@
 		"listing_6_3_apply_metric_groups" : {
 		},
 		"listing_6_4_find_metric_groups" : {
-			"group_corr_thresh" : 0.7
+			"group_corr_thresh" : 0.5
 		}
 	},
 	"chap7" : {
