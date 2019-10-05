@@ -198,10 +198,11 @@
 	},
 	"chap6" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
 			"type": "py"
 		},
 		"listing_6_1_metric_pair_plot" : {
+			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "dislike_per_month"
 		},
@@ -210,7 +211,9 @@
 		"listing_6_3_apply_metric_groups" : {
 		},
 		"listing_6_4_find_metric_groups" : {
-			"group_corr_thresh" : 0.7
+			"group_corr_thresh" : 0.5
+		},
+		"listing_6_5_ordered_correlation_matrix" : {
 		}
 	},
 	"chap7" : {
