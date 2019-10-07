@@ -1,7 +1,7 @@
 with 
 date_range as (     
-	select  'FRYR-MM-DD'::timestamp as start_date, 
-		'TOYR-MM-DD'::timestamp as end_date
+	select  '%from_yyyy-mm-dd'::timestamp as start_date,
+		'%to_yyyy-mm-dd'::timestamp as end_date
 ), account_count as (    
 	select count(distinct account_id) as n_account    
 	from subscription s inner join date_range d on

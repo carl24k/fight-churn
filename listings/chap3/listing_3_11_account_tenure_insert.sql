@@ -1,6 +1,6 @@
 with RECURSIVE date_vals AS (    
 select i::timestamp as metric_date     
-from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
+from generate_series('%from_yyyy-mm-dd', '%to_yyyy-mm-dd', '7 day'::interval) i
 ),
 earlier_starts AS    
 (

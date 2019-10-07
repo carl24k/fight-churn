@@ -1,14 +1,14 @@
 with 
 date_range as (    
-	select  'FRYR-MM-DD'::TIMESTAMP as start_date,    
-		'TOYR-MM-DD'::TIMESTAMP as end_date,    
-		interval 'MAX_INACTIVE' as max_inactive
+	select  '%from_yyyy-mm-dd'::TIMESTAMP as start_date,
+		'%to_yyyy-mm-dd'::TIMESTAMP as end_date,
+		interval '%max_inactive' as inactivity_interval
 ), 
 start_accounts as     
 (
 	select distinct account_id
 	from event e inner join date_range d on
-		e.event_time + max_inactive > start_date    
+		e.event_time + inactivity_interval > start_date
 ),
 start_count as (    
 	select 	count(start_accounts.*) as n_start from start_accounts
@@ -17,7 +17,7 @@ end_accounts as
 (
 	select distinct account_id
 	from event e inner join date_range d on
-		e.event_time + max_inactive > end_date    
+		e.event_time + inactivity_interval > end_date
 ), 
 end_count as (    
 	select 	count(end_accounts.*) as n_end from end_accounts

@@ -1,8 +1,8 @@
 {
 	"chap2" : {
 		"params" : {
-			"FRYR-MM-DD": "2019-01-01",
-			"TOYR-MM-DD": "2019-01-31",
+			"%from_yyyy-mm-dd": "2019-01-01",
+			"%to_yyyy-mm-dd": "2019-01-31",
 			"mode" : "one"
 		},
 		"listing_2_1_net_retention" : {
@@ -14,16 +14,16 @@
 		"listing_2_5_churn_rate_scaled" : {
 		},
 		"listing_2_3_activity_churn" : {
-			"MAX_INACTIVE" : "1 month"
+			"%max_inactive" : "1 month"
 		}
 	},
 	"chap3" : {
 		"params": {
-			"FRYR-MM-DD": "2019-01-01",
-			"TOYR-MM-DD": "2019-01-31",
+			"%from_yyyy-mm-dd": "2019-01-01",
+			"%to_yyyy-mm-dd": "2019-01-31",
 			"mode": "top",
-			"event_to_query": "MyEvent",
-			"SUM_FIELD" : "duration"
+			"%event2measure": "MyEvent",
+			"%field2sum" : "duration"
 		},
 		"listing_3_1_event_count" : {
 		},
@@ -57,8 +57,8 @@
 	},
 	"chap4" : {
 		"params" : {
-			"FRYR-MM-DD": "2019-01-01",
-			"TOYR-MM-DD": "2019-12-31",
+			"%from_yyyy-mm-dd": "2019-01-01",
+			"%to_yyyy-mm-dd": "2019-12-31",
 			"mode" : "run"
 		},
 		"listing_4_1_ongoing_active_periods": {

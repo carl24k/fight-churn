@@ -1,31 +1,31 @@
 {
 	"chap2" : {
 		"params" : {
-			"FRYR-MM-DD": "2020-03-01",
-			"TOYR-MM-DD": "2020-04-01",
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-04-01",
 			"mode" : "one",
 			"type" : "sql"
 		},
 		"listing_2_1_net_retention" : {
+		},
+		"listing_2_3_activity_churn" : {
+			"%max_inactive" : "1 month"
 		},
 		"listing_2_2_churn_rate" : {
 		},
 		"listing_2_4_mrr_churn" : {
 		},
 		"listing_2_5_churn_rate_scaled" : {
-		},
-		"listing_2_3_activity_churn" : {
-			"MAX_INACTIVE" : "1 month"
 		}
 	},
 	"chap3" : {
 		"params": {
-			"FRYR-MM-DD": "2020-04-01",
-			"TOYR-MM-DD": "2020-05-06",
+			"%from_yyyy-mm-dd": "2020-04-01",
+			"%to_yyyy-mm-dd": "2020-05-06",
 			"mode": "top",
-			"event_to_query": "like",
-			"SUM_FIELD" : "0",
-			"type" : "sql"
+			"type" : "sql",
+			"%event2measure": "like",
+			"%field2sum" : "0"
 		},
 		"listing_3_1_event_count" : {
 		},
@@ -49,8 +49,8 @@
 		},
 		"listing_3_8_events_per_day" : {
 			"mode" : "save",
-			"FRYR-MM-DD": "2020-01-01",
-			"TOYR-MM-DD": "2020-06-30"
+			"%from_yyyy-mm-dd": "2020-01-01",
+			"%to_yyyy-mm-dd": "2020-06-30"
 		},
 		"listing_3_9_events_per_account" : {
 			"mode" : "save"
@@ -72,7 +72,7 @@
 
 		"listing_3_3_2_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "newfriend",
+			"%event2measure": "newfriend",
 			"new_metric_id" : 2
 		},
 		"listing_3_4_2_metric_name_insert" : {
@@ -83,7 +83,7 @@
 
 		"listing_3_3_3_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "post",
+			"%event2measure": "post",
 			"new_metric_id" : 3
 		},
 		"listing_3_4_3_metric_name_insert" : {
@@ -94,7 +94,7 @@
 
 		"listing_3_3_4_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "adview",
+			"%event2measure": "adview",
 			"new_metric_id" : 4
 		},
 		"listing_3_4_4_metric_name_insert" : {
@@ -105,7 +105,7 @@
 
 		"listing_3_3_5_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "dislike",
+			"%event2measure": "dislike",
 			"new_metric_id" : 5
 		},
 		"listing_3_4_5_metric_name_insert" : {
@@ -116,7 +116,7 @@
 
 		"listing_3_3_6_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "unfriend",
+			"%event2measure": "unfriend",
 			"new_metric_id" : 6
 		},
 		"listing_3_4_6_metric_name_insert" : {
@@ -127,7 +127,7 @@
 
 		"listing_3_3_7_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "message",
+			"%event2measure": "message",
 			"new_metric_id" : 7
 		},
 		"listing_3_4_7_metric_name_insert" : {
@@ -138,7 +138,7 @@
 
 		"listing_3_3_8_count_metric_insert" : {
 			"mode": "run",
-			"event_to_query": "reply",
+			"%event2measure": "reply",
 			"new_metric_id" : 8
 		},
 		"listing_3_4_8_metric_name_insert" : {
@@ -149,8 +149,8 @@
 	},
 	"chap4" : {
 		"params" : {
-			"FRYR-MM-DD": "2020-03-01",
-			"TOYR-MM-DD": "2020-05-10",
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode" : "run",
 			"type" : "sql"
 		},
@@ -173,8 +173,8 @@
 		"listing_4_6_current_customers": {
 			"MET_INTERVAL": "7 day",
 			"mode" : "save",
-			"FRYR-MM-DD": "2020-05-10",
-			"TOYR-MM-DD": "2020-05-10"
+			"%from_yyyy-mm-dd": "2020-05-10",
+			"%to_yyyy-mm-dd": "2020-05-10"
 		}
 	},
 	"chap5" : {
@@ -218,8 +218,8 @@
 	},
 	"chap7" : {
 		"params" : {
-			"FRYR-MM-DD": "2020-04-01",
-			"TOYR-MM-DD": "2020-05-10",
+			"%from_yyyy-mm-dd": "2020-04-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode" : "top",
 			"type" : "sql"
 		},
@@ -245,8 +245,8 @@
 		},
 		"insert_7_3_percent_change_metric" : {
 			"METRIC_TO_MEASURE" : "new_friend_per_month",
-			"FRYR-MM-DD": "2020-03-01",
-			"TOYR-MM-DD": "2020-05-10",
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
 			"PERIOD_WEEKS" : 4,
 			"NEW_ID" : 23
 		},
@@ -255,14 +255,14 @@
 			"type": "py"
 		},
 		"listing_7_5_days_since_event" : {
-			"event_to_query" : "newfriend",
-			"FRYR-MM-DD": "2020-05-03",
-			"TOYR-MM-DD": "2020-05-10"
+			"%event2measure" : "newfriend",
+			"%from_yyyy-mm-dd": "2020-05-03",
+			"%to_yyyy-mm-dd": "2020-05-10"
 		},
 		"insert_7_5_days_since_event" : {
-			"event_to_query" : "newfriend",
-			"FRYR-MM-DD": "2020-03-01",
-			"TOYR-MM-DD": "2020-05-10",
+			"%event2measure" : "newfriend",
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
 			"NEW_ID" : 24
 		},
 		"listing_7_6_scaled_events_per_month" : {
@@ -272,8 +272,8 @@
 		},
 		"insert_7_6_scaled_events_per_month" : {
 			"EVENT_TO_QUERY" : "unfriend",
-			"FRYR-MM-DD": "2020-03-01",
-			"TOYR-MM-DD": "2020-05-10",
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
 			"OBS_PERIOD" : 84,
 			"QUOTE_PERIOD" : 28,
 			"NEW_ID" : 25
@@ -283,8 +283,8 @@
 			"OBS_PERIOD" : 84,
 			"QUOTE_PERIOD" : 28,
 			"MIN_TENURE" : 14,
-			"FRYR-MM-DD": "2020-05-10",
-			"TOYR-MM-DD": "2020-05-10",
+			"%from_yyyy-mm-dd": "2020-05-10",
+			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode" : "save"
 		},
 		"insert_7_7_tenure_scaled_events_per_month" : {

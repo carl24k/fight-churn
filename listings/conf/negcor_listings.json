@@ -1,8 +1,8 @@
 {
 	"chap4" : {
 		"params" : {
-			"FRYR-MM-DD": "2019-03-04",
-			"TOYR-MM-DD": "2019-05-06",
+			"%from_yyyy-mm-dd": "2019-03-04",
+			"%to_yyyy-mm-dd": "2019-05-06",
 			"mode" : "run",
 			"type" : "sql"
 		},

@@ -1,8 +1,8 @@
 with observation_params as     
 (
     select  interval 'MET_INTERVAL' as metric_period,
-    'FRYR-MM-DD'::timestamp as obs_start,    
-    'TOYR-MM-DD'::timestamp as obs_end    
+    '%from_yyyy-mm-dd'::timestamp as obs_start,
+    '%to_yyyy-mm-dd'::timestamp as obs_end
 )
 select m.account_id, o.observation_date, is_churn FLAT_METRIC_SELECT
 from metric m inner join observation_params

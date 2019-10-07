@@ -6,8 +6,8 @@ from run_churn_listing import run_one_listing
 import argparse
 
 METRIC_BIND = 'FLAT_METRIC_SELECT'
-FRBIND = 'FRYR-MM-DD'
-TOBIND = 'TOYR-MM-DD'
+FRBIND = '%from_yyyy-mm-dd'
+TOBIND = '%to_yyyy-mm-dd'
 INTBIND = 'MET_INTERVAL'
 
 def remove_obsevations(schema):

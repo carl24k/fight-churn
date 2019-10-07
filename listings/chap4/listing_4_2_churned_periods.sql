@@ -1,8 +1,8 @@
 with RECURSIVE active_period_params as    
 (
 	select INTERVAL 'GAP_INTERVAL' as allowed_gap,
-	       'TOYR-MM-DD'::date as observe_end,
-	       'FRYR-MM-DD'::date as observe_start
+	       '%to_yyyy-mm-dd'::date as observe_end,
+	       '%from_yyyy-mm-dd'::date as observe_start
 ),
 end_dates as    
 (
