@@ -42,7 +42,7 @@
 		},
 		"listing_3_6_metric_stats_over_time" : {
 			"mode" : "save",
-			"metric_to_query" : "like_per_month"
+			"%metric2measure" : "like_per_month"
 		},
 		"listing_3_7_metric_coverage" : {
 			"mode" : "save"
@@ -224,31 +224,31 @@
 			"type" : "sql"
 		},
 		"listing_7_1_ratio_metric" : {
-			"NUM_METRIC" : "adview_per_month",
-			"DEN_METRIC" : "post_per_month"
+			"%num_metric" : "adview_per_month",
+			"%den_metric" : "post_per_month"
 		},
 		"insert_7_1_ratio_metric" : {
-			"NUM_METRIC" : "adview_per_month",
-			"DEN_METRIC" : "post_per_month",
-			"NEW_ID" : 21
+			"%num_metric" : "adview_per_month",
+			"%den_metric" : "post_per_month",
+			"%new_metric_id" : 21
 		},
 		"listing_7_2_total_metric" : {
-			"METRIC_LIST" : " 'like_per_month', 'dislike_per_month' "
+			"%metric_list" : " 'like_per_month', 'dislike_per_month' "
 		},
 		"insert_7_2_total_metric" : {
-			"METRIC_LIST" : " 'like_per_month', 'dislike_per_month' ",
-			"NEW_ID" : 22
+			"%metric_list" : " 'like_per_month', 'dislike_per_month' ",
+			"%new_metric_id" : 22
 		},
 		"listing_7_3_percent_change_metric" : {
-			"METRIC_TO_MEASURE" : "new_friend_per_month",
-			"PERIOD_WEEKS" : 4
+			"%metric2measure" : "new_friend_per_month",
+			"%period_weeks" : 4
 		},
 		"insert_7_3_percent_change_metric" : {
-			"METRIC_TO_MEASURE" : "new_friend_per_month",
+			"%metric2measure" : "new_friend_per_month",
 			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
-			"PERIOD_WEEKS" : 4,
-			"NEW_ID" : 23
+			"%period_weeks" : 4,
+			"%new_metric_id" : 23
 		},
 		"listing_7_4_fat_tail_scores" : {
 			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
@@ -263,36 +263,36 @@
 			"%event2measure" : "newfriend",
 			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
-			"NEW_ID" : 24
+			"%new_metric_id" : 24
 		},
 		"listing_7_6_scaled_events_per_month" : {
-			"EVENT_TO_QUERY" : "unfriend",
-			"OBS_PERIOD" : 84,
-			"QUOTE_PERIOD" : 28
+			"%event2measure" : "unfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28
 		},
 		"insert_7_6_scaled_events_per_month" : {
-			"EVENT_TO_QUERY" : "unfriend",
+			"%event2measure" : "unfriend",
 			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
-			"OBS_PERIOD" : 84,
-			"QUOTE_PERIOD" : 28,
-			"NEW_ID" : 25
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%new_metric_id" : 25
 		},
 		"listing_7_7_tenure_scaled_events_per_month" : {
-			"EVENT_TO_QUERY" : "unfriend",
-			"OBS_PERIOD" : 84,
-			"QUOTE_PERIOD" : 28,
-			"MIN_TENURE" : 14,
+			"%event2measure" : "unfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
 			"%from_yyyy-mm-dd": "2020-05-10",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode" : "save"
 		},
 		"insert_7_7_tenure_scaled_events_per_month" : {
-			"EVENT_TO_QUERY" : "unfriend",
-			"OBS_PERIOD" : 84,
-			"QUOTE_PERIOD" : 28,
-			"MIN_TENURE" : 14,
-			"NEW_ID" : 26
+			"%event2measure" : "unfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 26
 		}
 	}
 }

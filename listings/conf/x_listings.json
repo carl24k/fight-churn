@@ -52,7 +52,7 @@
 		},
 		"listing_3_12_tenure_scaled_events_per_month" : {
 			"OBS_DAYS" : 84,
-			"MIN_TENURE" : 28
+			"%min_tenure" : 28
 		}
 	},
 	"chap4" : {

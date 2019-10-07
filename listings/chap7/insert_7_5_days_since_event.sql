@@ -1,5 +1,5 @@
 
-INSERT into metric_name values (NEW_ID,concat('days_since_%event2measure' ))
+INSERT into metric_name values (%new_metric_id,concat('days_since_%event2measure' ))
 ON CONFLICT DO NOTHING;
 
 
@@ -19,7 +19,7 @@ last_event as (
 
 insert into metric (account_id,metric_time,metric_name_id,metric_value)
 
-select account_id, metric_date, NEW_ID,
+select account_id, metric_date, %new_metric_id,
 metric_date - last_date as days_since_event
 from last_event
 ON CONFLICT DO NOTHING;
