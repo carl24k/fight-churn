@@ -155,24 +155,24 @@
 			"type" : "sql"
 		},
 		"listing_4_1_ongoing_active_periods": {
-			"GAP_INTERVAL": "7 day"
+			"%gap_interval": "7 day"
 		},
 		"listing_4_2_churned_periods": {
-			"GAP_INTERVAL": "7 day"
+			"%gap_interval": "7 day"
 		},
 		"listing_4_3_active_event_weeks": {
 		},
 		"listing_4_4_observation_dates": {
-			"OBS_INTERVAL": "1 month",
-			"LEAD_TIME": "5 day"
+			"%obs_interval": "1 month",
+			"%lead_time": "5 day"
 		},
 		"listing_4_5_data_set_create": {
-			"MET_INTERVAL": "7 day",
-			"mode" : "save"
+			"mode" : "save",
+			"%metric_interval": "7 day"
 		},
 		"listing_4_6_current_customers": {
-			"MET_INTERVAL": "7 day",
 			"mode" : "save",
+			"%metric_interval": "7 day",
 			"%from_yyyy-mm-dd": "2020-05-10",
 			"%to_yyyy-mm-dd": "2020-05-10"
 		}

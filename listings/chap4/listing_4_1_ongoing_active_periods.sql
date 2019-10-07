@@ -1,6 +1,6 @@
 with RECURSIVE active_period_params as    
 (
-    select interval 'GAP_INTERVAL'  as allowed_gap,
+    select interval '%gap_interval'  as allowed_gap,
     '%to_yyyy-mm-dd'::date as calc_date
 ),
 active as  

@@ -1,6 +1,6 @@
 with observation_params as     
 (
-    select  interval 'MET_INTERVAL' as metric_period,
+    select  interval '%metric_interval' as metric_period,
     '%from_yyyy-mm-dd'::timestamp as obs_start,
     '%to_yyyy-mm-dd'::timestamp as obs_end
 )

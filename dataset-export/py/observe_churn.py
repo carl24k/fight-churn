@@ -8,7 +8,7 @@ import argparse
 METRIC_BIND = 'FLAT_METRIC_SELECT'
 FRBIND = '%from_yyyy-mm-dd'
 TOBIND = '%to_yyyy-mm-dd'
-INTBIND = 'MET_INTERVAL'
+INTBIND = '%metric_interval'
 
 def remove_obsevations(schema):
     '''

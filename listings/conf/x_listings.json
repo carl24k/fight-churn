@@ -44,7 +44,7 @@
 			"mode" : "save"
 		},
 		"listing_3_9_scaled_events_per_month" : {
-			"OBS_INTERVAL" : "84 day"
+			"%obs_interval" : "84 day"
 		},
 		"listing_3_10_account_tenure" : {
 		},
@@ -62,17 +62,17 @@
 			"mode" : "run"
 		},
 		"listing_4_1_ongoing_active_periods": {
-			"GAP_INTERVAL": "7 day"
+			"%gap_interval": "7 day"
 		},
 		"listing_4_2_churned_periods": {
-			"GAP_INTERVAL": "7 day"
+			"%gap_interval": "7 day"
 		},
 		"listing_4_4_observation_dates": {
-			"OBS_INTERVAL": "1 month",
-			"LEAD_TIME": "21 day"
+			"%obs_interval": "1 month",
+			"%lead_time": "21 day"
 		},
 		"listing_4_A_data_set_4analysis": {
-			"MET_INTERVAL": "7 day",
+			"%metric_interval": "7 day",
 			"mode" : "top"
 		}
 	}

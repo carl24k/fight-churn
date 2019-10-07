@@ -1,6 +1,6 @@
 with RECURSIVE active_period_params as    
 (
-	select INTERVAL 'GAP_INTERVAL' as allowed_gap,
+	select INTERVAL '%gap_interval' as allowed_gap,
 	       '%to_yyyy-mm-dd'::date as observe_end,
 	       '%from_yyyy-mm-dd'::date as observe_start
 ),
