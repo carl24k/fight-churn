@@ -16,9 +16,9 @@ parser = argparse.ArgumentParser()
 # Run control arguments
 parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
 parser.add_argument("--chapter", type=int, help="The chapter of the listing", default=2)
-parser.add_argument("--listing", type=int, help="The number of the listing", default=1)
+parser.add_argument("--listing", nargs='*', type=int, help="The number of the listing", default=[1])
 parser.add_argument("--insert", action="store_true", default=False,help="Use the insert version of a metric SQL, if available")
-parser.add_argument("--version", help="Alternative listing _parameter_ verions (optional)")
+parser.add_argument("--version", nargs='*', help="Alternative listing _parameter_ verions (optional)",default=[])
 
 
 '''
@@ -244,5 +244,13 @@ use them. Otherwise defaults are hard coded
 if __name__ == "__main__":
     args, _ = parser.parse_known_args()
 
-    run_one_listing(args)
-
+    for l in args.listing:
+        list_args = copy(args)
+        list_args.listing = l
+        if len(args.version)==0:
+            run_one_listing(list_args)
+        else:
+            for v in args.version:
+                vers_args = copy(list_args)
+                vers_args.version =v
+                run_one_listing(vers_args)
