@@ -58,12 +58,13 @@
 		"listing_3_10_account_tenure" : {
 		},
 		"listing_3_11_account_tenure_insert" : {
-			"mode" : "run"
+			"mode" : "run",
+			"%new_metric_id" : 8
 		},
 		"listing_3_4_1_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "account_tenure",
-			"%new_metric_id" : 1
+			"%new_metric_id" : 8
 		},
 		"listing_3_12_mrr" : {
 		},
@@ -73,78 +74,78 @@
 		"listing_3_3_2_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "newfriend",
-			"%new_metric_id" : 2
+			"%new_metric_id" : 1
 		},
 		"listing_3_4_2_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "newfriend_per_month",
-			"%new_metric_id" : 2
+			"%new_metric_id" : 1
 		},
 
 		"listing_3_3_3_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "post",
-			"%new_metric_id" : 3
+			"%new_metric_id" : 2
 		},
 		"listing_3_4_3_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "post_per_month",
-			"%new_metric_id" : 3
+			"%new_metric_id" : 2
 		},
 
 		"listing_3_3_4_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "adview",
-			"%new_metric_id" : 4
+			"%new_metric_id" : 3
 		},
 		"listing_3_4_4_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "adview_per_month",
-			"%new_metric_id" : 4
+			"%new_metric_id" : 3
 		},
 
 		"listing_3_3_5_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "dislike",
-			"%new_metric_id" : 5
+			"%new_metric_id" : 4
 		},
 		"listing_3_4_5_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "dislike_per_month",
-			"%new_metric_id" : 5
+			"%new_metric_id" : 4
 		},
 
 		"listing_3_3_6_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "unfriend",
-			"%new_metric_id" : 6
+			"%new_metric_id" : 5
 		},
 		"listing_3_4_6_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "unfriend_per_month",
-			"%new_metric_id" : 6
+			"%new_metric_id" : 5
 		},
 
 		"listing_3_3_7_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "message",
-			"%new_metric_id" : 7
+			"%new_metric_id" : 6
 		},
 		"listing_3_4_7_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "message_per_month",
-			"%new_metric_id" : 7
+			"%new_metric_id" : 6
 		},
 
 		"listing_3_3_8_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "reply",
-			"%new_metric_id" : 8
+			"%new_metric_id" : 7
 		},
 		"listing_3_4_8_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "reply_per_month",
-			"%new_metric_id" : 8
+			"%new_metric_id" : 7
 		}
 	},
 	"chap4" : {
