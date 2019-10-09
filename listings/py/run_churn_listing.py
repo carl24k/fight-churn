@@ -248,6 +248,7 @@ if __name__ == "__main__":
         list_args = copy(args)
         list_args.listing = l
         if len(args.version)==0:
+            list_args.version=None
             run_one_listing(list_args)
         else:
             for v in args.version:
