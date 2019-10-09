@@ -94,13 +94,14 @@ class MetricCalculator:
 		return id
 
 
-	def metric_qa_plot(self,metric,hideAx=False):
+	def metric_qa_plot(self,metric,args):
 
 		save_path = '../../../fight-churn-output/' + self.schema + '/'
 		os.makedirs(save_path, exist_ok=True)
 
 		print('Checking metric %s.%s' % (self.schema, metric))
 		id = self.get_metric_id(metric)
+		assert id is not None, "No metric id found for %s" % metric
 		aSql = self.qa_sql.replace('%metric_name_id', str(id))
 		aSql = aSql.replace('%schema', self.schema)
 		aSql = aSql.replace('%from_date', self.from_date)
@@ -118,46 +119,49 @@ class MetricCalculator:
 		plt.figure(figsize=(8, 10))
 		plt.subplot(4, 1, 1)
 		plt.plot('calc_date', 'max_val', data=res, marker='', color='red', linewidth=2, label="max")
-		if hideAx: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
+		if args.hideax: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
 		plt.ylim(0, ceil(1.1 * res['max_val'].dropna().max()))
 		plt.legend()
 		plt.title(metric)
 		plt.subplot(4, 1, 2)
 		plt.plot('calc_date', 'avg_val', data=res, marker='', color='green', linewidth=2, label='avg')
-		if hideAx: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
+		if args.hideax: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
 		plt.ylim(0, ceil(1.1 * res['avg_val'].dropna().max()))
 		plt.legend()
 		plt.subplot(4, 1, 3)
 		plt.plot('calc_date', 'min_val', data=res, marker='', color='blue', linewidth=2, label='min')
-		if hideAx: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
+		if args.hideax: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
 		# plt.ylim(0, ceil(2*res['min_val'].dropna().max()))
 		plt.legend()
 		plt.subplot(4, 1, 4)
 		plt.plot('calc_date', 'n_calc', data=res, marker='', color='black', linewidth=2, label="n_calc")
 		plt.ylim(0, ceil(1.1 * res['n_calc'].dropna().max()))
 		plt.legend()
-		if hideAx:
+		if args.hideax:
 			plt.gca().get_yaxis().set_visible(False)  # Hiding y axis labels on the count
 			monthFormat = mdates.DateFormatter('%b')
 			plt.gca().get_xaxis().set_major_formatter(monthFormat)
-		plt.savefig(save_path + 'metric_valqa_' + cleanedName + '.png')
+		else:
+			plt.gcf().autofmt_xdate()
+
+		plt.savefig(save_path + 'metric_valqa_' + cleanedName + '.' + args.format)
 		plt.close()
 
-	def qa_metrics(self,run_mets=None,hideAx=False):
+	def qa_metrics(self,args):
 		'''
 		Loops over the configured metrics and makes the QA plot of each.  If a list was provided, it only runs the ones
 		in the list.
 		:param run_mets: list of strings, metric names; or else None meaning calculate all configured metrics
-		:param hideAx: boolean to indicate hiding the axes (used to make book plots)
+		:param args: from argparse
 		:return:
 		'''
 
-		if run_mets is None:
+		if args.metrics is None:
 			for metric in self.metric_dict.keys():
-				self.metric_qa_plot(metric,hideAx)
+				self.metric_qa_plot(metric,args)
 		else:
-			for metric in run_mets:
-				self.metric_qa_plot(metric,hideAx)
+			for metric in args.metrics:
+				self.metric_qa_plot(metric,args)
 
 	def run_one_metric_calculation(self,metric):
 		'''
