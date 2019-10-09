@@ -153,7 +153,7 @@ class EventChecker:
 			self.plot_event_without_properties(res,cleaned_name)
 
 
-		plt.savefig(self.save_path + 'event_qa_' + cleaned_name + self.args.format)
+		plt.savefig(self.save_path + 'event_qa_' + cleaned_name + '.' + self.args.format)
 		plt.close()
 
 
