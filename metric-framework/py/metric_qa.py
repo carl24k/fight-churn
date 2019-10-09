@@ -12,8 +12,7 @@ parser.add_argument("--format", type=str, help="Format to save in", default='png
 
 '''
 ####################################################################################################
-The main script for calculating Fight Churn With Data metrics in batch: If there are command line arguments, 
-use them. Otherwise defaults are hard coded
+The main script for calculating Fight Churn With Data metrics in batch
 
 '''
 
