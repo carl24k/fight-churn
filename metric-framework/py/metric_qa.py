@@ -1,24 +1,24 @@
 import sys
 from metric_calc import MetricCalculator
 
+import argparse
+
+parser = argparse.ArgumentParser()
+# Run control arguments
+parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
+parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
+parser.add_argument("--hideax", action="store_true", default=False,help="Hide axis labels")
+parser.add_argument("--format", type=str, help="Format to save in", default='png')
+
 '''
 ####################################################################################################
-The main script for calculating Fight Churn With Data metrics in batch: If there are command line arguments, 
-use them. Otherwise defaults are hard coded
+The main script for calculating Fight Churn With Data metrics in batch
 
 '''
 
 if __name__ == "__main__":
 
-	schema = 'churnsim9'
-	run_mets = None
-	# Example of running just a few metrics - uncomment this line...
-	# run_mets=['account_tenure','post_per_month']
+	args, _ = parser.parse_known_args()
 
-	if len(sys.argv)>=2:
-		schema=sys.argv[1]
-	if len(sys.argv)>=3:
-		run_mets=sys.argv[2:]
-
-	met_calc = MetricCalculator(schema)
-	met_calc.qa_metrics(run_mets)
+	met_calc = MetricCalculator(args.schema)
+	met_calc.qa_metrics(args)

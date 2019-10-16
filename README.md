@@ -645,8 +645,8 @@ Below is an example of the beginning of the listing configuration for the `churn
 ```
 	"chap2" : {
 		"params" : {
-			"FRYR-MM-DD": "2019-03-01",
-			"TOYR-MM-DD": "2019-04-01",
+			"%from_yyyy-mm-dd": "2019-03-01",
+			"%to_yyyy-mm-dd": "2019-04-01",
 			"mode" : "one",
 			"type" : "sql"
 		},

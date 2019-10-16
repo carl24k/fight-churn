@@ -5,11 +5,18 @@ import json
 import pandas
 import os
 import sys
+import argparse
 
+parser = argparse.ArgumentParser()
+# Run control arguments
+parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
+parser.add_argument("--events", type=str,nargs='*', help="List of events to run (default to all)")
+parser.add_argument("--hideax", action="store_true", default=False,help="Hide axis labels")
+parser.add_argument("--format", type=str, help="Format to save in", default='png')
 
 class EventChecker:
 
-	def __init__(self,schema,hideAx=False):
+	def __init__(self,args):
 		'''
 		EventChecker has the parameters and logic to run the QA query on events. Loads parameter json from the adjacent
 		conf directory, which has the  date range for the schema. Makes postgres sqlalchemy with environment variables.
@@ -20,20 +27,21 @@ class EventChecker:
 		:param properties: list of strings, property names ffor the events
 		'''
 
-		# Load the metric configuration dictionary
-		with open('../conf/%s_metrics.json' % schema, 'r') as myfile:
-			self.metric_dict=json.loads(myfile.read())
 
-		self.hideAx=hideAx
-		self.schema=schema
+		self.args=args
+		self.schema=args.schema
 		self.monthFormat = mdates.DateFormatter('%b')
+
+		# Load the metric configuration dictionary
+		with open('../conf/%s_metrics.json' % self.schema, 'r') as myfile:
+			self.metric_dict=json.loads(myfile.read())
 
 		# get the start/end date from the metric configuration
 		self.from_date=self.metric_dict['date_range']['from_date']
 		self.to_date=self.metric_dict['date_range']['to_date']
 
 		# make the output path (if necessary)
-		self.save_path = '../../../fight-churn-output/' + schema + '/'
+		self.save_path = '../../../fight-churn-output/' + self.schema + '/'
 		os.makedirs(self.save_path,exist_ok=True)
 
 		# Make a sql connection with sqlalchmey
@@ -44,7 +52,7 @@ class EventChecker:
 		self.conn = engine.connect()
 
 		# read the event types from the database
-		self.events = pandas.read_sql_query("select * from %s.event_type" % schema, self.conn)
+		self.events = pandas.read_sql_query("select * from %s.event_type" % self.schema, self.conn)
 
 		# load the sql template used to make the queries
 		with open('../sql/qa_event.sql', 'r') as myfile:
@@ -82,9 +90,11 @@ class EventChecker:
 		'''
 		res.plot(kind='line', linestyle="-", marker=".", x='event_date', y='n_event',
 				 title='%s n_event' % cleanedName, legend=False, ylim=(0, round(1.1 * res['n_event'].max())))
-		if self.hideAx:
+		if self.args.hideax:
 			plt.gca().get_yaxis().set_visible(False)
 			plt.gca().get_xaxis().set_major_formatter(self.monthFormat)
+		else:
+			plt.gcf().autofmt_xdate()
 
 	def plot_event_with_properties(self,res,cleaned_name,valid_properties):
 		'''
@@ -101,7 +111,7 @@ class EventChecker:
 		plt.plot('event_date', 'n_event', data=res, marker='.', color='black', linewidth=1, label="count")
 		plt.legend()
 		plt.title('%s' % cleaned_name)
-		if self.hideAx:
+		if self.args.hideax:
 			plt.gca().get_yaxis().set_visible(False)
 			plt.gca().get_xaxis().set_major_formatter(self.monthFormat)
 		for p in range(0, n_valid_property):
@@ -111,7 +121,7 @@ class EventChecker:
 			plt.plot('event_date', self.metric_dict['event_properties'][p], data=res, marker='.', color='blue', linewidth=1,
 					 label="sum(%s)" % self.metric_dict['event_properties'][p])
 			plt.legend()
-			if self.hideAx:
+			if self.args.hideax:
 				plt.gca().get_yaxis().set_visible(False)
 				plt.gca().get_xaxis().set_major_formatter(self.monthFormat)
 
@@ -143,11 +153,11 @@ class EventChecker:
 			self.plot_event_without_properties(res,cleaned_name)
 
 
-		plt.savefig(self.save_path + 'event_qa_' + cleaned_name + '.png')
+		plt.savefig(self.save_path + 'event_qa_' + cleaned_name + '.' + self.args.format)
 		plt.close()
 
 
-	def check_events(self,events_2check=None):
+	def check_events(self):
 		'''
 		Check all of the events in a loop, calling check_one_event_qa for each.  If a list of events is provided,
 		it only checks the events in the list.
@@ -156,29 +166,20 @@ class EventChecker:
 		'''
 
 		for idx, event in self.events.iterrows():
-			if events_2check is not None and event['event_type_name'] not in events_2check:
+			if self.args.events is not None and event['event_type_name'] not in self.args.events:
 				continue
 
 			self.check_one_event_qa(event)
 
 '''
 ####################################################################################################
-The main script for quality assurance checks on events: If there are command line arguments, 
-use them. Otherwise defaults are hard coded
+The main script for quality assurance checks on events
 
 '''
 
 if __name__ == "__main__":
 
-	schema = 'churnsim9'
-	events_2check = None
-	# Example of running just a few events - uncomment this line...
-	# events_2check=['post','like']
+	args, _ = parser.parse_known_args()
 
-	if len(sys.argv)>=2:
-		schema=sys.argv[1]
-	if len(sys.argv)>=3:
-		events_2check=sys.argv[2:]
-
-	event_check = EventChecker(schema)
-	event_check.check_events(events_2check)
+	event_check = EventChecker(args)
+	event_check.check_events()

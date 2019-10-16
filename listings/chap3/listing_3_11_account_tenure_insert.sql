@@ -1,6 +1,6 @@
 with RECURSIVE date_vals AS (    
 select i::timestamp as metric_date     
-from generate_series('FRYR-MM-DD', 'TOYR-MM-DD', '7 day'::interval) i
+from generate_series('%from_yyyy-mm-dd', '%to_yyyy-mm-dd', '7 day'::interval) i
 ),
 earlier_starts AS    
 (
@@ -20,7 +20,7 @@ earlier_starts AS
 
 )
 insert into metric (account_id,metric_time,metric_name_id, metric_value)
-SELECT account_id, metric_date, 1 as metric_name_id, extract(days from metric_date-min(start_date)) as metric_value
+SELECT account_id, metric_date, %new_metric_id as metric_name_id, extract(days from metric_date-min(start_date)) as metric_value
 FROM earlier_starts
 group by account_id, metric_date
 order by account_id, metric_date
