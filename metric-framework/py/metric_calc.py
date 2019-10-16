@@ -139,12 +139,8 @@ class MetricCalculator:
 		plt.plot('calc_date', 'n_calc', data=res, marker='', color='black', linewidth=2, label="n_calc")
 		plt.ylim(0, ceil(1.1 * res['n_calc'].dropna().max()))
 		plt.legend()
-<<<<<<< HEAD
 		plt.gca().figure.autofmt_xdate()
-		if hideAx:
-=======
 		if args.hideax:
->>>>>>> master
 			plt.gca().get_yaxis().set_visible(False)  # Hiding y axis labels on the count
 			monthFormat = mdates.DateFormatter('%b')
 			plt.gca().get_xaxis().set_major_formatter(monthFormat)
@@ -165,12 +161,8 @@ class MetricCalculator:
 
 		if args.metrics is None:
 			for metric in self.metric_dict.keys():
-<<<<<<< HEAD
 				if metric in self.non_metrics: continue
-				self.metric_qa_plot(metric,hideAx)
-=======
 				self.metric_qa_plot(metric,args)
->>>>>>> master
 		else:
 			for metric in args.metrics:
 				self.metric_qa_plot(metric,args)
