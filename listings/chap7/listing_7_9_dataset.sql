@@ -1,8 +1,8 @@
 with observation_params as     
 (
     select  interval '%metric_interval' as metric_period,
-    'FRYR-MM-DD'::timestamp as obs_start,    
-    'TOYR-MM-DD'::timestamp as obs_end    
+    '%from_yyyy-mm-dd'::timestamp as obs_start,
+    '%to_yyyy-mm-dd'::timestamp as obs_end
 )
 select m.account_id, o.observation_date, is_churn,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,

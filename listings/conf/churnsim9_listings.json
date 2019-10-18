@@ -183,7 +183,7 @@
 			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"type" : "py"
 		},
-		"listing_5_1_cohort_plot" : {
+		"_listing_5_1_cohort_plot" : {
 			"metric_to_plot" : "post_permonth"
 		},
 		"_listing_5_1_cohort_plot" : {
@@ -195,8 +195,8 @@
 		"_listing_5_1_cohort_plot" : {
 			"metric_to_plot" : "adview_per_post"
 		},
-		"_listing_5_1_cohort_plot" : {
-			"metric_to_plot" : "pcnt_change_new_friend_per_month_4"
+		"listing_5_1_cohort_plot" : {
+			"metric_to_plot" : "pcnt_change_newfriend"
 		},
 		"listing_5_2_dataset_stats" : {
 		},
