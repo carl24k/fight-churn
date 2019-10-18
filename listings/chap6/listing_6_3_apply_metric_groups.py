@@ -21,7 +21,7 @@ def apply_metric_groups(data_set_path='',save=True):
     churn_data_grouped['is_churn'] = score_data['is_churn']
 
     if save:
-        save_path = data_set_path.replace('.csv', '_group_scores.csv')
+        save_path = data_set_path.replace('.csv', '_group.csv')
         churn_data_grouped.to_csv(save_path,header=True)
         print('Saved grouped data  to ' + save_path)
 

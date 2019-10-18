@@ -184,13 +184,13 @@
 			"type" : "py"
 		},
 		"listing_5_1_cohort_plot" : {
-			"metric_to_plot" : "post_permonth"
+			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_2_cohort_plot" : {
 			"metric_to_plot" : "adview_per_month"
 		},
 		"listing_5_1_3_cohort_plot" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
+			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores_group.csv",
 			"metric_to_plot" : "metric_group_1"
 		},
 		"listing_5_1_4_cohort_plot" : {
@@ -206,7 +206,7 @@
 			"metric_to_plot" : "dislike_pcnt"
 		},
 		"listing_5_1_8_cohort_plot" : {
-			"metric_to_plot" : "pcnt_change_newfriend"
+			"metric_to_plot" : "newfriend_pcnt_chng"
 		},
 		"listing_5_2_dataset_stats" : {
 		},
