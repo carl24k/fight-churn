@@ -187,6 +187,7 @@
 			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_2_cohort_plot" : {
+			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
 			"metric_to_plot" : "adview_per_month"
 		},
 		"listing_5_1_3_cohort_plot" : {
@@ -194,21 +195,27 @@
 			"metric_to_plot" : "metric_group_1"
 		},
 		"listing_5_1_4_cohort_plot" : {
-			"metric_to_plot" : "adview_per_post"
+			"metric_to_plot" : "adview_per_month"
 		},
 		"listing_5_1_5_cohort_plot" : {
-			"metric_to_plot" : "like_per_month"
+			"metric_to_plot" : "adview_per_post"
 		},
 		"listing_5_1_6_cohort_plot" : {
-			"metric_to_plot" : "dislike_per_month"
+			"metric_to_plot" : "like_per_month"
 		},
 		"listing_5_1_7_cohort_plot" : {
+			"metric_to_plot" : "dislike_per_month"
+		},
+		"listing_5_1_9_cohort_plot" : {
 			"metric_to_plot" : "dislike_pcnt"
 		},
-		"listing_5_1_8_cohort_plot" : {
+		"listing_5_1_10_cohort_plot" : {
 			"metric_to_plot" : "newfriend_pcnt_chng"
 		},
 		"listing_5_2_dataset_stats" : {
+		},
+		"listing_5_2_2_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv"
 		},
 		"listing_5_3_metric_scores" : {
 		}
