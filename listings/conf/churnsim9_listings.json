@@ -188,7 +188,7 @@
 		},
 		"listing_5_1_2_cohort_plot" : {
 			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
-			"metric_to_plot" : "adview_per_month"
+			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_3_cohort_plot" : {
 			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores_group.csv",
