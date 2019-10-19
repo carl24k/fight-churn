@@ -318,11 +318,11 @@
 		},
 
 		"listing_7_4_percent_change_metric" : {
-			"%metric2measure" : "new_friend_per_month",
+			"%metric2measure" : "newfriend_per_month",
 			"%period_weeks" : 4
 		},
 		"insert_7_4_percent_change_metric" : {
-			"%metric2measure" : "new_friend_per_month",
+			"%metric2measure" : "newfriend_per_month",
 			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"%period_weeks" : 4,
