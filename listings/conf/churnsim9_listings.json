@@ -206,10 +206,10 @@
 		"listing_5_1_7_cohort_plot" : {
 			"metric_to_plot" : "dislike_per_month"
 		},
-		"listing_5_1_9_cohort_plot" : {
+		"listing_5_1_8_cohort_plot" : {
 			"metric_to_plot" : "dislike_pcnt"
 		},
-		"listing_5_1_10_cohort_plot" : {
+		"listing_5_1_9_cohort_plot" : {
 			"metric_to_plot" : "newfriend_pcnt_chng"
 		},
 		"listing_5_2_dataset_stats" : {
