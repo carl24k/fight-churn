@@ -228,7 +228,7 @@
 		"listing_6_1_metric_pair_plot" : {
 			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
-			"metric2" : "message_per_month"
+			"metric2" : "like_per_month"
 		},
 		"listing_6_2_dataset_correlation_matrix" : {
 		},
@@ -242,7 +242,7 @@
 		"listing_6_1_2_metric_pair_plot" : {
 			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
-			"metric2" : "like_per_month"
+			"metric2" : "message_per_month"
 		},
 		"listing_6_1_3_metric_pair_plot" : {
 			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
