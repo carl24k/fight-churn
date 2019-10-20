@@ -71,6 +71,11 @@
 		"listing_3_14_billing_period" : {
 		},
 
+		"listing_3_3_1_count_metric_insert" : {
+			"mode": "run",
+			"%event2measure": "like",
+			"%new_metric_id" : 1
+		},
 		"listing_3_3_2_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "newfriend",
