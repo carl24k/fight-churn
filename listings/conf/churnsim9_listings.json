@@ -61,7 +61,7 @@
 			"mode" : "run",
 			"%new_metric_id" : 8
 		},
-		"listing_3_4_1_metric_name_insert" : {
+		"listing_3_4_11_metric_name_insert" : {
 			"mode": "run",
 			"%new_metric_name" : "account_tenure",
 			"%new_metric_id" : 8
@@ -74,7 +74,12 @@
 		"listing_3_3_1_count_metric_insert" : {
 			"mode": "run",
 			"%event2measure": "like",
-			"%new_metric_id" : 1
+			"%new_metric_id" : 0
+		},
+		"listing_3_4_1_metric_name_insert" : {
+			"mode": "run",
+			"%new_metric_name" : "like_per_month",
+			"%new_metric_id" : 0
 		},
 		"listing_3_3_2_count_metric_insert" : {
 			"mode": "run",
