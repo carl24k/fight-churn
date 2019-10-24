@@ -235,11 +235,10 @@
 	},
 	"chap6" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
+			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"type": "py"
 		},
 		"listing_6_1_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "like_per_month"
 		},
@@ -253,37 +252,30 @@
 		"listing_6_5_ordered_correlation_matrix" : {
 		},
 		"listing_6_1_2_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "message_per_month"
 		},
 		"listing_6_1_3_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "newfriend_per_month"
 		},
 		"listing_6_1_4_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "adview_per_month"
 		},
 		"listing_6_1_5_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "dislike_per_month"
 		},
 		"listing_6_1_6_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "unfriend_per_month"
 		},
 		"listing_6_1_7_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "reply_per_month"
 		},
 		"listing_6_1_8_metric_pair_plot" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
 			"metric1" : "post_per_month",
 			"metric2" : "account_tenure"
 		}
