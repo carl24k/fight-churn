@@ -530,6 +530,10 @@ class ChurnCalculator:
 
     def cv_params(self,model_code,**kwargs):
         n_features_def=int(sqrt(kwargs.get('n_feature',20)))
+        cr = self.churn_rate()
+        cw = [ {0:w,1:1.0-w} for w in [cr*.66, cr, cr*1.5]]
+        cw.append({0:0.5,1:0.5}),
+                # 'class_weight' : cw
         CV_PARAMS = {
             self.LOGISTIC_REGRESSION : {
                 'C': [1.0 / 2.0 ** x for x in range(0, 10)]
@@ -553,7 +557,7 @@ class ChurnCalculator:
         if model_code==self.LOGISTIC_REGRESSION:
             return LogisticRegression(penalty='l1', solver='liblinear',fit_intercept=True)
         elif model_code==self.RANDOM_FOREST:
-            return RandomForestClassifier()
+            return RandomForestClassifier(class_weight='balanced')
         elif model_code==self.XGBOOST:
             return xgb.XGBClassifier(objective='binary:logistic')
         else:
