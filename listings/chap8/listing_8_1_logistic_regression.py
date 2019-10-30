@@ -4,14 +4,6 @@ from listing_6_3_apply_metric_groups import apply_metric_groups
 from sklearn.linear_model import LogisticRegression
 import pickle
 
-def coefs_to_dataframe(log_reg, column_names):
-    full_list = ['offset']
-    full_list.extend(column_names)
-    all_coef = [float(log_reg.intercept_)]
-    all_coef.extend(list(log_reg.coef_[0]))
-    results_dict = {'metric': full_list, 'coef': all_coef}
-    result_df = pd.DataFrame.from_dict(results_dict)
-    return result_df
 
 def logistic_regression(data_set_path='',save=True):
 
@@ -24,7 +16,9 @@ def logistic_regression(data_set_path='',save=True):
     retain_reg.fit(X, y)
 
     if save:
-        coef_df = coefs_to_dataframe(retain_reg, X.columns.values)
+        coef_df = pd.DataFrame.from_dict(
+            {'metric':  np.append(X.columns.values,'offset'),
+             'coef': np.append(retain_reg.coef_[0],retain_reg.intercept_)})
         save_path = data_set_path.replace('.csv', '_logreg_coef.csv')
         coef_df.to_csv(save_path, index=False)
         print('Saved coefficients to ' + save_path)
