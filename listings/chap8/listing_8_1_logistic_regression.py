@@ -1,13 +1,15 @@
 import pandas as pd
 import numpy as np
-from listing_6_3_apply_metric_groups import apply_metric_groups
+import os
 from sklearn.linear_model import LogisticRegression
 import pickle
 
 
 def logistic_regression(data_set_path='',save=True):
 
-    grouped_data= apply_metric_groups(data_set_path,save=False)
+    score_save_path = data_set_path.replace('.csv', '_groupscore.csv')
+    assert os.path.isfile(score_save_path), 'You must run listing 6.3 to save grouped metric scores first'
+    grouped_data = pd.read_csv(score_save_path, index_col=0)
 
     y = ~grouped_data['is_churn']
     X = grouped_data.drop(['is_churn'],axis=1)

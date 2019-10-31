@@ -1,4 +1,4 @@
-with observation_params as     
+with observation_params as
 (
     select  interval '%metric_interval' as metric_period,
     '%from_yyyy-mm-dd'::timestamp as obs_start,
@@ -19,9 +19,9 @@ sum(case when metric_name_id=23 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=24 then metric_value else 0 end) as newfriend_pcnt_chng,
 sum(case when metric_name_id=25 then metric_value else 0 end) as days_since_newfriend
 from metric m inner join observation_params
-on metric_time between obs_start and obs_end    
+on metric_time between obs_start and obs_end
 inner join observation o on m.account_id = o.account_id
-    and m.metric_time > (o.observation_date - metric_period)::timestamp    
+    and m.metric_time > (o.observation_date - metric_period)::timestamp
     and m.metric_time <= o.observation_date::timestamp
-group by m.account_id, metric_time, observation_date, is_churn    
+group by m.account_id, metric_time, observation_date, is_churn
 order by m.account_id,observation_date
