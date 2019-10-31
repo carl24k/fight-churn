@@ -1,7 +1,9 @@
 import pandas as pd
+import os
 
 def dataset_stats(data_set_path='',save=True):
 
+    assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
     churn_data['is_churn']=churn_data['is_churn'].astype(float)
@@ -15,6 +17,7 @@ def dataset_stats(data_set_path='',save=True):
     summary['nonzero'] = churn_data.astype(bool).sum(axis=0) / churn_data.shape[0]
 
     summary = summary[ ['count','nonzero','mean','std','skew','min','1%','25%','50%','75%','99%','max'] ]
+    summary.columns = summary.columns.str.replace("%", "pct")
 
     if save:
         save_path = data_set_path.replace('.csv', '_summarystats.csv')
