@@ -383,12 +383,14 @@
 		"listing_8_1_logistic_regression" : {
 
 		},
-		"listing_8_2_current_dataset": {
+		"listing_8_2_dataset_current": {
 			"type" : "sql",
 			"mode" : "save",
 			"%metric_interval": "7 day"
 		},
-		"listing_8_3_churn_forecast" : {
+		"listing_8_3_rescore_metrics" : {
+		},
+		"listing_8_4_churn_forecast" : {
 		}
 	}
 }
