@@ -183,9 +183,7 @@
 		},
 		"listing_4_6_current_customers": {
 			"mode" : "save",
-			"%metric_interval": "7 day",
-			"%from_yyyy-mm-dd": "2020-05-10",
-			"%to_yyyy-mm-dd": "2020-05-10"
+			"%metric_interval": "7 day"
 		}
 	},
 	"chap5" : {
@@ -384,6 +382,13 @@
 		},
 		"listing_8_1_logistic_regression" : {
 
+		},
+		"listing_8_2_current_dataset": {
+			"type" : "sql",
+			"mode" : "save",
+			"%metric_interval": "7 day"
+		},
+		"listing_8_3_churn_forecast" : {
 		}
 	}
 }

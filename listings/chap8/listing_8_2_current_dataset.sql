@@ -2,7 +2,7 @@ with metric_date as
 (
     select  max(metric_time) as last_metric_time from metric
 )
-select s.account_id, metric_time,
+select s.account_id, last_metric_time as observation_date,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
 sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
@@ -20,5 +20,5 @@ from metric m inner join metric_date on metric_time =last_metric_time
 inner join subscription s on m.account_id=s.account_id
 where s.start_date <= last_metric_time
 and (s.end_date >=last_metric_time or s.end_date is null)
-group by s.account_id, metric_time
+group by s.account_id, last_metric_time
 order by s.account_id
