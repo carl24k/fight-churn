@@ -17,7 +17,7 @@ def churn_forecast(data_set_path='',save=True):
     result = logreg_model.predict_proba(scored_current_data)
 
     if save:
-        current_data_path = data_set_path.replace('dataset.csv', 'current_dataset.csv')
+        current_data_path = data_set_path.replace('dataset.csv', 'dataset_current.csv')
         current_data = pd.read_csv(current_data_path)
         current_data.set_index(['account_id', 'observation_date'], inplace=True)
 

@@ -37,5 +37,6 @@ def fat_tail_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
         print('Saving results to %s' % score_save_path)
         param_save_path=data_set_path.replace('.csv','_score_params.csv')
         transform_df.to_csv(param_save_path,header=True)
+        print('Saving params to %s' % param_save_path)
 
     return data_scores
