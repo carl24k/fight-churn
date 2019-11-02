@@ -293,7 +293,7 @@
 			"%num_metric" : "adview_per_month",
 			"%den_metric" : "post_per_month",
 			"%new_metric_id" : 21,
-			"%new_metric_name" : "adviw_per_post"
+			"%new_metric_name" : "adview_per_post"
 		},
 		"insert_7_1_2_ratio_metric" : {
 			"%num_metric" : "dislike_per_month",
@@ -372,7 +372,65 @@
 			"%obs_period" : 84,
 			"%desc_period" : 28,
 			"%min_tenure" : 14,
-			"%new_metric_id" : 27
+			"%new_metric_id" : 35
+		},
+
+
+		"insert_7_8_1_tenure_scaled_events_per_month" : {
+			"%event2measure" : "like",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 30
+		},
+		"insert_7_8_2_tenure_scaled_events_per_month" : {
+			"%event2measure" : "newfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 31
+		},
+		"insert_7_8_3_tenure_scaled_events_per_month" : {
+			"%event2measure" : "post",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 32
+		},
+		"insert_7_8_4_tenure_scaled_events_per_month" : {
+			"%event2measure" : "adview",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 33
+		},
+		"insert_7_8_5_tenure_scaled_events_per_month" : {
+			"%event2measure" : "dislike",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 34
+		},
+		"insert_7_8_6_tenure_scaled_events_per_month" : {
+			"%event2measure" : "unfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 35
+		},
+		"insert_7_8_7_tenure_scaled_events_per_month" : {
+			"%event2measure" : "message",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 36
+		},
+		"insert_7_8_8_tenure_scaled_events_per_month" : {
+			"%event2measure" : "reply",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 37
 		}
 	},
 	"chap8" : {
