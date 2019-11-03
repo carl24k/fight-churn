@@ -6,7 +6,8 @@ def dataset_stats(data_set_path='',save=True):
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
-    churn_data['is_churn']=churn_data['is_churn'].astype(float)
+    if 'is_churn' in churn_data:
+        churn_data['is_churn']=churn_data['is_churn'].astype(float)
 
     summary = churn_data.describe()
     summary = summary.transpose()
