@@ -12,9 +12,10 @@ def churn_forecast(data_set_path='',save=True):
     with open(pickle_path, 'rb') as fid:
         logreg_model = pickle.load(fid)
 
-    scored_current_data = rescore_metrics(data_set_path)
-
-    result = logreg_model.predict_proba(scored_current_data)
+    score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
+    current_score_df=pd.read_csv(score_save_path)
+    current_score_df.set_index(['account_id', 'observation_date'], inplace=True)
+    result = logreg_model.predict_proba(current_score_df.to_numpy())
 
     if save:
         current_data_path = data_set_path.replace('dataset.csv', 'dataset_current.csv')
