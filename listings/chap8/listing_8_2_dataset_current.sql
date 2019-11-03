@@ -17,7 +17,6 @@ sum(case when metric_name_id=4 then metric_value else 0 end) as dislike_per_mont
 sum(case when metric_name_id=27 then metric_value else 0 end) as unfriend_per_month,
 sum(case when metric_name_id=6 then metric_value else 0 end) as message_per_month,
 sum(case when metric_name_id=7 then metric_value else 0 end) as reply_per_month,
-sum(case when metric_name_id=8 then metric_value else 0 end) as account_tenure,
 sum(case when metric_name_id=21 then metric_value else 0 end) as adview_per_post,
 sum(case when metric_name_id=23 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=24 then metric_value else 0 end) as newfriend_pcnt_chng,
