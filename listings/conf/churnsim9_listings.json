@@ -223,6 +223,9 @@
 		"listing_5_1_10_cohort_plot" : {
 			"metric_to_plot" : "days_since_newfriend"
 		},
+		"listing_5_1_11_cohort_plot" : {
+			"metric_to_plot" : "account_tenure"
+		},
 		"listing_5_2_dataset_stats" : {
 		},
 		"listing_5_2_2_dataset_stats" : {
@@ -245,10 +248,13 @@
 		},
 		"listing_6_2_dataset_correlation_matrix" : {
 		},
+		"listing_6_2_2_dataset_correlation_matrix" : {
+			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv"
+		},
 		"listing_6_3_apply_metric_groups" : {
 		},
 		"listing_6_4_find_metric_groups" : {
-			"group_corr_thresh" : 0.5
+			"group_corr_thresh" : 0.55
 		},
 		"listing_6_5_ordered_correlation_matrix" : {
 		},
