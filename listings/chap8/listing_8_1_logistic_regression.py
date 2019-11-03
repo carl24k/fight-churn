@@ -30,4 +30,11 @@ def logistic_regression(data_set_path='',save=True):
             pickle.dump(retain_reg, fid)
         print('Saved model pickle to ' + pickle_path)
 
+        predictions = retain_reg.predict_proba(X)
+        grouped_data['churn_prob'] = predictions[:, 0]
+        grouped_data['retain_prob'] = predictions[:, 1]
+        predict_path = data_set_path.replace('.csv', '_groupscore_predictions.csv')
+        grouped_data.to_csv(predict_path,header=True)
+        print('Saved predictions to ' + predict_path)
+
     return retain_reg
