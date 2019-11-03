@@ -15,26 +15,32 @@ def reload_churn_data(data_set_path,suffix,listing,is_customer_data):
 def rescore_metrics(data_set_path='', save=True):
 
     load_mat_df = reload_churn_data(data_set_path,'load_mat','6.4',is_customer_data=False)
-    transform_df = reload_churn_data(data_set_path,'score_params','7.5',is_customer_data=False)
+    score_df = reload_churn_data(data_set_path,'score_params','7.5',is_customer_data=False)
     current_data = reload_churn_data(data_set_path,'current','8.2',is_customer_data=True)
+    groupstd_df = reload_churn_data(data_set_path,'groupstd','6.3',is_customer_data=False)
 
-    for col in transform_df[transform_df['skew_score']].index.values:
+    for col in score_df[score_df['skew_score']].index.values:
         current_data[col]=np.log(1.0+current_data[col])
 
-    for col in transform_df[transform_df['fattail_score']].index.values:
+    for col in score_df[score_df['fattail_score']].index.values:
         current_data[col]=np.log(current_data[col] + np.sqrt(np.power(current_data[col],2) + 1.0) )
 
-    assert set(transform_df.index.values)==set(current_data.columns.values),"Data to re-score does not match transform params"
-    current_data=current_data[transform_df.index.values]
-    current_data=(current_data-transform_df['mean'])/transform_df['std']
+    assert set(score_df.index.values)==set(current_data.columns.values),"Data to re-score does not match transform params"
+    current_data=current_data[score_df.index.values]
+    scaled_data=(current_data-score_df['mean'])/score_df['std']
 
     assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match load matrix"
-    ndarray_2group = current_data[load_mat_df.index.values].to_numpy()
+    scaled_data = scaled_data[load_mat_df.index.values]
+    ndarray_2group = scaled_data.to_numpy()
     grouped_ndarray = np.matmul(ndarray_2group, load_mat_df.to_numpy())
 
+    grouped_column_names = ['metric_group_%d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
+    current_data_grouped = pd.DataFrame(grouped_ndarray,columns=grouped_column_names, index=current_data.index)
+    current_data_grouped = current_data_grouped / groupstd_df['std']
+
     if save:
-        score_save_path=data_set_path.replace('.csv','_groupscore.csv')
-        np.savetxt(score_save_path,grouped_ndarray)
+        score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
+        current_data_grouped.to_csv(score_save_path,header=True)
         print('Saving results to %s' % score_save_path)
 
-    return grouped_ndarray
+    return current_data_grouped
