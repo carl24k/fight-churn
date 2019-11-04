@@ -172,7 +172,7 @@ class ChurnSimulation:
 
 if __name__ == "__main__":
 
-    model_name = 'churnsim9'
+    model_name = 'soc_net_sim_1'
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
     init = 10000

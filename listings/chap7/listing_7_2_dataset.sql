@@ -6,7 +6,7 @@ with observation_params as
 )
 select m.account_id, o.observation_date, is_churn,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
-sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
+sum(case when metric_name_id=28 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
 sum(case when metric_name_id=3 then metric_value else 0 end) as adview_per_month,
 sum(case when metric_name_id=4 then metric_value else 0 end) as dislike_per_month,
