@@ -290,7 +290,7 @@
 	},
 	"chap7" : {
 		"params" : {
-			"%from_yyyy-mm-dd": "2020-04-01",
+			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode" : "top",
 			"type" : "sql"
@@ -312,8 +312,6 @@
 			"%new_metric_name" : "dislike_percent"
 		},
 		"listing_7_2_dataset": {
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%metric_interval": "7 day",
 			"mode" : "save",
 			"type" : "sql"
@@ -333,8 +331,6 @@
 		},
 		"insert_7_4_percent_change_metric" : {
 			"%metric2measure" : "newfriend_per_month",
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%period_weeks" : 4,
 			"%new_metric_id" : 24,
 			"%new_metric_name" : "new_friends_pcnt_change"
@@ -350,8 +346,6 @@
 		},
 		"insert_7_6_days_since_event" : {
 			"%event2measure" : "newfriend",
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%new_metric_id" : 25,
 			"%new_metric_name" : "days_since_newfriend"
 		},
@@ -362,8 +356,6 @@
 		},
 		"insert_7_7_scaled_events_per_month" : {
 			"%event2measure" : "unfriend",
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%obs_period" : 84,
 			"%desc_period" : 28,
 			"%new_metric_id" : 26
