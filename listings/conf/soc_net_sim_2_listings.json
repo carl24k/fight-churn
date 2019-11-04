@@ -190,18 +190,18 @@
 	},
 	"chap5" : {
 		"params": {
-			"data_set_path" : "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset.csv",
 			"type" : "py"
 		},
 		"listing_5_1_cohort_plot" : {
 			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_2_cohort_plot" : {
-			"data_set_path" : "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset_scores.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_scores.csv",
 			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_3_cohort_plot" : {
-			"data_set_path" : "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset_scores_group.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_scores_group.csv",
 			"metric_to_plot" : "metric_group_1"
 		},
 		"listing_5_1_4_cohort_plot" : {
@@ -228,14 +228,14 @@
 		"listing_5_2_dataset_stats" : {
 		},
 		"listing_5_2_2_dataset_stats" : {
-			"data_set_path" : "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset_scores.csv"
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_scores.csv"
 		},
 		"listing_5_3_metric_scores" : {
 		}
 	},
 	"chap6" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset.csv",
 			"type": "py"
 		},
 		"listing_6_1_metric_pair_plot" : {
@@ -245,7 +245,7 @@
 		"listing_6_2_dataset_correlation_matrix" : {
 		},
 		"listing_6_2_2_dataset_correlation_matrix" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/soc_net_sim_1_dataset_scores.csv"
+			"data_set_path" : "../../../fight-churn-output/churnsim9/soc_net_sim_2_dataset_scores.csv"
 		},
 		"listing_6_3_apply_metric_groups" : {
 		},
@@ -329,7 +329,7 @@
 			"%new_metric_name" : "new_friends_pcnt_change"
 		},
 		"listing_7_5_fat_tail_scores" : {
-			"data_set_path": "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset.csv",
 			"type": "py"
 		},
 		"listing_7_6_days_since_event" : {
@@ -386,7 +386,7 @@
 	},
 	"chap8" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/soc_net_sim_1/soc_net_sim_1_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset.csv",
 			"type": "py"
 		},
 		"listing_8_1_prepare_data" : {
