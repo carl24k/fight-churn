@@ -1,12 +1,16 @@
-with observation_params as
+with metric_date as
 (
-    select  interval '%metric_interval' as metric_period,
-    '%from_yyyy-mm-dd'::timestamp as obs_start,
-    '%to_yyyy-mm-dd'::timestamp as obs_end
+    select  max(metric_time) as last_metric_time from metric
+),
+account_tenures as (
+    select account_id, metric_value as account_tenure
+    from metric m inner join metric_date on metric_time =last_metric_time
+    where metric_name_id = 8
+    and metric_value >= 14
 )
-select m.account_id, o.observation_date, is_churn,
+select s.account_id, last_metric_time as observation_date,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
-sum(case when metric_name_id=28 then metric_value else 0 end) as newfriend_per_month,
+sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
 sum(case when metric_name_id=3 then metric_value else 0 end) as adview_per_month,
 sum(case when metric_name_id=4 then metric_value else 0 end) as dislike_per_month,
@@ -17,10 +21,10 @@ sum(case when metric_name_id=21 then metric_value else 0 end) as adview_per_post
 sum(case when metric_name_id=23 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=24 then metric_value else 0 end) as newfriend_pcnt_chng,
 sum(case when metric_name_id=25 then metric_value else 0 end) as days_since_newfriend
-from metric m inner join observation_params
-on metric_time between obs_start and obs_end
-inner join observation o on m.account_id = o.account_id
-    and m.metric_time > (o.observation_date - metric_period)::timestamp
-    and m.metric_time <= o.observation_date::timestamp
-group by m.account_id, metric_time, observation_date, is_churn
-order by m.account_id,observation_date
+from metric m inner join metric_date on metric_time =last_metric_time
+inner join account_tenures a on a.account_id = m.account_id
+inner join subscription s on m.account_id=s.account_id
+where s.start_date <= last_metric_time
+and (s.end_date >=last_metric_time or s.end_date is null)
+group by s.account_id, last_metric_time
+order by s.account_id

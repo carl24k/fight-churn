@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
+import os
 from collections import Counter
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
-from listing_5_3_metric_scores import metric_scores
 
 
 def find_correlation_clusters(corr,corr_thresh):
@@ -38,7 +38,11 @@ def make_load_matrix(labeled_column_df,metric_columns,relabled_count):
 
 def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
 
-    score_data = metric_scores(data_set_path).drop('is_churn',axis=1)
+    score_save_path=data_set_path.replace('.csv','_scores.csv')
+    assert os.path.isfile(score_save_path),'You must run listing 5.3 or 7.5 to save metric scores first'
+    score_data = pd.read_csv(score_save_path)
+    score_data.set_index(['account_id','observation_date'],inplace=True)
+    score_data.drop('is_churn',axis=1,inplace=True)
     metric_columns = list(score_data.columns.values)
 
     labels = find_correlation_clusters(score_data.corr(),group_corr_thresh)
@@ -49,5 +53,10 @@ def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
         save_path = data_set_path.replace('.csv', '_load_mat.csv')
         print('saving loadings to ' + save_path)
         loadmat_df.to_csv(save_path)
+        save_path = data_set_path.replace('.csv', '_groupmets.csv')
+        print('saving metric groups to ' + save_path)
+        group_lists=['|'.join(labeled_column_df[labeled_column_df['group']==g]['column'])
+                        for g in set(labeled_column_df['group'])]
+        pd.DataFrame(group_lists,columns=['metrics']).to_csv(save_path)
 
     return loadmat_df

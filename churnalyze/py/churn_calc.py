@@ -10,11 +10,21 @@ from collections import Counter
 from scipy.cluster.hierarchy import linkage, fcluster
 from scipy.spatial.distance import squareform
 from sklearn.decomposition import PCA
-from sklearn.metrics import auc, roc_curve
+from sklearn.metrics import auc, roc_curve,roc_auc_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
+from sklearn.metrics import make_scorer
 import xgboost as xgb
+
+def top_decile_lift(y_true, y_pred):
+    sort_by_pred=[(p,t) for p,t in sorted(zip(y_pred, y_true))]
+    overall = sum(y_true)/len(y_true)
+    i90=int(round(len(y_true)*0.9))
+    top_decile_count=sum([p[1] for p in sort_by_pred[i90:]])
+    top_decile = top_decile_count/(len(y_true)-i90)
+    return top_decile/overall
+
 
 class ChurnCalculator:
     '''
@@ -499,10 +509,17 @@ class ChurnCalculator:
         params = self.cv_params(model_code)
         model = self.model_instance(model_code)
         tscv = TimeSeriesSplit(n_splits=3)
-        gsearch = GridSearchCV(estimator=model, param_grid=params, scoring='roc_auc', cv=tscv, n_jobs=8,verbose=5,
-                               return_train_score=True)
+        lift_scorer = make_scorer(top_decile_lift,needs_proba=True)
+        score_models = {'lift_scorer' : lift_scorer, 'AUC' : 'roc_auc'}
+        gsearch = GridSearchCV(estimator=model, param_grid=params, scoring=score_models, cv=tscv, n_jobs=8,verbose=5,
+                               return_train_score=True,refit='AUC')
+
+
         gsearch.fit(X, y)
         result_df = pd.DataFrame(gsearch.cv_results_)
+        if len(params)>1:
+            result_df.sort_values('mean_test_AUC',ascending=False,inplace=True)
+
 
         save_file_name = model_code + '_CV'
         save_path = self.save_path(save_file_name, subdir=self.grouping_correlation_subdir(groups))
@@ -513,6 +530,10 @@ class ChurnCalculator:
 
     def cv_params(self,model_code,**kwargs):
         n_features_def=int(sqrt(kwargs.get('n_feature',20)))
+        cr = self.churn_rate()
+        cw = [ {0:w,1:1.0-w} for w in [cr*.66, cr, cr*1.5]]
+        cw.append({0:0.5,1:0.5}),
+                # 'class_weight' : cw
         CV_PARAMS = {
             self.LOGISTIC_REGRESSION : {
                 'C': [1.0 / 2.0 ** x for x in range(0, 10)]
@@ -526,7 +547,7 @@ class ChurnCalculator:
                 'max_depth': [1,2,4,6],
                 'learning_rate': [0.1,0.2,0.3,0.4],
                 'n_estimators': [20,40,80,120],
-                'min_child_weight' : [3,6,9]
+                'min_child_weight' : [3,6,9,12]
             }
         }
         assert model_code in CV_PARAMS,"No params for model code %s" % model_code
@@ -536,7 +557,7 @@ class ChurnCalculator:
         if model_code==self.LOGISTIC_REGRESSION:
             return LogisticRegression(penalty='l1', solver='liblinear',fit_intercept=True)
         elif model_code==self.RANDOM_FOREST:
-            return RandomForestClassifier()
+            return RandomForestClassifier(class_weight='balanced')
         elif model_code==self.XGBOOST:
             return xgb.XGBClassifier(objective='binary:logistic')
         else:
