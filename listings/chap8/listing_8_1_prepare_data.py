@@ -4,8 +4,6 @@ from listing_6_4_find_metric_groups import find_metric_groups
 from listing_6_3_apply_metric_groups import apply_metric_groups
 from listing_6_5_ordered_correlation_matrix import ordered_correlation_matrix
 
-
-
 def prepare_data(data_set_path=''):
     dataset_stats(data_set_path)
     fat_tail_scores(data_set_path)
