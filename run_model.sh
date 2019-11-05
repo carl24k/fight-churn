@@ -68,3 +68,6 @@ cd ~/Documents/churn/fight-churn/listings/py/
 # Regression
 ../../venv/bin/python run_churn_listing.py --chap 8 --listing 2 3 4 5
 
+# Cohorts
+../../venv/bin/python run_churn_listing.py --chapter 5 --listing 1 --version 1 2 3 4 5 6 7 8 10
+
