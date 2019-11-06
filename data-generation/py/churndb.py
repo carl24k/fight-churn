@@ -15,8 +15,11 @@ The SQL statements to create the tables are the adjacent directory ../schema
 
 from postgres import Postgres
 import os
+import sys
 
-schema_name='soc_net_sim_3'
+schema_name='soc_net_sim_2'
+if len(sys.argv) >= 2:
+    schema = sys.argv[1]
 
 db = Postgres("postgres://%s:%s@localhost/%s" % (
 os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
