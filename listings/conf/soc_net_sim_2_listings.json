@@ -196,12 +196,15 @@
 		"listing_5_1_cohort_plot" : {
 			"metric_to_plot" : "post_per_month"
 		},
+		"listing_5_1_1_cohort_plot" : {
+			"metric_to_plot" : "post_per_month"
+		},
 		"listing_5_1_2_cohort_plot" : {
 			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_scores.csv",
 			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_3_cohort_plot" : {
-			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_scores_group.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_groupscore.csv",
 			"metric_to_plot" : "metric_group_1"
 		},
 		"listing_5_1_4_cohort_plot" : {
@@ -230,6 +233,9 @@
 		"listing_5_2_2_dataset_stats" : {
 			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_scores.csv"
 		},
+		"listing_5_2_3_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_current.csv"
+		},
 		"listing_5_3_metric_scores" : {
 		}
 	},
@@ -250,7 +256,7 @@
 		"listing_6_3_apply_metric_groups" : {
 		},
 		"listing_6_4_find_metric_groups" : {
-			"group_corr_thresh" : 1.0
+			"group_corr_thresh" : 0.55
 		},
 		"listing_6_5_ordered_correlation_matrix" : {
 		},

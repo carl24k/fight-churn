@@ -1,7 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 def cohort_plot(data_set_path='', metric_to_plot='',save=True,ncohort=10):
+    assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
     groups = pd.qcut(churn_data[metric_to_plot], ncohort, duplicates='drop')
