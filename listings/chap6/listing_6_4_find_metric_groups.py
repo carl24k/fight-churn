@@ -22,11 +22,14 @@ def relabel_clusters(labels,metric_columns):
         ['group', 'column'], ascending=[True, True])
     return labeled_column_df, relabled_count
 
-def make_load_matrix(labeled_column_df,metric_columns,relabled_count):
+def make_load_matrix(labeled_column_df,metric_columns,relabled_count,corr):
     load_mat = np.zeros((len(metric_columns), len(relabled_count)))
     for row in labeled_column_df.iterrows():
         orig_col = metric_columns.index(row[1][1])
-        load_mat[orig_col, row[1][0]] = 1.0 / float(relabled_count[row[1][0]])
+        if relabled_count[row[1][0]]>1:
+            load_mat[orig_col, row[1][0]] = 1.0/  (np.sqrt(corr) * float(relabled_count[row[1][0]])  )
+        else:
+            load_mat[orig_col, row[1][0]] = 1.0
     loadmat_df = pd.DataFrame(load_mat, index=metric_columns, columns=[d for d in range(0, load_mat.shape[1])])
     loadmat_df['name'] = loadmat_df.index
     sort_cols = list(loadmat_df.columns.values)
@@ -47,7 +50,7 @@ def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
 
     labels = find_correlation_clusters(score_data.corr(),group_corr_thresh)
     labeled_column_df, relabled_count = relabel_clusters(labels,metric_columns)
-    loadmat_df = make_load_matrix(labeled_column_df, metric_columns, relabled_count)
+    loadmat_df = make_load_matrix(labeled_column_df, metric_columns, relabled_count,group_corr_thresh)
 
     if save:
         save_path = data_set_path.replace('.csv', '_load_mat.csv')

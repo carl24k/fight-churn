@@ -21,9 +21,6 @@ def apply_metric_groups(data_set_path='',save=True):
 
     grouped_column_names = ['metric_group_%d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
     churn_data_grouped = pd.DataFrame(grouped_ndarray,columns=grouped_column_names, index=score_data.index)
-    group_std = churn_data_grouped.std()
-    churn_data_grouped = churn_data_grouped / group_std
-    group_std_df = pd.DataFrame({'group':grouped_column_names,'std':group_std})
 
     churn_data_grouped['is_churn'] = score_data['is_churn']
 
@@ -31,8 +28,5 @@ def apply_metric_groups(data_set_path='',save=True):
         save_path = data_set_path.replace('.csv', '_groupscore.csv')
         churn_data_grouped.to_csv(save_path,header=True)
         print('Saved grouped data  to ' + save_path)
-        save_path = data_set_path.replace('.csv', '_groupstd.csv')
-        group_std_df.to_csv(save_path,header=True)
-        print('Saved group standard deviations to ' + save_path)
 
     return churn_data_grouped
