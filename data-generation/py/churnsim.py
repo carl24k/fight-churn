@@ -121,10 +121,12 @@ class ChurnSimulation:
         cur = self.con.cursor()
         with open(self.tmp_sub_file_name, 'r') as f:
             cur.copy_expert(sql, f)
+        self.con.commit()
 
         sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
         with open(self.tmp_event_file_name, 'r') as f:
             cur.copy_expert(sql, f)
+        self.con.commit()
 
 
     def truncate_old_sim(self):
