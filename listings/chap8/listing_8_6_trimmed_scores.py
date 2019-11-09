@@ -2,30 +2,28 @@ import pandas as pd
 import os
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 
-def trim_hi_cols(data,hi_cols,hi_vals):
-    for col in hi_cols:
-        assert col in data.columns.values,"No metric {} in data".format(col)
-        data[col][data[col] > hi_vals[col]] = hi_vals[col]
+def trim_hi_cols(data,hi_vals):
+    for col in data.columns.values:
+        data.loc[data[col] > hi_vals[col],col] = hi_vals[col]
 
-def trim_lo_cols(data,lo_cols,lo_vals):
-    for col in lo_cols:
-        assert col in data.columns.values,"No metric {} in data".format(col)
-        data[col][data[col] < lo_vals[col]] = lo_vals[col]
+def trim_lo_cols(data,lo_vals):
+    for col in data.columns.values:
+        data.loc[data[col] < lo_vals[col],col] = lo_vals[col]
 
-def trimmed_scores(data_set_path='',skew_thresh=4.0,lo_trim=[],hi_trim=[],save=True,**kwargs):
+def trimmed_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
 
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
     data_scores = churn_data.copy()
-    data_scores.drop('is_churn',axis=1)
+    data_scores.drop('is_churn',axis=1,inplace=True)
 
     stat_path = data_set_path.replace('.csv', '_summarystats.csv')
     assert os.path.isfile(stat_path),'You must running listing 5.2 first to generate stats'
     stats = pd.read_csv(stat_path,index_col=0)
     stats.drop('is_churn',inplace=True)
 
-    trim_hi_cols(data_scores,hi_trim,stats['99pct'])
-    trim_lo_cols(data_scores,lo_trim,stats['1pct'])
+    trim_hi_cols(data_scores,stats['99pct'])
+    trim_lo_cols(data_scores,stats['1pct'])
 
     skewed_columns=(stats['skew']>skew_thresh) & (stats['min'] >= 0)
     transform_skew_columns(data_scores,skewed_columns[skewed_columns].keys())
@@ -46,8 +44,6 @@ def trimmed_scores(data_set_path='',skew_thresh=4.0,lo_trim=[],hi_trim=[],save=T
 
         param_df = pd.DataFrame({'skew_score': skewed_columns,
                                      'fattail_score': fattail_columns,
-                                     'hi_trim': [x in hi_trim for x in stats.index],
-                                     'lo_trim': [x in lo_trim for x in stats.index],
                                      'mean': mean_vals,
                                      'std': std_vals})
         param_save_path=data_set_path.replace('.csv','_score_params.csv')
