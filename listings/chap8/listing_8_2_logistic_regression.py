@@ -13,7 +13,7 @@ def logistic_regression(data_set_path='',save=True):
     grouped_data.set_index(['account_id', 'observation_date'], inplace=True)
     group_lists = pd.read_csv(data_set_path.replace('.csv', '_groupmets.csv'))
 
-    y = ~grouped_data['is_churn']
+    y = ~grouped_data['is_churn'].astype(np.bool)
     X = grouped_data.drop(['is_churn'],axis=1)
 
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)

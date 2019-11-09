@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import json
+import pickle
 import datetime as dt
 from math import sqrt
 
@@ -499,6 +500,12 @@ class ChurnCalculator:
         result_df = pd.DataFrame.from_dict(results_dict)
         save_file_name = 'logreg_coef_C%.3f' % cost_param
         save_path = self.save_path(save_file_name, subdir=self.grouping_correlation_subdir(groups))
+
+
+        pickle_path = self.save_path('logreg_model',ext='pkl')
+        with open(pickle_path, 'wb') as fid:
+            pickle.dump(clf, fid)
+        print('Saved model pickle to ' + pickle_path)
 
         result_df.to_csv(save_path,index=False)
         print('Saved result to ' + save_path)
