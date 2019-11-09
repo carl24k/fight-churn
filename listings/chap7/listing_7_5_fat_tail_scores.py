@@ -15,7 +15,7 @@ def fat_tail_scores(data_set_path='',skew_thresh=4.0,**kwargs):
 
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
     data_scores = churn_data.copy()
-    data_scores.drop('is_churn',axis=1)
+    data_scores.drop('is_churn',inplace=True,axis=1)
 
     stat_path = data_set_path.replace('.csv', '_summarystats.csv')
     assert os.path.isfile(stat_path),'You must running listing 5.2 first to generate stats'
