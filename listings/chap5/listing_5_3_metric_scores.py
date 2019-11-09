@@ -5,8 +5,7 @@ import os
 def metric_scores(data_set_path='',skew_thresh=4.0,save=True):
 
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
-    churn_data = pd.read_csv(data_set_path)
-    churn_data.set_index(['account_id','observation_date'],inplace=True)
+    churn_data = pd.read_csv(data_set_path,index_col=[0,1])
     data_scores = churn_data.copy()
     data_scores.drop('is_churn',axis=1)
 

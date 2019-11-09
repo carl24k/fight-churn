@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 
 def metric_pair_plot(data_set_path='', metric1='',metric2=''):
 
-    churn_data = pd.read_csv(data_set_path)
-    churn_data.set_index(['account_id','observation_date'],inplace=True)
+    churn_data = pd.read_csv(data_set_path,index_col=[0,1])
 
     met1_series = churn_data[metric1]
     met2_series = churn_data[metric2]

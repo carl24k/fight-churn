@@ -14,8 +14,7 @@ def churn_forecast(data_set_path='',save=True):
 
     score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
     assert os.path.isfile(score_save_path), 'You must run listing 8.3 to save current scores first'
-    current_score_df=pd.read_csv(score_save_path)
-    current_score_df.set_index(['account_id', 'observation_date'], inplace=True)
+    current_score_df=pd.read_csv(score_save_path,index_col=[0,1])
 
     predictions = logreg_model.predict_proba(current_score_df.to_numpy())
 

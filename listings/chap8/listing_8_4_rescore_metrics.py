@@ -5,11 +5,8 @@ import os
 def reload_churn_data(data_set_path,suffix,listing,is_customer_data):
     data_path = data_set_path.replace('.csv', '_{}.csv'.format(suffix))
     assert os.path.isfile(data_path),'You must run listing {} to save {} first'.format(listing,suffix)
-    if is_customer_data:
-        churn_data = pd.read_csv(data_path)
-        churn_data.set_index(['account_id', 'observation_date'], inplace=True)
-    else:
-        churn_data = pd.read_csv(data_path, index_col=0)
+    ic = [0,1] if is_customer_data else 0
+    churn_data = pd.read_csv(data_path, index_col=ic)
     return churn_data
 
 def rescore_metrics(data_set_path='', save=True):
