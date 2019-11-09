@@ -25,7 +25,8 @@ def churn_forecast(data_set_path='',save=True):
         predict_df.to_csv(forecast_save_path, header=True)
 
         plt.figure(figsize=[6,4])
-        plt.hist(predictions[:,0],bins=20)
+        n, bins,_ = plt.hist(predictions[:,0],bins=20)
+        hist_df=pd.DataFrame({'n':n,'bins':bins[1:]})
         plt.xlim(left=0)
         plt.xlabel('Churn Probability')
         plt.ylabel('# of Accounts')
@@ -33,5 +34,6 @@ def churn_forecast(data_set_path='',save=True):
         plt.grid()
         plt.savefig(data_set_path.replace('.csv', '_current_churnhist'), ext='png')
         plt.close()
+        hist_df.to_csv(data_set_path.replace('.csv', '_current_churnhist.csv'))
 
     return predictions
