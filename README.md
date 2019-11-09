@@ -76,14 +76,24 @@ To install PostgreSQL for Mac following these instructions:
 
 * https://postgresapp.com/downloads.html
 
-I also recommend installing installing pgAdmin to make it easier to import and export 
+To install PostgreSQL for Windows, use :
+
+* https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+
+(That page has a different Mac installer if you don't like Postgresapp.)
+
+For both Mac and Win, I also recommend installing installing pgAdmin to make it easier to import and export
 data, and run adhoc queries.  Follow the instructions  here:
 
 * https://www.pgadmin.org/download/
 
-Make sure Posgres is running - here's what it looks like if you installed with PostgresApp on a Mac:
+For Mac you should make sure Posgres is running - here's what it looks like if you installed with
+PostgresApp on a Mac:
 
 ![Postgres Running on Mac](/readme_files/postico.png)
+
+For Windows, I have not yet figured out how to make sure Postgres is running, but I also have not yet had a
+problem with it not running (please notify me if you have something to contribute on either subject.)
 
 ---
 ---
@@ -101,8 +111,10 @@ running.
 ---
 #### 1.2.1 Creating a Database
 
-The first thing you need to do is connect to your server.  You can do that in PgAdmin by control (right) clicking
-on the root of the Servers tree and selecting *Connect*
+The first thing you might need to do is connect to your local server (when I do this on Mac this is necessary;
+on Windows, the connection to the localhost server was already present by default.)
+If you don't already see `localhost` under the Servers tree in Pgadmin,  control (right)
+clicking on the root of the Servers tree and selecting *Connect*
 
 ![Connect to Server in PgAdmin](/readme_files/pgadmin_connect.png)
 
@@ -114,7 +126,7 @@ user name and password.  So your dialog should look like the one below - then hi
 ![Connect to Server in PgAdmin](/readme_files/pgadmin_connect_details.png)
 
 
-Next you should create a new database to hold all of the churn data schemas you create. 
+Next you need to create a new database to hold all of the churn data schemas you create.
 You will probably create multiple schemas as you work on the exmaples in the book and/or your own
 data so this will help keep these organized.  An easy way to create a database is in PgAdmin - right click
 on the *Databases* node under *localhost* in the tree:
@@ -179,15 +191,14 @@ You should select the following folders:
 * churnalyze/py
 * data-generation/py
 * metric-framework/py
-* examples/py
-    * examples/chap5
-    * examples/chap6
-    * examples/chap7
-    * examples/chap8
-    * examples/chap9
-    * examples/chap10
-    * examples/chap11
-    
+* listings/py
+    * listings/chap5
+    * listings/chap6
+    * listings/chap7
+    * listings/chap8
+    * listings/chap9
+    * listings/chap10
+
 When you are done your project preferences should look like this:
 
 ![PyCharm Source Folders Selected](/readme_files/pycharm7_sources_selected.png)
@@ -327,7 +338,7 @@ resources:
 1. You already have data of your own - this is the option for anyone who already works on an online product or service
 1. You can generate a simulated data set from a random model - this is the option for most students or people doing this for training purposes 
 
-Note that unforatunately there is no publicly avaiable *real* data at this time. Subscription and
+Note that unfortunately there is no publicly available *real* data at this time. Subscription and
 customer data like this tends to be very sensitive information for the companies that hold it
 and so far there are no offers of data that can be made publicly available. (**If you have
 such data that you would be willing to make publicly available please contact the author.**)
@@ -388,7 +399,7 @@ If this is your first time following these instructions, just run it.  You shoul
 /Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/data-generation/py/churnsim.py
 Matrix is not positive semi-definite: Multiplying by transpose
 
-Creating 500 initial customers for 2019-01-01 start date
+Creating 10000 initial customers for 2019-01-01 start date
 Simulated customer 0: 5 subscription, 10243 events @ 2019-05-21 06:00:01.611085
 Simulated customer 1: 5 subscription, 10076 events @ 2019-05-21 06:00:01.805228
 Simulated customer 2: 5 subscription, 11501 events @ 2019-05-21 06:00:02.034017
@@ -398,31 +409,36 @@ Simulated customer 4: 5 subscription, 9869 events @ 2019-05-21 06:00:02.433102
 
 ```
 
-There will be more like this and the whole process will take a couple of minutes.  The program has simulated the
-subscriptions, behavior and churn of a few hundred customers and inserted them into the database tables `subscription`
-and `event`. (There is no data for churns yet : you will derive that as part of the analysis process described
-in the book chapters 2 and 4.)  You can (and should) confirm the results of the data simulation by
- querying the database directly:
+There will be more like this and the whole process will take from around 10-30 minutes depending on the speed of your
+system (**so this may be a good time to go for a coffee break, lunch, nap, etc.**.) Please pardon the delay,
+ but the program is simulating the
+subscriptions, behavior and churn of more than 10,000 customers over 6 months time. The results of the simulation are
+ all inserted into the
+ database tables `subscription` and `event`. (There is no data for churns yet : you will derive that as part of the
+ analysis process described in the book chapters 2 and 4.)  You can (and should) confirm the results of the data
+ simulation by querying the database directly, and you don't have to wait for the simulation to complete (so this is
+ actually a good next step to take while you are waiting...)
 
 ```
-churn=# select count(*) from churnsim2.subscription;
+churn=# select count(*) from churnsim9.subscription;
  count 
 -------
-  2594
+  52048
 (1 row)
 
-churn=# select count(*) from churnsim2.event;
+churn=# select count(*) from churnsim9.event;
   count  
 ---------
- 5454701
+ 34198616
 (1 row)
 
 churn=# 
 
 ```
 
-Yours won't look exactly like that, because its a random simulation and the results are different every time.
-But it should be a similar overall number.
+Those are examples of what the numbers will look like when the simulation is over; yours won't look exactly like that,
+ because its a random simulation and the results are different every time.  But it should be a similar overall number.
+ If you check the count midway through it will be less of course.
 (If you don't know how to launch a SQL prompt on your launch the PostgreSQL app and double click on
 the database.  Mine doesn't actually launch the terminal directly, but it points in the right direction....)
 

@@ -11,6 +11,7 @@ import tempfile
 from customer import Customer
 from behavior import GaussianBehaviorModel
 from utility import UtilityModel
+import psycopg2 as post
 
 
 class ChurnSimulation:
@@ -41,11 +42,15 @@ class ChurnSimulation:
         self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate,self.behave_mod)
 
         self.subscription_count = 0
-        self.tmp_sub_file_name='%s/%s_tmp_sub.csv' % ( tempfile.gettempdir(),self.model_name)
-        self.tmp_event_file_name='%s/%s_tmp_event.csv' % ( tempfile.gettempdir(), self.model_name)
+        self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),'{}_tmp_sub.csv'.format(self.model_name))
+        self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),'{}_tmp_event.csv'.format(self.model_name))
 
         self.db = Postgres("postgres://%s:%s@localhost/%s" % (
         os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
+
+        self.con = post.connect( database= os.environ['CHURN_DB'],
+                                 user= os.environ['CHURN_DB_USER'],
+                                 password=os.environ['CHURN_DB_PASS'])
 
     def remove_tmp_files(self):
         '''
@@ -112,12 +117,18 @@ class ChurnSimulation:
         with open(self.tmp_event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write("%d,'%s',%d\n" % (customer.id, e[0], e[1]))
-        sql = "COPY %s.subscription FROM '%s' USING DELIMITERS ',' WITH NULL AS '\\null'" % (
-        self.model_name, self.tmp_sub_file_name)
-        self.db.run(sql)
-        sql = "COPY %s.event FROM '%s' USING DELIMITERS ',' WITH NULL AS '\\null'" % (
-        self.model_name, self.tmp_event_file_name)
-        self.db.run(sql)
+
+        sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
+        cur = self.con.cursor()
+        with open(self.tmp_sub_file_name, 'r') as f:
+            cur.copy_expert(sql, f)
+        self.con.commit()
+
+        sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
+        with open(self.tmp_event_file_name, 'r') as f:
+            cur.copy_expert(sql, f)
+        self.con.commit()
+
 
     def truncate_old_sim(self):
         '''
