@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 from listing_8_4_rescore_metrics import reload_churn_data
-from listing_8_6_trimmed_scores import trim_hi_cols, trim_lo_cols
+from listing_8_6_clipped_scores import clip_hi_cols, clip_lo_cols
 
 def rescore_metrics(data_set_path='', save=True):
 
@@ -15,8 +15,8 @@ def rescore_metrics(data_set_path='', save=True):
     assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match load matrix"
     assert set(stats.index.values)==set(current_data.columns.values),"Data to re-score does not match summary stats"
 
-    trim_hi_cols(current_data, stats['99pct'])
-    trim_lo_cols(current_data, stats['1pct'])
+    clip_hi_cols(current_data, stats['99pct'])
+    clip_lo_cols(current_data, stats['1pct'])
 
     transform_skew_columns(current_data, score_df[score_df['skew_score']].index.values)
     transform_fattail_columns(current_data, score_df[score_df['skew_score']].index.values)

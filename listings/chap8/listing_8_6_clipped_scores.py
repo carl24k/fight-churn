@@ -2,15 +2,15 @@ import pandas as pd
 import os
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 
-def trim_hi_cols(data,hi_vals):
+def clip_hi_cols(data, hi_vals):
     for col in data.columns.values:
         data.loc[data[col] > hi_vals[col],col] = hi_vals[col]
 
-def trim_lo_cols(data,lo_vals):
+def clip_lo_cols(data, lo_vals):
     for col in data.columns.values:
         data.loc[data[col] < lo_vals[col],col] = lo_vals[col]
 
-def trimmed_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
+def clipped_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
 
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
@@ -22,8 +22,8 @@ def trimmed_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
     stats = pd.read_csv(stat_path,index_col=0)
     stats.drop('is_churn',inplace=True)
 
-    trim_hi_cols(data_scores,stats['99pct'])
-    trim_lo_cols(data_scores,stats['1pct'])
+    clip_hi_cols(data_scores, stats['99pct'])
+    clip_lo_cols(data_scores, stats['1pct'])
 
     skewed_columns=(stats['skew']>skew_thresh) & (stats['min'] >= 0)
     transform_skew_columns(data_scores,skewed_columns[skewed_columns].keys())
