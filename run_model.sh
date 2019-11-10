@@ -64,7 +64,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # Scores
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 5
 
- Grouping
+# Grouping
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 4 3 5
 
 # Regression
