@@ -1,30 +1,27 @@
 import pandas as pd
 import numpy as np
-import os
-
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
-
-def reload_churn_data(data_set_path,suffix,listing,is_customer_data):
-    data_path = data_set_path.replace('.csv', '_{}.csv'.format(suffix))
-    assert os.path.isfile(data_path),'You must run listing {} to save {} first'.format(listing,suffix)
-    ic = [0,1] if is_customer_data else 0
-    churn_data = pd.read_csv(data_path, index_col=ic)
-    return churn_data
+from listing_8_4_rescore_metrics import reload_churn_data
+from listing_8_6_trimmed_scores import trim_hi_cols, trim_lo_cols
 
 def rescore_metrics(data_set_path='', save=True):
 
+    current_data = reload_churn_data(data_set_path,'current','8.2',is_customer_data=True)
     load_mat_df = reload_churn_data(data_set_path,'load_mat','6.4',is_customer_data=False)
     score_df = reload_churn_data(data_set_path,'score_params','7.5',is_customer_data=False)
-    current_data = reload_churn_data(data_set_path,'current','8.2',is_customer_data=True)
+    stats = reload_churn_data(data_set_path,'summarystats','5.2',is_customer_data=False)
+    stats.drop('is_churn',inplace=True)
     assert set(score_df.index.values)==set(current_data.columns.values),"Data to re-score does not match transform params"
     assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match load matrix"
+    assert set(stats.index.values)==set(current_data.columns.values),"Data to re-score does not match summary stats"
 
-    transform_skew_columns(current_data,score_df[score_df['skew_score']].index.values)
+    trim_hi_cols(current_data, stats['99pct'])
+    trim_lo_cols(current_data, stats['1pct'])
 
-    transform_fattail_columns(current_data,score_df[score_df['skew_score']].index.values)
+    transform_skew_columns(current_data, score_df[score_df['skew_score']].index.values)
+    transform_fattail_columns(current_data, score_df[score_df['skew_score']].index.values)
 
     current_data=current_data[score_df.index.values]
-
     scaled_data=(current_data-score_df['mean'])/score_df['std']
 
     scaled_data = scaled_data[load_mat_df.index.values]

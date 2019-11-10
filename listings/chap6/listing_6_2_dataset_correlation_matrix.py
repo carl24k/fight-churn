@@ -2,8 +2,7 @@ import pandas as pd
 
 def dataset_correlation_matrix(data_set_path='',save=True):
 
-    churn_data = pd.read_csv(data_set_path)
-    churn_data.set_index(['account_id','observation_date'],inplace=True)
+    churn_data = pd.read_csv(data_set_path,index_col=[0,1])
 
     corr = churn_data.corr()
 

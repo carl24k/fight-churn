@@ -9,8 +9,7 @@ def logistic_regression(data_set_path='',save=True):
 
     score_save_path = data_set_path.replace('.csv', '_groupscore.csv')
     assert os.path.isfile(score_save_path), 'You must run listing 6.3 to save grouped metric scores first'
-    grouped_data = pd.read_csv(score_save_path)
-    grouped_data.set_index(['account_id', 'observation_date'], inplace=True)
+    grouped_data = pd.read_csv(score_save_path,index_col=[0,1])
     group_lists = pd.read_csv(data_set_path.replace('.csv', '_groupmets.csv'))
 
     y = ~grouped_data['is_churn'].astype(np.bool)

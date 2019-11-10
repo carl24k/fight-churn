@@ -14,8 +14,7 @@ def churn_forecast(data_set_path='',save=True):
 
     score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
     assert os.path.isfile(score_save_path), 'You must run listing 8.3 to save current scores first'
-    current_score_df=pd.read_csv(score_save_path)
-    current_score_df.set_index(['account_id', 'observation_date'], inplace=True)
+    current_score_df=pd.read_csv(score_save_path,index_col=[0,1])
 
     predictions = logreg_model.predict_proba(current_score_df.to_numpy())
 
@@ -26,7 +25,8 @@ def churn_forecast(data_set_path='',save=True):
         predict_df.to_csv(forecast_save_path, header=True)
 
         plt.figure(figsize=[6,4])
-        plt.hist(predictions[:,0],bins=20)
+        n, bins,_ = plt.hist(predictions[:,0],bins=20)
+        hist_df=pd.DataFrame({'n':n,'bins':bins[1:]})
         plt.xlim(left=0)
         plt.xlabel('Churn Probability')
         plt.ylabel('# of Accounts')
@@ -34,5 +34,6 @@ def churn_forecast(data_set_path='',save=True):
         plt.grid()
         plt.savefig(data_set_path.replace('.csv', '_current_churnhist'), ext='png')
         plt.close()
+        hist_df.to_csv(data_set_path.replace('.csv', '_current_churnhist.csv'))
 
     return predictions

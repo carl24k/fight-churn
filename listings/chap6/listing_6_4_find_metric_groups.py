@@ -43,8 +43,7 @@ def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
 
     score_save_path=data_set_path.replace('.csv','_scores.csv')
     assert os.path.isfile(score_save_path),'You must run listing 5.3 or 7.5 to save metric scores first'
-    score_data = pd.read_csv(score_save_path)
-    score_data.set_index(['account_id','observation_date'],inplace=True)
+    score_data = pd.read_csv(score_save_path,index_col=[0,1])
     score_data.drop('is_churn',axis=1,inplace=True)
     metric_columns = list(score_data.columns.values)
 
