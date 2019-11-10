@@ -31,8 +31,10 @@ def churn_forecast(data_set_path='',save=True):
         plt.xlabel('Churn Probability')
         plt.ylabel('# of Accounts')
         plt.title('Histogram of Current Churn Probability')
+        # plt.gca().get_yaxis().set_ticklabels([])
+        # plt.gca().get_xaxis().set_ticklabels([])
         plt.grid()
-        plt.savefig(data_set_path.replace('.csv', '_current_churnhist'), ext='png')
+        plt.savefig(data_set_path.replace('.csv', '_current_churnhist.svg'), format='svg')
         plt.close()
         hist_df.to_csv(data_set_path.replace('.csv', '_current_churnhist.csv'))
 
