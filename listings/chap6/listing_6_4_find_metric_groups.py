@@ -30,7 +30,9 @@ def make_load_matrix(labeled_column_df,metric_columns,relabled_count,corr):
             load_mat[orig_col, row[1][0]] = 1.0/  (np.sqrt(corr) * float(relabled_count[row[1][0]])  )
         else:
             load_mat[orig_col, row[1][0]] = 1.0
-    loadmat_df = pd.DataFrame(load_mat, index=metric_columns, columns=[d for d in range(0, load_mat.shape[1])])
+
+    column_names=['metric_group_%d' % (d + 1) for d in range(0, load_mat.shape[1])]
+    loadmat_df = pd.DataFrame(load_mat, index=metric_columns, columns=column_names)
     loadmat_df['name'] = loadmat_df.index
     sort_cols = list(loadmat_df.columns.values)
     sort_order = [False] * loadmat_df.shape[1]
@@ -59,6 +61,6 @@ def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
         print('saving metric groups to ' + save_path)
         group_lists=['|'.join(labeled_column_df[labeled_column_df['group']==g]['column'])
                         for g in set(labeled_column_df['group'])]
-        pd.DataFrame(group_lists,columns=['metrics']).to_csv(save_path)
+        pd.DataFrame(group_lists,index=loadmat_df.columns.values,columns=['metrics']).to_csv(save_path)
 
     return loadmat_df

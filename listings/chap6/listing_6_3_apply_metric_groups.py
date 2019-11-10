@@ -18,8 +18,7 @@ def apply_metric_groups(data_set_path='',save=True):
     ndarray_2group = data_2group[load_mat_df.index.values].to_numpy()
     grouped_ndarray = np.matmul(ndarray_2group, load_mat_ndarray)
 
-    grouped_column_names = ['metric_group_%d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
-    churn_data_grouped = pd.DataFrame(grouped_ndarray,columns=grouped_column_names, index=score_data.index)
+    churn_data_grouped = pd.DataFrame(grouped_ndarray,columns=load_mat_df.columns.values, index=score_data.index)
 
     churn_data_grouped['is_churn'] = score_data['is_churn']
 
