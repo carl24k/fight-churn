@@ -191,8 +191,8 @@ if __name__ == "__main__":
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
     init = 10000
-    growth_rate = 0.15
-    churn_rate = 0.10
+    growth_rate = 0.1
+    churn_rate = 0.05
     mrr = 9.99
     random_seed = None
     if random_seed is not None:

@@ -22,11 +22,6 @@ class UtilityModel:
 
         The churn probability is a sigmoidal function based on utility - see the function `simulate_churn`.
 
-        The model also takes a churn rate as a parameter. The model is calibrated by configuring the slope term of the
-        churn probability sigma, which is the class variable `kappa`, so that if a customer has the average behaviors
-        (taken from the behavior model means) they will have the target churn rate.  This doesn't guarantee that the
-        simulation will have the average churn rate, but it seems to work well enough.
-
         :param name:
         :param churn_rate: Target churn rate for calibration
         :param behavior_model: The behavior model that this utility function works withy
@@ -46,7 +41,9 @@ class UtilityModel:
         assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
         r=1.0-self.churn_rate
         self.kappa = -2.0/self.expected_utility
-        self.offset=-log(1.0/r-1.0) + self.kappa*self.expected_utility
+        self.offset=log(1.0/r-1.0) - self.kappa*self.expected_utility
+        expected_churn=self.churn_probability(self.expected_utility)
+        print('Expected churn rate {}'.format(expected_churn))
 
     def utility_function(self,behavior):
         '''
@@ -58,6 +55,15 @@ class UtilityModel:
         utility= np.dot(behavior,self.linear_utility)
         return utility
 
+    def churn_probability(self,utility):
+        '''
+        sigmoidal model for churn based on utility
+        :param utility:
+        :return:
+        '''
+        churn_prob=1.0-1.0/(1.0+exp(self.kappa*utility + self.offset))
+        return churn_prob
+
     def simulate_churn(self,event_counts):
         '''
         Simulates one customer churn, given a set of event counts.  The retention probability is a sigmoidal function
@@ -67,5 +73,5 @@ class UtilityModel:
         :return:
         '''
         u=self.utility_function(event_counts)
-        churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
+        churn_prob=self.churn_probability(u)
         return uniform(0, 1) < churn_prob
