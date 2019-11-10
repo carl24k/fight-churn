@@ -2,8 +2,11 @@ import pandas as pd
 import numpy as np
 import os
 from sklearn.linear_model import LogisticRegression
+from math import exp
 import pickle
 
+def s_curve(x):
+    return 1.0-1.0/(1.0+exp(-x))
 
 def logistic_regression(data_set_path='',save=True):
 
@@ -18,24 +21,28 @@ def logistic_regression(data_set_path='',save=True):
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
     retain_reg.fit(X, y)
 
-    if save:
-        coef_df = pd.DataFrame.from_dict(
-            {'group':  np.append(X.columns.values,'offset'),
-             'coef': np.append(retain_reg.coef_[0],retain_reg.intercept_),
-             'metrics' : np.append(group_lists['metrics'],'NA')})
-        save_path = data_set_path.replace('.csv', '_logreg_coef.csv')
-        coef_df.to_csv(save_path, index=False)
-        print('Saved coefficients to ' + save_path)
+    average_churn=s_curve(retain_reg.intercept_)
+    one_stdev_churns=np.array( [ s_curve(retain_reg.intercept_+c) for c in  retain_reg.coef_[0]])
+    one_stdev_impact=average_churn-one_stdev_churns
 
-        pickle_path = data_set_path.replace('.csv', '_logreg_model.pkl')
-        with open(pickle_path, 'wb') as fid:
-            pickle.dump(retain_reg, fid)
-        print('Saved model pickle to ' + pickle_path)
+    coef_df = pd.DataFrame.from_dict(
+        {'group':  np.append(X.columns.values,'offset'),
+         'coef': np.append(retain_reg.coef_[0],retain_reg.intercept_),
+         'impact_1sd' : np.append(one_stdev_impact,average_churn),
+         'metrics' : np.append(group_lists['metrics'],'(baseline)')})
+    save_path = data_set_path.replace('.csv', '_logreg_coef.csv')
+    coef_df.to_csv(save_path, index=False)
+    print('Saved coefficients to ' + save_path)
 
-        predictions = retain_reg.predict_proba(X)
-        predict_df = pd.DataFrame(predictions,index=grouped_data.index,columns=['churn_prob','retain_prob'])
-        predict_path = data_set_path.replace('.csv', '_predictions.csv')
-        predict_df.to_csv(predict_path,header=True)
-        print('Saved predictions to ' + predict_path)
+    pickle_path = data_set_path.replace('.csv', '_logreg_model.pkl')
+    with open(pickle_path, 'wb') as fid:
+        pickle.dump(retain_reg, fid)
+    print('Saved model pickle to ' + pickle_path)
+
+    predictions = retain_reg.predict_proba(X)
+    predict_df = pd.DataFrame(predictions,index=grouped_data.index,columns=['churn_prob','retain_prob'])
+    predict_path = data_set_path.replace('.csv', '_predictions.csv')
+    predict_df.to_csv(predict_path,header=True)
+    print('Saved dataset predictions to ' + predict_path)
 
     return retain_reg
