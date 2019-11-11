@@ -3,14 +3,14 @@ import os
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 
 def clip_hi_cols(data, hi_vals):
-    for col in data.columns.values:
+    for col in hi_vals.index.values:
         data.loc[data[col] > hi_vals[col],col] = hi_vals[col]
 
 def clip_lo_cols(data, lo_vals):
-    for col in data.columns.values:
+    for col in lo_vals.index.values:
         data.loc[data[col] < lo_vals[col],col] = lo_vals[col]
 
-def clipped_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
+def clipped_scores(data_set_path,skew_thresh=4.0):
 
     churn_data = pd.read_csv(data_set_path)
     churn_data.set_index(['account_id','observation_date'],inplace=True)
@@ -37,17 +37,14 @@ def clipped_scores(data_set_path='',skew_thresh=4.0,save=True,**kwargs):
 
     data_scores['is_churn']=churn_data['is_churn']
 
-    if save:
-        score_save_path=data_set_path.replace('.csv','_scores.csv')
-        data_scores.to_csv(score_save_path,header=True)
-        print('Saving results to %s' % score_save_path)
+    score_save_path=data_set_path.replace('.csv','_scores.csv')
+    data_scores.to_csv(score_save_path,header=True)
+    print('Saving results to %s' % score_save_path)
 
-        param_df = pd.DataFrame({'skew_score': skewed_columns,
-                                     'fattail_score': fattail_columns,
-                                     'mean': mean_vals,
-                                     'std': std_vals})
-        param_save_path=data_set_path.replace('.csv','_score_params.csv')
-        param_df.to_csv(param_save_path,header=True)
-        print('Saving params to %s' % param_save_path)
-
-    return data_scores
+    param_df = pd.DataFrame({'skew_score': skewed_columns,
+                                 'fattail_score': fattail_columns,
+                                 'mean': mean_vals,
+                                 'std': std_vals})
+    param_save_path=data_set_path.replace('.csv','_score_params.csv')
+    param_df.to_csv(param_save_path,header=True)
+    print('Saving params to %s' % param_save_path)

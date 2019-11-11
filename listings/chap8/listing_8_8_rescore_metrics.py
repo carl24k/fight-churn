@@ -4,7 +4,7 @@ from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_ske
 from listing_8_4_rescore_metrics import reload_churn_data
 from listing_8_6_clipped_scores import clip_hi_cols, clip_lo_cols
 
-def rescore_metrics(data_set_path='', save=True):
+def rescore_metrics(data_set_path):
 
     current_data = reload_churn_data(data_set_path,'current','8.2',is_customer_data=True)
     load_mat_df = reload_churn_data(data_set_path,'load_mat','6.4',is_customer_data=False)
@@ -27,12 +27,10 @@ def rescore_metrics(data_set_path='', save=True):
     scaled_data = scaled_data[load_mat_df.index.values]
     grouped_ndarray = np.matmul(scaled_data.to_numpy(), load_mat_df.to_numpy())
 
-    grouped_column_names = ['metric_group_%d' % (d + 1) for d in range(0, load_mat_df.shape[1])]
-    current_data_grouped = pd.DataFrame(grouped_ndarray,columns=grouped_column_names, index=current_data.index)
+    current_data_grouped = pd.DataFrame(grouped_ndarray,columns=load_mat_df.columns.values, index=current_data.index)
 
-    if save:
-        score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
-        current_data_grouped.to_csv(score_save_path,header=True)
-        print('Saving results to %s' % score_save_path)
+    score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
+    current_data_grouped.to_csv(score_save_path,header=True)
+    print('Saving results to %s' % score_save_path)
 
-    return current_data_grouped
+
