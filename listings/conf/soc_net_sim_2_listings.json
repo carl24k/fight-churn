@@ -424,9 +424,9 @@
 		},
 		"listing_8_5_churn_forecast" : {
 		},
-		"listing_8_6_trimmed_scores" : {
-			"data_set_path": "../../../fight-churn-output/soc_net_sim_2/soc_net_sim_2_dataset_extreme.csv",
-			"hi_trim": ["adview_per_post"]
+		"listing_8_6_clipped_scores" : {
+		},
+		"listing_8_8_rescore_metrics" : {
 		}
 	}
 }
