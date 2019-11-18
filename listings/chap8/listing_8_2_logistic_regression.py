@@ -34,10 +34,10 @@ def save_regression_summary(data_set_path,retain_reg):
     one_stdev_impact,average_churn = calculate_impacts(retain_reg)
     group_lists = pd.read_csv(data_set_path.replace('.csv', '_groupmets.csv'),index_col=0)
     coef_df = pd.DataFrame.from_dict(
-        {'group':  np.append(group_lists.index,'offset'),
-         'coef': np.append(retain_reg.coef_[0],retain_reg.intercept_),
-         'impact_1sd' : np.append(one_stdev_impact,average_churn),
-         'metrics' : np.append(group_lists['metrics'],'(baseline)')})
+        {'group_metric_offset':  np.append(group_lists.index,'offset'),
+         'weight': np.append(retain_reg.coef_[0],retain_reg.intercept_),
+         'churn_impact' : np.append(one_stdev_impact,average_churn),
+         'group_metrics' : np.append(group_lists['metrics'],'(baseline)')})
     save_path = data_set_path.replace('.csv', '_logreg_coef.csv')
     coef_df.to_csv(save_path, index=False)
     print('Saved coefficients to ' + save_path)

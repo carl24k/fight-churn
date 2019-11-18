@@ -31,7 +31,10 @@ def make_load_matrix(labeled_column_df,metric_columns,relabled_count,corr):
         else:
             load_mat[orig_col, row[1][0]] = 1.0
 
-    column_names=['metric_group_%d' % (d + 1) for d in range(0, load_mat.shape[1])]
+    is_group = load_mat.astype(bool).sum(axis=0) > 1
+    column_names=['metric_group_{}'.format(d + 1) if is_group[d]
+                      else labeled_column_df.loc[labeled_column_df['group']==d,'column'].item()
+                      for d in range(0, load_mat.shape[1])]
     loadmat_df = pd.DataFrame(load_mat, index=metric_columns, columns=column_names)
     loadmat_df['name'] = loadmat_df.index
     sort_cols = list(loadmat_df.columns.values)
