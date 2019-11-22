@@ -22,21 +22,21 @@ def prepare_data(data_set_path):
     return X,y
 
 def calculate_impacts(retain_reg):
-    average_churn=s_curve(retain_reg.intercept_)
-    one_stdev_churns=np.array( [ s_curve(retain_reg.intercept_+c) for c in  retain_reg.coef_[0]])
-    one_stdev_impact=average_churn-one_stdev_churns
-    return one_stdev_impact, average_churn
+    average_retain=s_curve(-retain_reg.intercept_)
+    one_stdev_retain=np.array( [ s_curve(-retain_reg.intercept_-c) for c in  retain_reg.coef_[0]])
+    one_stdev_impact=one_stdev_retain-average_retain
+    return one_stdev_impact, average_retain
 
 def s_curve(x):
     return 1.0 - (1.0/(1.0+exp(-x)))
 
 def save_regression_summary(data_set_path,retain_reg):
-    one_stdev_impact,average_churn = calculate_impacts(retain_reg)
+    one_stdev_impact,average_retain = calculate_impacts(retain_reg)
     group_lists = pd.read_csv(data_set_path.replace('.csv', '_groupmets.csv'),index_col=0)
     coef_df = pd.DataFrame.from_dict(
         {'group_metric_offset':  np.append(group_lists.index,'offset'),
          'weight': np.append(retain_reg.coef_[0],retain_reg.intercept_),
-         'churn_impact' : np.append(one_stdev_impact,average_churn),
+         'retain_impact' : np.append(one_stdev_impact,average_retain),
          'group_metrics' : np.append(group_lists['metrics'],'(baseline)')})
     save_path = data_set_path.replace('.csv', '_logreg_coef.csv')
     coef_df.to_csv(save_path, index=False)
