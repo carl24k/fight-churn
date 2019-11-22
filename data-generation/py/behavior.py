@@ -120,13 +120,14 @@ class GaussianBehaviorModel(BehaviorModel):
         return new_customer
 
 
-class FatTailledBehaviorModel(BehaviorModel):
+class FatTailledBehaviorModel(GaussianBehaviorModel):
 
     def __init__(self,name,random_seed):
         super(FatTailledBehaviorModel,self).__init__(name,random_seed)
         self.log_means=np.log(self.behave_means)
 
     def scale_correlation_to_covariance(self):
+        self.log_means=np.log(self.behave_means)
         print('Scaling correlation by behavior means...')
         # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
         scaling = np.sqrt(self.log_means * np.sqrt(self.log_means))
@@ -142,5 +143,5 @@ class FatTailledBehaviorModel(BehaviorModel):
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=np.exp(customer_rates)
         new_customer= Customer(customer_rates)
-        # print(customer_rates)
+        print(customer_rates)
         return new_customer
