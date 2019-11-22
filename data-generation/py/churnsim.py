@@ -8,7 +8,7 @@ import os
 import tempfile
 
 from customer import Customer
-from behavior import GaussianBehaviorModel
+from behavior import GaussianBehaviorModel, FatTailledBehaviorModel
 from utility import UtilityModel
 import psycopg2 as post
 
@@ -37,7 +37,7 @@ class ChurnSimulation:
         self.monthly_churn_rate = churn
         self.mrr=mrr
 
-        self.behave_mod=GaussianBehaviorModel(self.model_name,seed)
+        self.behave_mod=FatTailledBehaviorModel(self.model_name,seed)
         self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate,self.behave_mod)
 
         self.subscription_count = 0
