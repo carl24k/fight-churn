@@ -2,7 +2,14 @@ import pandas as pd
 import numpy as np
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 from listing_8_4_rescore_metrics import reload_churn_data
-from listing_8_6_clipped_scores import clip_hi_cols, clip_lo_cols
+
+def clip_hi_cols(data, hi_vals):
+    for col in hi_vals.index.values:
+        data.loc[data[col] > hi_vals[col],col] = hi_vals[col]
+
+def clip_lo_cols(data, lo_vals):
+    for col in lo_vals.index.values:
+        data.loc[data[col] < lo_vals[col],col] = lo_vals[col]
 
 def rescore_metrics(data_set_path):
 

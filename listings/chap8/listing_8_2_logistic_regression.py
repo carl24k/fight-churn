@@ -38,7 +38,7 @@ def save_regression_summary(data_set_path,retain_reg):
          'weight': np.append(retain_reg.coef_[0],retain_reg.intercept_),
          'retain_impact' : np.append(one_stdev_impact,average_retain),
          'group_metrics' : np.append(group_lists['metrics'],'(baseline)')})
-    save_path = data_set_path.replace('.csv', '_logreg_coef.csv')
+    save_path = data_set_path.replace('.csv', '_logreg_summary.csv')
     coef_df.to_csv(save_path, index=False)
     print('Saved coefficients to ' + save_path)
 
