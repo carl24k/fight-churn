@@ -123,14 +123,19 @@ class GaussianBehaviorModel(BehaviorModel):
 class FatTailledBehaviorModel(GaussianBehaviorModel):
 
     def __init__(self,name,random_seed):
+        self.exp_base = 1.333
+        self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
+        self.exp_fun = lambda x: np.power(self.exp_base,x)
+
         super(FatTailledBehaviorModel,self).__init__(name,random_seed)
-        self.log_means=np.log(self.behave_means)
+        self.log_means=self.log_fun(self.behave_means)
 
     def scale_correlation_to_covariance(self):
-        self.log_means=np.log(self.behave_means)
+        self.log_means=self.log_fun(self.behave_means)
+        rectified_means =np.array([max(m,1.0) for m in self.log_means])
         print('Scaling correlation by behavior means...')
-        # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
-        scaling = np.sqrt(self.log_means * np.sqrt(self.log_means))
+
+        scaling = np.sqrt(rectified_means)
         self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))
         self.behave_cov = np.matmul(np.diag(scaling), self.behave_cov)
 
@@ -141,7 +146,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         :return: a Custoemr object
         '''
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
-        customer_rates=np.exp(customer_rates)
+        customer_rates=self.exp_fun(customer_rates)
         new_customer= Customer(customer_rates)
-        print(customer_rates)
+        # print(customer_rates)
         return new_customer
