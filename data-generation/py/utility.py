@@ -40,6 +40,8 @@ class UtilityModel:
         assert len(self.behave_names)==len(behavior_model.behave_names)
         assert all(self.behave_names == behavior_model.behave_names)
         self.utility_interactions=data[self.behave_names]
+        self.max_util = 8.0
+        self.util_clip = self.max_util * behavior_model.behave_means
 
         # pick the constant so the mean behavior has the target churn rate
         self.expected_utility=self.utility_function(behavior_model.behave_means)
@@ -55,7 +57,8 @@ class UtilityModel:
         :param behavior:
         :return:
         '''
-        utility= np.dot(behavior,self.linear_utility)
+        clipped_behave = np.clip(behavior,a_min=None,a_max=self.util_clip)
+        utility= np.dot(clipped_behave,self.linear_utility)
         return utility
 
     def simulate_churn(self,event_counts):

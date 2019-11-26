@@ -128,7 +128,6 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         self.exp_fun = lambda x: np.power(self.exp_base,x)
 
         super(FatTailledBehaviorModel,self).__init__(name,random_seed)
-        self.log_means=self.log_fun(self.behave_means)
 
     def scale_correlation_to_covariance(self):
         self.log_means=self.log_fun(self.behave_means)
