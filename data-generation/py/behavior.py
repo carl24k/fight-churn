@@ -85,11 +85,7 @@ class GaussianBehaviorModel(BehaviorModel):
                 exit(0)
 
         if corr_scale:
-            print('Scaling correlation by behavior means...')
-            # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
-            scaling=np.sqrt( self.behave_means.abs() * np.sqrt(self.behave_means.abs()))
-            self.behave_cov=np.matmul(self.behave_cov,np.diag(scaling))
-            self.behave_cov=np.matmul(np.diag(scaling),self.behave_cov)
+            self.scale_correlation_to_covariance()
 
         # Save to a csv
         save_path = '../../../fight-churn-output/' + name + '/'
@@ -105,7 +101,12 @@ class GaussianBehaviorModel(BehaviorModel):
         # exit(0)
 
 
-
+    def scale_correlation_to_covariance(self):
+        print('Scaling correlation by behavior means...')
+        # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
+        scaling = np.sqrt(self.behave_means.abs() * np.sqrt(self.behave_means.abs()))
+        self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))
+        self.behave_cov = np.matmul(np.diag(scaling), self.behave_cov)
 
     def generate_customer(self):
         '''
@@ -115,6 +116,38 @@ class GaussianBehaviorModel(BehaviorModel):
         '''
         customer_rates=np.random.multivariate_normal(mean=self.behave_means,cov=self.behave_cov)
         customer_rates=customer_rates.clip(min=self.min_rate) # clip : no negative rates!
+        new_customer= Customer(customer_rates)
+        # print(customer_rates)
+        return new_customer
+
+
+class FatTailledBehaviorModel(GaussianBehaviorModel):
+
+    def __init__(self,name,random_seed):
+        self.exp_base = 1.333
+        self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
+        self.exp_fun = lambda x: np.power(self.exp_base,x)
+
+        super(FatTailledBehaviorModel,self).__init__(name,random_seed)
+        self.log_means=self.log_fun(self.behave_means)
+
+    def scale_correlation_to_covariance(self):
+        self.log_means=self.log_fun(self.behave_means)
+        rectified_means =np.array([max(m,1.0) for m in self.log_means])
+        print('Scaling correlation by behavior means...')
+
+        scaling = np.sqrt(rectified_means)
+        self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))
+        self.behave_cov = np.matmul(np.diag(scaling), self.behave_cov)
+
+    def generate_customer(self):
+        '''
+        Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
+        gaussian distribution.
+        :return: a Custoemr object
+        '''
+        customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
+        customer_rates=self.exp_fun(customer_rates)
         new_customer= Customer(customer_rates)
         # print(customer_rates)
         return new_customer
