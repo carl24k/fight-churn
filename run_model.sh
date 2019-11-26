@@ -25,10 +25,10 @@ export CHURN_DB_PASS
 
 cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
-#cd $HOME$CHURN_ROOT/fight-churn/data-generation/py
-#../../venv/bin/python churndb.py $SCHEMA
-#../../venv/bin/python churnsim.py $SCHEMA
-#cd $HOME$CHURN_ROOT/fight-churn/listings/py/
+cd $HOME$CHURN_ROOT/fight-churn/data-generation/py
+../../venv/bin/python churndb.py $SCHEMA
+../../venv/bin/python churnsim.py $SCHEMA
+cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 # standard metric names
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4 5 6 7 8 11
