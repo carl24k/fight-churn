@@ -107,6 +107,9 @@ class GaussianBehaviorModel(BehaviorModel):
         self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))
         self.behave_cov = np.matmul(np.diag(scaling), self.behave_cov)
 
+    def behave_var(self):
+        return np.diagonal(self.behave_cov)
+
     def generate_customer(self):
         '''
         Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
@@ -137,6 +140,9 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         scaling = np.sqrt(rectified_means)
         self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))
         self.behave_cov = np.matmul(np.diag(scaling), self.behave_cov)
+
+    def behave_var(self):
+        return self.exp_fun( np.diagonal(self.behave_cov))
 
     def generate_customer(self):
         '''

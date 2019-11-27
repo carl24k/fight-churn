@@ -137,12 +137,15 @@ class ChurnSimulation:
         oldEvent= self.db.one('select count(*) from %s.event' % self.model_name)
         oldSubs= self.db.one('select count(*) from %s.subscription' % self.model_name)
         if oldEvent > 0 or oldSubs>0:
-            print('TRUNCATING *Events & Subscriptions* in schema -> %s <-  ...' % self.model_name)
+            print('TRUNCATING *Events/Metrics & Subscriptions/Observations* in schema -> %s <-  ...' % self.model_name)
             if input("are you sure? (enter %s to proceed) " % self.model_name) == self.model_name:
                 if oldEvent > 0:
                     self.db.run('truncate table %s.event' % self.model_name)
+                    self.db.run('truncate table %s.metric' % self.model_name)
                 if oldSubs > 0:
                     self.db.run('truncate table %s.subscription' % self.model_name)
+                    self.db.run('truncate table %s.active_period' % self.model_name)
+                    self.db.run('truncate table %s.observation' % self.model_name)
                 return True
             else:
                 return False
@@ -186,7 +189,7 @@ if __name__ == "__main__":
     model_name = 'socnet_sim4'
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
-    init = 5000
+    init = 1000
     growth_rate = 0.1
     churn_rate = 0.05
     mrr = 9.99

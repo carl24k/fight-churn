@@ -40,15 +40,30 @@ class UtilityModel:
         assert len(self.behave_names)==len(behavior_model.behave_names)
         assert all(self.behave_names == behavior_model.behave_names)
         self.utility_interactions=data[self.behave_names]
-        self.max_util = 8.0
-        self.util_clip = self.max_util * behavior_model.behave_means
+        self.behave_means = behavior_model.behave_means
+        self.behave_var = behavior_model.behave_var()
+        self.fat_tail_fudge = 1.0
+        self.util_clip = None
+        self.scaled_means = self.fat_tail_fudge*self.behave_means
+        self.scaled_vars = self.fat_tail_fudge * self.behave_var
+        self.offset_fudge = 0.0
 
         # pick the constant so the mean behavior has the target churn rate
-        self.expected_utility=self.utility_function(behavior_model.behave_means)
+        self.expected_contributions = self.behave_means*self.linear_utility
+        self.expected_utility=self.utility_function(self.scaled_means)
+        self.ex_util_vol= np.sqrt( np.dot(self.scaled_vars,self.linear_utility))
         assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
         r=1.0-self.churn_rate
-        self.kappa = -2.0/self.expected_utility
-        self.offset=-log(1.0/r-1.0) + self.kappa*self.expected_utility
+        self.kappa = -1.0/self.ex_util_vol
+        self.offset=log(1.0/r-1.0) -self.kappa*self.expected_utility
+        print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(self.churn_rate,r,log(1.0/r-1.0) ))
+        print('Utility model expected util={}, util_vol={}'.format(self.expected_utility,self.ex_util_vol))
+        print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
+        expected_churn_prob = self.churn_probability(self.scaled_means)
+        print('\tExpected churn prob={}'.format(expected_churn_prob))
+        expected_unscaled_prob = self.churn_probability(self.behave_means)
+        print('\tMedian churn prob={}'.format(expected_unscaled_prob))
+        # exit(0)
 
     def utility_function(self,behavior):
         '''
@@ -57,9 +72,18 @@ class UtilityModel:
         :param behavior:
         :return:
         '''
-        clipped_behave = np.clip(behavior,a_min=None,a_max=self.util_clip)
-        utility= np.dot(clipped_behave,self.linear_utility)
+
+        contrib_ratios = behavior / self.behave_means
+        utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
+        utility = np.sum(utility_contribs)
+
         return utility
+
+    def churn_probability(self,event_counts):
+
+        u=self.utility_function(event_counts)
+        churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
+        return churn_prob
 
     def simulate_churn(self,event_counts):
         '''
@@ -69,6 +93,4 @@ class UtilityModel:
         :param event_counts:
         :return:
         '''
-        u=self.utility_function(event_counts)
-        churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
-        return uniform(0, 1) < churn_prob
+        return uniform(0, 1) < self.churn_probability(event_counts)
