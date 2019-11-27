@@ -37,16 +37,11 @@ class UtilityModel:
         self.utility_interactions=data[self.behave_names]
         self.behave_means = behavior_model.behave_means
         self.behave_var = behavior_model.behave_var()
-        self.fat_tail_fudge = 1.0
-        self.util_clip = None
-        self.scaled_means = self.fat_tail_fudge*self.behave_means
-        self.scaled_vars = self.fat_tail_fudge * self.behave_var
-        self.offset_fudge = 0.0
 
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means*self.linear_utility
-        self.expected_utility=self.utility_function(self.scaled_means)
-        self.ex_util_vol= np.sqrt( np.dot(self.scaled_vars,self.linear_utility))
+        self.expected_utility=self.utility_function(self.behave_means)
+        self.ex_util_vol= np.sqrt( np.dot(self.behave_var,self.linear_utility))
         assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
         r=1.0-self.churn_rate
         self.kappa = -1.0/self.ex_util_vol
@@ -54,7 +49,7 @@ class UtilityModel:
         print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(self.churn_rate,r,log(1.0/r-1.0) ))
         print('Utility model expected util={}, util_vol={}'.format(self.expected_utility,self.ex_util_vol))
         print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
-        expected_churn_prob = self.churn_probability(self.scaled_means)
+        expected_churn_prob = self.churn_probability(self.behave_means)
         print('\tExpected churn prob={}'.format(expected_churn_prob))
         expected_unscaled_prob = self.churn_probability(self.behave_means)
         print('\tMedian churn prob={}'.format(expected_unscaled_prob))
