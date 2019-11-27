@@ -11,11 +11,22 @@ def rescore_metrics(data_set_path=''):
     assert set(score_df.index.values)==set(current_data.columns.values),"Data to re-score does not match transform params"
     assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match load matrix"
 
+    debug1=current_data.describe()
+
     transform_skew_columns(current_data,score_df[score_df['skew_score']].index.values)
+
+    debug2=current_data.describe()
+
+
     transform_fattail_columns(current_data,score_df[score_df['skew_score']].index.values)
 
     current_data=current_data[score_df.index.values]
     scaled_data=(current_data-score_df['mean'])/score_df['std']
+
+
+    score_save_path=data_set_path.replace('.csv','_current_scores.csv')
+    scaled_data.to_csv(score_save_path,header=True)
+    print('Saving score results to %s' % score_save_path)
 
     scaled_data = scaled_data[load_mat_df.index.values]
     grouped_ndarray = np.matmul(scaled_data.to_numpy(), load_mat_df.to_numpy())
@@ -24,7 +35,7 @@ def rescore_metrics(data_set_path=''):
 
     score_save_path=data_set_path.replace('.csv','_current_groupscore.csv')
     current_data_grouped.to_csv(score_save_path,header=True)
-    print('Saving results to %s' % score_save_path)
+    print('Saving grouped results to %s' % score_save_path)
 
 
 def reload_churn_data(data_set_path,suffix,listing,is_customer_data):
