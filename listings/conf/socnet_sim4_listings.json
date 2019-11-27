@@ -20,7 +20,7 @@
 	},
 	"chap3" : {
 		"params": {
-			"%from_yyyy-mm-dd": "2020-03-01",
+			"%from_yyyy-mm-dd": "2020-02-02",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode": "top",
 			"type" : "sql",

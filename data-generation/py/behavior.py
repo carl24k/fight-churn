@@ -135,7 +135,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
 
     def scale_correlation_to_covariance(self):
         self.log_means=self.log_fun(self.behave_means)
-        rectified_means =np.array([max(m,1.0) for m in self.log_means])
+        rectified_means =np.array([max(m,0.0) for m in self.log_means])
         print('Scaling correlation by behavior means...')
 
         scaling = np.sqrt(rectified_means)
