@@ -2,8 +2,7 @@ import pandas as pd
 
 def remove_invalid(data_set_path='dataset.csv',min_valid={},max_valid={},save_path='cleaned_data.csv'):
 
-    churn_data = pd.read_csv(data_set_path)
-    churn_data.set_index(['account_id','observation_date'],inplace=True)
+    churn_data = pd.read_csv(data_set_path,index_col=[0,1])
     clean_data = churn_data.copy()
 
     for metric in min_valid.keys():

@@ -22,11 +22,6 @@ class UtilityModel:
 
         The churn probability is a sigmoidal function based on utility - see the function `simulate_churn`.
 
-        The model also takes a churn rate as a parameter. The model is calibrated by configuring the slope term of the
-        churn probability sigma, which is the class variable `kappa`, so that if a customer has the average behaviors
-        (taken from the behavior model means) they will have the target churn rate.  This doesn't guarantee that the
-        simulation will have the average churn rate, but it seems to work well enough.
-
         :param name:
         :param churn_rate: Target churn rate for calibration
         :param behavior_model: The behavior model that this utility function works withy
@@ -65,6 +60,7 @@ class UtilityModel:
         print('\tMedian churn prob={}'.format(expected_unscaled_prob))
         # exit(0)
 
+
     def utility_function(self,behavior):
         '''
         Given a vector of behavior counts, calculate the model for customer utility.  Right now its just a dot
@@ -72,7 +68,6 @@ class UtilityModel:
         :param behavior:
         :return:
         '''
-
         contrib_ratios = behavior / self.behave_means
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
         utility = np.sum(utility_contribs)
@@ -83,6 +78,7 @@ class UtilityModel:
 
         u=self.utility_function(event_counts)
         churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
+
         return churn_prob
 
     def simulate_churn(self,event_counts):

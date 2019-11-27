@@ -45,26 +45,37 @@ if __name__ == "__main__":
     parser.add_argument("--frdt", type=str, help="Earliest date to export", default='2019-03-04')
     parser.add_argument("--todt", type=str, help="Latest date to export", default='2019-05-06')
     parser.add_argument("--interval", type=str, help="Interval between metrics", default='7 day')
+    parser.add_argument("--dataset", action="store_true", default=False, help="Only resample metrics, not observation dates")
+    parser.add_argument("--current", action="store_true", default=False, help="Select a current observation data set")
+
     args, _ = parser.parse_known_args()
     argd = vars(args)
 
-    # Clean up any data from old runs
-    remove_obsevations(args.schema)
+    if not args.dataset and not args.current:
+        # Clean up any data from old runs
+        remove_obsevations(args.schema)
 
-    # Create active periods and observations using the exact listings from the book
-    # You must configure these with a JSON in listings/conf/<schema>_listings.json
-    argd['chapter']=4
-    argd['insert']=False
-    argd['listing']=1
-    run_one_listing(args)
-    argd['listing']=2
-    run_one_listing(args)
-    argd['listing']=4
-    run_one_listing(args)
+        # Create active periods and observations using the exact listings from the book
+        # You must configure these with a JSON in listings/conf/<schema>_listings.json
+        argd['chapter']=4
+        argd['insert']=False
+        argd['version']=None
+        argd['listing']=1
+        run_one_listing(args)
+        argd['listing']=2
+        run_one_listing(args)
+        argd['listing']=4
+        run_one_listing(args)
 
     # Load the base SQL from the adjacent sql directory
     sql = "set search_path = '%s'; " % args.schema;
-    with open('../sql/export_dataset.sql' , 'r') as myfile:
+
+    if not args.current:
+        path ='../sql/export_dataset.sql'
+    else:
+        path = '../sql/export_dataset_current.sql'
+
+    with open(path , 'r') as myfile:
         sql += myfile.read()
 
     # Fill in the standard bind parameters with the arguments
@@ -85,6 +96,10 @@ if __name__ == "__main__":
     # Save to a csv
     save_path = '../../../fight-churn-output/' + args.schema + '/'
     os.makedirs(save_path,exist_ok=True)
-    csv_path=save_path +  args.schema + '_dataset.csv'
+    if not args.current:
+        csv_path=save_path +  args.schema + '_dataset.csv'
+    else:
+        csv_path=save_path +  args.schema + '_dataset_current.csv'
+
     print('Saving: %s' % csv_path)
     df.to_csv(csv_path, index=False)

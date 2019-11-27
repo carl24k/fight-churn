@@ -183,23 +183,28 @@
 		},
 		"listing_4_6_current_customers": {
 			"mode" : "save",
-			"%metric_interval": "7 day"
+			"%metric_interval": "7 day",
+			"%from_yyyy-mm-dd": "2020-05-10",
+			"%to_yyyy-mm-dd": "2020-05-10"
 		}
 	},
 	"chap5" : {
 		"params": {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset.csv",
 			"type" : "py"
 		},
 		"listing_5_1_cohort_plot" : {
 			"metric_to_plot" : "post_per_month"
 		},
+		"listing_5_1_1_cohort_plot" : {
+			"metric_to_plot" : "post_per_month"
+		},
 		"listing_5_1_2_cohort_plot" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset_scores.csv",
 			"metric_to_plot" : "post_per_month"
 		},
 		"listing_5_1_3_cohort_plot" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores_group.csv",
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset_groupscore.csv",
 			"metric_to_plot" : "metric_group_1"
 		},
 		"listing_5_1_4_cohort_plot" : {
@@ -223,23 +228,17 @@
 		"listing_5_1_10_cohort_plot" : {
 			"metric_to_plot" : "days_since_newfriend"
 		},
-		"listing_5_1_11_cohort_plot" : {
-			"metric_to_plot" : "account_tenure"
-		},
 		"listing_5_2_dataset_stats" : {
 		},
 		"listing_5_2_2_dataset_stats" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv"
-		},
-		"listing_5_2_3_dataset_stats" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_current.csv"
+			"data_set_path" : "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset_scores.csv"
 		},
 		"listing_5_3_metric_scores" : {
 		}
 	},
 	"chap6" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset.csv",
 			"type": "py"
 		},
 		"listing_6_1_metric_pair_plot" : {
@@ -249,7 +248,7 @@
 		"listing_6_2_dataset_correlation_matrix" : {
 		},
 		"listing_6_2_2_dataset_correlation_matrix" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/churnsim9_dataset_scores.csv"
+			"data_set_path" : "../../../fight-churn-output/churnsim9/soc_net_sim_3_dataset_scores.csv"
 		},
 		"listing_6_3_apply_metric_groups" : {
 		},
@@ -270,12 +269,10 @@
 			"metric1" : "post_per_month",
 			"metric2" : "adview_per_month"
 		},
-		"listing_6_1_5_metric_pair_plot" : {
-			"metric1" : "post_per_month",
+		"listing_6_1_5_metric_pair_plot" : {"metric1" : "post_per_month",
 			"metric2" : "dislike_per_month"
 		},
-		"listing_6_1_6_metric_pair_plot" : {
-			"metric1" : "post_per_month",
+		"listing_6_1_6_metric_pair_plot" : {"metric1" : "post_per_month",
 			"metric2" : "unfriend_per_month"
 		},
 		"listing_6_1_7_metric_pair_plot" : {
@@ -302,7 +299,7 @@
 			"%num_metric" : "adview_per_month",
 			"%den_metric" : "post_per_month",
 			"%new_metric_id" : 21,
-			"%new_metric_name" : "adview_per_post"
+			"%new_metric_name" : "adviw_per_post"
 		},
 		"insert_7_1_2_ratio_metric" : {
 			"%num_metric" : "dislike_per_month",
@@ -311,8 +308,6 @@
 			"%new_metric_name" : "dislike_percent"
 		},
 		"listing_7_2_dataset": {
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%metric_interval": "7 day",
 			"mode" : "save",
 			"type" : "sql"
@@ -332,14 +327,12 @@
 		},
 		"insert_7_4_percent_change_metric" : {
 			"%metric2measure" : "newfriend_per_month",
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%period_weeks" : 4,
 			"%new_metric_id" : 24,
 			"%new_metric_name" : "new_friends_pcnt_change"
 		},
 		"listing_7_5_fat_tail_scores" : {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset.csv",
 			"type": "py"
 		},
 		"listing_7_6_days_since_event" : {
@@ -349,8 +342,6 @@
 		},
 		"insert_7_6_days_since_event" : {
 			"%event2measure" : "newfriend",
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%new_metric_id" : 25,
 			"%new_metric_name" : "days_since_newfriend"
 		},
@@ -361,8 +352,6 @@
 		},
 		"insert_7_7_scaled_events_per_month" : {
 			"%event2measure" : "unfriend",
-			"%from_yyyy-mm-dd": "2020-03-01",
-			"%to_yyyy-mm-dd": "2020-05-10",
 			"%obs_period" : 84,
 			"%desc_period" : 28,
 			"%new_metric_id" : 26
@@ -382,11 +371,25 @@
 			"%desc_period" : 28,
 			"%min_tenure" : 14,
 			"%new_metric_id" : 27
+		},
+		"insert_7_8_1_tenure_scaled_events_per_month" : {
+			"%event2measure" : "unfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 27
+		},
+		"insert_7_8_2_tenure_scaled_events_per_month" : {
+			"%event2measure" : "newfriend",
+			"%obs_period" : 84,
+			"%desc_period" : 28,
+			"%min_tenure" : 14,
+			"%new_metric_id" : 28
 		}
 	},
 	"chap8" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/churnsim9/churnsim9_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/soc_net_sim_3/soc_net_sim_3_dataset.csv",
 			"type": "py"
 		},
 		"listing_8_1_prepare_data" : {

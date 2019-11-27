@@ -98,6 +98,7 @@ class GaussianBehaviorModel(BehaviorModel):
         # std_ = np.sqrt(np.diag(self.behave_cov))
         # corr = self.behave_cov / np.outer(std_, std_)
         # np.savetxt('../conf/'+name+ '_behavior_corr.csv', corr,delimiter=',')
+        # exit(0)
 
 
     def scale_correlation_to_covariance(self):

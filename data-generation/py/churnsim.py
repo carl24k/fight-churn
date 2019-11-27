@@ -5,6 +5,7 @@ import random
 from postgres import Postgres
 from math import ceil
 import os
+import sys
 import tempfile
 
 from customer import Customer
@@ -187,9 +188,13 @@ class ChurnSimulation:
 if __name__ == "__main__":
 
     model_name = 'socnet_sim4'
+    if len(sys.argv) >= 2:
+        model_name = sys.argv[1]
+
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
     init = 1000
+
     growth_rate = 0.1
     churn_rate = 0.05
     mrr = 9.99
