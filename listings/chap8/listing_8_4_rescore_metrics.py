@@ -11,14 +11,8 @@ def rescore_metrics(data_set_path=''):
     assert set(score_df.index.values)==set(current_data.columns.values),"Data to re-score does not match transform params"
     assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match load matrix"
 
-    debug1=current_data.describe()
-
     transform_skew_columns(current_data,score_df[score_df['skew_score']].index.values)
-
-    debug2=current_data.describe()
-
-
-    transform_fattail_columns(current_data,score_df[score_df['skew_score']].index.values)
+    transform_fattail_columns(current_data,score_df[score_df['fattail_score']].index.values)
 
     current_data=current_data[score_df.index.values]
     scaled_data=(current_data-score_df['mean'])/score_df['std']
