@@ -239,6 +239,12 @@
 		"listing_5_2_4_dataset_stats" : {
 			"data_set_path" : "../../../fight-churn-output/socnet_sim4/socnet_sim4_dataset_current.csv"
 		},
+		"listing_5_2_5_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/socnet_sim4/socnet_sim4_dataset_current_scores.csv"
+		},
+		"listing_5_2_6_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/socnet_sim4/socnet_sim4_dataset_current_groupscore.csv"
+		},
 		"listing_5_3_metric_scores" : {
 		}
 	},
