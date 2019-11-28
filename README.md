@@ -44,8 +44,9 @@ better please help help out! :)
 
 ### 1.1 Prerequisites
 
-Required:
 
+Required:
+* 12 Gb free disk space for the simulation data
 * Python 3 and the required packages (requirements.txt)
 * PostgreSQL
 
