@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def metric_pair_plot(data_set_path='', metric1='',metric2=''):
+def metric_pair_plot(data_set_path, metric1='',metric2=''):
 
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
 

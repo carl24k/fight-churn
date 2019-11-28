@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-def dataset_stats(data_set_path='',save=True):
+def dataset_stats(data_set_path):
 
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
@@ -19,9 +19,7 @@ def dataset_stats(data_set_path='',save=True):
     summary = summary[ ['count','nonzero','mean','std','skew','min','1%','25%','50%','75%','99%','max'] ]
     summary.columns = summary.columns.str.replace("%", "pct")
 
-    if save:
-        save_path = data_set_path.replace('.csv', '_summarystats.csv')
-        summary.to_csv(save_path,header=True)
-        print('Saving results to %s' % save_path)
+    save_path = data_set_path.replace('.csv', '_summarystats.csv')
+    summary.to_csv(save_path,header=True)
+    print('Saving results to %s' % save_path)
 
-    return summary

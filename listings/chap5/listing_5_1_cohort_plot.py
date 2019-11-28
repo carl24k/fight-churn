@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-def cohort_plot(data_set_path='', metric_to_plot='',save=True,ncohort=10):
+def cohort_plot(data_set_path, metric_to_plot='',ncohort=10):
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
     groups = pd.qcut(churn_data[metric_to_plot], ncohort, duplicates='drop')
@@ -15,7 +15,6 @@ def cohort_plot(data_set_path='', metric_to_plot='',save=True,ncohort=10):
     plt.ylabel('Cohort Churn Rate')
     plt.grid()
     plt.gca().set_ylim(bottom=0)
-    if save:
-        save_path = data_set_path.replace('.csv', '_' + metric_to_plot + '_churn_corhort.png')
-        plt.savefig(save_path)
-        print('Saving plot to %s' % save_path)
+    save_path = data_set_path.replace('.csv', '_' + metric_to_plot + '_churn_corhort.png')
+    plt.savefig(save_path)
+    print('Saving plot to %s' % save_path)

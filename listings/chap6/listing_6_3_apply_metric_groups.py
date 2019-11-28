@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 
-def apply_metric_groups(data_set_path='',save=True):
+def apply_metric_groups(data_set_path):
 
     score_save_path=data_set_path.replace('.csv','_scores.csv')
     assert os.path.isfile(score_save_path),'You must run listing 5.3 or 7.5 to save metric scores first'
@@ -22,9 +22,7 @@ def apply_metric_groups(data_set_path='',save=True):
 
     churn_data_grouped['is_churn'] = score_data['is_churn']
 
-    if save:
-        save_path = data_set_path.replace('.csv', '_groupscore.csv')
-        churn_data_grouped.to_csv(save_path,header=True)
-        print('Saved grouped data  to ' + save_path)
+    save_path = data_set_path.replace('.csv', '_groupscore.csv')
+    churn_data_grouped.to_csv(save_path,header=True)
+    print('Saved grouped data  to ' + save_path)
 
-    return churn_data_grouped

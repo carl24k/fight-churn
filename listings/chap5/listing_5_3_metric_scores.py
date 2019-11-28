@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 
-def metric_scores(data_set_path='',skew_thresh=4.0,save=True):
+def metric_scores(data_set_path,skew_thresh=4.0):
 
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
@@ -24,9 +24,7 @@ def metric_scores(data_set_path='',skew_thresh=4.0,save=True):
     data_scores=(data_scores-stats['mean'])/stats['std']
     data_scores['is_churn']=churn_data['is_churn']
 
-    if save:
-        score_save_path=data_set_path.replace('.csv','_scores.csv')
-        print('Saving results to %s' % score_save_path)
-        data_scores.to_csv(score_save_path,header=True)
+    score_save_path=data_set_path.replace('.csv','_scores.csv')
+    print('Saving results to %s' % score_save_path)
+    data_scores.to_csv(score_save_path,header=True)
 
-    return data_scores

@@ -11,7 +11,7 @@ def transform_fattail_columns(data,fattail_col_names):
         data[col] = np.log(data[col] + np.sqrt(np.power(data[col],2) + 1.0))
 
 
-def fat_tail_scores(data_set_path='',skew_thresh=4.0,**kwargs):
+def fat_tail_scores(data_set_path,skew_thresh=4.0,**kwargs):
 
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
     data_scores = churn_data.copy()

@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from math import exp
 import pickle
 
-def logistic_regression(data_set_path=''):
+def logistic_regression(data_set_path):
     X,y = prepare_data(data_set_path)
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
     retain_reg.fit(X, y)

@@ -3,7 +3,7 @@ import numpy as np
 import os
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 
-def rescore_metrics(data_set_path=''):
+def rescore_metrics(data_set_path):
 
     load_mat_df = reload_churn_data(data_set_path,'load_mat','6.4',is_customer_data=False)
     score_df = reload_churn_data(data_set_path,'score_params','7.5',is_customer_data=False)

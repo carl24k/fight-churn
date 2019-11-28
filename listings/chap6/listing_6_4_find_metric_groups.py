@@ -44,7 +44,7 @@ def make_load_matrix(labeled_column_df,metric_columns,relabled_count,corr):
     loadmat_df = loadmat_df.drop('name', axis=1)
     return loadmat_df
 
-def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
+def find_metric_groups(data_set_path,group_corr_thresh=0.5):
 
     score_save_path=data_set_path.replace('.csv','_scores.csv')
     assert os.path.isfile(score_save_path),'You must run listing 5.3 or 7.5 to save metric scores first'
@@ -56,14 +56,11 @@ def find_metric_groups(data_set_path='',group_corr_thresh=0.5,save=True):
     labeled_column_df, relabled_count = relabel_clusters(labels,metric_columns)
     loadmat_df = make_load_matrix(labeled_column_df, metric_columns, relabled_count,group_corr_thresh)
 
-    if save:
-        save_path = data_set_path.replace('.csv', '_load_mat.csv')
-        print('saving loadings to ' + save_path)
-        loadmat_df.to_csv(save_path)
-        save_path = data_set_path.replace('.csv', '_groupmets.csv')
-        print('saving metric groups to ' + save_path)
-        group_lists=['|'.join(labeled_column_df[labeled_column_df['group']==g]['column'])
-                        for g in set(labeled_column_df['group'])]
-        pd.DataFrame(group_lists,index=loadmat_df.columns.values,columns=['metrics']).to_csv(save_path)
-
-    return loadmat_df
+    save_path = data_set_path.replace('.csv', '_load_mat.csv')
+    print('saving loadings to ' + save_path)
+    loadmat_df.to_csv(save_path)
+    save_path = data_set_path.replace('.csv', '_groupmets.csv')
+    print('saving metric groups to ' + save_path)
+    group_lists=['|'.join(labeled_column_df[labeled_column_df['group']==g]['column'])
+                    for g in set(labeled_column_df['group'])]
+    pd.DataFrame(group_lists,index=loadmat_df.columns.values,columns=['metrics']).to_csv(save_path)
