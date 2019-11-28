@@ -1,7 +1,9 @@
 import pandas as pd
+import os
 
-def remove_invalid(data_set_path='dataset.csv',min_valid={},max_valid={},save_path='cleaned_data.csv'):
+def remove_invalid(data_set_path,min_valid={},max_valid={}):
 
+    assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
     clean_data = churn_data.copy()
 
@@ -17,7 +19,6 @@ def remove_invalid(data_set_path='dataset.csv',min_valid={},max_valid={},save_pa
         else:
             print('metric %s is not in the data set %s' % (metric,data_set_path))
 
-    if save_path is not None:
-        clean_data.to_csv(save_path,header=True)
-
-    return clean_data
+    score_save_path=data_set_path.replace('.csv','_cleaned.csv')
+    print('Saving results to %s' % score_save_path)
+    clean_data.to_csv(score_save_path,header=True)
