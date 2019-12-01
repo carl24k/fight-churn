@@ -439,6 +439,8 @@
 			"type": "py"
 		},
 		"listing_9_1_regression_auc" : {
+		},
+		"listing_9_2_top_decile_lift" : {
 		}
 	}
 }

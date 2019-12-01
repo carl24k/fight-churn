@@ -1,0 +1,20 @@
+from listing_8_2_logistic_regression import prepare_data
+from listing_9_1_regression_auc import reload_regression
+
+
+def calc_lift(y_true, y_pred):
+    sort_by_pred=[(p,t) for p,t in sorted(zip(y_pred, y_true))]
+    overall = sum(y_true)/len(y_true)
+    i90=int(round(len(y_true)*0.9))
+    top_decile_count=sum([p[1] for p in sort_by_pred[i90:]])
+    top_decile = top_decile_count/(len(y_true)-i90)
+    return top_decile/overall
+
+def top_decile_lift(data_set_path):
+
+    logreg_model = reload_regression(data_set_path)
+    X,y = prepare_data(data_set_path)
+    predictions = logreg_model.predict_proba(X)
+    y = ~y
+    lift = calc_lift(y,predictions[:,0])
+    print('Regression Lift score={:.3f}'.format(lift))
