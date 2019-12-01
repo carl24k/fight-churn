@@ -441,6 +441,8 @@
 		"listing_9_1_regression_auc" : {
 		},
 		"listing_9_2_top_decile_lift" : {
+		},
+		"listing_9_3_backtest" : {
 		}
 	}
 }
