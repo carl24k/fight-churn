@@ -432,5 +432,13 @@
 		},
 		"listing_8_6_rescore_metrics" : {
 		}
+	},
+	"chap9" : {
+		"params": {
+			"data_set_path": "../../../fight-churn-output/socnet_sim4/socnet_sim4_dataset.csv",
+			"type": "py"
+		},
+		"listing_9_1_regression_auc" : {
+		}
 	}
 }
