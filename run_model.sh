@@ -78,3 +78,6 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 # Cohorts
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10
+
+# OOS testing
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 3

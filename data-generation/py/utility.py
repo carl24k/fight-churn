@@ -4,6 +4,8 @@ import numpy as np
 from math import log, exp
 from random import uniform
 
+from customer import Customer
+
 class UtilityModel:
 
     def __init__(self,name,churn_rate,behavior_model):
@@ -40,7 +42,8 @@ class UtilityModel:
 
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means*self.linear_utility
-        self.expected_utility=self.utility_function(self.behave_means)
+        temp_customer = Customer(self.behave_means,satisfaction=1.0)
+        self.expected_utility=self.utility_function(self.behave_means,temp_customer)
         self.ex_util_vol= np.sqrt( np.dot(self.behave_var,self.linear_utility))
         assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
         r=1.0-self.churn_rate
@@ -49,34 +52,38 @@ class UtilityModel:
         print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(self.churn_rate,r,log(1.0/r-1.0) ))
         print('Utility model expected util={}, util_vol={}'.format(self.expected_utility,self.ex_util_vol))
         print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
-        expected_churn_prob = self.churn_probability(self.behave_means)
+        expected_churn_prob = self.churn_probability(self.behave_means, temp_customer)
         print('\tExpected churn prob={}'.format(expected_churn_prob))
-        expected_unscaled_prob = self.churn_probability(self.behave_means)
+        expected_unscaled_prob = self.churn_probability(self.behave_means, temp_customer)
         print('\tMedian churn prob={}'.format(expected_unscaled_prob))
         # exit(0)
 
 
-    def utility_function(self,behavior):
+    def utility_function(self,event_counts,customer):
         '''
-        Given a vector of behavior counts, calculate the model for customer utility.  Right now its just a dot
+        Given a vector of event_counts counts, calculate the model for customer utility.  Right now its just a dot
         product and doesn't use the matrix.  That can be added in the future to make more complex simulations.
-        :param behavior:
+        :param event_counts:
         :return:
         '''
-        contrib_ratios = behavior / self.behave_means
+        contrib_ratios = event_counts / self.behave_means
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
         utility = np.sum(utility_contribs)
-
+        if customer.satisfaction_propensity != 1.0:
+            multiplier = customer.satisfaction_propensity if utility > 0.0  else (1.0/customer.satisfaction_propensity)
+        else:
+            multiplier = 1.0
+        utility *= multiplier
         return utility
 
-    def churn_probability(self,event_counts):
+    def churn_probability(self,event_counts,customer):
 
-        u=self.utility_function(event_counts)
+        u=self.utility_function(event_counts,customer)
         churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
 
         return churn_prob
 
-    def simulate_churn(self,event_counts):
+    def simulate_churn(self,event_counts,customer):
         '''
         Simulates one customer churn, given a set of event counts.  The retention probability is a sigmoidal function
         in the utility, and the churn probability is 100% minus retention. The return value is a binary indicating
@@ -84,4 +91,4 @@ class UtilityModel:
         :param event_counts:
         :return:
         '''
-        return uniform(0, 1) < self.churn_probability(event_counts)
+        return uniform(0, 1) < self.churn_probability(event_counts,customer)

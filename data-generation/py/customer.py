@@ -2,10 +2,11 @@
 from datetime import date, datetime, timedelta,time
 from numpy import random
 from random import randrange
+import numpy as np
 
 class Customer:
     id_counter=0
-    def __init__(self,behavior_rates):
+    def __init__(self,behavior_rates,satisfaction=None):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -15,6 +16,10 @@ class Customer:
         self.behave_per_month=behavior_rates
         self.behave_per_day = (1.0/30.0)*self.behave_per_month
         self.id=Customer.id_counter # set the id to the current class variable
+        if satisfaction is None:
+            self.satisfaction_propensity = np.power(2.0, random.uniform(-1.0, 1.0))
+        else:
+            self.satisfaction_propensity = satisfaction
         Customer.id_counter+=1 # increment the class variable
         self.subscriptions=[]
         self.events=[]

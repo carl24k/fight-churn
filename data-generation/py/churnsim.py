@@ -82,7 +82,7 @@ class ChurnSimulation:
             next_month=this_month+relativedelta(months=1)
             new_customer.subscriptions.append( (this_month,next_month) )
             month_count = new_customer.generate_events(this_month,next_month)
-            churned=self.util_mod.simulate_churn(month_count) or next_month > self.end_date
+            churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
             if not churned:
                 this_month = next_month
         return new_customer
