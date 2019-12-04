@@ -8,6 +8,6 @@ def regression_cparam(data_set_path, C_param):
     retain_reg.fit(X, y)
     c_ext = '_c{:.3f}.csv'.format(C_param)
     save_regression_summary(data_set_path,retain_reg,ext=c_ext)
-    # save_regression_model(data_set_path,retain_reg,ext=c_ext)
-    # save_dataset_predictions(data_set_path,retain_reg,X,ext=c_ext)
+    save_regression_model(data_set_path,retain_reg,ext=c_ext)
+    save_dataset_predictions(data_set_path,retain_reg,X,ext=c_ext)
 

@@ -317,7 +317,7 @@
 			"%new_metric_id" : 23,
 			"%new_metric_name" : "dislike_percent"
 		},
-		"listing_7_2_dataset": {
+		"listing_7_2_dataset2": {
 			"%metric_interval": "7 day",
 			"mode" : "save",
 			"type" : "sql"

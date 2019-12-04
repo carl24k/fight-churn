@@ -310,7 +310,7 @@
 			"%new_metric_id" : 23,
 			"%new_metric_name" : "dislike_percent"
 		},
-		"listing_7_2_dataset": {
+		"listing_7_2_dataset2": {
 			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"%metric_interval": "7 day",

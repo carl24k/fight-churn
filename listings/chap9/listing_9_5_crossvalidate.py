@@ -6,7 +6,7 @@ from sklearn.metrics import make_scorer
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 
-from listing_8_2_logistic_regression import prepare_data
+from listing_8_2_logistic_regression import prepare_data, save_regression_model
 from listing_9_1_regression_auc import reload_regression
 from listing_9_2_top_decile_lift import calc_lift
 
@@ -25,7 +25,10 @@ def crossvalidate(data_set_path):
     test_params = {'C' : [1.0, 0.5, 0.2, 0.1, 0.05, 0.02, 0.015, 0.01 ]}
 
     gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=4,
-                           return_train_score=False,  param_grid=test_params, refit='AUC')
+                           return_train_score=False,  param_grid=test_params, refit=False)
+    gsearch.fit(X,y)
+
+    result_df = pd.DataFrame(gsearch.cv_results_)
 
     n_weights=[]
     for c in test_params['C']:
@@ -33,8 +36,6 @@ def crossvalidate(data_set_path):
         res=lr.fit(X,~y)
         n_weights.append(res.coef_[0].astype(bool).sum(axis=0))
 
-    gsearch.fit(X,y)
-    result_df = pd.DataFrame(gsearch.cv_results_)
     result_df['n_weights']=n_weights
 
     save_path = data_set_path.replace('.csv', '_crossval.csv')
@@ -64,6 +65,6 @@ def crossvalidate(data_set_path):
     pretty_plot(0, int(1 + result_df['n_weights'].max()),2)
     plt.xlabel('Regression C Param')
 
-    save_path = data_set_path.replace('.csv', '_crossval.png')
+    save_path = data_set_path.replace('.csv', '_crossval_regression.png')
     plt.savefig(save_path)
     plt.close()

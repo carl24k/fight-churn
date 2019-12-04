@@ -220,28 +220,36 @@
 			"metric_to_plot" : "dislike_per_month"
 		},
 		"listing_5_1_8_cohort_plot" : {
-			"metric_to_plot" : "dislike_pcnt"
+			"metric_to_plot" : "dislike_pcnt",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_9_cohort_plot" : {
-			"metric_to_plot" : "newfriend_pcnt_chng"
+			"metric_to_plot" : "newfriend_pcnt_chng",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_10_cohort_plot" : {
-			"metric_to_plot" : "days_since_newfriend"
+			"metric_to_plot" : "days_since_newfriend",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_11_cohort_plot" : {
-			"metric_to_plot" : "reply_per_message"
+			"metric_to_plot" : "reply_per_message",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_12_cohort_plot" : {
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv",
 			"metric_to_plot" : "like_per_post"
 		},
 		"listing_5_1_13_cohort_plot" : {
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv",
 			"metric_to_plot" : "post_per_message"
 		},
 		"listing_5_1_14_cohort_plot" : {
-			"metric_to_plot" : "unfriend_per_month"
+			"metric_to_plot" : "unfriend_per_month",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_15_cohort_plot" : {
-			"metric_to_plot" : "newfriend_per_month"
+			"metric_to_plot" : "newfriend_per_month",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_16_cohort_plot" : {
 			"metric_to_plot" : "unfriend_per_newfriend"
@@ -371,7 +379,7 @@
 			"%new_metric_id" : 33,
 			"%new_metric_name" : "unfriend_per_newfriend"
 		},
-		"listing_7_2_dataset": {
+		"listing_7_2_dataset2": {
 			"%metric_interval": "7 day",
 			"mode" : "save",
 			"type" : "sql"
@@ -457,7 +465,7 @@
 	},
 	"chap8" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv",
 			"type": "py"
 		},
 		"xparams": {
@@ -465,6 +473,9 @@
 			"type": "py"
 		},
 		"listing_8_1_prepare_data" : {
+		},
+		"listing_8_1_2_prepare_data" : {
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
 		},
 		"listing_8_2_logistic_regression" : {
 
@@ -483,7 +494,7 @@
 	},
 	"chap9" : {
 		"params": {
-			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv",
 			"type": "py"
 		},
 		"listing_9_1_regression_auc" : {
@@ -511,6 +522,14 @@
 			"C_param" : 0.005
 		},
 		"listing_9_5_crossvalidate" : {
+		},
+		"listing_9_6_crossvalidate_xgb" : {
+		},
+		"listing_9_5_1_crossvalidate" : {
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
+		},
+		"listing_9_6_1_crossvalidate_xgb" : {
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
 		}
 	}
 }
