@@ -30,7 +30,7 @@ def calculate_impacts(retain_reg):
 def s_curve(x):
     return 1.0 - (1.0/(1.0+exp(-x)))
 
-def save_regression_summary(data_set_path,retain_reg):
+def save_regression_summary(data_set_path,retain_reg,ext=''):
     one_stdev_impact,average_retain = calculate_impacts(retain_reg)
     group_lists = pd.read_csv(data_set_path.replace('.csv', '_groupmets.csv'),index_col=0)
     coef_df = pd.DataFrame.from_dict(
@@ -38,19 +38,19 @@ def save_regression_summary(data_set_path,retain_reg):
          'weight': np.append(retain_reg.coef_[0],retain_reg.intercept_),
          'retain_impact' : np.append(one_stdev_impact,average_retain),
          'group_metrics' : np.append(group_lists['metrics'],'(baseline)')})
-    save_path = data_set_path.replace('.csv', '_logreg_summary.csv')
+    save_path = data_set_path.replace('.csv', '_logreg_summary{}.csv'.format(ext))
     coef_df.to_csv(save_path, index=False)
     print('Saved coefficients to ' + save_path)
 
-def save_regression_model(data_set_path,retain_reg):
-    pickle_path = data_set_path.replace('.csv', '_logreg_model.pkl')
+def save_regression_model(data_set_path,retain_reg,ext=''):
+    pickle_path = data_set_path.replace('.csv', '_logreg_model{}.pkl'.format(ext))
     with open(pickle_path, 'wb') as fid:
         pickle.dump(retain_reg, fid)
     print('Saved model pickle to ' + pickle_path)
 
-def save_dataset_predictions(data_set_path, retain_reg, X):
+def save_dataset_predictions(data_set_path, retain_reg, X,ext=''):
     predictions = retain_reg.predict_proba(X)
     predict_df = pd.DataFrame(predictions,index=X.index,columns=['churn_prob','retain_prob'])
-    predict_path = data_set_path.replace('.csv', '_predictions.csv')
+    predict_path = data_set_path.replace('.csv', '_predictions{}.csv'.format(ext))
     predict_df.to_csv(predict_path,header=True)
     print('Saved dataset predictions to ' + predict_path)

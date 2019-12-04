@@ -264,7 +264,7 @@
 		"listing_6_2_dataset_correlation_matrix" : {
 		},
 		"listing_6_2_2_dataset_correlation_matrix" : {
-			"data_set_path" : "../../../fight-churn-output/churnsim9/socnet_sim4_dataset_scores.csv"
+			"data_set_path" : "../../../fight-churn-output/socnet_sim4/socnet_sim4_dataset_scores.csv"
 		},
 		"listing_6_3_apply_metric_groups" : {
 		},
@@ -322,6 +322,18 @@
 			"%den_metric" : "total_opinions",
 			"%new_metric_id" : 23,
 			"%new_metric_name" : "dislike_percent"
+		},
+		"insert_7_1_3_ratio_metric" : {
+			"%num_metric" : "reply_per_month",
+			"%den_metric" : "message_per_month",
+			"%new_metric_id" : 30,
+			"%new_metric_name" : "reply_per_message"
+		},
+		"insert_7_1_4_ratio_metric" : {
+			"%num_metric" : "like_per_month",
+			"%den_metric" : "post_per_month",
+			"%new_metric_id" : 31,
+			"%new_metric_name" : "like_per_post"
 		},
 		"listing_7_2_dataset": {
 			"%metric_interval": "7 day",
@@ -443,6 +455,26 @@
 		"listing_9_2_top_decile_lift" : {
 		},
 		"listing_9_3_backtest" : {
+		},
+		"listing_9_4_2_regression_cparam" : {
+			"C_param" : 0.25
+		},
+		"listing_9_4_3_regression_cparam" : {
+			"C_param" : 0.1
+		},
+		"listing_9_4_4_regression_cparam" : {
+			"C_param" : 0.05
+		},
+		"listing_9_4_5_regression_cparam" : {
+			"C_param" : 0.025
+		},
+		"listing_9_4_6_regression_cparam" : {
+			"C_param" : 0.01
+		},
+		"listing_9_4_7_regression_cparam" : {
+			"C_param" : 0.005
+		},
+		"listing_9_5_crossvalidate" : {
 		}
 	}
 }

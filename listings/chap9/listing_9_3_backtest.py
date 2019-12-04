@@ -26,6 +26,6 @@ def backtest(data_set_path):
     gsearch.fit(X,y)
     result_df = pd.DataFrame(gsearch.cv_results_)
 
-    save_path = data_set_path.replace('.csv', '_backtest_scores.csv')
+    save_path = data_set_path.replace('.csv', '_backtest.csv')
     result_df.to_csv(save_path, index=False)
     print('Saved test scores to ' + save_path)
