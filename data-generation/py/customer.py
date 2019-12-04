@@ -17,7 +17,7 @@ class Customer:
         self.behave_per_day = (1.0/30.0)*self.behave_per_month
         self.id=Customer.id_counter # set the id to the current class variable
         if satisfaction is None:
-            self.satisfaction_propensity = np.power(2.0, random.uniform(-1.0, 1.0))
+            self.satisfaction_propensity = np.power(2.0, random.uniform(-0.75, 0.75))
         else:
             self.satisfaction_propensity = satisfaction
         Customer.id_counter+=1 # increment the class variable
