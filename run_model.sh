@@ -4,7 +4,7 @@
 
 # run_churn_listing.py
 
-SCHEMA=socnet_sim4
+SCHEMA=socialnet5
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
 CHURN_DB_USER=cgold
@@ -14,8 +14,9 @@ CHURN_ROOT=/projects/ChurnBook
 
 PYTHONPATH="${PYTHONPATH}:$HOME$CHURN_ROOT/fight-churn/listings/chap5:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap6:"\
+"$HOME$CHURN_ROOT/fight-churn/listings/chap7:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap8:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap7"
+"$HOME$CHURN_ROOT/fight-churn/listings/chap9"
 
 export PYTHONPATH
 export PYTHONUNBUFFERED
@@ -33,17 +34,17 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # standard metric names
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4 5 6 7 8 11
 
-# standard metric
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 1 2 3 4 5 6 7 8
-
 # Account tenure metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 11
 
-# 1st ratio & total
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 3 --insert
+# standard metric
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 1 2 3 4 5 6 7 8
 
-# 2nd ratio
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 2 --insert
+# total metric
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --insert
+
+## ratios
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 --insert
 
 # Change metrics
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 4 6 --insert
@@ -55,29 +56,39 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
 
 # Extract the data
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 5
 
 # Stats
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2
 
-# Scores
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 5
+# Scores data set 1
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 3
 
-# Grouping
+# Grouping data set 1
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 4 3 5
+
+# Dataset2 Extract & Processing
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1
 
 # Regression
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 2
 
-# Prediction
+ Prediction
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 3 4 5
 
 # Current Stats
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 3
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 7 8 9
 
 
-# Cohorts
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10
+# Cohorts (after all metrics generated)
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16
 
-# OOS testing
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 3
+# Levels of C param
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 2 3 4 5 6 7
+
+# Cross validation
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 5
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 5 --version 1
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6 --version 1

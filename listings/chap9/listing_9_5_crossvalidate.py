@@ -24,7 +24,7 @@ def crossvalidate(data_set_path):
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
     test_params = {'C' : [1.0, 0.5, 0.2, 0.1, 0.05, 0.02, 0.015, 0.01 ]}
 
-    gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=4,
+    gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=1,
                            return_train_score=False,  param_grid=test_params, refit=False)
     gsearch.fit(X,y)
 

@@ -99,8 +99,8 @@ class ChurnSimulation:
         for i in range(n_to_create):
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
-            print('Simulated customer %d: %d subscription, %d events' %
-                  (i, len(customer.subscriptions), len(customer.events)))
+            if i % 100==0:
+                print('Simulated customer {}/{}: {} subscription, {} events'.format(i,n_to_create, len(customer.subscriptions), len(customer.events)))
 
 
     def copy_customer_to_database(self,customer):

@@ -10,7 +10,7 @@ from listing_9_2_top_decile_lift import calc_lift
 
 def crossvalidate_xgb(data_set_path):
 
-    X,y = prepare_data(data_set_path)
+    X,y = prepare_data(data_set_path,ext='')
     y=~y
 
     tscv = TimeSeriesSplit(n_splits=3)
@@ -23,7 +23,7 @@ def crossvalidate_xgb(data_set_path):
                     'learning_rate': [0.1,0.2,0.3,0.4],
                     'n_estimators': [20,40,80,120],
                     'min_child_weight' : [3,6,9,12]}
-    gsearch = GridSearchCV(estimator=xgb_model,n_jobs=-1, scoring=score_models, cv=tscv, verbose=4,
+    gsearch = GridSearchCV(estimator=xgb_model,n_jobs=-1, scoring=score_models, cv=tscv, verbose=1,
                            return_train_score=False,  param_grid=test_params,refit='AUC')
     gsearch.fit(X,y)
 

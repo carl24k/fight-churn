@@ -211,7 +211,8 @@
 			"metric_to_plot" : "adview_per_month"
 		},
 		"listing_5_1_5_cohort_plot" : {
-			"metric_to_plot" : "adview_per_post"
+			"metric_to_plot" : "adview_per_post",
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_6_cohort_plot" : {
 			"metric_to_plot" : "like_per_month"
@@ -252,6 +253,7 @@
 			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv"
 		},
 		"listing_5_1_16_cohort_plot" : {
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset2.csv",
 			"metric_to_plot" : "unfriend_per_newfriend"
 		},
 		"listing_5_2_dataset_stats" : {
@@ -270,6 +272,15 @@
 		},
 		"listing_5_2_6_dataset_stats" : {
 			"data_set_path" : "../../../fight-churn-output/socialnet5/socialnet5_dataset_current_groupscore.csv"
+		},
+		"listing_5_2_7_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/socialnet5/socialnet5_dataset2_current.csv"
+		},
+		"listing_5_2_8_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/socialnet5/socialnet5_dataset2_current_scores.csv"
+		},
+		"listing_5_2_9_dataset_stats" : {
+			"data_set_path" : "../../../fight-churn-output/socialnet5/socialnet5_dataset2_current_groupscore.csv"
 		},
 		"listing_5_3_metric_scores" : {
 		}
@@ -473,6 +484,7 @@
 			"type": "py"
 		},
 		"listing_8_1_prepare_data" : {
+			"group_corr_thresh" : 0.62
 		},
 		"listing_8_1_2_prepare_data" : {
 			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
@@ -480,7 +492,7 @@
 		"listing_8_2_logistic_regression" : {
 
 		},
-		"listing_8_3_dataset_current": {
+		"listing_8_3_dataset2_current": {
 			"type" : "sql",
 			"mode" : "save",
 			"%metric_interval": "7 day"
@@ -523,10 +535,10 @@
 		},
 		"listing_9_5_crossvalidate" : {
 		},
-		"listing_9_6_crossvalidate_xgb" : {
-		},
 		"listing_9_5_1_crossvalidate" : {
 			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
+		},
+		"listing_9_6_crossvalidate_xgb" : {
 		},
 		"listing_9_6_1_crossvalidate_xgb" : {
 			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"

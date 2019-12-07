@@ -2,7 +2,7 @@ import pandas as pd
 
 def ordered_correlation_matrix(data_set_path):
 
-    churn_data = pd.read_csv(data_set_path,index_col=[0,1])
+    churn_data = pd.read_csv(data_set_path.replace('.csv','_scores.csv'),index_col=[0,1])
 
     load_mat_df = pd.read_csv(data_set_path.replace('.csv', '_load_mat.csv'), index_col=0)
 
