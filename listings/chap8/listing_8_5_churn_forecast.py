@@ -22,16 +22,14 @@ def churn_forecast(data_set_path):
 
     forecast_histogram(data_set_path,predictions)
 
-def forecast_histogram(data_set_path,predictions):
+def forecast_histogram(data_set_path,predictions,ext='reg'):
     plt.figure(figsize=[6,4])
     n, bins,_ = plt.hist(predictions[:,0],bins=20)
     plt.xlabel('Churn Probability')
     plt.ylabel('# of Accounts')
-    plt.title('Histogram of Active Customer Churn Probability')
-    # plt.gca().get_yaxis().set_ticklabels([])
-    # plt.gca().get_xaxis().set_ticklabels([])
+    plt.title('Histogram of Active Customer Churn Probability ({})'.format(ext))
     plt.grid()
-    plt.savefig(data_set_path.replace('.csv', '_current_churnhist.png'), format='png')
+    plt.savefig(data_set_path.replace('.csv', '_current_{}_churnhist.png'.format(ext)), format='png')
     plt.close()
     hist_df=pd.DataFrame({'n':n,'bins':bins[1:]})
     hist_df.to_csv(data_set_path.replace('.csv', '_current_churnhist.csv'))
