@@ -4,23 +4,21 @@ from sklearn.metrics import make_scorer
 from sklearn.linear_model import LogisticRegression
 
 from listing_8_2_logistic_regression import prepare_data
-from listing_9_1_regression_auc import reload_regression
 from listing_9_2_top_decile_lift import calc_lift
 
 
-def backtest(data_set_path):
+def backtest(data_set_path,n_test_split):
 
-    X,y = prepare_data(data_set_path)
-    y=~y
+    X,y = prepare_data(data_set_path,as_retention=False)
 
-    tscv = TimeSeriesSplit(n_splits=3)
+    tscv = TimeSeriesSplit(n_splits=n_test_split)
 
     lift_scorer = make_scorer(calc_lift, needs_proba=True)
-    score_models = {'lift_scorer': lift_scorer, 'AUC': 'roc_auc'}
+    score_models = {'lift': lift_scorer, 'AUC': 'roc_auc'}
 
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
 
-    gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=4,
+    gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=1,
                            return_train_score=False,  param_grid={'C' : [1]}, refit='AUC')
 
     gsearch.fit(X,y)

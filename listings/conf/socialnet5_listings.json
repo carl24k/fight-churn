@@ -160,7 +160,7 @@
 	},
 	"chap4" : {
 		"params" : {
-			"%from_yyyy-mm-dd": "2020-03-01",
+			"%from_yyyy-mm-dd": "2020-02-09",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode" : "run",
 			"type" : "sql"
@@ -484,7 +484,7 @@
 			"type": "py"
 		},
 		"listing_8_1_prepare_data" : {
-			"group_corr_thresh" : 0.62
+			"group_corr_thresh" : 0.65
 		},
 		"listing_8_1_2_prepare_data" : {
 			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
@@ -514,34 +514,31 @@
 		"listing_9_2_top_decile_lift" : {
 		},
 		"listing_9_3_backtest" : {
+			"n_test_split" : 2
 		},
+		"listing_9_4_regression_cparam" : {
+			"C_param" : 0.02		},
 		"listing_9_4_2_regression_cparam" : {
-			"C_param" : 0.2
-		},
-		"listing_9_4_3_regression_cparam" : {
-			"C_param" : 0.1
-		},
-		"listing_9_4_4_regression_cparam" : {
-			"C_param" : 0.05
-		},
-		"listing_9_4_5_regression_cparam" : {
-			"C_param" : 0.02
-		},
-		"listing_9_4_6_regression_cparam" : {
 			"C_param" : 0.01
 		},
-		"listing_9_4_7_regression_cparam" : {
+		"listing_9_4_3_regression_cparam" : {
 			"C_param" : 0.005
 		},
 		"listing_9_5_crossvalidate" : {
+			"n_test_split" : 2
 		},
 		"listing_9_5_1_crossvalidate" : {
-			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv",
+			"n_test_split" : 2
 		},
 		"listing_9_6_crossvalidate_xgb" : {
+			"n_test_split" : 2
 		},
 		"listing_9_6_1_crossvalidate_xgb" : {
-			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv"
+			"data_set_path": "../../../fight-churn-output/socialnet5/socialnet5_dataset.csv",
+			"n_test_split" : 2
+		},
+		"listing_9_7_churn_forecast_xgb" : {
 		}
 	}
 }
