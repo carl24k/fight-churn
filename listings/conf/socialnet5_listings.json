@@ -517,7 +517,11 @@
 			"n_test_split" : 2
 		},
 		"listing_9_4_regression_cparam" : {
-			"C_param" : 0.02		},
+			"C_param" : 0.02
+		},
+		"listing_9_4_1_regression_cparam" : {
+			"C_param" : 0.02
+		},
 		"listing_9_4_2_regression_cparam" : {
 			"C_param" : 0.01
 		},
