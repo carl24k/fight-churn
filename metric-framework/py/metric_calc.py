@@ -10,7 +10,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 # Run control arguments
-parser.add_argument("--schema", type=str, help="The name of the schema", default='churnsim9')
+parser.add_argument("--schema", type=str, help="The name of the schema", default='socialnet5')
 parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
 parser.add_argument("--nowarn", action="store_true", default=False,help="Plot cohorts using scored metrics for all (not just skewed)")
 
