@@ -363,31 +363,31 @@
 		"insert_7_1_2_ratio_metric" : {
 			"%num_metric" : "reply_per_month",
 			"%den_metric" : "message_per_month",
-			"%new_metric_id" : 30,
+			"%new_metric_id" : 22,
 			"%new_metric_name" : "reply_per_message"
 		},
 		"insert_7_1_3_ratio_metric" : {
 			"%num_metric" : "like_per_month",
 			"%den_metric" : "post_per_month",
-			"%new_metric_id" : 31,
+			"%new_metric_id" : 23,
 			"%new_metric_name" : "like_per_post"
 		},
 		"insert_7_1_4_ratio_metric" : {
 			"%num_metric" : "post_per_month",
 			"%den_metric" : "message_per_month",
-			"%new_metric_id" : 32,
+			"%new_metric_id" : 24,
 			"%new_metric_name" : "post_per_message"
 		},
 		"insert_7_1_5_ratio_metric" : {
 			"%num_metric" : "unfriend_per_month",
 			"%den_metric" : "newfriend_per_month",
-			"%new_metric_id" : 33,
+			"%new_metric_id" : 25,
 			"%new_metric_name" : "unfriend_per_newfriend"
 		},
 		"insert_7_1_6_ratio_metric" : {
 			"%num_metric" : "dislike_per_month",
 			"%den_metric" : "total_opinions",
-			"%new_metric_id" : 23,
+			"%new_metric_id" : 27,
 			"%new_metric_name" : "dislike_percent"
 		},
 		"listing_7_2_dataset2": {
@@ -400,7 +400,7 @@
 		},
 		"insert_7_3_total_metric" : {
 			"%metric_list" : " 'like_per_month', 'dislike_per_month' ",
-			"%new_metric_id" : 22,
+			"%new_metric_id" : 26,
 			"%new_metric_name" : "total_opinions"
 		},
 
@@ -411,7 +411,7 @@
 		"insert_7_4_percent_change_metric" : {
 			"%metric2measure" : "newfriend_per_month",
 			"%period_weeks" : 4,
-			"%new_metric_id" : 24,
+			"%new_metric_id" : 30,
 			"%new_metric_name" : "new_friends_pcnt_change"
 		},
 		"listing_7_5_fat_tail_scores" : {
@@ -429,19 +429,19 @@
 		},
 		"insert_7_6_days_since_event" : {
 			"%event2measure" : "newfriend",
-			"%new_metric_id" : 25,
+			"%new_metric_id" : 31,
 			"%new_metric_name" : "days_since_newfriend"
 		},
 		"listing_7_7_scaled_events_per_month" : {
 			"%event2measure" : "unfriend",
 			"%obs_period" : 84,
-			"%desc_period" : 28
+			"%desc_period" : 32
 		},
 		"insert_7_7_scaled_events_per_month" : {
 			"%event2measure" : "unfriend",
 			"%obs_period" : 84,
 			"%desc_period" : 28,
-			"%new_metric_id" : 26
+			"%new_metric_id" : 33
 		},
 		"listing_7_8_tenure_scaled_events_per_month" : {
 			"%event2measure" : "unfriend",
@@ -457,21 +457,14 @@
 			"%obs_period" : 84,
 			"%desc_period" : 28,
 			"%min_tenure" : 14,
-			"%new_metric_id" : 27
+			"%new_metric_id" : 34
 		},
 		"insert_7_8_1_tenure_scaled_events_per_month" : {
 			"%event2measure" : "unfriend",
 			"%obs_period" : 84,
 			"%desc_period" : 28,
 			"%min_tenure" : 14,
-			"%new_metric_id" : 27
-		},
-		"insert_7_8_2_tenure_scaled_events_per_month" : {
-			"%event2measure" : "newfriend",
-			"%obs_period" : 84,
-			"%desc_period" : 28,
-			"%min_tenure" : 14,
-			"%new_metric_id" : 28
+			"%new_metric_id" : 34
 		}
 	},
 	"chap8" : {
