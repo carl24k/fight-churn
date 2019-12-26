@@ -14,11 +14,11 @@ sum(case when metric_name_id=27 then metric_value else 0 end) as unfriend_per_mo
 sum(case when metric_name_id=6 then metric_value else 0 end) as message_per_month,
 sum(case when metric_name_id=7 then metric_value else 0 end) as reply_per_month,
 sum(case when metric_name_id=21 then metric_value else 0 end) as adview_per_post,
-sum(case when metric_name_id=23 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=30 then metric_value else 0 end) as reply_per_message,
 sum(case when metric_name_id=31 then metric_value else 0 end) as like_per_post,
 sum(case when metric_name_id=32 then metric_value else 0 end) as post_per_message,
 sum(case when metric_name_id=33 then metric_value else 0 end) as unfriend_per_newfriend,
+sum(case when metric_name_id=23 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=24 then metric_value else 0 end) as newfriend_pcnt_chng,
 sum(case when metric_name_id=25 then metric_value else 0 end) as days_since_newfriend
 from metric m inner join observation_params

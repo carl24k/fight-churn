@@ -361,34 +361,34 @@
 			"%new_metric_name" : "adviw_per_post"
 		},
 		"insert_7_1_2_ratio_metric" : {
-			"%num_metric" : "dislike_per_month",
-			"%den_metric" : "total_opinions",
-			"%new_metric_id" : 23,
-			"%new_metric_name" : "dislike_percent"
-		},
-		"insert_7_1_3_ratio_metric" : {
 			"%num_metric" : "reply_per_month",
 			"%den_metric" : "message_per_month",
 			"%new_metric_id" : 30,
 			"%new_metric_name" : "reply_per_message"
 		},
-		"insert_7_1_4_ratio_metric" : {
+		"insert_7_1_3_ratio_metric" : {
 			"%num_metric" : "like_per_month",
 			"%den_metric" : "post_per_month",
 			"%new_metric_id" : 31,
 			"%new_metric_name" : "like_per_post"
 		},
-		"insert_7_1_5_ratio_metric" : {
+		"insert_7_1_4_ratio_metric" : {
 			"%num_metric" : "post_per_month",
 			"%den_metric" : "message_per_month",
 			"%new_metric_id" : 32,
 			"%new_metric_name" : "post_per_message"
 		},
-		"insert_7_1_6_ratio_metric" : {
+		"insert_7_1_5_ratio_metric" : {
 			"%num_metric" : "unfriend_per_month",
 			"%den_metric" : "newfriend_per_month",
 			"%new_metric_id" : 33,
 			"%new_metric_name" : "unfriend_per_newfriend"
+		},
+		"insert_7_1_6_ratio_metric" : {
+			"%num_metric" : "dislike_per_month",
+			"%den_metric" : "total_opinions",
+			"%new_metric_id" : 23,
+			"%new_metric_name" : "dislike_percent"
 		},
 		"listing_7_2_dataset2": {
 			"%metric_interval": "7 day",
