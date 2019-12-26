@@ -115,7 +115,7 @@ running.
 The first thing you might need to do is connect to your local server (when I do this on Mac this is necessary;
 on Windows, the connection to the localhost server was already present by default.)
 If you don't already see `localhost` under the Servers tree in Pgadmin,  control (right)
-clicking on the root of the Servers tree and selecting *Connect*
+clicking on the root of the Servers tree and selecting *Create*
 
 ![Connect to Server in PgAdmin](/readme_files/pgadmin_connect.png)
 
@@ -128,7 +128,7 @@ user name and password.  So your dialog should look like the one below - then hi
 
 
 Next you need to create a new database to hold all of the churn data schemas you create.
-You will probably create multiple schemas as you work on the exmaples in the book and/or your own
+You will probably create multiple schemas as you work on the examples in the book and/or your own
 data so this will help keep these organized.  An easy way to create a database is in PgAdmin - right click
 on the *Databases* node under *localhost* in the tree:
 
