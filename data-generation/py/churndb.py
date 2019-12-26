@@ -17,7 +17,7 @@ from postgres import Postgres
 import os
 import sys
 
-schema_name='socnet_sim4'
+schema_name='socialnet5'
 if len(sys.argv) >= 2:
     schema_name = sys.argv[1]
 
