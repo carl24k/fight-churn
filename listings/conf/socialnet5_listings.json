@@ -306,7 +306,7 @@
 		"listing_6_3_apply_metric_groups" : {
 		},
 		"listing_6_4_find_metric_groups" : {
-			"group_corr_thresh" : 0.55
+			"group_corr_thresh" : 0.65
 		},
 		"listing_6_5_ordered_correlation_matrix" : {
 		},
