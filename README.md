@@ -504,7 +504,7 @@ listing for the table you want to import into:
 
 ## 2 Running the Code from the Book Listings
 
-You can run the book listings with the python script `listings/run_churn_listing.py`.
+You can run the book listings with the python script `listings/py/run_churn_listing.py`.
 
 * This script reads SQL and Python source code, and either
 binds variables (for SQL) or passes parameters (for Python) and executes the code.  
@@ -522,7 +522,7 @@ from any listing on your local database, this is the easiest way to do it.
 
 ### 2.1 Running a Listing
 
-Start by making a Run Configuration for the script `listings/run_churn_listing.py`, 
+Start by making a Run Configuration for the script `listings/py/run_churn_listing.py`, 
 following the instructions in Section 1.2.6.
 
 The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
