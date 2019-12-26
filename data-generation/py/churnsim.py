@@ -187,7 +187,7 @@ class ChurnSimulation:
 
 if __name__ == "__main__":
 
-    model_name = 'socnet_sim4'
+    model_name = 'socialnet5'
     if len(sys.argv) >= 2:
         model_name = sys.argv[1]
 
