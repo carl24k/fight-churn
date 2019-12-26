@@ -15,9 +15,9 @@ def churn_forecast_xgb(data_set_path):
 
     predictions = xgb_model.predict_proba(current_score_df.values)
 
-    predict_df = pd.DataFrame(predictions, index=current_score_df.index, columns=['churn_prob', 'retain_prob'])
+    predict_df = pd.DataFrame(predictions, index=current_score_df.index, columns=['retain_prob','churn_prob'])
     forecast_save_path = data_set_path.replace('.csv', '_current_xgb_predictions.csv')
     print('Saving results to %s' % forecast_save_path)
     predict_df.to_csv(forecast_save_path, header=True)
 
-    forecast_histogram(data_set_path,predictions,ext='xgb')
+    forecast_histogram(data_set_path,predict_df,ext='xgb')
