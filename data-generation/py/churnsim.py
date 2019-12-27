@@ -196,7 +196,7 @@ if __name__ == "__main__":
     init = 10000
 
     growth_rate = 0.1
-    churn_rate = 0.04
+    churn_rate = 0.02
     mrr = 9.99
     random_seed = None
     if random_seed is not None:
