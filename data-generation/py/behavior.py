@@ -54,7 +54,7 @@ class BehaviorModel:
 
 class GaussianBehaviorModel(BehaviorModel):
 
-    def __init__(self,name,random_seed):
+    def __init__(self,name,random_seed=None,version='model'):
         '''
         This behavior model uses a mean and (pseudo) covariance matrix to generate customers with event rates.
         The parameters are passed on a csv file that should be located in a `conf` directory adjacent to the code.
@@ -67,7 +67,8 @@ class GaussianBehaviorModel(BehaviorModel):
         :param name:
         '''
         self.name=name
-        model_path='../conf/'+name+'_model.csv'
+        self.version=version
+        model_path='../conf/'+name + '_' + version + '.csv'
         model=pd.read_csv(model_path)
         model.set_index(['behavior'],inplace=True)
         self.behave_means=model['mean']
@@ -126,12 +127,12 @@ class GaussianBehaviorModel(BehaviorModel):
 
 class FatTailledBehaviorModel(GaussianBehaviorModel):
 
-    def __init__(self,name,random_seed):
+    def __init__(self,name,random_seed=None,version=None):
         self.exp_base = 1.333
         self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
         self.exp_fun = lambda x: np.power(self.exp_base,x)
 
-        super(FatTailledBehaviorModel,self).__init__(name,random_seed)
+        super(FatTailledBehaviorModel,self).__init__(name,random_seed,version)
 
     def scale_correlation_to_covariance(self):
         self.log_means=self.log_fun(self.behave_means)
@@ -153,6 +154,6 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         '''
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)
-        new_customer= Customer(customer_rates)
+        new_customer= Customer(customer_rates,channel_name=self.version)
         # print(customer_rates)
         return new_customer

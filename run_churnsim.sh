@@ -4,7 +4,7 @@
 
 # run_churn_listing.py
 
-SCHEMA=socialnet5
+SCHEMA=socialnet6
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
 CHURN_DB_USER=cgold
