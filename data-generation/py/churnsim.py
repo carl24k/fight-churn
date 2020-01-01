@@ -19,7 +19,7 @@ import psycopg2 as post
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers, growth, churn, mrr,seed):
+    def __init__(self, model, start, end, init_customers,seed):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -37,11 +37,9 @@ class ChurnSimulation:
         self.start_date = start
         self.end_date = end
         self.init_customers=init_customers
-        self.monthly_growth_rate = growth
-        self.monthly_churn_rate = churn
-        self.mrr=mrr
+        self.monthly_growth_rate = 0.1
 
-        self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate)
+        self.util_mod=UtilityModel(self.model_name)
         behavior_versions = glob.glob('../conf/'+self.model_name+'_*.csv')
         self.behavior_models = {}
         for b in behavior_versions:
@@ -135,7 +133,7 @@ class ChurnSimulation:
         with open(self.tmp_sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
                 tmp_file.write("%d,%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], self.mrr))
+                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], 0.0))
                 self.subscription_count += 1
         with open(self.tmp_event_file_name, 'w') as tmp_file:
             for e in customer.events:
@@ -226,14 +224,10 @@ if __name__ == "__main__":
     end = date(2020, 6, 1)
     init = 5000
 
-    growth_rate = 0.1
-    churn_rate = 0.02
-    mrr = 9.99
     random_seed = None
     if random_seed is not None:
         random.seed(random_seed) # for random
 
-
-    churn_sim = ChurnSimulation(model_name, start, end, init,growth_rate,churn_rate, mrr,random_seed)
+    churn_sim = ChurnSimulation(model_name, start, end, init,random_seed)
     churn_sim.run_simulation()
 

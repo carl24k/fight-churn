@@ -95,3 +95,6 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 # Forecast xgb
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7
+
+# Data set with account data
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 1

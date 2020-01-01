@@ -8,7 +8,7 @@ from customer import Customer
 
 class UtilityModel:
 
-    def __init__(self,name,churn_rate):
+    def __init__(self,name):
         '''
         This class calculates the churn probability for a customer based on their event counts.  Its called a "Utility
         Model" to mean utility in the economic sense: How much a good or service to satisfies one or more needs or
@@ -29,7 +29,6 @@ class UtilityModel:
         :param behavior_model: The behavior model that this utility function works withy
         '''
         self.name=name
-        self.churn_rate = churn_rate
         data=pd.read_csv('../conf/'+name+'_utility.csv',index_col=0)
         self.linear_utility=data['util']
         self.behave_names=data.index.values
@@ -56,17 +55,17 @@ class UtilityModel:
         self.expected_utility = self.utility_function(self.behave_means, temp_customer)
         self.ex_util_vol = np.sqrt(np.dot(self.behave_var, self.linear_utility.values))
         assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
-        r = 1.0 - self.churn_rate
+        # churn_fudge = 0.02
+        # r = 1.0 - churn_fudge
         self.kappa = -1.0 / self.ex_util_vol
-        self.offset = log(1.0 / r - 1.0) - self.kappa * self.expected_utility
-        print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(self.churn_rate, r,
-                                                                                    log(1.0 / r - 1.0)))
+        # self.offset = log(1.0 / r - 1.0) - self.kappa * self.expected_utility
+        self.offset = 1.5 # chosen to give around 5% churn rate on the simulation
+        # print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(churn_fudge, r,log(1.0 / r - 1.0)))
+
         print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
         print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
-        expected_churn_prob = self.churn_probability(self.behave_means, temp_customer)
-        print('\tExpected churn prob={}'.format(expected_churn_prob))
         expected_unscaled_prob = self.churn_probability(self.behave_means, temp_customer)
-        print('\tMedian churn prob={}'.format(expected_unscaled_prob))
+        print('\tExpected Median churn prob={}'.format(expected_unscaled_prob))
 
     def utility_function(self,event_counts,customer):
         '''
