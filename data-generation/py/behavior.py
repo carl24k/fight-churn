@@ -146,7 +146,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
     def behave_var(self):
         return self.exp_fun( np.diagonal(self.behave_cov))
 
-    def generate_customer(self):
+    def generate_customer(self,start_of_month):
         '''
         Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
         gaussian distribution.
@@ -154,6 +154,6 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         '''
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)
-        new_customer= Customer(customer_rates,channel_name=self.version)
+        new_customer= Customer(customer_rates,channel_name=self.version,start_of_month=start_of_month)
         # print(customer_rates)
         return new_customer

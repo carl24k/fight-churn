@@ -92,7 +92,7 @@ class ChurnSimulation:
         :return: the new customer object it contains the events and subscriptions
         '''
         customer_model = self.pick_customer_model()
-        new_customer=customer_model.generate_customer()
+        new_customer=customer_model.generate_customer(start_of_month)
 
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
@@ -139,7 +139,8 @@ class ChurnSimulation:
             for e in customer.events:
                 tmp_file.write("%d,'%s',%d\n" % (customer.id, e[0], e[1]))
 
-        sql = "INSERT INTO {}.account VALUES({},'{}')".format(self.model_name,customer.id,customer.channel)
+        sql = "INSERT INTO {}.account VALUES({},'{}','{}')".format(self.model_name,customer.id,customer.channel,
+                                                                   customer.date_of_birth.isoformat())
         self.db.run(sql)
 
         cur = self.con.cursor()

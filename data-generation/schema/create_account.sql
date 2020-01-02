@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS  x.account
 (
     id integer NOT NULL,
     channel text COLLATE pg_catalog."default"  NULL,
+    date_of_birth date NOT NULL,
     CONSTRAINT account_pkey PRIMARY KEY (id)
 )
 WITH (

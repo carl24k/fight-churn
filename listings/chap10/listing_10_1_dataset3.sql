@@ -6,6 +6,7 @@ with observation_params as
 )
 select m.account_id, o.observation_date, is_churn,
 a.channel,
+date_part('day',o.observation_date::timestamp - a.date_of_birth::timestamp)::float/365.0 as customer_age,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
 sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
@@ -28,5 +29,5 @@ inner join observation o on m.account_id = o.account_id
     and m.metric_time > (o.observation_date - metric_period)::timestamp
     and m.metric_time <= o.observation_date::timestamp
 inner join account a on m.account_id = a.id
-group by m.account_id, metric_time, observation_date, is_churn, a.channel
+group by m.account_id, metric_time, observation_date, is_churn, a.channel, date_of_birth
 order by observation_date,m.account_id

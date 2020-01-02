@@ -249,6 +249,10 @@
 			"data_set_path": "../../../fight-churn-output/socialnet6/socialnet6_dataset2.csv",
 			"metric_to_plot": "unfriend_per_newfriend"
 		},
+		"listing_5_1_17_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet6/socialnet6_dataset3.csv",
+			"metric_to_plot": "customer_age"
+		},
 		"listing_5_2_dataset_stats": {
 		},
 		"listing_5_2_2_dataset_stats": {

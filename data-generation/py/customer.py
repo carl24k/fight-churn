@@ -1,12 +1,20 @@
 
 from datetime import date, datetime, timedelta,time
+from dateutil import relativedelta
 from numpy import random
 from random import randrange
 import numpy as np
 
+
+
 class Customer:
     id_counter=0
-    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA'):
+    MIN_AGE = 12.0
+    MAX_AGE = 82.0
+    AGE_RANGE = MAX_AGE - MIN_AGE
+    AVG_AGE = (MAX_AGE + MIN_AGE) / 2.0
+
+    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -16,9 +24,17 @@ class Customer:
         self.behave_per_month=behavior_rates
         self.behave_per_day = (1.0/30.0)*self.behave_per_month
         self.channel=channel_name
+        if start_of_month:
+            self.age=random.uniform(Customer.MIN_AGE,Customer.MAX_AGE)
+            self.date_of_birth = start_of_month + relativedelta.relativedelta(years=-int(self.age),
+                                                                              months=-int( (self.age % 1)*12 ),
+                                                                              days=-random.uniform(1,30))
+        else:
+            self.date_of_birth=None
         self.id=Customer.id_counter # set the id to the current class variable
         if satisfaction is None:
-            self.satisfaction_propensity = np.power(2.0, random.uniform(-1.0, 1.0))
+            age_contrib = 0.3* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
+            self.satisfaction_propensity = np.power(2.0, random.uniform(-0.85, 0.85) + age_contrib)
         else:
             self.satisfaction_propensity = satisfaction
         Customer.id_counter+=1 # increment the class variable

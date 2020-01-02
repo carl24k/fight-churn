@@ -82,7 +82,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 
 # Cohorts (after all metrics generated)
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17
 
 # Levels of C param
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 1 2 3
