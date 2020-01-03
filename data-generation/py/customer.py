@@ -33,8 +33,8 @@ class Customer:
             self.date_of_birth=None
         self.id=Customer.id_counter # set the id to the current class variable
         if satisfaction is None:
-            age_contrib = 0.3* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
-            self.satisfaction_propensity = np.power(2.0, random.uniform(-0.85, 0.85) + age_contrib)
+            age_contrib = 0.25* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
+            self.satisfaction_propensity = np.power(2.0, random.uniform(-0.875, 0.875) + age_contrib)
         else:
             self.satisfaction_propensity = satisfaction
         Customer.id_counter+=1 # increment the class variable

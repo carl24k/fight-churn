@@ -223,7 +223,7 @@ if __name__ == "__main__":
 
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
-    init = 5000
+    init = 8000
 
     random_seed = None
     if random_seed is not None:

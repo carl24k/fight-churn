@@ -81,9 +81,6 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 7 8 9
 
 
-# Cohorts (after all metrics generated)
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17
-
 # Levels of C param
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 1 2 3
 
@@ -98,3 +95,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 # Data set with account data
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 1
+
+
+# Cohorts (after all metrics generated)
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17
