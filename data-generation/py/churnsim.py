@@ -28,9 +28,6 @@ class ChurnSimulation:
         :param start: start date for simulation
         :param end: end date for simulation
         :param init_customers: how many customers to create at start date
-        :param growth: monthly customer growth rate
-        :param churn: monthly customer churn rate
-        :param mrr: customer MRR
         '''
 
         self.model_name=model
@@ -133,7 +130,7 @@ class ChurnSimulation:
         with open(self.tmp_sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
                 tmp_file.write("%d,%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], 0.0))
+                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], 9.99)) # mrr is 9.99
                 self.subscription_count += 1
         with open(self.tmp_event_file_name, 'w') as tmp_file:
             for e in customer.events:
@@ -223,7 +220,7 @@ if __name__ == "__main__":
 
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
-    init = 8000
+    init = 10000
 
     random_seed = None
     if random_seed is not None:
