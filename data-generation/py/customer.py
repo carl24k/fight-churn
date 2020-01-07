@@ -13,6 +13,7 @@ class Customer:
     MAX_AGE = 82.0
     AGE_RANGE = MAX_AGE - MIN_AGE
     AVG_AGE = (MAX_AGE + MIN_AGE) / 2.0
+    date_multipliers = {}
 
     def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None):
         '''
@@ -58,8 +59,16 @@ class Customer:
         counts=[0]*len(self.behave_per_day)
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
+            if the_date in Customer.date_multipliers:
+                multiplier = Customer.date_multipliers[the_date]
+            else:
+                if the_date.weekday() >= 4:
+                    multiplier = random.uniform(1.00,1.2)
+                else:
+                    multiplier = random.uniform(0.825,1.025)
+                Customer.date_multipliers[the_date]=multiplier
             for event_idx,rate in  enumerate(self.behave_per_day):
-                new_count=random.poisson(rate)
+                new_count= int(round(multiplier*random.poisson(rate)))
                 counts[event_idx] += new_count
                 for n in range(0,new_count):
                     event_time=datetime.combine(the_date,time(randrange(24),randrange(60),randrange(60)))
