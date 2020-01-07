@@ -150,10 +150,12 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         '''
         Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
         gaussian distribution.
+        subtract 0.5 and set min at 0.5 per month, so there can be very low rates despite 0 (1) min in log normal sim
         :return: a Custoemr object
         '''
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)
+        customer_rates = np.maximum(customer_rates-0.667,0.333)
         new_customer= Customer(customer_rates,channel_name=self.version,start_of_month=start_of_month)
         # print(customer_rates)
         return new_customer

@@ -40,17 +40,20 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # standard metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 1 2 3 4 5 6 7 8
 
+# Metric coverage test
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 7
+
 # total metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --insert
-
-## ratios
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 --insert
 
 # Change metrics
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 4 6 --insert
 
 # Scaled metrics
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 --insert
+
+## ratios
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 7 --insert
 
 # Calculate active periods and observation dates
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
