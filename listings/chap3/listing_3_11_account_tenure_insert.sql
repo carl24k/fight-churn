@@ -24,3 +24,4 @@ SELECT account_id, metric_date, %new_metric_id as metric_name_id, extract(days f
 FROM earlier_starts
 group by account_id, metric_date
 order by account_id, metric_date
+ON CONFLICT DO NOTHING;

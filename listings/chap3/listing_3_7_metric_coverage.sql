@@ -11,7 +11,7 @@ date_range as (
 select metric_name, 
 	count(distinct m.account_id) as count_with_metric,
 	n_account as n_account,    
-	(count(distinct s.account_id))::float/n_account::float as pcnt_with_metric    ,
+	(count(distinct m.account_id))::float/n_account::float as pcnt_with_metric    ,
 	avg(metric_value) as avg_value,    
 	min(metric_value) as min_value,    
 	max(metric_value) as max_value,
