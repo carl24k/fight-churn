@@ -587,15 +587,20 @@
 	},
 	"chap10": {
 		"params": {
+			"type" : "py",
+			"data_set_path": "../../../fight-churn-output/socialnet6/socialnet6_dataset3.csv"
+		},
+		"listing_10_1_dataset3": {
 			"%from_yyyy-mm-dd": "2020-03-01",
 			"%to_yyyy-mm-dd": "2020-05-10",
 			"mode": "top",
-			"type": "sql"
-		},
-		"listing_10_1_dataset3": {
+			"type": "sql",
 			"%metric_interval": "7 day",
 			"mode": "save",
 			"type": "sql"
+		},
+		"listing_10_2_dummy_variables": {
+			"columns" : ["channel"]
 		}
 	}
 }
