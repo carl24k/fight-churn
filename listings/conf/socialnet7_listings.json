@@ -1,0 +1,609 @@
+{
+	"chap2": {
+		"params": {
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-04-01",
+			"mode": "one",
+			"type": "sql"
+		},
+		"listing_2_1_net_retention": {
+		},
+		"listing_2_3_activity_churn": {
+			"%max_inactive": "1 month"
+		},
+		"listing_2_2_churn_rate": {
+		},
+		"listing_2_4_mrr_churn": {
+		},
+		"listing_2_5_churn_rate_scaled": {
+		}
+	},
+	"chap3": {
+		"params": {
+			"%from_yyyy-mm-dd": "2020-02-02",
+			"%to_yyyy-mm-dd": "2020-05-10",
+			"mode": "top",
+			"type": "sql",
+			"%event2measure": "like",
+			"%field2sum": "0"
+		},
+		"listing_3_1_event_count": {
+		},
+		"listing_3_2_multi_date_count": {
+		},
+		"listing_3_3_count_metric_insert": {
+			"mode": "run",
+			"%new_metric_id": 0
+		},
+		"listing_3_4_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "like_per_month",
+			"%new_metric_id": 0
+		},
+		"listing_3_6_metric_stats_over_time": {
+			"mode": "save",
+			"%metric2measure": "like_per_month"
+		},
+		"listing_3_7_metric_coverage": {
+			"mode": "save"
+		},
+		"listing_3_8_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-01-01",
+			"%to_yyyy-mm-dd": "2020-06-30"
+		},
+		"listing_3_9_events_per_account": {
+			"mode": "save"
+		},
+		"listing_3_10_account_tenure": {
+		},
+		"listing_3_11_account_tenure_insert": {
+			"mode": "run",
+			"%new_metric_id": 8
+		},
+		"listing_3_4_11_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "account_tenure",
+			"%new_metric_id": 8
+		},
+		"listing_3_12_mrr": {
+		},
+		"listing_3_14_billing_period": {
+		},
+		"listing_3_3_1_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "like",
+			"%new_metric_id": 0
+		},
+		"listing_3_4_1_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "like_per_month",
+			"%new_metric_id": 0
+		},
+		"listing_3_3_2_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "newfriend",
+			"%new_metric_id": 1
+		},
+		"listing_3_4_2_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "newfriend_per_month",
+			"%new_metric_id": 1
+		},
+		"listing_3_3_3_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "post",
+			"%new_metric_id": 2
+		},
+		"listing_3_4_3_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "post_per_month",
+			"%new_metric_id": 2
+		},
+		"listing_3_3_4_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "adview",
+			"%new_metric_id": 3
+		},
+		"listing_3_4_4_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "adview_per_month",
+			"%new_metric_id": 3
+		},
+		"listing_3_3_5_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "dislike",
+			"%new_metric_id": 4
+		},
+		"listing_3_4_5_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "dislike_per_month",
+			"%new_metric_id": 4
+		},
+		"listing_3_3_6_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "unfriend",
+			"%new_metric_id": 5
+		},
+		"listing_3_4_6_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "unfriend_per_month",
+			"%new_metric_id": 5
+		},
+		"listing_3_3_7_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "message",
+			"%new_metric_id": 6
+		},
+		"listing_3_4_7_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "message_per_month",
+			"%new_metric_id": 6
+		},
+		"listing_3_3_8_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "reply",
+			"%new_metric_id": 7
+		},
+		"listing_3_4_8_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "reply_per_month",
+			"%new_metric_id": 7
+		}
+	},
+	"chap4": {
+		"params": {
+			"%from_yyyy-mm-dd": "2020-02-09",
+			"%to_yyyy-mm-dd": "2020-05-10",
+			"mode": "run",
+			"type": "sql"
+		},
+		"listing_4_1_ongoing_active_periods": {
+			"%gap_interval": "7 day"
+		},
+		"listing_4_2_churned_periods": {
+			"%gap_interval": "7 day"
+		},
+		"listing_4_3_active_event_weeks": {
+		},
+		"listing_4_4_observation_dates": {
+			"%obs_interval": "1 month",
+			"%lead_time": "5 day"
+		},
+		"listing_4_5_dataset": {
+			"mode": "save",
+			"%metric_interval": "7 day"
+		},
+		"listing_4_6_current_customers": {
+			"mode": "save",
+			"%metric_interval": "7 day",
+			"%from_yyyy-mm-dd": "2020-05-10",
+			"%to_yyyy-mm-dd": "2020-05-10"
+		}
+	},
+	"chap5": {
+		"params": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
+			"type": "py"
+		},
+		"listing_5_1_cohort_plot": {
+			"metric_to_plot": "post_per_month"
+		},
+		"listing_5_1_1_cohort_plot": {
+			"metric_to_plot": "post_per_month"
+		},
+		"listing_5_1_2_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric_to_plot": "post_per_month"
+		},
+		"listing_5_1_3_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_groupscore.csv",
+			"metric_to_plot": "metric_group_1"
+		},
+		"listing_5_1_4_cohort_plot": {
+			"metric_to_plot": "adview_per_month"
+		},
+		"listing_5_1_5_cohort_plot": {
+			"metric_to_plot": "adview_per_post",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_6_cohort_plot": {
+			"metric_to_plot": "like_per_month"
+		},
+		"listing_5_1_7_cohort_plot": {
+			"metric_to_plot": "dislike_per_month"
+		},
+		"listing_5_1_8_cohort_plot": {
+			"metric_to_plot": "dislike_pcnt",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_9_cohort_plot": {
+			"metric_to_plot": "newfriend_pcnt_chng",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_10_cohort_plot": {
+			"metric_to_plot": "days_since_newfriend",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_11_cohort_plot": {
+			"metric_to_plot": "reply_per_message",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_12_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv",
+			"metric_to_plot": "like_per_post"
+		},
+		"listing_5_1_13_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv",
+			"metric_to_plot": "post_per_message"
+		},
+		"listing_5_1_14_cohort_plot": {
+			"metric_to_plot": "unfriend_per_month",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_15_cohort_plot": {
+			"metric_to_plot": "newfriend_per_month",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
+		"listing_5_1_16_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv",
+			"metric_to_plot": "unfriend_per_newfriend"
+		},
+		"listing_5_1_17_cohort_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
+			"metric_to_plot": "customer_age"
+		},
+		"listing_5_2_dataset_stats": {
+		},
+		"listing_5_2_2_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv"
+		},
+		"listing_5_2_3_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_groupscore.csv"
+		},
+		"listing_5_2_4_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_current.csv"
+		},
+		"listing_5_2_5_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_current_scores.csv"
+		},
+		"listing_5_2_6_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_current_groupscore.csv"
+		},
+		"listing_5_2_7_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2_current.csv"
+		},
+		"listing_5_2_8_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2_current_scores.csv"
+		},
+		"listing_5_2_9_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2_current_groupscore.csv"
+		},
+		"listing_5_3_metric_scores": {
+		}
+	},
+	"chap6": {
+		"params": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
+			"type": "py"
+		},
+		"xparams": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
+			"type": "py"
+		},
+		"listing_6_1_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "like_per_month"
+		},
+		"listing_6_2_dataset_correlation_matrix": {
+		},
+		"listing_6_2_2_dataset_correlation_matrix": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv"
+		},
+		"listing_6_3_apply_metric_groups": {
+		},
+		"listing_6_4_find_metric_groups": {
+			"group_corr_thresh": 0.65
+		},
+		"listing_6_5_ordered_correlation_matrix": {
+		},
+		"listing_6_1_1_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "like_per_month"
+		},
+		"listing_6_1_2_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "like_per_month"
+		},
+		"listing_6_1_3_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "message_per_month"
+		},
+		"listing_6_1_4_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "message_per_month"
+		},
+		"listing_6_1_5_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "newfriend_per_month"
+		},
+		"listing_6_1_6_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "newfriend_per_month"
+		},
+		"listing_6_1_7_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "adview_per_month"
+		},
+		"listing_6_1_8_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "adview_per_month"
+		},
+		"listing_6_1_9_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "dislike_per_month"
+		},
+		"listing_6_1_10_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "dislike_per_month"
+		},
+		"listing_6_1_11_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "unfriend_per_month"
+		},
+		"listing_6_1_12_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "unfriend_per_month"
+		},
+		"listing_6_1_13_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "reply_per_month"
+		},
+		"listing_6_1_14_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "reply_per_month"
+		},
+		"listing_6_1_15_metric_pair_plot": {
+			"metric1": "post_per_month",
+			"metric2": "account_tenure"
+		},
+		"listing_6_1_16_metric_pair_plot": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
+			"metric1": "post_per_month",
+			"metric2": "account_tenure"
+		}
+	},
+	"chap7": {
+		"params": {
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
+			"mode": "top",
+			"type": "sql"
+		},
+		"listing_7_1_ratio_metric": {
+			"%num_metric": "adview_per_month",
+			"%den_metric": "post_per_month"
+		},
+		"insert_7_1_ratio_metric": {
+			"%num_metric": "adview_per_month",
+			"%den_metric": "post_per_month",
+			"%new_metric_id": 21,
+			"%new_metric_name": "adviw_per_post"
+		},
+		"insert_7_1_1_ratio_metric": {
+			"%num_metric": "adview_per_month",
+			"%den_metric": "post_per_month",
+			"%new_metric_id": 21,
+			"%new_metric_name": "adviw_per_post"
+		},
+		"insert_7_1_2_ratio_metric": {
+			"%num_metric": "reply_per_month",
+			"%den_metric": "message_per_month",
+			"%new_metric_id": 22,
+			"%new_metric_name": "reply_per_message"
+		},
+		"insert_7_1_3_ratio_metric": {
+			"%num_metric": "like_per_month",
+			"%den_metric": "post_per_month",
+			"%new_metric_id": 23,
+			"%new_metric_name": "like_per_post"
+		},
+		"insert_7_1_4_ratio_metric": {
+			"%num_metric": "post_per_month",
+			"%den_metric": "message_per_month",
+			"%new_metric_id": 24,
+			"%new_metric_name": "post_per_message"
+		},
+		"insert_7_1_5_ratio_metric": {
+			"%num_metric": "unfriend_per_month",
+			"%den_metric": "newfriend_per_month",
+			"%new_metric_id": 25,
+			"%new_metric_name": "unfriend_per_newfriend"
+		},
+		"insert_7_1_6_ratio_metric": {
+			"%num_metric": "dislike_per_month",
+			"%den_metric": "total_opinions",
+			"%new_metric_id": 27,
+			"%new_metric_name": "dislike_percent"
+		},
+		"insert_7_1_7_ratio_metric": {
+			"%num_metric": "unfriend_28day_avg_84day_obs_scaled",
+			"%den_metric": "newfriend_per_month",
+			"%new_metric_id": 28,
+			"%new_metric_name": "unfriend_per_newfriend_scaled"
+		},
+		"listing_7_2_dataset2": {
+			"%metric_interval": "7 day",
+			"mode": "save",
+			"type": "sql"
+		},
+		"listing_7_3_total_metric": {
+			"%metric_list": " 'like_per_month', 'dislike_per_month' "
+		},
+		"insert_7_3_total_metric": {
+			"%metric_list": " 'like_per_month', 'dislike_per_month' ",
+			"%new_metric_id": 26,
+			"%new_metric_name": "total_opinions"
+		},
+		"listing_7_4_percent_change_metric": {
+			"%metric2measure": "newfriend_per_month",
+			"%period_weeks": 4
+		},
+		"insert_7_4_percent_change_metric": {
+			"%metric2measure": "newfriend_per_month",
+			"%period_weeks": 4,
+			"%new_metric_id": 30,
+			"%new_metric_name": "new_friends_pcnt_change"
+		},
+		"listing_7_5_fat_tail_scores": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
+			"type": "py"
+		},
+		"xlisting_7_5_fat_tail_scores": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
+			"type": "py"
+		},
+		"listing_7_6_days_since_event": {
+			"%event2measure": "newfriend",
+			"%from_yyyy-mm-dd": "2020-05-03",
+			"%to_yyyy-mm-dd": "2020-05-10"
+		},
+		"insert_7_6_days_since_event": {
+			"%event2measure": "newfriend",
+			"%new_metric_id": 31,
+			"%new_metric_name": "days_since_newfriend"
+		},
+		"listing_7_7_scaled_events_per_month": {
+			"%event2measure": "unfriend",
+			"%obs_period": 84,
+			"%desc_period": 32
+		},
+		"insert_7_7_scaled_events_per_month": {
+			"%event2measure": "unfriend",
+			"%obs_period": 84,
+			"%desc_period": 28,
+			"%new_metric_id": 33
+		},
+		"listing_7_8_tenure_scaled_events_per_month": {
+			"%event2measure": "unfriend",
+			"%obs_period": 84,
+			"%desc_period": 28,
+			"%min_tenure": 14,
+			"%from_yyyy-mm-dd": "2020-05-10",
+			"%to_yyyy-mm-dd": "2020-05-10",
+			"mode": "save"
+		},
+		"insert_7_8_tenure_scaled_events_per_month": {
+			"%event2measure": "unfriend",
+			"%obs_period": 84,
+			"%desc_period": 28,
+			"%min_tenure": 14,
+			"%new_metric_id": 34
+		},
+		"insert_7_8_1_tenure_scaled_events_per_month": {
+			"%event2measure": "unfriend",
+			"%obs_period": 84,
+			"%desc_period": 28,
+			"%min_tenure": 14,
+			"%new_metric_id": 34
+		}
+	},
+	"chap8": {
+		"params": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv",
+			"type": "py"
+		},
+		"xparams": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
+			"type": "py"
+		},
+		"listing_8_1_prepare_data": {
+			"group_corr_thresh": 0.65
+		},
+		"listing_8_1_2_prepare_data": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv"
+		},
+		"listing_8_2_logistic_regression": {
+		},
+		"listing_8_3_dataset2_current": {
+			"type": "sql",
+			"mode": "save",
+			"%metric_interval": "7 day"
+		},
+		"listing_8_4_rescore_metrics": {
+		},
+		"listing_8_5_churn_forecast": {
+		},
+		"listing_8_6_rescore_metrics": {
+		}
+	},
+	"chap9": {
+		"params": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv",
+			"type": "py"
+		},
+		"listing_9_1_regression_auc": {
+		},
+		"listing_9_2_top_decile_lift": {
+		},
+		"listing_9_3_backtest": {
+			"n_test_split": 2
+		},
+		"listing_9_4_regression_cparam": {
+			"C_param": 0.02
+		},
+		"listing_9_4_1_regression_cparam": {
+			"C_param": 0.02
+		},
+		"listing_9_4_2_regression_cparam": {
+			"C_param": 0.01
+		},
+		"listing_9_4_3_regression_cparam": {
+			"C_param": 0.005
+		},
+		"listing_9_5_crossvalidate": {
+			"n_test_split": 2
+		},
+		"listing_9_5_1_crossvalidate": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
+			"n_test_split": 2
+		},
+		"listing_9_6_crossvalidate_xgb": {
+			"n_test_split": 2
+		},
+		"listing_9_6_1_crossvalidate_xgb": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
+			"n_test_split": 2
+		},
+		"listing_9_7_churn_forecast_xgb": {
+		}
+	},
+	"chap10": {
+		"params": {
+			"type" : "py",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv"
+		},
+		"listing_10_1_dataset3": {
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-05-10",
+			"mode": "top",
+			"type": "sql",
+			"%metric_interval": "7 day",
+			"mode": "save",
+			"type": "sql"
+		},
+		"listing_10_2_dummy_variables": {
+			"columns" : ["channel"]
+		},
+		"listing_10_3_category_plot": {
+			"category" : "channel"
+		}
+	}
+}

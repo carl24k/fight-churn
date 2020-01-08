@@ -37,7 +37,7 @@ class UtilityModel:
 
     def setChurnScale(self,bemodDict,model_weights):
 
-        assert sum(model_weights['percent'])==1.0, "Model weights should sum to 1.0"
+        assert sum(model_weights['pcnt'])==1.0, "Model weights should sum to 1.0"
         n_behaviors = len(self.behave_names)
         self.behave_means = np.zeros((1,n_behaviors))
         self.behave_var = np.zeros((1,n_behaviors))
@@ -45,7 +45,7 @@ class UtilityModel:
         for bemod in bemodDict.values():
             assert n_behaviors == len(bemod.behave_names)
             assert all(self.behave_names == bemod.behave_names)
-            weight = model_weights.loc[bemod.version,'percent']
+            weight = model_weights.loc[bemod.version,'pcnt']
             self.behave_means = self.behave_means + weight * bemod.behave_means.values
             self.behave_var = self.behave_var + weight * bemod.behave_var()
 

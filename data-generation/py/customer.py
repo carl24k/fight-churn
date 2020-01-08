@@ -15,16 +15,20 @@ class Customer:
     AVG_AGE = (MAX_AGE + MIN_AGE) / 2.0
     date_multipliers = {}
 
-    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None):
+    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
         own subscriptions and events.
         :param behavior_rates: ndarray of behavior rates, which are assumed to be PER MONTH
         '''
+        self.id=Customer.id_counter # set the id to the current class variable
+        Customer.id_counter+=1 # increment the class variable
+
         self.behave_per_month=behavior_rates
         self.behave_per_day = (1.0/30.0)*self.behave_per_month
         self.channel=channel_name
+
         if start_of_month:
             self.age=random.uniform(Customer.MIN_AGE,Customer.MAX_AGE)
             self.date_of_birth = start_of_month + relativedelta.relativedelta(years=-int(self.age),
@@ -32,13 +36,14 @@ class Customer:
                                                                               days=-random.uniform(1,30))
         else:
             self.date_of_birth=None
-        self.id=Customer.id_counter # set the id to the current class variable
+
+        self.country=country
+
         if satisfaction is None:
             age_contrib = 0.25* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
             self.satisfaction_propensity = np.power(2.0, random.uniform(-0.875, 0.875) + age_contrib)
         else:
             self.satisfaction_propensity = satisfaction
-        Customer.id_counter+=1 # increment the class variable
         self.subscriptions=[]
         self.events=[]
 
