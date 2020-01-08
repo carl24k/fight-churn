@@ -604,6 +604,12 @@
 		},
 		"listing_10_3_category_plot": {
 			"category" : "channel"
+		},
+		"listing_10_3_1_category_plot": {
+			"category" : "channel"
+		},
+		"listing_10_3_2_category_plot": {
+			"category" : "country"
 		}
 	}
 }
