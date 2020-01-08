@@ -7,7 +7,7 @@ def dummy_variables(data_set_path,columns):
 
     for c in columns:
         dummies = raw_data[c].str.get_dummies()
-        dummies.columns=[str(cat) for cat in dummies.columns]
+        dummies.columns=['{}_{}'.format(c,str(cat)) for cat in dummies.columns]
         new_data = new_data.join(dummies)
 
 
