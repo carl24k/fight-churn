@@ -605,7 +605,16 @@
 		"listing_10_2_2_category_plot": {
 			"category" : "country"
 		},
-		"listing_10_3_dummy_variables": {
+		"listing_10_3_grouped_category_plot": {
+			"category" : "country",
+			"groups" : {
+				"APAC" : ["AU","ID","IN","JP","KR","NZ"],
+				"EUR" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","PT","RU","SE"],
+				"LaAm" : ["AR","BR","CO","MX"],
+				"NoAm" : ["US","CA"]
+			}
+		},
+		"listing_10_4_dummy_variables": {
 			"columns" : ["channel"]
 		}
 	}
