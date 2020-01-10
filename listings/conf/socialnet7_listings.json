@@ -279,6 +279,9 @@
 		"listing_5_2_9_dataset_stats": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2_current_groupscore.csv"
 		},
+		"listing_5_2_9_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
+		},
 		"listing_5_3_metric_scores": {
 		}
 	},
@@ -299,6 +302,9 @@
 		},
 		"listing_6_2_2_dataset_correlation_matrix": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv"
+		},
+		"listing_6_2_3_dataset_correlation_matrix": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
 		},
 		"listing_6_3_apply_metric_groups": {
 		},
@@ -466,6 +472,10 @@
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
 			"type": "py"
 		},
+		"listing_7_5_2_fat_tail_scores": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv",
+			"type": "py"
+		},
 		"xlisting_7_5_fat_tail_scores": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
 			"type": "py"
@@ -624,6 +634,10 @@
 				"NoAm" : ["US","CA"]
 			}
 			}
+		},
+		"listing_10_5_find_groups_skip_cats": {
+			"group_corr_thresh" : 0.5,
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
 		}
 	}
 }
