@@ -16,7 +16,8 @@ PYTHONPATH="${PYTHONPATH}:$HOME$CHURN_ROOT/fight-churn/listings/chap5:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap6:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap7:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap8:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap9"
+"$HOME$CHURN_ROOT/fight-churn/listings/chap9:"\
+"$HOME$CHURN_ROOT/fight-churn/listings/chap10"
 
 export PYTHONPATH
 export PYTHONUNBUFFERED
@@ -96,9 +97,23 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # Forecast xgb
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7
 
-# Data set with account data
+# Categorical data extract
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 1
 
+# Categorical plots
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 2 --version 1 2
+
+# Categorical data group and dummies
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 3 4
+
+# Cat Stats
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 10
+
+# Categorical scores
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 5 --version 2
+
+# Categorical loading matrix
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 5
 
 # Cohorts (after all metrics generated)
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17
