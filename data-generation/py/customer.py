@@ -40,8 +40,8 @@ class Customer:
         self.country=country
 
         if satisfaction is None:
-            age_contrib = 0.25* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
-            self.satisfaction_propensity = np.power(2.0, random.uniform(-0.875, 0.875) + age_contrib)
+            age_contrib = 0.5* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
+            self.satisfaction_propensity = np.power(2.0, random.uniform(-1.5, 1.5) + age_contrib)
         else:
             self.satisfaction_propensity = satisfaction
         self.subscriptions=[]
