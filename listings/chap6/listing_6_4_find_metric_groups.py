@@ -65,4 +65,4 @@ def find_metric_groups(data_set_path,group_corr_thresh=0.5):
     labels = find_correlation_clusters(score_data.corr(),group_corr_thresh)
     labeled_column_df, relabled_count = relabel_clusters(labels,metric_columns)
     loadmat_df = make_load_matrix(labeled_column_df, metric_columns, relabled_count,group_corr_thresh)
-    save_load_matrix(loadmat_df,labeled_column_df)
+    save_load_matrix(data_set_path,loadmat_df,labeled_column_df)

@@ -279,7 +279,7 @@
 		"listing_5_2_9_dataset_stats": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2_current_groupscore.csv"
 		},
-		"listing_5_2_9_dataset_stats": {
+		"listing_5_2_10_dataset_stats": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
 		},
 		"listing_5_3_metric_scores": {
@@ -474,10 +474,6 @@
 		},
 		"listing_7_5_2_fat_tail_scores": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv",
-			"type": "py"
-		},
-		"xlisting_7_5_fat_tail_scores": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
 			"type": "py"
 		},
 		"listing_7_6_days_since_event": {
