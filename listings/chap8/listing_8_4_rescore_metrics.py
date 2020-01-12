@@ -17,7 +17,6 @@ def rescore_metrics(data_set_path):
     current_data=current_data[score_df.index.values]
     scaled_data=(current_data-score_df['mean'])/score_df['std']
 
-
     score_save_path=data_set_path.replace('.csv','_current_scores.csv')
     scaled_data.to_csv(score_save_path,header=True)
     print('Saving score results to %s' % score_save_path)
@@ -31,6 +30,10 @@ def rescore_metrics(data_set_path):
     current_data_grouped.to_csv(score_save_path,header=True)
     print('Saving grouped results to %s' % score_save_path)
 
+    group_cols =  load_mat_df.columns[load_mat_df.astype(bool).sum(axis=0) > 1]
+    no_group_cols = load_mat_df.columns[load_mat_df.astype(bool).sum(axis=0) == 1]
+    segment_df = current_data_grouped[group_cols].join(current_data[no_group_cols])
+    segment_df.to_csv(data_set_path.replace('.csv','_current_groupmets_segment.csv'),header=True)
 
 def reload_churn_data(data_set_path,suffix,listing,is_customer_data):
     data_path = data_set_path.replace('.csv', '_{}.csv'.format(suffix))
