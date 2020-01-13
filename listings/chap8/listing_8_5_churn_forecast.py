@@ -4,9 +4,9 @@ import pickle
 import matplotlib.pyplot as plt
 from listing_8_4_rescore_metrics import reload_churn_data
 
-def churn_forecast(data_set_path):
+def churn_forecast(data_set_path,model_name='logreg_model'):
 
-    pickle_path = data_set_path.replace('.csv', '_logreg_model.pkl')
+    pickle_path = data_set_path.replace('.csv', '_{}.pkl'.format(model_name))
     assert os.path.isfile(pickle_path), 'You must run listing 8.2 to save a logistic regression model first'
     with open(pickle_path, 'rb') as fid:
         logreg_model = pickle.load(fid)
