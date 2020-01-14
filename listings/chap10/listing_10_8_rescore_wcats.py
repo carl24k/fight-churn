@@ -3,7 +3,7 @@ from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_ske
 from listing_8_4_rescore_metrics import score_current_data, group_current_data, reload_churn_data
 from listing_10_4_dummy_variables import dummy_variables
 
-def rescore_wcats(data_set_path,columns,groups):
+def rescore_wcats(data_set_path,categories,groups):
 
     dummy_path = data_set_path.replace('.csv', '_dumcat.csv')
     load_mat_df = reload_churn_data(dummy_path,'load_mat','6.4',is_customer_data=False)
@@ -14,7 +14,7 @@ def rescore_wcats(data_set_path,columns,groups):
 
     current_data = reload_churn_data(data_set_path,'dumcat_current','10.7',is_customer_data=True)
     assert set(score_df.index.values)==set(current_data.columns.values),"Data to re-score does not match transform params"
-    assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match lodaasasdfasdfasdf matrix"
+    assert set(load_mat_df.index.values)==set(current_data.columns.values),"Data to re-score does not match loading matrix"
 
     align_dummies(current_data,data_set_path,new_dummies)
 
@@ -24,7 +24,7 @@ def rescore_wcats(data_set_path,columns,groups):
     grouped_data = group_current_data(scaled_data, load_mat_df,data_set_path)
 
     current_data_orig = reload_churn_data(data_set_path,'current','10.7',is_customer_data=True)
-    save_segment_data_wcats(grouped_data,current_data_orig,load_mat_df,data_set_path, columns)
+    save_segment_data_wcats(grouped_data,current_data_orig,load_mat_df,data_set_path, categories)
 
 
 def align_dummies(current_data,data_set_path,new_dummies):
