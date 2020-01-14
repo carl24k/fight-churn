@@ -642,14 +642,13 @@
 			}
 		},
 		"listing_10_4_dummy_variables": {
-			"columns" : ["channel","country"],
 			"groups" : {
 				"country" :  {
 				"APAC" : ["AU","ID","IN","JP","KR","NZ"],
 				"EUR" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
 				"LaAm" : ["AR","BR","CO","MX"],
 				"NoAm" : ["US","CA"]
-			}
+				}
 			}
 		},
 		"listing_10_5_find_groups_skip_cats": {

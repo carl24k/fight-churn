@@ -5,12 +5,7 @@ import statsmodels.stats.proportion as sp
 
 from listing_10_2_category_plot import category_churn_summary, category_churn_plot
 
-def group_category_column(df, cat_col, group_dict):
-    group_lookup = {value: key for key in group_dict.keys() for value in group_dict[key]}
-    group_cat_col = cat_col + '_group'
-    df[group_cat_col] = df[cat_col].apply(lambda x: group_lookup[x] if x in group_lookup else x)
-    df.drop(cat_col,axis=1,inplace=True)
-    return group_cat_col
+
 
 def grouped_category_plot(data_set_path, category, groups):
 
@@ -24,3 +19,10 @@ def grouped_category_plot(data_set_path, category, groups):
     summary = category_churn_summary(churn_data,group_cat_col,data_set_path)
 
     category_churn_plot(group_cat_col, summary, data_set_path)
+
+def group_category_column(df, cat_col, group_dict):
+    group_lookup = {value: key for key in group_dict.keys() for value in group_dict[key]}
+    group_cat_col = cat_col + '_group'
+    df[group_cat_col] = df[cat_col].apply(lambda x: group_lookup[x] if x in group_lookup else x)
+    df.drop(cat_col,axis=1,inplace=True)
+    return group_cat_col
