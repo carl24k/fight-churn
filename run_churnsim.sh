@@ -103,17 +103,28 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # Categorical plots
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 2 --version 1 2
 
-# Categorical data group and dummies
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 3 4
+# Categorical plot with group
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 3
 
-# Cat Stats
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 10
+# Categorical data prep (call 4 and 5)
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 6
 
 # Categorical scores
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 5 --version 2
 
-# Categorical loading matrix
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 5
+# Categorical cross valid / regression
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 5 --version 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6 --version 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 4
+
+
+# Current Categorical data
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 7
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 8
+
+# Categorical current foecast
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 5 --version 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7 --version 2
 
 # Cohorts (after all metrics generated)
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17

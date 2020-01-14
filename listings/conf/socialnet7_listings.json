@@ -610,7 +610,9 @@
 			"n_test_split": 2
 		},
 		"listing_9_7_churn_forecast_xgb": {
-		}
+		},
+		"listing_9_7_2_churn_forecast_xgb": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"}
 	},
 	"chap10": {
 		"params": {
@@ -655,9 +657,8 @@
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
 		},
 		"listing_10_6_prepare_data_wcats": {
-			"cat_cols" : ["channel","country"],
-			"cat_groups" : {
-				"country" : {
+			"groups" : {
+				"country": {
 					"APAC": [
 						"AU",
 						"ID",
@@ -702,8 +703,8 @@
 			"mode": "save"
 		},
 		"listing_10_8_rescore_wcats": {
-			"cat_cols" : ["channel","country"],
-			"cat_groups" : {
+			"columns" : ["channel","country"],
+			"groups" : {
 				"country" :  {
 				"APAC" : ["AU","ID","IN","JP","KR","NZ"],
 				"EUR" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],

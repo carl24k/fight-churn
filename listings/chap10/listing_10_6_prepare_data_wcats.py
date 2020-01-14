@@ -5,8 +5,8 @@ from listing_6_5_ordered_correlation_matrix import ordered_correlation_matrix
 from listing_10_5_find_groups_skip_cats import find_groups_skip_cats
 from listing_10_4_dummy_variables import dummy_variables
 
-def prepare_data_wcats(data_set_path,cat_cols,cat_groups,group_corr_thresh):
-    dummy_variables(data_set_path,cat_cols,cat_groups)
+def prepare_data_wcats(data_set_path,groups,group_corr_thresh):
+    dummy_variables(data_set_path,groups)
     dummy_data_path=data_set_path.replace('.csv', '_dumcat.csv')
     dataset_stats(dummy_data_path)
     fat_tail_scores(dummy_data_path)
