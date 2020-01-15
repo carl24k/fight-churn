@@ -1,7 +1,5 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import os
-import statsmodels.stats.proportion as sp
 
 from listing_10_2_category_plot import category_churn_summary, category_churn_plot
 
