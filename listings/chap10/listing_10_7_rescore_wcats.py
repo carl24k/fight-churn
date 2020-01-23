@@ -5,16 +5,14 @@ from listing_10_4_dummy_variables import dummy_variables
 
 def rescore_wcats(data_set_path,categories,groups):
 
-    nocat_path = data_set_path.replace('.csv', '_nocat.csv')
-    load_mat_df = reload_churn_data(nocat_path,'load_mat','6.4',is_customer_data=False)
-    score_df = reload_churn_data(nocat_path,'score_params','7.5',is_customer_data=False)
-
     current_path = data_set_path.replace('.csv', '_current.csv')
-
     dummy_variables(current_path,groups, current=True)
     current_dummies = reload_churn_data(data_set_path,'current_dummies_groupscore','10.7',is_customer_data=True)
     align_dummies(current_dummies,data_set_path)
 
+    nocat_path = data_set_path.replace('.csv', '_nocat.csv')
+    load_mat_df = reload_churn_data(nocat_path,'load_mat','6.4',is_customer_data=False)
+    score_df = reload_churn_data(nocat_path,'score_params','7.5',is_customer_data=False)
     current_nocat = reload_churn_data(data_set_path,'current_nocat','10.7',is_customer_data=True)
     assert set(score_df.index.values)==set(current_nocat.columns.values),"Data to re-score does not match transform params"
     assert set(load_mat_df.index.values)==set(current_nocat.columns.values),"Data to re-score does not match loading matrix"
@@ -31,9 +29,10 @@ def rescore_wcats(data_set_path,categories,groups):
 
 
 def align_dummies(current_data,data_set_path):
-    new_dummies = set(pd.read_csv(data_set_path.replace('.csv','_current_dummies_groupmets.csv'),index_col=[0])['metrics'])
-    old_dummies = set(pd.read_csv(data_set_path.replace('.csv','_dummies_groupmets.csv'),index_col=[0])['metrics'])
-
+    current_groupments=pd.read_csv(data_set_path.replace('.csv','_current_dummies_groupmets.csv'),index_col=0)
+    new_dummies = set(current_groupments['metrics'])
+    original_groupmets = pd.read_csv(data_set_path.replace('.csv','_dummies_groupmets.csv'),index_col=0)
+    old_dummies = set(original_groupmets['metrics'])
     missing_in_old = new_dummies.difference(old_dummies)
     missing_in_new = old_dummies.difference(new_dummies)
     for col in missing_in_new:
