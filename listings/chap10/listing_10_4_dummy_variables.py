@@ -16,7 +16,8 @@ def dummy_variables(data_set_path, groups={},current=False):
     dummy_col_df = pd.DataFrame(new_cols,index=new_cols,columns=['metrics'])
     dummy_col_df.to_csv(data_set_path.replace('.csv', '_dummies_groupmets.csv'))
 
-    new_cols.append('is_churn')
+    if not current:
+        new_cols.append('is_churn')
     dummies_only = data_w_dummies[new_cols]
     save_path = data_set_path.replace('.csv', '_dummies_groupscore.csv')
     print('Saved dummy variable (only) dataset ' + save_path)

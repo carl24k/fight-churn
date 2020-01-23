@@ -557,7 +557,7 @@
 		},
 		"listing_8_5_2_churn_forecast": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
-			"model_name" : "dumcat_logreg_model_c0.010"
+			"model_name" : "logreg_model_c0.040"
 		},
 		"listing_8_6_rescore_metrics": {
 		}
@@ -668,12 +668,12 @@
 		"listing_10_5_merge_groups_dummies" : {
 
 		},
-		"listing_10_7_dataset3_current": {
+		"listing_10_6_dataset3_current": {
 			"type": "sql",
 			"%metric_interval": "7 day",
 			"mode": "save"
 		},
-		"listing_10_8_rescore_wcats": {
+		"listing_10_7_rescore_wcats": {
 			"categories" : ["channel","country"],
 			"groups" : {
 				"country" :  {
