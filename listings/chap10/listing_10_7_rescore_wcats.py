@@ -21,7 +21,7 @@ def rescore_wcats(data_set_path,categories,groups):
     transform_skew_columns(current_nocat,score_df[score_df['skew_score']].index.values)
     transform_fattail_columns(current_nocat,score_df[score_df['fattail_score']].index.values)
     scaled_data = score_current_data(current_nocat,score_df,data_set_path)
-    grouped_data = group_current_data(current_nocat, load_mat_df,data_set_path)
+    grouped_data = group_current_data(scaled_data, load_mat_df,data_set_path)
 
     groupscore_dummy_df = grouped_data.merge(current_dummies,left_index=True,right_index=True)
     groupscore_dummy_df.to_csv(data_set_path.replace('.csv','_current_groupscore.csv'),header=True)
