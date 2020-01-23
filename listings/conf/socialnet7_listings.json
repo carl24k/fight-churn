@@ -587,12 +587,12 @@
 			"C_param": 0.005
 		},
 		"listing_9_4_4_regression_cparam": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
-			"C_param": 0.04
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dummies.csv",
+			"C_param": 0.32
 		},
 		"listing_9_4_5_regression_cparam": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dummies.csv",
-			"C_param": 0.64
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
+			"C_param": 0.04
 		},
 		"listing_9_5_crossvalidate": {
 			"n_test_split": 2
@@ -602,11 +602,11 @@
 			"n_test_split": 2
 		},
 		"listing_9_5_2_crossvalidate": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dummies.csv",
 			"n_test_split": 2
 		},
 		"listing_9_5_3_crossvalidate": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dummies.csv",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
 			"n_test_split": 2
 		},
 		"listing_9_6_crossvalidate_xgb": {

@@ -9,7 +9,7 @@ def dummy_variables(data_set_path, groups={},current=False):
     for cat in groups.keys():
         group_category_column(raw_data,cat,groups[cat])
 
-    data_w_dummies = pd.get_dummies(raw_data)
+    data_w_dummies = pd.get_dummies(raw_data,dummy_na=True)
     new_cols = sorted(list(set(data_w_dummies.columns).difference(set(raw_data.columns))))
     cat_cols = sorted(list(set(raw_data.columns).difference(set(data_w_dummies.columns))))
 

@@ -15,7 +15,7 @@ def merge_groups_dummies(data_set_path):
     merged_df.to_csv(save_path)
     print('Saved merged group score + dummy dataset ' + save_path)
 
-    cols = list(merged_df.columns.values)
-    cols.remove('is_churn')
-    merged_col_df = pd.DataFrame(cols,index=cols,columns=['metrics'])
+    standard_group_metrics = pd.read_csv(data_set_path.replace('.csv', '_nocat_groupmets.csv'),index_col=0)
+    dummies_group_metrics = pd.read_csv(data_set_path.replace('.csv', '_dummies_groupmets.csv'),index_col=0)
+    merged_col_df = standard_group_metrics.append(dummies_group_metrics)
     merged_col_df.to_csv(data_set_path.replace('.csv', '_groupmets.csv'))
