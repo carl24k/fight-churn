@@ -1,18 +1,15 @@
 import pandas as pd
 import os
 
-from listing_10_2_category_plot import category_churn_summary, category_churn_plot
+from listing_10_2_category_churn_cohorts import category_churn_summary, category_churn_plot, prepare_category_data
 
 
 
-def grouped_category_plot(data_set_path, category, groups):
+def grouped_category_cohorts(data_set_path, cat_col, groups):
 
-    assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
-    churn_data = pd.read_csv(data_set_path,index_col=[0,1])
+    churn_data = prepare_category_data(data_set_path,cat_col)
 
-    churn_data[category].fillna('-na-',inplace=True)
-
-    group_cat_col = group_category_column(churn_data,category,groups)
+    group_cat_col = group_category_column(churn_data,cat_col,groups)
 
     summary = category_churn_summary(churn_data,group_cat_col,data_set_path)
 

@@ -1,7 +1,7 @@
 import pandas as pd
 from copy import copy
 
-from listing_10_3_grouped_category_plot import group_category_column
+from listing_10_3_grouped_category_cohorts import group_category_column
 
 def dummy_variables(data_set_path, groups={},current=False):
 
@@ -21,4 +21,9 @@ def dummy_variables(data_set_path, groups={},current=False):
 
     new_cols = sorted(list(set(data_w_dummies.columns).difference(set(raw_data.columns))))
     pd.DataFrame(new_cols).to_csv(data_set_path.replace('.csv', '_dummylist.csv'),header=False,index=False)
+    new_cols.append('is_churn')
+    save_path = data_set_path.replace('.csv', '_onlydummies.csv')
+    print('Saved dummy variable only dataset ' + save_path)
+    data_w_dummies[new_cols].to_csv(save_path)
+
     return new_cols

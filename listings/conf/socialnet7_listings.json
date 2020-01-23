@@ -626,20 +626,20 @@
 			"mode": "save",
 			"type": "sql"
 		},
-		"listing_10_2_category_plot": {
-			"category" : "channel"
+		"listing_10_2_category_churn_cohorts": {
+			"cat_col" : "channel"
 		},
-		"listing_10_2_1_category_plot": {
-			"category" : "channel"
+		"listing_10_2_1_category_churn_cohorts": {
+			"cat_col" : "channel"
 		},
-		"listing_10_2_2_category_plot": {
-			"category" : "country"
+		"listing_10_2_2_category_churn_cohorts": {
+			"cat_col" : "country"
 		},
-		"listing_10_3_grouped_category_plot": {
-			"category" : "country",
+		"listing_10_3_grouped_category_cohorts": {
+			"cat_col" : "country",
 			"groups" : {
-				"APAC" : ["AU","ID","IN","JP","KR","NZ"],
-				"EUR" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
+				"APac" : ["AU","ID","IN","JP","KR","NZ"],
+				"Eur" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
 				"LaAm" : ["AR","BR","CO","MX"],
 				"NoAm" : ["US","CA"]
 			}
@@ -647,8 +647,8 @@
 		"listing_10_4_dummy_variables": {
 			"groups" : {
 				"country" :  {
-				"APAC" : ["AU","ID","IN","JP","KR","NZ"],
-				"EUR" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
+				"APac" : ["AU","ID","IN","JP","KR","NZ"],
+				"Eur" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
 				"LaAm" : ["AR","BR","CO","MX"],
 				"NoAm" : ["US","CA"]
 				}
@@ -660,40 +660,11 @@
 		},
 		"listing_10_6_prepare_data_wcats": {
 			"groups" : {
-				"country": {
-					"APAC": [
-						"AU",
-						"ID",
-						"IN",
-						"JP",
-						"KR",
-						"NZ"
-					],
-					"EUR": [
-						"CH",
-						"DE",
-						"DK",
-						"ES",
-						"FR",
-						"GB",
-						"GR",
-						"IT",
-						"NL",
-						"NO",
-						"PT",
-						"RU",
-						"SE"
-					],
-					"LaAm": [
-						"AR",
-						"BR",
-						"CO",
-						"MX"
-					],
-					"NoAm": [
-						"US",
-						"CA"
-					]
+				"country" :  {
+				"APac" : ["AU","ID","IN","JP","KR","NZ"],
+				"Eur" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
+				"LaAm" : ["AR","BR","CO","MX"],
+				"NoAm" : ["US","CA"]
 				}
 			},
 			"group_corr_thresh" : 0.65,
@@ -708,8 +679,8 @@
 			"categories" : ["channel","country"],
 			"groups" : {
 				"country" :  {
-				"APAC" : ["AU","ID","IN","JP","KR","NZ"],
-				"EUR" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
+				"APac" : ["AU","ID","IN","JP","KR","NZ"],
+				"Eur" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
 				"LaAm" : ["AR","BR","CO","MX"],
 				"NoAm" : ["US","CA"]
 			}
