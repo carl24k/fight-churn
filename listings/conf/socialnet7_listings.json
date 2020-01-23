@@ -304,7 +304,7 @@
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv"
 		},
 		"listing_6_2_3_dataset_correlation_matrix": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_groupscore.csv"
 		},
 		"listing_6_3_1_apply_metric_groups": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
@@ -539,6 +539,9 @@
 		"listing_8_1_2_prepare_data": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv"
 		},
+		"listing_8_1_3_prepare_data": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_nocat.csv"
+		},
 		"listing_8_2_logistic_regression": {
 		},
 		"listing_8_3_dataset2_current": {
@@ -584,8 +587,12 @@
 			"C_param": 0.005
 		},
 		"listing_9_4_4_regression_cparam": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv",
-			"C_param": 0.01
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
+			"C_param": 0.04
+		},
+		"listing_9_4_5_regression_cparam": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dummies.csv",
+			"C_param": 0.64
 		},
 		"listing_9_5_crossvalidate": {
 			"n_test_split": 2
@@ -595,7 +602,11 @@
 			"n_test_split": 2
 		},
 		"listing_9_5_2_crossvalidate": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv",
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
+			"n_test_split": 2
+		},
+		"listing_9_5_3_crossvalidate": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dummies.csv",
 			"n_test_split": 2
 		},
 		"listing_9_6_crossvalidate_xgb": {
@@ -654,21 +665,8 @@
 				}
 			}
 		},
-		"listing_10_5_find_groups_skip_cats": {
-			"group_corr_thresh" : 0.65,
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"
-		},
-		"listing_10_6_prepare_data_wcats": {
-			"groups" : {
-				"country" :  {
-				"APac" : ["AU","ID","IN","JP","KR","NZ"],
-				"Eur" : ["CH","DE","DK","ES","FR","GB","GR","IT","NL","NO","PT","RU","SE"],
-				"LaAm" : ["AR","BR","CO","MX"],
-				"NoAm" : ["US","CA"]
-				}
-			},
-			"group_corr_thresh" : 0.65,
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv"
+		"listing_10_5_merge_groups_dummies" : {
+
 		},
 		"listing_10_7_dataset3_current": {
 			"type": "sql",

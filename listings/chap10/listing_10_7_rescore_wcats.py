@@ -28,7 +28,8 @@ def rescore_wcats(data_set_path,categories,groups):
 
 
 def align_dummies(current_data,data_set_path,new_dummies):
-    with open(data_set_path.replace('.csv', '_dummylist.csv')) as f:
+    with open(data_set_path.replace('.csv', '_onlydummies_groupmets.csv')) as f:
+        assert False, "fix this"
         old_dummies = set(f.read().splitlines() )
     missing_in_old = new_dummies.difference(old_dummies)
     missing_in_new = old_dummies.difference(new_dummies)
