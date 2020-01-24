@@ -21,11 +21,11 @@ def rescore_wcats(data_set_path,categories,groups):
     scaled_data = score_current_data(current_nocat,score_df,data_set_path)
     grouped_data = group_current_data(scaled_data, load_mat_df,data_set_path)
 
-    groupscore_dummy_df = grouped_data.merge(current_dummies,left_index=True,right_index=True)
-    groupscore_dummy_df.to_csv(data_set_path.replace('.csv','_current_groupscore.csv'),header=True)
+    group_dum_df = grouped_data.merge(current_dummies,left_index=True,right_index=True)
+    group_dum_df.to_csv(data_set_path.replace('.csv','_current_groupscore.csv'),header=True)
 
-    current_data_orig = reload_churn_data(data_set_path,'current','10.7',is_customer_data=True)
-    save_segment_data_wcats(grouped_data,current_data_orig,load_mat_df,data_set_path, categories)
+    current_df = reload_churn_data(data_set_path,'current','10.7',is_customer_data=True)
+    save_segment_data_wcats(grouped_data,current_df,load_mat_df,data_set_path, categories)
 
 
 def align_dummies(current_data,data_set_path):

@@ -623,7 +623,7 @@
 		"listing_9_7_churn_forecast_xgb": {
 		},
 		"listing_9_7_2_churn_forecast_xgb": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_dumcat.csv"}
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_xgbdummies.csv"}
 	},
 	"chap10": {
 		"params": {
