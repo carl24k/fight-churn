@@ -8,10 +8,10 @@ account_tenures as (
     where metric_name_id = 8
     and metric_value >= 14
 )
-select s.account_id, last_metric_time as observation_date,
+select s.account_id, d.last_metric_time as observation_date,
 a.channel,
 a.country,
-date_part('day',last_metric_time::timestamp - a.date_of_birth::timestamp)::float/365.0 as customer_age,
+date_part('day', d.last_metric_time::timestamp - a.date_of_birth::timestamp)::float/365.0 as customer_age,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
 sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
@@ -28,11 +28,11 @@ sum(case when metric_name_id=25 then metric_value else 0 end) as unfriend_per_ne
 sum(case when metric_name_id=27 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=30 then metric_value else 0 end) as newfriend_pcnt_chng,
 sum(case when metric_name_id=31 then metric_value else 0 end) as days_since_newfriend
-from metric m inner join metric_date on metric_time =last_metric_time
+from metric m inner join metric_date d on m.metric_time = d.last_metric_time
 inner join account_tenures t on t.account_id = m.account_id
 inner join subscription s on m.account_id=s.account_id
 inner join account a on m.account_id = a.id
-where s.start_date <= last_metric_time
-and (s.end_date >=last_metric_time or s.end_date is null)
-group by s.account_id, last_metric_time, a.channel, a.country, a.date_of_birth
+where s.start_date <= d.last_metric_time
+and (s.end_date >= d.last_metric_time or s.end_date is null)
+group by s.account_id, d.last_metric_time, a.channel, a.country, a.date_of_birth
 order by s.account_id
