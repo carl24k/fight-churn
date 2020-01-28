@@ -1,0 +1,14 @@
+{
+    "date_range": {
+        "from_date" :"2020-02-02",
+        "to_date" : "2020-05-10"
+    },
+	"event_properties" : [],
+	"like_per_month": {
+		"event_id":  2,
+		"fun" : "count(*)",
+		"measwin" : 4,
+		"quotwin" : 4,
+		"sql" : "metric_over_period"
+	}
+}

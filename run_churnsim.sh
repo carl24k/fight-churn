@@ -4,7 +4,7 @@
 
 # run_churn_listing.py
 
-SCHEMA=socialnet5
+SCHEMA=socialnet7
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
 CHURN_DB_USER=cgold
@@ -16,7 +16,8 @@ PYTHONPATH="${PYTHONPATH}:$HOME$CHURN_ROOT/fight-churn/listings/chap5:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap6:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap7:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap8:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap9"
+"$HOME$CHURN_ROOT/fight-churn/listings/chap9:"\
+"$HOME$CHURN_ROOT/fight-churn/listings/chap10"
 
 export PYTHONPATH
 export PYTHONUNBUFFERED
@@ -40,17 +41,20 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # standard metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 1 2 3 4 5 6 7 8
 
+# Metric coverage test
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 7
+
 # total metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --insert
-
-## ratios
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 --insert
 
 # Change metrics
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 4 6 --insert
 
 # Scaled metrics
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 --insert
+
+## ratios
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 7 --insert
 
 # Calculate active periods and observation dates
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
@@ -81,9 +85,6 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 7 8 9
 
 
-# Cohorts (after all metrics generated)
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16
-
 # Levels of C param
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 1 2 3
 
@@ -95,3 +96,35 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 # Forecast xgb
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7
+
+# Categorical data extract
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 1
+
+# Categorical plots
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 2 --version 1 2
+
+# Categorical plot with group
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 3
+
+# Categorical data prep (call 4 and 5)
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 6
+
+# Categorical scores
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 5 --version 2
+
+# Categorical cross valid / regression
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 5 --version 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6 --version 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 4
+
+
+# Current Categorical data
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 7
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 8
+
+# Categorical current foecast
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 5 --version 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7 --version 2
+
+# Cohorts (after all metrics generated)
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17

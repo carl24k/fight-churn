@@ -6,7 +6,7 @@ import xgboost as xgb
 
 from listing_8_2_logistic_regression import prepare_data
 from listing_9_2_top_decile_lift import calc_lift
-
+from listing_8_5_churn_forecast import forecast_histogram
 
 def crossvalidate_xgb(data_set_path,n_test_split):
 
@@ -35,3 +35,11 @@ def crossvalidate_xgb(data_set_path,n_test_split):
     with open(pickle_path, 'wb') as fid:
         pickle.dump(gsearch.best_estimator_, fid)
     print('Saved model pickle to ' + pickle_path)
+
+    predictions = gsearch.best_estimator_.predict_proba(X.values)
+    predict_df = pd.DataFrame(predictions, index=X.index, columns=['retain_prob','churn_prob'])
+    forecast_save_path = data_set_path.replace('.csv', '_xgb_predictions.csv')
+    print('Saving results to %s' % forecast_save_path)
+    predict_df.to_csv(forecast_save_path, header=True)
+
+    forecast_histogram(data_set_path,predict_df,ext='xgb')

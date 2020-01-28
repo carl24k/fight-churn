@@ -5,8 +5,11 @@ import random
 from postgres import Postgres
 from math import ceil
 import os
+import glob
 import sys
 import tempfile
+import pandas as pd
+import numpy as np
 
 from customer import Customer
 from behavior import GaussianBehaviorModel, FatTailledBehaviorModel
@@ -16,7 +19,7 @@ import psycopg2 as post
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers, growth, churn, mrr,seed):
+    def __init__(self, model, start, end, init_customers,seed):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -25,21 +28,32 @@ class ChurnSimulation:
         :param start: start date for simulation
         :param end: end date for simulation
         :param init_customers: how many customers to create at start date
-        :param growth: monthly customer growth rate
-        :param churn: monthly customer churn rate
-        :param mrr: customer MRR
         '''
 
         self.model_name=model
         self.start_date = start
         self.end_date = end
         self.init_customers=init_customers
-        self.monthly_growth_rate = growth
-        self.monthly_churn_rate = churn
-        self.mrr=mrr
+        self.monthly_growth_rate = 0.1
 
-        self.behave_mod=FatTailledBehaviorModel(self.model_name,seed)
-        self.util_mod=UtilityModel(self.model_name,self.monthly_churn_rate,self.behave_mod)
+        self.util_mod=UtilityModel(self.model_name)
+        behavior_versions = glob.glob('../conf/'+self.model_name+'_*.csv')
+        self.behavior_models = {}
+        self.model_list = []
+        for b in behavior_versions:
+            version = b[(b.find(self.model_name) + len(self.model_name)+1):-4]
+            if version in ('utility','population','country'):
+                continue
+            behave_mod=FatTailledBehaviorModel(self.model_name,seed,version)
+            self.behavior_models[behave_mod.version]=behave_mod
+            self.model_list.append(behave_mod)
+
+        if len(self.behavior_models)>1:
+            self.population_percents = pd.read_csv('../conf/'+self.model_name + '_population.csv',index_col=0)
+        self.util_mod.setChurnScale(self.behavior_models,self.population_percents)
+        self.population_picker = np.cumsum(self.population_percents)
+
+        self.country_lookup = pd.read_csv('../conf/'+self.model_name + '_country.csv')
 
         self.subscription_count = 0
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),'{}_tmp_sub.csv'.format(self.model_name))
@@ -60,6 +74,14 @@ class ChurnSimulation:
         os.remove(self.tmp_event_file_name)
         os.remove(self.tmp_sub_file_name)
 
+    def pick_customer_model(self):
+        choice = random.uniform(0,1)
+        for m in range(0,self.population_picker.shape[0]):
+            if choice <= self.population_picker['percent'][m]:
+                version_name=self.population_picker.index.values[m]
+                return self.behavior_models[version_name]
+
+
     def simulate_customer(self, start_of_month):
         '''
         Simulate one customer collecting its events and subscriptions.
@@ -71,7 +93,12 @@ class ChurnSimulation:
         :param start_of_month:
         :return: the new customer object it contains the events and subscriptions
         '''
-        new_customer=self.behave_mod.generate_customer()
+        # customer_model = self.pick_customer_model()
+        customer_model = np.random.choice(self.model_list,p=self.population_percents['pcnt'])
+        new_customer=customer_model.generate_customer(start_of_month)
+
+        customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
+        new_customer.country = customer_country
 
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
@@ -112,14 +139,21 @@ class ChurnSimulation:
         with open(self.tmp_sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
                 tmp_file.write("%d,%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], self.mrr))
+                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], 9.99)) # mrr is 9.99
                 self.subscription_count += 1
         with open(self.tmp_event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write("%d,'%s',%d\n" % (customer.id, e[0], e[1]))
 
-        sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
+        sql =         "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
+                                                                customer.date_of_birth.isoformat(),
+                                                                'NULL' if customer.country == 'None' else "'{}'".format(
+                                                                    customer.country))
+        self.db.run(sql)
+
         cur = self.con.cursor()
+
+        sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
         with open(self.tmp_sub_file_name, 'r') as f:
             cur.copy_expert(sql, f)
         self.con.commit()
@@ -137,12 +171,15 @@ class ChurnSimulation:
         '''
         oldEvent= self.db.one('select count(*) from %s.event' % self.model_name)
         oldSubs= self.db.one('select count(*) from %s.subscription' % self.model_name)
-        if oldEvent > 0 or oldSubs>0:
+        oldAccount = self.db.one('select count(*) from %s.account' % self.model_name)
+        if oldEvent > 0 or oldSubs>0 or oldAccount>0:
             print('TRUNCATING *Events/Metrics & Subscriptions/Observations* in schema -> %s <-  ...' % self.model_name)
             if input("are you sure? (enter %s to proceed) " % self.model_name) == self.model_name:
                 if oldEvent > 0:
                     self.db.run('truncate table %s.event' % self.model_name)
                     self.db.run('truncate table %s.metric' % self.model_name)
+                if oldAccount > 0:
+                    self.db.run('truncate table %s.account' % self.model_name)
                 if oldSubs > 0:
                     self.db.run('truncate table %s.subscription' % self.model_name)
                     self.db.run('truncate table %s.active_period' % self.model_name)
@@ -166,7 +203,8 @@ class ChurnSimulation:
         # database setup
         if not self.truncate_old_sim():
             return
-        self.behave_mod.insert_event_types(self.model_name,self.db)
+        # Any model can insert the event types
+        self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,self.db)
 
         # Initial customer count
         print('\nCreating %d initial customers for %s start date' % (self.init_customers,self.start_date))
@@ -187,7 +225,7 @@ class ChurnSimulation:
 
 if __name__ == "__main__":
 
-    model_name = 'socialnet5'
+    model_name = 'socialnet7'
     if len(sys.argv) >= 2:
         model_name = sys.argv[1]
 
@@ -195,14 +233,10 @@ if __name__ == "__main__":
     end = date(2020, 6, 1)
     init = 10000
 
-    growth_rate = 0.1
-    churn_rate = 0.02
-    mrr = 9.99
     random_seed = None
     if random_seed is not None:
         random.seed(random_seed) # for random
 
-
-    churn_sim = ChurnSimulation(model_name, start, end, init,growth_rate,churn_rate, mrr,random_seed)
+    churn_sim = ChurnSimulation(model_name, start, end, init,random_seed)
     churn_sim.run_simulation()
 

@@ -54,7 +54,7 @@ class BehaviorModel:
 
 class GaussianBehaviorModel(BehaviorModel):
 
-    def __init__(self,name,random_seed):
+    def __init__(self,name,random_seed=None,version='model'):
         '''
         This behavior model uses a mean and (pseudo) covariance matrix to generate customers with event rates.
         The parameters are passed on a csv file that should be located in a `conf` directory adjacent to the code.
@@ -67,7 +67,8 @@ class GaussianBehaviorModel(BehaviorModel):
         :param name:
         '''
         self.name=name
-        model_path='../conf/'+name+'_model.csv'
+        self.version=version
+        model_path='../conf/'+name + '_' + version + '.csv'
         model=pd.read_csv(model_path)
         model.set_index(['behavior'],inplace=True)
         self.behave_means=model['mean']
@@ -126,12 +127,12 @@ class GaussianBehaviorModel(BehaviorModel):
 
 class FatTailledBehaviorModel(GaussianBehaviorModel):
 
-    def __init__(self,name,random_seed):
-        self.exp_base = 1.333
+    def __init__(self,name,random_seed=None,version=None):
+        self.exp_base = 1.6
         self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
         self.exp_fun = lambda x: np.power(self.exp_base,x)
 
-        super(FatTailledBehaviorModel,self).__init__(name,random_seed)
+        super(FatTailledBehaviorModel,self).__init__(name,random_seed,version)
 
     def scale_correlation_to_covariance(self):
         self.log_means=self.log_fun(self.behave_means)
@@ -145,14 +146,16 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
     def behave_var(self):
         return self.exp_fun( np.diagonal(self.behave_cov))
 
-    def generate_customer(self):
+    def generate_customer(self,start_of_month):
         '''
         Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
         gaussian distribution.
+        subtract 0.5 and set min at 0.5 per month, so there can be very low rates despite 0 (1) min in log normal sim
         :return: a Custoemr object
         '''
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)
-        new_customer= Customer(customer_rates)
+        customer_rates = np.maximum(customer_rates-0.667,0.333)
+        new_customer= Customer(customer_rates,channel_name=self.version,start_of_month=start_of_month)
         # print(customer_rates)
         return new_customer

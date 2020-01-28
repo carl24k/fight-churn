@@ -1,14 +1,13 @@
-with metric_date as
+with observation_params as
 (
-    select  max(metric_time) as last_metric_time from metric
-),
-account_tenures as (
-    select account_id, metric_value as account_tenure
-    from metric m inner join metric_date on metric_time =last_metric_time
-    where metric_name_id = 8
-    and metric_value >= 14
+    select  interval '%metric_interval' as metric_period,
+    '%from_yyyy-mm-dd'::timestamp as obs_start,
+    '%to_yyyy-mm-dd'::timestamp as obs_end
 )
-select s.account_id, d.last_metric_time as observation_date,
+select m.account_id, o.observation_date, is_churn,
+a.channel,
+a.country,
+date_part('day',o.observation_date::timestamp - a.date_of_birth::timestamp)::float/365.0 as customer_age,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
 sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
@@ -25,10 +24,11 @@ sum(case when metric_name_id=25 then metric_value else 0 end) as unfriend_per_ne
 sum(case when metric_name_id=27 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=30 then metric_value else 0 end) as newfriend_pcnt_chng,
 sum(case when metric_name_id=31 then metric_value else 0 end) as days_since_newfriend
-from metric m inner join metric_date d on m.metric_time = d.last_metric_time
-inner join account_tenures a on a.account_id = m.account_id
-inner join subscription s on m.account_id=s.account_id
-where s.start_date <= d.last_metric_time
-and (s.end_date >= d.last_metric_time or s.end_date is null)
-group by s.account_id, d.last_metric_time
-order by s.account_id
+from metric m inner join observation_params
+on metric_time between obs_start and obs_end
+inner join observation o on m.account_id = o.account_id
+    and m.metric_time > (o.observation_date - metric_period)::timestamp
+    and m.metric_time <= o.observation_date::timestamp
+inner join account a on m.account_id = a.id
+group by m.account_id, metric_time, observation_date, is_churn, a.channel, date_of_birth, country
+order by observation_date,m.account_id
