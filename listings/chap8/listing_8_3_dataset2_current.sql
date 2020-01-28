@@ -8,7 +8,7 @@ account_tenures as (
     where metric_name_id = 8
     and metric_value >= 14
 )
-select s.account_id, last_metric_time as observation_date,
+select s.account_id, d.last_metric_time as observation_date,
 sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
 sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
 sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
