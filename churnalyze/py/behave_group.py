@@ -11,7 +11,7 @@ def main():
     The dataset and all other parameters are then taken from the schema configuration.
     :return: None
     '''
-    schema = 'socialnet5'
+    schema = 'socialnet7'
     data=None
     if len(sys.argv) >= 2:
         schema = sys.argv[1]

@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 # Run control arguments
-parser.add_argument("--schema", type=str, help="The name of the schema", default='socialnet5')
+parser.add_argument("--schema", type=str, help="The name of the schema", default='socialnet7')
 parser.add_argument("--metrics", type=str,nargs='*', help="List of metrics to run (default to all)")
 parser.add_argument("--hideax", action="store_true", default=False,help="Hide axis labels")
 parser.add_argument("--format", type=str, help="Format to save in", default='png')
