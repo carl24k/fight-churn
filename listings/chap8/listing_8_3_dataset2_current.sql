@@ -25,10 +25,10 @@ sum(case when metric_name_id=25 then metric_value else 0 end) as unfriend_per_ne
 sum(case when metric_name_id=27 then metric_value else 0 end) as dislike_pcnt,
 sum(case when metric_name_id=30 then metric_value else 0 end) as newfriend_pcnt_chng,
 sum(case when metric_name_id=31 then metric_value else 0 end) as days_since_newfriend
-from metric m inner join metric_date on metric_time =last_metric_time
+from metric m inner join metric_date d on m.metric_time = d.last_metric_time
 inner join account_tenures a on a.account_id = m.account_id
 inner join subscription s on m.account_id=s.account_id
-where s.start_date <= last_metric_time
-and (s.end_date >=last_metric_time or s.end_date is null)
-group by s.account_id, last_metric_time
+where s.start_date <= d.last_metric_time
+and (s.end_date >= d.last_metric_time or s.end_date is null)
+group by s.account_id, d.last_metric_time
 order by s.account_id
