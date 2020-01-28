@@ -421,13 +421,13 @@ subscriptions, behavior and churn of more than 10,000 customers over 6 months ti
  actually a good next step to take while you are waiting...)
 
 ```
-churn=# select count(*) from socialnet5.subscription;
+churn=# select count(*) from socialnet7.subscription;
  count 
 -------
   52048
 (1 row)
 
-churn=# select count(*) from socialnet5.event;
+churn=# select count(*) from socialnet7.event;
   count  
 ---------
  34198616
@@ -526,7 +526,7 @@ Start by making a Run Configuration for the script `listings/py/run_churn_listin
 following the instructions in Section 1.2.6.
 
 The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
-simulated data set `socialnet5`.  If you have created a simulated dataset named `socialnet5` as described
+simulated data set `socialnet7`.  If you have created a simulated dataset named `socialnet7` as described
 in section 1.3.2 you can run your configuration as is and you should see a result like this:
 
 ```
@@ -535,7 +535,7 @@ in section 1.3.2 you can run your configuration as is and you should see a resul
 Running chap2 listing listing_2_1_net_retention
 SQL:
 ----------
-set search_path = 'socialnet5'; with 
+set search_path = 'socialnet7'; with 
 date_range as (    
 	select  '2019-03-01'::date as start_date, '2019-04-01'::date as end_date
 ), 
@@ -618,7 +618,7 @@ You can also set command line arguments in PyCharm, in the Run Configurations se
 line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
 
 To see what listings are available to run, peruse the code in the chapter folders below `listing`.  But note that your
-schema must be *configured* to run each listing, as described in the next  section.  The `socialnet5` (default) schema
+schema must be *configured* to run each listing, as described in the next  section.  The `socialnet7` (default) schema
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
 configuration.
  
@@ -630,12 +630,12 @@ configuration.
 
 ### 2.2 Configuring How Listings Run
 
-Your schema must be *configured* to run each listing.  The `socialnet5` (default) schema
+Your schema must be *configured* to run each listing.  The `socialnet7` (default) schema
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
-configuration. Also if you want to change how the listings are run on `socialnet5` this section will explain how to do it.
+configuration. Also if you want to change how the listings are run on `socialnet7` this section will explain how to do it.
 
 The configuration files are all in folder `listings/conf` and each schema has a configuration file that must have a name
-that is `<schema_name>_listings.json`.  So the configuration for the `socialnet5` data set is in the file `socialnet5_listings.json`.
+that is `<schema_name>_listings.json`.  So the configuration for the `socialnet7` data set is in the file `socialnet7_listings.json`.
 The configuration his a JSON with the following structure:
 
 1. The top level are keys for the chapters, "chap2", "chap3", etc.
@@ -657,7 +657,7 @@ As mentioned, there are two special control parameters which are are *not* param
     * `mode=top` : A SQL expected to return many results, print the first 5 lines
     * `mode=save`: A SQL expected to return many results, save the result in a csv file
 
-Below is an example of the beginning of the listing configuration for the `socialnet5` simulated data set:
+Below is an example of the beginning of the listing configuration for the `socialnet7` simulated data set:
 
 ```
 	"chap2" : {
@@ -724,7 +724,7 @@ Checking event view_feed
 Checking event photo
 Checking event message
 Checking event unfriend
-Saving results to ../../../fight-churn-output/socialnet5/
+Saving results to ../../../fight-churn-output/socialnet7/
 
 Process finished with exit code 0
 ```
@@ -765,7 +765,7 @@ Here is a high level overview of how it works:
 with things like the type name for an event or the time window for a measurement.
 * The configuration of what parameters to bind in the SQL's are stored in  JSON in the `conf` directorynd
 * Each database schema has its own configuration file, so if you are using the default simulated data
-`socialnet5` then the configuration for all of the metrics will be in `conf/socialnet5_metrics.json`. If you
+`socialnet7` then the configuration for all of the metrics will be in `conf/socialnet7_metrics.json`. If you
  have loaded your own data in a schema called `saasco` you need to make and fill out a configuration 
  `conf/saasco_metrics.json`, etc.
 * Each metric that will be calculated must have its own entry in the JSON for its schema, and there 
@@ -831,11 +831,11 @@ At the time of this writing the following metrics are available:
 #### 3.2.2 Configuring Metrics
 
 To calculate metrics in batch jobs you need to configure the metrics specifically for your event data in a
-configuration file for your schema.  For a simple example you can take a look at `metric-framework/conf/socialnet5_metrics.json`
+configuration file for your schema.  For a simple example you can take a look at `metric-framework/conf/socialnet7_metrics.json`
 which is setup to run for the default simulated data file.  The configuration is a set of named objects where the
 key is the name of the metric that will be created (the name to be entered in the table `metric_name` in the database)
 and the value is an object containing key/value pairs that are the bind variables for the SQL.  Here is an 
-example from the `socialnet5` configuration:
+example from the `socialnet7` configuration:
 
 ```
     "date_range": {
@@ -875,7 +875,7 @@ This configuration will create a metric named "post_per_month".  The `sql` param
  The other fields in the configuration  object will all be matched to bind variables in the SQL.
 
 Each metric you create requires one configuration and the easiest way to create them is copy/paste and then modify
-the existing configurations. For more examples of metric configurations (the `socialnet5` only has one example repeated)
+the existing configurations. For more examples of metric configurations (the `socialnet7` only has one example repeated)
 look at the other sample file `metric-framework/conf/x_metrics.json`. 
 (Unless you really need to make a lot - then its not so easy to make them manually and
 you should spend some time automating that process as well.  Maybe that will be a future feature in this framework...)
@@ -884,14 +884,14 @@ you should spend some time automating that process as well.  Maybe that will be 
 
 #### 3.2.3 Running Metric Calculations
 
-Once you have configured metrics (or if you are using the default `socialnet5`) you calculate the metrics with the
+Once you have configured metrics (or if you are using the default `socialnet7`) you calculate the metrics with the
 `metric-framework/metric_calc.py`.  You create a configuration for this script as described in Section 1.2.6 of this
 README.  If you run the default configuration you should see this in your terminal (or the "Run" window in PyCharm):
 
 ```
 /Users/cgold/projects/ChurnBook/fight-churn/venv/bin/python /Users/cgold/projects/ChurnBook/fight-churn/metric-framework/py/metric_calc.py
-TRUNCATING *Metrics* in schema -> socialnet5 <-  ...
-are you sure? (enter socialnet5 to proceed)
+TRUNCATING *Metrics* in schema -> socialnet7 <-  ...
+are you sure? (enter socialnet7 to proceed)
 ```
 
 The program asks because if there were any metrics already saved, this program would wipe them out. If this is the first 
@@ -900,24 +900,24 @@ and you should see the following, although it will take a bit of time: each metr
 
 ```
 /Users/cgold/projects/ChurnBook/fight-churn/venv/bin/python /Users/cgold/projects/ChurnBook/fight-churn/metric-framework/py/metric_calc.py
-TRUNCATING *Metrics* in schema -> socialnet5 <-  ...
-are you sure? (enter socialnet5 to proceed) socialnet5
-Inserting metric socialnet5.account_tenure as id 0
-set search_path = 'socialnet5'; with RECURSIVE date_vals AS (   select i::timestamp as metric_date from generate_series('2019-02-04', '2019-05-06', '7 day'::interval) i ), earlier_starts AS ( 	select account_id, metric_date, start_date 	from subscription inner join date_vals 		on start_date <= metric_date 		and (end_date > metric_date or end_date is null)  	UNION  	select s.account_id, metric_date, s.start_date 	from subscription s inner join earlier_starts e 		on s.account_id=e.account_id 		and s.start_date < e.start_date 		and s.end_date >= (e.start_date-31)  )  insert into metric (account_id,metric_time,metric_name_id,metric_value)   SELECT account_id, metric_date,0, extract(days from metric_date-min(start_date)) FROM earlier_starts group by account_id, metric_date order by account_id, metric_date;  
-Inserting metric socialnet5.post_per_month as id 1
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 1,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=0     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
-Inserting metric socialnet5.new_friend_per_month as id 2
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 2,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=1     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
-Inserting metric socialnet5.like_per_month as id 3
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 3,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=2     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
-Inserting metric socialnet5.view_feed_per_month as id 4
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 4,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=3     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
-Inserting metric socialnet5.photo_per_month as id 5
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 5,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=4     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
-Inserting metric socialnet5.message_per_month as id 6
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 6,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=5     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
-Inserting metric socialnet5.unfriend_per_month as id 7
-set search_path = 'socialnet5';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 7,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=6     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+TRUNCATING *Metrics* in schema -> socialnet7 <-  ...
+are you sure? (enter socialnet7 to proceed) socialnet7
+Inserting metric socialnet7.account_tenure as id 0
+set search_path = 'socialnet7'; with RECURSIVE date_vals AS (   select i::timestamp as metric_date from generate_series('2019-02-04', '2019-05-06', '7 day'::interval) i ), earlier_starts AS ( 	select account_id, metric_date, start_date 	from subscription inner join date_vals 		on start_date <= metric_date 		and (end_date > metric_date or end_date is null)  	UNION  	select s.account_id, metric_date, s.start_date 	from subscription s inner join earlier_starts e 		on s.account_id=e.account_id 		and s.start_date < e.start_date 		and s.end_date >= (e.start_date-31)  )  insert into metric (account_id,metric_time,metric_name_id,metric_value)   SELECT account_id, metric_date,0, extract(days from metric_date-min(start_date)) FROM earlier_starts group by account_id, metric_date order by account_id, metric_date;  
+Inserting metric socialnet7.post_per_month as id 1
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 1,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=0     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric socialnet7.new_friend_per_month as id 2
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 2,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=1     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric socialnet7.like_per_month as id 3
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 3,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=2     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric socialnet7.view_feed_per_month as id 4
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 4,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=3     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric socialnet7.photo_per_month as id 5
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 5,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=4     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric socialnet7.message_per_month as id 6
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 6,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=5     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
+Inserting metric socialnet7.unfriend_per_month as id 7
+set search_path = 'socialnet7';  insert into metric (account_id,metric_time,metric_name_id,metric_value)  select m.account_id, metric_time, 7,     (4/ least(8,m.metric_value))  *  count(*) from event e inner join metric m     on m.account_id = e.account_id     	and event_time <= metric_time and event_time >  metric_time-interval '8 week' where e.event_type_id=6     and metric_name_id = 0     and metric_value >= 2     and metric_time between '2019-02-04'::timestamp and '2019-05-06'::timestamp group by m.account_id, metric_time, metric_value order by m.account_id, metric_time, metric_value; 
 
 Process finished with exit code 0
 
@@ -926,11 +926,11 @@ Process finished with exit code 0
 The program prints out each metric as it inserts them into the metric name table and runs the SQL to insert the results
 into the metric table.
 
-The default of the program is calculate all the metrics for the `socialnet5` schema, but you can control this behavior 
+The default of the program is calculate all the metrics for the `socialnet7` schema, but you can control this behavior 
 with a constant saved at the top of the file `metric_calc.py` :
 
 ```
-schema='socialnet5'
+schema='socialnet7'
 
 run_mets=None
 # run_mets=['account_tenure','post_per_month']
@@ -954,27 +954,27 @@ directly, or you can use the script described in the next section.
 
 The script `metric-framework/metric_qa.py` will create plots for metric QA (Quality Assurance) like the ones described
 in Chapter 3 of the book.  To get started, just make a new Run Configuration (Section 1.2.6 of this README) and if
-you are using the default `socialnet5` data set just run it.  You should see the following printout:
+you are using the default `socialnet7` data set just run it.  You should see the following printout:
 
 
 ```
 /Users/cgold/projects/ChurnBook/fight-churn/venv/bin/python /Users/cgold/projects/ChurnBook/fight-churn/metric-framework/py/metric_qa.py
-Checking metric socialnet5.account_tenure
-Checking metric socialnet5.post_per_month
-Checking metric socialnet5.new_friend_per_month
-Checking metric socialnet5.like_per_month
-Checking metric socialnet5.view_feed_per_month
-Checking metric socialnet5.photo_per_month
-Checking metric socialnet5.message_per_month
-Checking metric socialnet5.unfriend_per_month
-Saving results to ../../../fight-churn-output/socialnet5/
+Checking metric socialnet7.account_tenure
+Checking metric socialnet7.post_per_month
+Checking metric socialnet7.new_friend_per_month
+Checking metric socialnet7.like_per_month
+Checking metric socialnet7.view_feed_per_month
+Checking metric socialnet7.photo_per_month
+Checking metric socialnet7.message_per_month
+Checking metric socialnet7.unfriend_per_month
+Saving results to ../../../fight-churn-output/socialnet7/
 
 Process finished with exit code 0
 ```
 
 As described on the last line of the printout, results are saved in a directory named `fight-churn-output`  which is
 alongside the `fight-churn` source directory.  (The confusing printout is the relative path from the 
-script directory.)  Each of the plots produced by the script for the default `socialnet5` simulation data will look roughly
+script directory.)  Each of the plots produced by the script for the default `socialnet7` simulation data will look roughly
 like this:
 
 Note that the metric QA uses the metric configuration to run - it only runs on metrics that
@@ -1005,13 +1005,13 @@ of a dataset for a real project.
 
 The code in the folder `dataset-export` handles these problems by making a single script that does everything. The python
 script is `dataset-export/observe_churn.py`. To get started, just make a new Run Configuration 
-(Section 1.2.6 of this README) and if you are using the default `socialnet5` data set just run it. The script prints out 
+(Section 1.2.6 of this README) and if you are using the default `socialnet7` data set just run it. The script prints out 
 the SQL from each step, just like the script that runs the book SQL listings.  When it is done it should print
 that it is saving the dataset:
 
 ```
 ...
-Saving: ../../../fight-churn-output/socialnet5/socialnet5_dataset.csv
+Saving: ../../../fight-churn-output/socialnet7/socialnet7_dataset.csv
 ```
 
 If you want to run this for your own dataset it accepts command line arguments to change the defaults:
