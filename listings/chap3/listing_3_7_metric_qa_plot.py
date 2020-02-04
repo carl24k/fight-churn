@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from math import ceil
 
 def metric_qa_plot(qa_data_path, metric_name,**kwargs):
-    qa_data_df=pd.read_csv(qa_data_path)
+    metric_data_path = qa_data_path + '_' + metric_name + '.csv'
+    qa_data_df=pd.read_csv(metric_data_path)
     plt.figure(figsize=(6, 6))
     qa_subplot(qa_data_df,'max',1,None)
     plt.title(metric_name)
@@ -11,7 +12,7 @@ def metric_qa_plot(qa_data_path, metric_name,**kwargs):
     qa_subplot(qa_data_df,'min',3,'-.')
     qa_subplot(qa_data_df,'n_calc',4,':')
     plt.gca().figure.autofmt_xdate()
-    plt.savefig(qa_data_path.replace('.csv', '_' + metric_name + '_churn_qa.png'))
+    plt.savefig(metric_data_path.replace('.csv', '.png'))
     plt.close()
 
 def qa_subplot(qa_data_df, field, number, linestyle):

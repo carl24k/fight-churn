@@ -82,7 +82,10 @@ def sql_listing(param_dict):
             if  param_dict['mode']  == 'save':
                 save_path = '../../../fight-churn-output/' + param_dict['schema'] + '/'
                 os.makedirs(save_path,exist_ok=True)
-                csv_path=save_path + param_dict['schema'] + '_' +  param_dict['name'].replace(param_dict['prefix'],'')  + '.csv'
+                csv_path= save_path + param_dict['schema'] + '_' +  param_dict['name'].replace(
+                    'listing_{}_{}_'.format(param_dict['chapter'],param_dict['listing']),'')
+                csv_path = csv_path + '_' + param_dict['save_ext']
+                csv_path = csv_path + '.csv'
                 print('Saving: %s' % csv_path)
                 df.to_csv(csv_path, index=False)
             else:
