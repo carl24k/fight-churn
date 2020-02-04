@@ -56,11 +56,12 @@
 		"listing_3_9_events_per_day": {
 			"mode": "save",
 			"%from_yyyy-mm-dd": "2020-01-01",
-			"%to_yyyy-mm-dd": "2020-06-30"
+			"%to_yyyy-mm-dd": "2020-06-30",
+			"save_ext" : "like"
 		},
 		"listing_3_10_event_count_plot": {
 			"type": "py",
-			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day.csv",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
 			"event_name" : "like"
 		},
 		"listing_3_11_events_per_account": {
