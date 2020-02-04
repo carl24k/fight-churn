@@ -52,17 +52,17 @@
 		"listing_3_8_metric_coverage": {
 			"mode": "save"
 		},
-		"listing_3_8_events_per_day": {
+		"listing_3_9_events_per_day": {
 			"mode": "save",
 			"%from_yyyy-mm-dd": "2020-01-01",
 			"%to_yyyy-mm-dd": "2020-06-30"
 		},
-		"listing_3_9_events_per_account": {
+		"listing_3_11_events_per_account": {
 			"mode": "save"
 		},
-		"listing_3_10_account_tenure": {
+		"listing_3_12_account_tenure": {
 		},
-		"listing_3_11_account_tenure_insert": {
+		"listing_3_13_account_tenure_insert": {
 			"mode": "run",
 			"%new_metric_id": 8
 		},
@@ -71,9 +71,9 @@
 			"%new_metric_name": "account_tenure",
 			"%new_metric_id": 8
 		},
-		"listing_3_12_mrr": {
+		"listing_3_14_mrr": {
 		},
-		"listing_3_14_billing_period": {
+		"listing_3_16_billing_period": {
 		},
 		"listing_3_3_1_count_metric_insert": {
 			"mode": "run",

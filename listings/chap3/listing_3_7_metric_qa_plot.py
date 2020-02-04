@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from math import ceil
-import os
 
 def metric_qa_plot(qa_data_path, metric_name,**kwargs):
     qa_data_df=pd.read_csv(qa_data_path)
