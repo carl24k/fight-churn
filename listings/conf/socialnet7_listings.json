@@ -44,7 +44,12 @@
 			"mode": "save",
 			"%metric2measure": "like_per_month"
 		},
-		"listing_3_7_metric_coverage": {
+		"listing_3_7_metric_qa_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_metric_stats_over_time.csv",
+			"metric_name" : "like_per_month"
+		},
+		"listing_3_8_metric_coverage": {
 			"mode": "save"
 		},
 		"listing_3_8_events_per_day": {
