@@ -55,8 +55,8 @@
 		},
 		"listing_3_9_events_per_day": {
 			"mode": "save",
-			"%from_yyyy-mm-dd": "2020-01-01",
-			"%to_yyyy-mm-dd": "2020-06-30",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
 			"save_ext" : "like"
 		},
 		"listing_3_10_event_count_plot": {
@@ -242,6 +242,101 @@
 			"type": "py",
 			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_metric_stats_over_time",
 			"metric_name" : "reply_per_month"
+		},
+		"listing_3_9_1_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"save_ext" : "like"
+		},
+		"listing_3_10_1_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "like"
+		},
+		"listing_3_9_2_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "newfriend",
+			"save_ext" : "newfriend"
+		},
+		"listing_3_10_2_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "newfriend"
+		},
+		"listing_3_9_3_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "post",
+			"save_ext" : "post"
+		},
+		"listing_3_10_3_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "post"
+		},
+		"listing_3_9_4_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "adview",
+			"save_ext" : "adview"
+		},
+		"listing_3_10_4_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "adview"
+		},
+		"listing_3_9_5_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "dislike",
+			"save_ext" : "dislike"
+		},
+		"listing_3_10_5_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "dislike"
+		},
+		"listing_3_9_6_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "unfriend",
+			"save_ext" : "unfriend"
+		},
+		"listing_3_10_6_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "unfriend"
+		},
+		"listing_3_9_7_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "message",
+			"save_ext" : "message"
+		},
+		"listing_3_10_7_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "message"
+		},
+		"listing_3_9_8_events_per_day": {
+			"mode": "save",
+			"%from_yyyy-mm-dd": "2020-02-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"%event2measure": "reply",
+			"save_ext" : "reply"
+		},
+		"listing_3_10_8_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/socialnet7/socialnet7_events_per_day",
+			"event_name" : "reply"
 		}
 	},
 	"chap4": {
