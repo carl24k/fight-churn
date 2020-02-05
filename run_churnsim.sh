@@ -32,17 +32,26 @@ cd $HOME$CHURN_ROOT/fight-churn/data-generation/py
 ../../venv/bin/python churnsim.py $SCHEMA
 cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
+
+# event QA
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 9 --version 1 2 3 4 5 6 7 8
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 10 --version 1 2 3 4 5 6 7 8
+
 # standard metric names
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4 5 6 7 8 11
 
 # Account tenure metric
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 11
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
 
 # standard metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 1 2 3 4 5 6 7 8
 
+# metric QA
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 6 --version 1 2 3 4 5 6 7 8
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 7 --version 1 2 3 4 5 6 7 8
+
 # Metric coverage test
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 7
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 8
 
 # total metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --insert
@@ -128,3 +137,4 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 
 # Cohorts (after all metrics generated)
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 10 11 12 13 14 15 16 17
+

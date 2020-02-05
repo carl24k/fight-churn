@@ -12,7 +12,9 @@ def metric_qa_plot(qa_data_path, metric_name,**kwargs):
     qa_subplot(qa_data_df,'min',3,'-.')
     qa_subplot(qa_data_df,'n_calc',4,':')
     plt.gca().figure.autofmt_xdate()
-    plt.savefig(metric_data_path.replace('.csv', '.png'))
+    save_to_path=metric_data_path.replace('.csv', '.png')
+    print('Saving metric qa plot to ' + save_to_path)
+    plt.savefig(save_to_path)
     plt.close()
 
 def qa_subplot(qa_data_df, field, number, linestyle):

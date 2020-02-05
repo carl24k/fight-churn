@@ -14,7 +14,7 @@ Arguments
 '''
 parser = argparse.ArgumentParser()
 # Run control arguments
-parser.add_argument("--schema", type=str, help="The name of the schema", default='socialnet6')
+parser.add_argument("--schema", type=str, help="The name of the schema", default='socialnet7')
 parser.add_argument("--chapter", type=int, help="The chapter of the listing", default=2)
 parser.add_argument("--listing", nargs='*', type=int, help="The number of the listing", default=[1])
 parser.add_argument("--insert", action="store_true", default=False,help="Use the insert version of a metric SQL, if available")
@@ -84,7 +84,8 @@ def sql_listing(param_dict):
                 os.makedirs(save_path,exist_ok=True)
                 csv_path= save_path + param_dict['schema'] + '_' +  param_dict['name'].replace(
                     'listing_{}_{}_'.format(param_dict['chapter'],param_dict['listing']),'')
-                csv_path = csv_path + '_' + param_dict['save_ext']
+                if 'save_ext' in param_dict:
+                    csv_path = csv_path + '_' + param_dict['save_ext']
                 csv_path = csv_path + '.csv'
                 print('Saving: %s' % csv_path)
                 df.to_csv(csv_path, index=False)
