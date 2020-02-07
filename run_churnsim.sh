@@ -12,7 +12,8 @@ CHURN_DB_PASS=churn
 
 CHURN_ROOT=/projects/ChurnBook
 
-PYTHONPATH="${PYTHONPATH}:$HOME$CHURN_ROOT/fight-churn/listings/chap5:"\
+PYTHONPATH="${PYTHONPATH}:$HOME$CHURN_ROOT/fight-churn/listings/chap3:"\
+"$HOME$CHURN_ROOT/fight-churn/listings/chap5:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap6:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap7:"\
 "$HOME$CHURN_ROOT/fight-churn/listings/chap8:"\
