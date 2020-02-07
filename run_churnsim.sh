@@ -81,8 +81,11 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # Scores data set 1
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 3
 
+# Pair scatter plots
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 -listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+
 # Grouping data set 1
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 4 3 5
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 2 4 3 5
 
 # Dataset2 Extract & Processing
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 2
