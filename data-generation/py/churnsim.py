@@ -123,11 +123,15 @@ class ChurnSimulation:
         :return:
         '''
 
+        total_subscriptions=0
+        total_events=0
         for i in range(n_to_create):
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
+            total_subscriptions+=len(customer.subscriptions)
+            total_events+=len(customer.events)
             if i % 100==0:
-                print('Simulated customer {}/{}: {} subscription, {} events'.format(i,n_to_create, len(customer.subscriptions), len(customer.events)))
+                print('Simulated customer {}/{}: {:,} subscriptions & {:,} events'.format(i,n_to_create, total_subscriptions, total_events))
 
 
     def copy_customer_to_database(self,customer):
@@ -207,7 +211,7 @@ class ChurnSimulation:
         self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,self.db)
 
         # Initial customer count
-        print('\nCreating %d initial customers for %s start date' % (self.init_customers,self.start_date))
+        print('\nCreating %d initial customers for month of %s' % (self.init_customers,self.start_date))
         self.create_customers_for_month(self.start_date,self.init_customers)
         print('Created %d initial customers with %d subscriptions for start date %s' % (self.init_customers,self.subscription_count,str(self.start_date)))
 
@@ -215,7 +219,7 @@ class ChurnSimulation:
         next_month=self.start_date+relativedelta(months=+1)
         n_to_add = int(ceil( self.init_customers* self.monthly_growth_rate))  # number of new customers in first month
         while next_month < self.end_date:
-            print('\nCreating %d new customers for month %s:' % (n_to_add,next_month))
+            print('\nCreating %d new customers for month of %s:' % (n_to_add,next_month))
             self.create_customers_for_month(next_month,n_to_add)
             print('Created %d new customers for month %s, now %d subscriptions\n' % (n_to_add,str(next_month),self.subscription_count))
             next_month=next_month+relativedelta(months=+1)
