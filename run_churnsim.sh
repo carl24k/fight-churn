@@ -55,7 +55,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 7 --version 1 2 3 4 5 6 7 8
 
 # Metric coverage test
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 8
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 8 11
 
 # total metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --insert
