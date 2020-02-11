@@ -103,7 +103,7 @@ class GaussianBehaviorModel(BehaviorModel):
 
 
     def scale_correlation_to_covariance(self):
-        print('Scaling correlation by behavior means...')
+        # print('Scaling correlation by behavior means...')
         # This seems to give a reasonable amount of variance if the matrix was designed as a set of correlations
         scaling = np.sqrt(self.behave_means.abs() * np.sqrt(self.behave_means.abs()))
         self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))
@@ -137,7 +137,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
     def scale_correlation_to_covariance(self):
         self.log_means=self.log_fun(self.behave_means)
         rectified_means =np.array([max(m,0.0) for m in self.log_means])
-        print('Scaling correlation by behavior means...')
+        # print('Scaling correlation by behavior means...')
 
         scaling = np.sqrt(rectified_means)
         self.behave_cov = np.matmul(self.behave_cov, np.diag(scaling))

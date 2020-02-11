@@ -100,6 +100,8 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 # Current Stats
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 7 8 9
 
+# Accuracy code test
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 1 2 3
 
 # Levels of C param
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 1 2 3
@@ -128,7 +130,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 4
 
 # Re-prepare the non-dummy part of categorical data
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1 --version 3
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 2 --version 3
 
 # Merge dummies & groupscores
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 5
