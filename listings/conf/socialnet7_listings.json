@@ -443,6 +443,9 @@
 		},
 		"listing_5_2_dataset_stats": {
 		},
+		"listing_5_2_1_dataset_stats": {
+			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv"
+		},
 		"listing_5_2_2_dataset_stats": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv"
 		},
