@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import pickle
 import matplotlib.pyplot as plt
-from listing_8_4_rescore_metrics import reload_churn_data
+from listing_8_5_rescore_metrics import reload_churn_data
 
 def churn_forecast(data_set_path,model_name='logreg_model'):
 
@@ -29,7 +29,7 @@ def forecast_histogram(data_set_path,predict_df,ext='reg'):
     plt.ylabel('# of Accounts')
     plt.title('Histogram of Active Customer Churn Probability ({})'.format(ext))
     plt.grid()
-    plt.savefig(data_set_path.replace('.csv', '_{}_churnhist.png'.format(ext)), format='png')
+    plt.savefig(data_set_path.replace('.csv', '_{}_churnhist.svg'.format(ext)), format='svg')
     plt.close()
     hist_df=pd.DataFrame({'n':n,'bins':bins[1:]})
     hist_df.to_csv(data_set_path.replace('.csv', '_current_churnhist.csv'))

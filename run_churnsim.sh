@@ -64,6 +64,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 4 6 --insert
 
 # Scaled metrics
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 7 --insert
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 --insert
 
 ## ratios
@@ -88,14 +89,13 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 2 4 3 5
 
 # Dataset2 Extract & Processing
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 2
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1 2
 
 # Regression
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 2
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 3
 
 # Prediction
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 3 4 5
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 4 5 6 7
 
 # Current Stats
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 --version 7 8 9
