@@ -16,6 +16,8 @@
 		"listing_2_4_mrr_churn": {
 		},
 		"listing_2_5_churn_rate_scaled": {
+			"%from_yyyy-mm-dd": "2020-03-01",
+			"%to_yyyy-mm-dd": "2020-06-01"
 		}
 	},
 	"chap3": {
