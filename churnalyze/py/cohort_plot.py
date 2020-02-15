@@ -68,7 +68,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
     if args.group or not plot_score:
         plt.figure(figsize=(6, 4))
         plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
-                 marker='o', color='red', linewidth=2, label=var_to_plot)
+                 marker='o', color='black', linewidth=2, label=var_to_plot)
         plt.gcf().subplots_adjust(bottom=0.2)
         plt.xlabel('Cohort Average of  "%s"' % renames[var_to_plot])
         plt.ylim(0, churn_plot_max)
@@ -86,7 +86,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
         plt.figure(figsize=(10, 10))
         plt.subplot(2, 1, 1)
         plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
-                 marker='o', color='red', linewidth=2, label=var_to_plot)
+                 marker='o', color='black', linewidth=2, label=var_to_plot)
         plt.ylabel('Cohort Churn Rate (%)')
         plt.xlabel('Cohort Average of  "%s"' % renames[var_to_plot])
         plt.grid()
@@ -101,7 +101,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
 
         plt.subplot(2, 1, 2)
         plt.plot(var_to_plot, 'churn_rate', data=score_frame,
-                 marker='o', color='blue', linewidth=2, label='score(%s)' % var_to_plot)
+                 marker='o', color='black', linewidth=2, label='score(%s)' % var_to_plot)
         plt.xlabel('Cohort Average of  "%s" (SCORE)' % renames[var_to_plot])
         plt.grid()
         plt.ylim(0, churn_plot_max)

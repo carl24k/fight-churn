@@ -88,7 +88,7 @@ class EventChecker:
 		:param cleanedName:
 		:return:
 		'''
-		res.plot(kind='line', linestyle="-", marker=".", x='event_date', y='n_event',
+		res.plot(kind='line', linestyle="-", marker=".", x='event_date', y='n_event', color='black',
 				 title='%s n_event' % cleanedName, legend=False, ylim=(0, round(1.1 * res['n_event'].max())))
 		if self.args.hideax:
 			plt.gca().get_yaxis().set_visible(False)
@@ -118,7 +118,7 @@ class EventChecker:
 			if not valid_properties[p]: continue
 			count = sum([int(v) for v in valid_properties[0:p + 1]])
 			plt.subplot(n_valid_property + 1, 1, 1 + count)
-			plt.plot('event_date', self.metric_dict['event_properties'][p], data=res, marker='.', color='blue', linewidth=1,
+			plt.plot('event_date', self.metric_dict['event_properties'][p], data=res, marker='.', color='black', linewidth=1,
 					 label="sum(%s)" % self.metric_dict['event_properties'][p])
 			plt.legend()
 			if self.args.hideax:
