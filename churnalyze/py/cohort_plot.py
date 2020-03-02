@@ -63,7 +63,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
     plot_frame = cc.behavioral_cohort_analysis(var_to_plot, nbin=args.nbin,bins=args.bins,
                                                use_score=False,use_group=args.group)
     ax_scale=cc.get_conf('ax_scale',default=200)
-    churn_plot_max = ceil(cc.churn_rate() * ax_scale) / 100.0
+    churn_plot_max = cc.churn_rate() * 3.0
 
     if args.group or not plot_score:
         plt.figure(figsize=(6, 4))
@@ -83,7 +83,7 @@ def plot_one_cohort_churn(cc,args,var_to_plot,plot_score):
 
     else:
         score_frame = cc.behavioral_cohort_analysis(var_to_plot, use_score=True, nbin=args.nbin,bins=args.bins)
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(8, 10))
         plt.subplot(2, 1, 1)
         plt.plot(var_to_plot, 'churn_rate', data=plot_frame,
                  marker='o', color='black', linewidth=2, label=var_to_plot)
