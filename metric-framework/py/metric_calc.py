@@ -120,18 +120,18 @@ class MetricCalculator:
 
 		plt.figure(figsize=(8, 10))
 		plt.subplot(4, 1, 1)
-		plt.plot('calc_date', 'max_val', data=res, marker='', color='red', linewidth=2, label="max")
+		plt.plot('calc_date', 'max_val', data=res, marker='', color='black', linewidth=2, label="max")
 		if args.hideax: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
 		plt.ylim(0, ceil(1.1 * res['max_val'].dropna().max()))
 		plt.legend()
 		plt.title(metric)
 		plt.subplot(4, 1, 2)
-		plt.plot('calc_date', 'avg_val', data=res, marker='', color='green', linewidth=2, label='avg')
+		plt.plot('calc_date', 'avg_val', data=res, marker='', color='black', linewidth=2, label='avg')
 		if args.hideax: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
 		plt.ylim(0, ceil(1.1 * res['avg_val'].dropna().max()))
 		plt.legend()
 		plt.subplot(4, 1, 3)
-		plt.plot('calc_date', 'min_val', data=res, marker='', color='blue', linewidth=2, label='min')
+		plt.plot('calc_date', 'min_val', data=res, marker='', color='black', linewidth=2, label='min')
 		if args.hideax: plt.gca().get_xaxis().set_visible(False)  # Hiding y axis labels on the count
 		# plt.ylim(0, ceil(2*res['min_val'].dropna().max()))
 		plt.legend()

@@ -3,7 +3,7 @@ from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.metrics import make_scorer
 from sklearn.linear_model import LogisticRegression
 
-from listing_8_2_logistic_regression import prepare_data
+from listing_8_3_logistic_regression import prepare_data
 from listing_9_2_top_decile_lift import calc_lift
 
 

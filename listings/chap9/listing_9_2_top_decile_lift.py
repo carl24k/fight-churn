@@ -1,4 +1,4 @@
-from listing_8_2_logistic_regression import prepare_data
+from listing_8_3_logistic_regression import prepare_data
 from listing_9_1_regression_auc import reload_regression
 import numpy
 

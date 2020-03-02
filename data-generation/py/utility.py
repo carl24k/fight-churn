@@ -59,13 +59,13 @@ class UtilityModel:
         # r = 1.0 - churn_fudge
         self.kappa = -1.0 / self.ex_util_vol
         # self.offset = log(1.0 / r - 1.0) - self.kappa * self.expected_utility
-        self.offset = 1.5 # chosen to give around 5% churn rate on the simulation
+        self.offset = 0.5 # chosen to give around 5% churn rate on the simulation
         # print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(churn_fudge, r,log(1.0 / r - 1.0)))
 
-        print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
-        print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
-        expected_unscaled_prob = self.churn_probability(self.behave_means, temp_customer)
-        print('\tExpected Median churn prob={}'.format(expected_unscaled_prob))
+        # print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
+        # print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
+        # expected_unscaled_prob = self.churn_probability(self.behave_means, temp_customer)
+        # print('\tExpected Median churn prob={}'.format(expected_unscaled_prob))
 
     def utility_function(self,event_counts,customer):
         '''
