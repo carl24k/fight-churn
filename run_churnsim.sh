@@ -7,18 +7,18 @@
 SCHEMA=socialnet7
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
-CHURN_DB_USER=cgold
-CHURN_DB_PASS=churn
+CHURN_DB_USER=user
+CHURN_DB_PASS=pass
 
-CHURN_ROOT=/projects/ChurnBook
+CHURN_ROOT=path_from_home_to_code
 
-PYTHONPATH="${PYTHONPATH}:$HOME$CHURN_ROOT/fight-churn/listings/chap3:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap5:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap6:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap7:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap8:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap9:"\
-"$HOME$CHURN_ROOT/fight-churn/listings/chap10"
+PYTHONPATH="${PYTHONPATH}:$HOME/$CHURN_ROOT/fight-churn/listings/chap3:"\
+"$HOME/$CHURN_ROOT/fight-churn/listings/chap5:"\
+"$HOME/$CHURN_ROOT/fight-churn/listings/chap6:"\
+"$HOME/$CHURN_ROOT/fight-churn/listings/chap7:"\
+"$HOME/$CHURN_ROOT/fight-churn/listings/chap8:"\
+"$HOME/$CHURN_ROOT/fight-churn/listings/chap9:"\
+"$HOME/$CHURN_ROOT/fight-churn/listings/chap10"
 
 export PYTHONPATH
 export PYTHONUNBUFFERED
@@ -26,12 +26,12 @@ export CHURN_DB
 export CHURN_DB_USER
 export CHURN_DB_PASS
 
-cd $HOME$CHURN_ROOT/fight-churn/listings/py/
+cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
-cd $HOME$CHURN_ROOT/fight-churn/data-generation/py
+cd $HOME/$CHURN_ROOT/fight-churn/data-generation/py
 ../../venv/bin/python churndb.py $SCHEMA
 ../../venv/bin/python churnsim.py $SCHEMA
-cd $HOME$CHURN_ROOT/fight-churn/listings/py/
+cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
 
 # churn rate
@@ -137,7 +137,7 @@ cd $HOME$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 2 --version 3
 
 
- Categorical cross valid / regression
+#  Categorical cross valid / regression
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 5 --version 2 3
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 4 --version 4 5
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6 --version 2
