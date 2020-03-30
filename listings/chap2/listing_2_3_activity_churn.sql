@@ -7,8 +7,9 @@ date_range as (
 start_accounts as     
 (
 	select distinct account_id
-	from event e inner join date_range d on
-		e.event_time + inactivity_interval > start_date
+	from event e inner join date_range d
+	on	e.event_time > start_date-inactivity_interval
+	and e.event_time <= start_date
 ),
 start_count as (    
 	select 	count(start_accounts.*) as n_start from start_accounts
@@ -16,8 +17,9 @@ start_count as (
 end_accounts as    
 (
 	select distinct account_id
-	from event e inner join date_range d on
-		e.event_time + inactivity_interval > end_date
+	from event e inner join date_range d
+	on	e.event_time > end_date-inactivity_interval
+	and e.event_time <= end_date
 ), 
 end_count as (    
 	select 	count(end_accounts.*) as n_end from end_accounts
