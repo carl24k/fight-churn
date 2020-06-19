@@ -8,7 +8,6 @@ numpy
 pandas
 patsy
 postgres
-psycopg2
 psycopg2-binary
 pyparsing
 python-dateutil
