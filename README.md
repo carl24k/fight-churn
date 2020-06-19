@@ -292,13 +292,12 @@ using the little green arrow next to the Configuration drop down menu...
 #### 1.2.7 Running From the Command Line
 
 If you are not using PyCharm of course you can run all this code from a terminal shell. You will need
-to manually setup a Python virtual environment with the required packages, and  set a few environment variables 
-in your `.bash_profile` or `.bashrc` file on Mac/Linux (or whatever you use, but I will show this for bash because it seems to be the most common); on Windows the equivalent is to add environment variables in the system settings.
+to manually setup a Python virtual environment with the required packages, and  set a few environment variables.
 
+##### 1.2.7.1 Installing Virtual Environment and Requirements
 
-1.2.7.1 Installing Virtual Environment and Requirements
-
-In either Windows or Mac/Linux you should setup a virtual environment following the instructions at pythong.org:
+In either Windows or Mac/Linux you should setup a virtual environment following the 
+instructions at pythong.org:
 
 https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 
@@ -319,9 +318,10 @@ If you are unable to install xgboost with pip, then you can try to install using
   outlined in that link. Alternatively, you can remove that requirement - note that you can
 still run all the code in the book except for the 2nd half of chapter 9 without xgboost.
 
-1.2.7.2 Mac/Linux Command Line Environment Variables
+##### 1.2.7.2 Mac/Linux Command Line Environment Variables
 The environment variables are specific to these programs and contain information need to access the
-databse. You should add a few lines like this:
+databse. You should add a few lines like this in your `.bash_profile` or `.bashrc` file on Mac/Linux 
+(or whatever is appropriate for the shell you use, but I will show this for bash because it seems to be the most common...)
 
 ```
 export CHURN_DB=your_db
@@ -338,7 +338,7 @@ The rest of the README is written for people using PyCharm, but you can always r
 illustrated from the terminal...
 
 
-1.2.7.3 Windows Command Line Environment Variables
+##### 1.2.7.3 Windows Command Line Environment Variables
 If you are using Windows, you will need to setup the enviornment variables in the Advanced System Preferences.
 To make a long story short, you will need to end up with settings looking like this screenshot, but with 
 the correct database, username and password for your setup:
