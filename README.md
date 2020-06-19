@@ -304,6 +304,8 @@ using the little green arrow next to the Configuration drop down menu...
 If you are not using PyCharm of course you can run all this code from a terminal shell. You will need
 to manually setup a Python virtual environment with the required packages, and  set a few environment variables.
 
+---
+
 ##### 1.2.3.1 Installing Virtual Environment and Requirements
 
 In either Windows or Mac/Linux you should setup a virtual environment following the 
@@ -328,6 +330,8 @@ If you are unable to install xgboost with pip, then you can try to install using
   outlined in that link. Alternatively, you can remove that requirement - note that you can
 still run all the code in the book except for the 2nd half of chapter 9 without xgboost.
 
+---
+
 ##### 1.2.3.2 Mac/Linux Command Line Environment Variables
 The environment variables are specific to these programs and contain information need to access the
 databse. You should add a few lines like this in your `.bash_profile` or `.bashrc` file on Mac/Linux 
@@ -346,6 +350,8 @@ you really need to add these paths (it is not sufficient to simply run the scrip
 
 The rest of the README is written for people using PyCharm, but you can always run the same commands
 illustrated from the terminal...
+
+---
 
 
 ##### 1.2.3.3 Windows Command Line Environment Variables
