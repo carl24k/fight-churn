@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
-from listing_8_5_rescore_metrics import reload_churn_data
+from listing_8_4_rescore_metrics import reload_churn_data
 
 def clip_hi_cols(data, hi_vals):
     for col in hi_vals.index.values:
