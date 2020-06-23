@@ -1,6 +1,6 @@
 import pandas as pd
 from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
-from listing_8_5_rescore_metrics import score_current_data, group_current_data, reload_churn_data
+from listing_8_4_rescore_metrics import score_current_data, group_current_data, reload_churn_data
 from listing_10_4_dummy_variables import dummy_variables
 
 def rescore_wcats(data_set_path,categories,groups):
