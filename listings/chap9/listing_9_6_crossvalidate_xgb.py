@@ -4,9 +4,9 @@ from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.metrics import make_scorer
 import xgboost as xgb
 
-from listing_8_3_logistic_regression import prepare_data
+from listing_8_2_logistic_regression import prepare_data
 from listing_9_2_top_decile_lift import calc_lift
-from listing_8_6_churn_forecast import forecast_histogram
+from listing_8_5_churn_forecast import forecast_histogram
 
 def crossvalidate_xgb(data_set_path,n_test_split):
 
