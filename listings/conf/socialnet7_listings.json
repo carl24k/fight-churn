@@ -510,7 +510,6 @@
 		"listing_6_5_ordered_correlation_matrix": {
 		},
 		"listing_6_1_1_metric_pair_plot": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_scores.csv",
 			"metric1": "post_per_month",
 			"metric2": "like_per_month"
 		},
