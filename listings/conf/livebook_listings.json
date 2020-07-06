@@ -1,0 +1,127 @@
+{
+
+	"chap3": {
+		"params": {
+			"%from_yyyy-mm-dd": "2019-12-01",
+			"%to_yyyy-mm-dd": "2020-06-01",
+			"mode": "run",
+			"type": "sql",
+			"qa_data_path" : "../../../fight-churn-output/livebook/livebook_events_per_day"
+		},
+		"listing_3_1_event_count": {
+		},
+		"listing_3_2_multi_date_count": {
+		},
+		"listing_3_3_count_metric_insert": {
+			"mode": "run",
+			"%new_metric_id": 0
+		},
+		"listing_3_4_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "like_per_month",
+			"%new_metric_id": 0
+		},
+		"listing_3_6_metric_stats_over_time": {
+			"mode": "save",
+			"%metric2measure": "ReadOwnBook_per90days",
+			"save_ext" : "ReadOwnBook_per90days"
+		},
+		"listing_3_7_metric_qa_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/livebook/livebook_metric_stats_over_time",
+			"metric_name" : "ReadOwnBook_per90days"
+		},
+		"listing_3_8_metric_coverage": {
+			"mode": "save"
+		},
+		"listing_3_9_events_per_day": {
+			"mode": "save",
+			"save_ext" : "ReadingOwnedBook"
+		},
+		"listing_3_10_event_count_plot": {
+			"type": "py",
+			"qa_data_path" : "../../../fight-churn-output/livebook/livebook_events_per_day",
+			"event_name" : "ReadingOwnedBook"
+		},
+		"listing_3_11_events_per_account": {
+			"mode": "save"
+		},
+
+		"listing_3_3_1_count_metric_insert": {
+			"mode": "run",
+			"%event2measure": "ReadingOwnedBook",
+			"%new_metric_id": 0
+		},
+		"listing_3_4_1_metric_name_insert": {
+			"mode": "run",
+			"%new_metric_name": "ReadOwnBook_per90days",
+			"%new_metric_id": 0
+		},
+
+		"listing_3_9_1_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "ReadingOwnedBook"
+		},
+		"listing_3_9_2_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "FirstLivebookAccess"
+		},
+		"listing_3_9_3_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "FirstManningAccess"
+		},
+		"listing_3_9_4_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "EBookDownloaded"
+		},
+		"listing_3_9_5_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "ReadingFreePreview"
+		},
+		"listing_3_9_6_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "HighlightCreated"
+		},
+		"listing_3_9_7_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "FreeContentCheckout"
+		},
+		"listing_3_9_8_events_per_day": {
+			"mode": "save",
+			"%event2measure" : "ReadingOpenChapter"
+		},
+
+		"listing_3_10_1_event_count_plot": {
+			"type": "py",
+			"event_name" : "ReadingOwnedBook"
+		},
+		"listing_3_10_2_event_count_plot": {
+			"type": "py",
+			"event_name" : "FirstLivebookAccess"
+		},
+		"listing_3_10_3_event_count_plot": {
+			"type": "py",
+			"event_name" : "FirstManningAccess"
+		},
+		"listing_3_10_4_event_count_plot": {
+			"type": "py",
+			"event_name" : "EBookDownloaded"
+		},
+		"listing_3_10_5_event_count_plot": {
+			"type": "py",
+			"event_name" : "ReadingFreePreview"
+		},
+		"listing_3_10_6_event_count_plot": {
+			"type": "py",
+			"event_name" : "HighlightCreated"
+		},
+		"listing_3_10_7_event_count_plot": {
+			"type": "py",
+			"event_name" : "FreeContentCheckout"
+		},
+		"listing_3_10_8_event_count_plot": {
+			"type": "py",
+			"event_name" : "ReadingOpenChapter"
+		}
+	}
+}

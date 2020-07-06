@@ -17,7 +17,7 @@ from postgres import Postgres
 import os
 import sys
 
-schema_name='socialnet7'
+schema_name='livebook'
 if len(sys.argv) >= 2:
     schema_name = sys.argv[1]
 
@@ -26,6 +26,8 @@ db = Postgres("postgres://%s:%s@localhost/%s" % (
 os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
 
 tables=['event','subscription','event_type','metric','metric_name','active_period','observation','active_week','account']
+tables=['metric']
+
 
 print('Creating schema %s (if not exists)...' % schema_name)
 db.run('CREATE SCHEMA IF NOT EXISTS %s;' % schema_name)

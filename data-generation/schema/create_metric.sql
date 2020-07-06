@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS  x.metric
 (
-    account_id integer NOT NULL,
+    account_id character(32),
     metric_time timestamp(6) without time zone NOT NULL,
     metric_name_id integer NOT NULL,
     metric_value real

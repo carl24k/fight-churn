@@ -6,9 +6,8 @@ insert into metric (account_id,metric_time,metric_name_id,metric_value)
 select account_id, metric_date, %new_metric_id,  count(*) AS metric_value
 from event e inner join date_vals d
 on e.event_time < metric_date 
-and e.event_time >= metric_date - interval '28 day'
-inner join event_type t on t.event_type_id=e.event_type_id
-where t.event_type_name='%event2measure'
+and e.event_time >= metric_date - interval '90 day'
+where event_type='%event2measure'
 group by account_id, metric_date
 ON CONFLICT DO NOTHING;
 
