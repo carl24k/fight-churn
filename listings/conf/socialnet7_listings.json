@@ -483,10 +483,6 @@
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset.csv",
 			"type": "py"
 		},
-		"xparams": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
-			"type": "py"
-		},
 		"listing_6_1_metric_pair_plot": {
 			"metric1": "post_per_month",
 			"metric2": "like_per_month"
@@ -726,10 +722,6 @@
 	"chap8": {
 		"params": {
 			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset2.csv",
-			"type": "py"
-		},
-		"xparams": {
-			"data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset_extreme.csv",
 			"type": "py"
 		},
 		"listing_8_0_dataset2": {
