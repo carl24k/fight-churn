@@ -168,7 +168,7 @@ def load_and_check_listing_params(args):
 
     # If using the insert option, set the parameter source to insert sub-block rather than regular
     if args.insert:
-        if 'insert' not in param_dict[chapter_key]:
+        if 'insert' not in param_dict[chapter_key][list_key]:
             print(f'No insert section for chapter {chapter} in {schema}_listings.json')
             exit(-4)
         param_source = param_dict[chapter_key][list_key]['insert']
@@ -194,7 +194,7 @@ def load_and_check_listing_params(args):
     listing_params['schema'] = schema
     listing_params['chapter']=chapter
     listing_params['listing']=listing
-    listing_params['name']=param_source['name']
+    listing_params['name'] = param_dict[chapter_key][list_key]['name']
     listing_params['full_name']= f"{prefix}_{listing_params['chapter']}_{listing_params['listing']}" + \
                                                   f"_{listing_params['name']}"
 
