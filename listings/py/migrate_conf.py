@@ -43,6 +43,12 @@ for chap in param_dict.keys():
         if vers_num:
             vers_num_name = f'v{vers_num}'
             param_target[vers_num_name] = param_dict[chap][listing]
+            # if there are defaults, remove version params matching defaults
+            if 'params' in param_target:
+                for k in list(param_target[vers_num_name].keys()):
+                    if k in param_target['params']:
+                        if param_target[vers_num_name][k]==param_target['params'][k]:
+                            param_target[vers_num_name].pop(k)
         else:
             param_target['params'] =param_dict[chap][listing]
 

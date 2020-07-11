@@ -51,8 +51,7 @@ def sql_listing(param_dict):
     :return:
     '''
 
-
-    with open('../../listings/chap%d/%s.sql' % (param_dict['chapter'], param_dict['name']), 'r') as myfile:
+    with open('../../listings/chap%d/%s' % (param_dict['chapter'],param_dict['file']), 'r') as myfile:
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
         # prefix the search path onto the listing, which does not specify the schema
@@ -152,67 +151,63 @@ def load_and_check_listing_params(args):
     listing = args.listing
     version = args.version
 
-    chapter_key='chap{}'.format(chapter)
-    if not args.insert and version is None:
-        listing_prefix='^listing_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
-    elif args.insert and version is None:
-        listing_prefix='^insert_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
-    elif args.insert and version is not None:
-        listing_prefix='^insert_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
-    elif not args.insert and version is not None:
-        listing_prefix='^listing_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
-
-    listing_re=re.compile(listing_prefix)
+    chapter_key=f'chap{chapter}'
+    list_key=f'list{listing}'
+    vers_key=f'v{version}' if version else None
 
     # Error if there is no file for this schema
     conf_path='../../listings/conf/%s_listings.json' % schema
     if not os.path.isfile(conf_path):
-        print('No params %s to run listings on schema %s' % (conf_path,schema))
+        print(f'No params {conf_path} to run listings on schema {schema}')
         exit(-1)
 
     with open(conf_path, 'r') as myfile:
         param_dict=json.loads(myfile.read())
 
     # Error if there is no key for this chapter in the dictionary
-    if not chapter_key in param_dict:
-        print('No params for chapter %d in %s_listings.json' % (chapter,schema))
+    if chapter_key not in param_dict:
+        print(f'No params for chapter {chapter} in {schema}_listings.json')
         exit(-2)
 
-    matches = list(filter(listing_re.match, param_dict[chapter_key].keys()))
-    if len(matches)==0:
-        print('No params for listing %d, chapter %d in %s_listings.json' % (listing, chapter, schema))
+    # Error if there is no key for this listing
+    if list_key not in param_dict[chapter_key]:
+        print(f'No listing for chapter {chapter} in {schema}_listings.json')
         exit(-3)
 
-    if len(matches)>1:
-        print('Multiple configurations found matching listing %d, chapter %d in %s_listings.json' % (listing, chapter, schema))
-        exit(-4)
-
-    listing_name = matches[0]
     # Start with the chapter default parameters
-    listing_params = copy(param_dict[chapter_key]['params'])
+    listing_params = copy(param_dict[chapter_key]['defaults'])
 
-    # If there are specific parameters for this listing, add them here
-    if len(param_dict[chapter_key][listing_name])>0:
-        for k in param_dict[chapter_key][listing_name].keys():
-            listing_params[k]=param_dict[chapter_key][listing_name][k]
+    # If using the insert option, set the parameter source to insert sub-block rather than regular
+    if args.insert:
+        if 'insert' not in param_dict[chapter_key]:
+            print(f'No insert section for chapter {chapter} in {schema}_listings.json')
+            exit(-4)
+        param_source = param_dict[chapter_key][list_key]['insert']
+        # force the right mode forn insert sqls
+        listing_params['mode']='run'
+        prefix = 'insert'
+    else:
+        param_source = param_dict[chapter_key][list_key]
+        prefix = 'listing'
 
-    # Add the other contextual information
+    # Add additional specific parameters for this listing, possibly overwriting defaults
+    if len(param_source['params']) > 0:
+        for k in param_source['params'].keys():
+            listing_params[k]=param_source['params'][k]
+
+    # add additional specific parmeters for this version (if any), possibly overwriting
+    if vers_key and vers_key in param_source:
+        for k in param_source[vers_key].keys():
+            listing_params[k]=param_source[vers_key][k]
+
+
+    # Add the contextual information (?)
     listing_params['schema'] = schema
     listing_params['chapter']=chapter
     listing_params['listing']=listing
-    if args.version is None:
-        listing_params['name'] = listing_name
-        if listing_params['type']=='sql': listing_params['prefix'] = 'listing_{c}_{l}_'.format(c=chapter,l=listing)
-    else:
-        pre = 'listing' if not args.insert else 'insert'
-        # For a versioned set of parameters, the listing file name must be the original...
-        version_prefix='{p}_{c}_{l}_{v}_'.format(p=pre,c=chapter,l=listing,v=version)
-        listing_prefix='{p}_{c}_{l}_'.format(p=pre,c=chapter,l=listing)
-        listing_params['name'] = listing_name.replace(version_prefix,listing_prefix)
-        if listing_params['type']=='sql': listing_params['prefix']=version_prefix
-
-    if args.insert: # force the right mode forn insert sqls
-        listing_params['mode']='run'
+    listing_params['name']=param_source['name']
+    listing_params['file']=param_source['name'] = f"{prefix}_{listing_params['chapter']}_{listing_params['listing']}" + \
+                                                  f"_{listing_params['name']}.{listing_params['type']}"
 
     return listing_params
 
