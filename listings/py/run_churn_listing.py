@@ -51,7 +51,7 @@ def sql_listing(param_dict):
     :return:
     '''
 
-    with open('../../listings/chap%d/%s' % (param_dict['chapter'],param_dict['file']), 'r') as myfile:
+    with open('../../listings/chap%d/%s.sql' % (param_dict['chapter'],param_dict['full_name']), 'r') as myfile:
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
         # prefix the search path onto the listing, which does not specify the schema
@@ -111,26 +111,15 @@ def python_listing(param_dict):
         example_params[k]=param_dict[k]
 
     # Load the listing name module
-    mod = import_module(param_dict['name'])
+    mod = import_module(param_dict['full_name'])
 
-    # Find the function name from the listing name
-    example_name_regexp = 'listing_\\d+_\\d+_(\w+)'
-
-    m = re.search(example_name_regexp, param_dict['name'])
-
-    if m:
-        ex_name = m.group(1)
-        # Load the function, which is an attribute of the module
-        ex_fun = getattr(mod, ex_name,None)
-        if ex_fun is not None:
-            # Run the function, passing the parameters
-            ex_fun(**example_params)
-        else:
-            print('Could not find function %s in module %s' % (ex_name , param_dict['name']))
-            exit(-5)
+    ex_fun = getattr(mod, param_dict['name'],None)
+    if ex_fun is not None:
+        # Run the function, passing the parameters
+        ex_fun(**example_params)
     else:
-        print('Could not parse listing name %s in schema %s' % ( param_dict['name'], param_dict['schema']))
-        exit(-6)
+        print('Could not find function %s in module %s' % (param_dict['name'] , param_dict['full_name']))
+        exit(-5)
 
 
 def load_and_check_listing_params(args):
@@ -140,7 +129,7 @@ def load_and_check_listing_params(args):
     params, and then adds any parameters specific to the listing (which would override the chapter parameters, if there
     was one of the same name.) It also adds context information to the result, so that it has all the information needed
     when the listings are run.
-    TODO: There is uncovered case in checking the params - it does not error on two entries matching the prefix
+
     :param schema: string name
     :param chapter: chapter number
     :param listing: listing number (or in some cases a letter)
@@ -151,9 +140,9 @@ def load_and_check_listing_params(args):
     listing = args.listing
     version = args.version
 
-    chapter_key=f'chap{chapter}'
-    list_key=f'list{listing}'
-    vers_key=f'v{version}' if version else None
+    chapter_key = f'chap{chapter}'
+    list_key = f'list{listing}'
+    vers_key = f'v{version}' if version else None
 
     # Error if there is no file for this schema
     conf_path='../../listings/conf/%s_listings.json' % schema
@@ -206,8 +195,8 @@ def load_and_check_listing_params(args):
     listing_params['chapter']=chapter
     listing_params['listing']=listing
     listing_params['name']=param_source['name']
-    listing_params['file']=param_source['name'] = f"{prefix}_{listing_params['chapter']}_{listing_params['listing']}" + \
-                                                  f"_{listing_params['name']}.{listing_params['type']}"
+    listing_params['full_name']= f"{prefix}_{listing_params['chapter']}_{listing_params['listing']}" + \
+                                                  f"_{listing_params['name']}"
 
     return listing_params
 
