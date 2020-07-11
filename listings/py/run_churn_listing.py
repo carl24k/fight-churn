@@ -30,7 +30,7 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 print_num_rows=10
 
-reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter')
+reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter','full_name')
 
 '''
 ####################################################################################################
@@ -216,7 +216,7 @@ def run_one_listing(args):
     # Get arguments
     listing_params = load_and_check_listing_params(args)
 
-    print('\nRunning %d listing %s on schema %s' % (args.chapter,listing_params['name'],args.schema))
+    print('\nRunning chapter %d listing %d %s on schema %s' % (args.chapter,args.listing,listing_params['name'],args.schema))
 
     # Run the executor function for sql or for python...
     type = listing_params.get('type', listing_params['type']) # chap params should always have type
