@@ -1,7 +1,7 @@
 import os
 import pickle
 from sklearn.metrics import roc_auc_score
-from listing_8_3_logistic_regression import prepare_data
+from listing_8_2_logistic_regression import prepare_data
 
 def reload_regression(data_set_path):
     pickle_path = data_set_path.replace('.csv', '_logreg_model.pkl')

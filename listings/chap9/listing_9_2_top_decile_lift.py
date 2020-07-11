@@ -1,5 +1,5 @@
-from listing_8_3_logistic_regression import prepare_data
-from listing_9_1_regression_auc import reload_regression
+from listing_8_2_logistic_regression import prepare_data
+from listing_9_1_regression_auc  import reload_regression
 import numpy
 
 def calc_lift(y_true, y_pred):
