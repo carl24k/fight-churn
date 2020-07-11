@@ -37,9 +37,23 @@ reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter','f
 Functions
 '''
 
+def _full_listing_name(chapter, listing, name, insert=False):
+    prefix = 'listing' if not insert else 'insert'
+    full_name = f"{prefix}_{chapter}_{listing}_{name}"
+    return full_name
 
 
-def sql_listing(param_dict):
+def _sql_listing_from_params(param_dict,insert):
+    chapter = param_dict.pop('chapter')
+    listing = param_dict.pop('listing')
+    name = param_dict.pop('name')
+    schema = param_dict.pop('schema')
+    mode = param_dict.pop('mode')
+    save_ext = param_dict.pop('save_ext') if 'save_ext' in param_dict else None
+    sql_listing(chapter, listing, name, schema, mode, param_dict, insert=insert, save_ext=save_ext)
+
+
+def sql_listing(chapter, listing, name, schema, mode,param_dict, insert=False, save_ext=None):
     '''
     Run a SQL listing.  The sql file is loaded, and then any non-reserved keyword in the parameters is treated as a
     string to be replaced in the sql string. The SQL is then printed out, before newlines are removed, and then run
@@ -51,11 +65,12 @@ def sql_listing(param_dict):
     :return:
     '''
 
-    with open('../../listings/chap%d/%s.sql' % (param_dict['chapter'],param_dict['full_name']), 'r') as myfile:
+    with open('../../listings/chap%d/%s.sql' % (chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
+
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
         # prefix the search path onto the listing, which does not specify the schema
-        sql = "set search_path = '%s'; " % param_dict['schema'];
+        sql = "set search_path = '%s'; " % schema;
 
         # load the sql file
         sql = sql + myfile.read()
@@ -70,21 +85,21 @@ def sql_listing(param_dict):
         sql = sql.replace('\n', ' ')
 
         # Run in the manner indicated by the mode
-        if  param_dict['mode']  == 'run':
+        if  mode  == 'run':
             db.run(sql)
-        elif  param_dict['mode']  == 'one':
+        elif  mode  == 'one':
             res = db.one(sql)
             print(res)
-        elif  param_dict['mode']  == 'top' or param_dict['mode'] == 'save':
+        elif  mode  == 'top' or mode == 'save':
             res = db.all(sql)
             df = pd.DataFrame(res)
-            if  param_dict['mode']  == 'save':
-                save_path = '../../../fight-churn-output/' + param_dict['schema'] + '/'
+            if  mode  == 'save':
+                save_path = '../../../fight-churn-output/' + schema+ '/'
                 os.makedirs(save_path,exist_ok=True)
-                csv_path= save_path + param_dict['schema'] + '_' +  param_dict['name'].replace(
-                    'listing_{}_{}_'.format(param_dict['chapter'],param_dict['listing']),'')
-                if 'save_ext' in param_dict:
-                    csv_path = csv_path + '_' + param_dict['save_ext']
+                csv_path= save_path + schema+ '_' + name.replace(
+                    'listing_{}_{}_'.format(chapter,listing),'')
+                if save_ext:
+                    csv_path = csv_path + '_' + save_ext
                 csv_path = csv_path + '.csv'
                 print('Saving: %s' % csv_path)
                 df.to_csv(csv_path, index=False)
@@ -94,12 +109,22 @@ def sql_listing(param_dict):
             print('Unknown run mode for SQL example')
             exit(-4)
 
+def _python_listing_from_params(param_dict):
+    chapter = param_dict.pop('chapter')
+    listing = param_dict.pop('listing')
+    name = param_dict.pop('name')
 
-def python_listing(param_dict):
+    python_listing(chapter, listing, name, param_dict)
+
+
+def python_listing(chapter, listing, name, param_dict):
     '''
     Runs one python code listing.  Each listing is defined as a model, and should have one function in it, which is the name of
     the listing file, without the part saying listing_X_Y.  If the function is found in the module it is run; all of the
     non-reserved keywords in the parameter dictionary are treated as the parameters
+    :param chapter:
+    :param listing:
+    :param name:
     :param param_dict: dictionary produced by load_and_check_listing_params
     :return:
     '''
@@ -111,14 +136,15 @@ def python_listing(param_dict):
         example_params[k]=param_dict[k]
 
     # Load the listing name module
-    mod = import_module(param_dict['full_name'])
+    full_name = _full_listing_name(chapter, listing, name)
+    mod = import_module(full_name)
 
-    ex_fun = getattr(mod, param_dict['name'],None)
+    ex_fun = getattr(mod, name,None)
     if ex_fun is not None:
         # Run the function, passing the parameters
         ex_fun(**example_params)
     else:
-        print('Could not find function %s in module %s' % (param_dict['name'] , param_dict['full_name']))
+        print('Could not find function %s in module %s' % (name , full_name))
         exit(-5)
 
 
@@ -174,10 +200,8 @@ def load_and_check_listing_params(args):
         param_source = param_dict[chapter_key][list_key]['insert']
         # force the right mode forn insert sqls
         listing_params['mode']='run'
-        prefix = 'insert'
     else:
         param_source = param_dict[chapter_key][list_key]
-        prefix = 'listing'
 
     # Add additional specific parameters for this listing, possibly overwriting defaults
     if len(param_source['params']) > 0:
@@ -189,14 +213,11 @@ def load_and_check_listing_params(args):
         for k in param_source[vers_key].keys():
             listing_params[k]=param_source[vers_key][k]
 
-
-    # Add the contextual information (?)
+    # Add the contextual information
     listing_params['schema'] = schema
     listing_params['chapter']=chapter
     listing_params['listing']=listing
     listing_params['name'] = param_dict[chapter_key][list_key]['name']
-    listing_params['full_name']= f"{prefix}_{listing_params['chapter']}_{listing_params['listing']}" + \
-                                                  f"_{listing_params['name']}"
 
     return listing_params
 
@@ -221,9 +242,9 @@ def run_one_listing(args):
     # Run the executor function for sql or for python...
     type = listing_params.get('type', listing_params['type']) # chap params should always have type
     if type=='sql':
-        sql_listing(listing_params)
+        _sql_listing_from_params(listing_params,args.insert)
     elif type=='py':
-        python_listing(listing_params)
+        _python_listing_from_params(listing_params)
     else:
         raise Exception('Unsupported type %s' % type)
 

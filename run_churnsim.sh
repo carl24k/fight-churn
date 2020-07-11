@@ -37,6 +37,9 @@ cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 # churn rate
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 2 --listing 1 2 3 4 5
 
+# simple counts
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 1 2
+
 # event QA
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 9 --version 1 2 3 4 5 6 7 8
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 10 --version 1 2 3 4 5 6 7 8
@@ -48,7 +51,8 @@ cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
 
 # standard metric
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 1 2 3 4 5 6 7 8
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 2 3 4 5 6 7 8
 
 # metric QA
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 6 --version 1 2 3 4 5 6 7 8
