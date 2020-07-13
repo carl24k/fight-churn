@@ -8,10 +8,10 @@ import os
 import sys
 import argparse
 
-'''
+"""
 ####################################################################################################
 Arguments
-'''
+"""
 parser = argparse.ArgumentParser()
 # Run control arguments
 parser.add_argument("--schema", type=str, help="The name of the schema", default='livebook')
@@ -21,42 +21,83 @@ parser.add_argument("--insert", action="store_true", default=False,help="Use the
 parser.add_argument("--version", nargs='*', help="Alternative listing _parameter_ verions (optional)",default=[])
 
 
-'''
+"""
 ####################################################################################################
 Constants
-'''
+"""
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 print_num_rows=10
 
-reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter')
+reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter','full_name')
 
-'''
+"""
 ####################################################################################################
 Functions
-'''
+"""
+
+def _full_listing_name(chapter, listing, name, insert=False):
+    """
+    Creates the name of a listing file from the components.
+    The names are like "listing_C_N_<name>" where C is the chapter, N is the number and
+    <name> is the listing name.  For example, "listing_2_1_net_retention".
+    "insert" listings are a special SQL listing type used in chapter 7.
+    :param chapter:
+    :param listing:
+    :param name:
+    :param insert:
+    :return:
+    """
+    prefix = 'listing' if not insert else 'insert'
+    full_name = f"{prefix}_{chapter}_{listing}_{name}"
+    return full_name
 
 
+def _sql_listing_from_params(param_dict,insert):
+    """
+    Utility to take parameters in a dictionary loaded from configuration, and call the sql_listing function
+    Pops those dictionary parameters that are parameters of the sql_listing parameters, and passes what is
+    left as the bind variables
+    :param param_dict:
+    :param insert:
+    :return:
+    """
+    chapter = param_dict.pop('chapter')
+    listing = param_dict.pop('listing')
+    name = param_dict.pop('name')
+    schema = param_dict.pop('schema')
+    mode = param_dict.pop('mode')
+    save_ext = param_dict.pop('save_ext') if 'save_ext' in param_dict else None
+    sql_listing(chapter, listing, name, schema, mode, param_dict, insert=insert, save_ext=save_ext)
 
-def sql_listing(param_dict):
-    '''
+
+def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, save_ext=None):
+    """
+
     Run a SQL listing.  The sql file is loaded, and then any non-reserved keyword in the parameters is treated as a
-    string to be replaced in the sql string. The SQL is then printed out, before newlines are removed, and then run
-    in one of the allowed modes.  The allowed modes are:
+    string to be replaced in the sql string. The SQL is then printed out.
+
+    :param chapter:
+    :param listing:
+    :param name:
+    :param schema:
+    :param mode:The allowed modes are:
         run : The SQL returns no result
         one : The SQL should return one row result to be printed
         top : The SQL returns many results, print the top N (given by global print_num_rows)
-    :param param_dict: dictionary produced by load_and_check_listing_params
+    :param param_dict: the bind variables as a dictionary
+    :param insert: flag to use the insert form of a query; see chapter 7
+    :param save_ext:
     :return:
-    '''
+    """
 
+    with open('../../listings/chap%d/%s.sql' % (chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
 
-    with open('../../listings/chap%d/%s.sql' % (param_dict['chapter'], param_dict['name']), 'r') as myfile:
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
         # prefix the search path onto the listing, which does not specify the schema
-        sql = "set search_path = '%s'; " % param_dict['schema'];
+        sql = "set search_path = '%s'; " % schema
 
         # load the sql file
         sql = sql + myfile.read()
@@ -71,21 +112,21 @@ def sql_listing(param_dict):
         sql = sql.replace('\n', ' ')
 
         # Run in the manner indicated by the mode
-        if  param_dict['mode']  == 'run':
+        if  mode  == 'run':
             db.run(sql)
-        elif  param_dict['mode']  == 'one':
+        elif  mode  == 'one':
             res = db.one(sql)
             print(res)
-        elif  param_dict['mode']  == 'top' or param_dict['mode'] == 'save':
+        elif  mode  == 'top' or mode == 'save':
             res = db.all(sql)
             df = pd.DataFrame(res)
-            if  param_dict['mode']  == 'save':
-                save_path = '../../../fight-churn-output/' + param_dict['schema'] + '/'
+            if  mode  == 'save':
+                save_path = '../../../fight-churn-output/' + schema+ '/'
                 os.makedirs(save_path,exist_ok=True)
-                csv_path= save_path + param_dict['schema'] + '_' +  param_dict['name'].replace(
-                    'listing_{}_{}_'.format(param_dict['chapter'],param_dict['listing']),'')
-                if 'save_ext' in param_dict:
-                    csv_path = csv_path + '_' + param_dict['save_ext']
+                csv_path= save_path + schema+ '_' + name.replace(
+                    'listing_{}_{}_'.format(chapter,listing),'')
+                if save_ext:
+                    csv_path = csv_path + '_' + save_ext
                 csv_path = csv_path + '.csv'
                 print('Saving: %s' % csv_path)
                 df.to_csv(csv_path, index=False)
@@ -95,15 +136,32 @@ def sql_listing(param_dict):
             print('Unknown run mode for SQL example')
             exit(-4)
 
+def _python_listing_from_params(param_dict):
+    """
+    Utility to call the python_listing function from a parameter dictionary, loaded from the configuration
+    Pops the parameters that are part of the function signature, and passes the remaining parameters as dictionary
+    of function parameters
+    :param param_dict:
+    :return:
+    """
+    chapter = param_dict.pop('chapter')
+    listing = param_dict.pop('listing')
+    name = param_dict.pop('name')
 
-def python_listing(param_dict):
-    '''
+    python_listing(chapter, listing, name, param_dict)
+
+
+def python_listing(chapter, listing, name, param_dict):
+    """
     Runs one python code listing.  Each listing is defined as a model, and should have one function in it, which is the name of
     the listing file, without the part saying listing_X_Y.  If the function is found in the module it is run; all of the
     non-reserved keywords in the parameter dictionary are treated as the parameters
+    :param chapter:
+    :param listing:
+    :param name:
     :param param_dict: dictionary produced by load_and_check_listing_params
     :return:
-    '''
+    """
 
     # make a dictionary of just the non-reserved keywords, which should be the parameters
     example_params = {}
@@ -112,107 +170,86 @@ def python_listing(param_dict):
         example_params[k]=param_dict[k]
 
     # Load the listing name module
-    mod = import_module(param_dict['name'])
+    full_name = _full_listing_name(chapter, listing, name)
+    mod = import_module(full_name)
 
-    # Find the function name from the listing name
-    example_name_regexp = 'listing_\\d+_\\d+_(\w+)'
-
-    m = re.search(example_name_regexp, param_dict['name'])
-
-    if m:
-        ex_name = m.group(1)
-        # Load the function, which is an attribute of the module
-        ex_fun = getattr(mod, ex_name,None)
-        if ex_fun is not None:
-            # Run the function, passing the parameters
-            ex_fun(**example_params)
-        else:
-            print('Could not find function %s in module %s' % (ex_name , param_dict['name']))
-            exit(-5)
+    ex_fun = getattr(mod, name,None)
+    if ex_fun is not None:
+        # Run the function, passing the parameters
+        ex_fun(**example_params)
     else:
-        print('Could not parse listing name %s in schema %s' % ( param_dict['name'], param_dict['schema']))
-        exit(-6)
+        print('Could not find function %s in module %s' % (name , full_name))
+        exit(-5)
 
 
 def load_and_check_listing_params(args):
-    '''
+    """
     Loads the JSON of parameters for this schema, and gets the parameters for the specified listing. It raises errors if
     it cannot find what it is looking for. Once it finds the entry for this listing, it starts with the chapter default
     params, and then adds any parameters specific to the listing (which would override the chapter parameters, if there
     was one of the same name.) It also adds context information to the result, so that it has all the information needed
     when the listings are run.
-    TODO: There is uncovered case in checking the params - it does not error on two entries matching the prefix
-    :param schema: string name
-    :param chapter: chapter number
-    :param listing: listing number (or in some cases a letter)
+
+    :param args: result of parsing arguments
     :return: dictionary of name value pairs for the example
-    '''
+    """
     schema = args.schema
     chapter = args.chapter
     listing = args.listing
     version = args.version
 
-    chapter_key='chap{}'.format(chapter)
-    if not args.insert and version is None:
-        listing_prefix='^listing_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
-    elif args.insert and version is None:
-        listing_prefix='^insert_{c}_{l}_(?!\\d)'.format(c=chapter,l=listing)
-    elif args.insert and version is not None:
-        listing_prefix='^insert_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
-    elif not args.insert and version is not None:
-        listing_prefix='^listing_{c}_{l}_{v}_'.format(c=chapter,l=listing,v=version)
-
-    listing_re=re.compile(listing_prefix)
+    chapter_key = f'chap{chapter}'
+    list_key = f'list{listing}'
+    vers_key = f'v{version}' if version else None
 
     # Error if there is no file for this schema
     conf_path='../../listings/conf/%s_listings.json' % schema
     if not os.path.isfile(conf_path):
-        print('No params %s to run listings on schema %s' % (conf_path,schema))
+        print(f'No params {conf_path} to run listings on schema {schema}')
         exit(-1)
 
     with open(conf_path, 'r') as myfile:
         param_dict=json.loads(myfile.read())
 
     # Error if there is no key for this chapter in the dictionary
-    if not chapter_key in param_dict:
-        print('No params for chapter %d in %s_listings.json' % (chapter,schema))
+    if chapter_key not in param_dict:
+        print(f'No params for chapter {chapter} in {schema}_listings.json')
         exit(-2)
 
-    matches = list(filter(listing_re.match, param_dict[chapter_key].keys()))
-    if len(matches)==0:
-        print('No params for listing %d, chapter %d in %s_listings.json' % (listing, chapter, schema))
+    # Error if there is no key for this listing
+    if list_key not in param_dict[chapter_key]:
+        print(f'No listing for chapter {chapter} in {schema}_listings.json')
         exit(-3)
 
-    if len(matches)>1:
-        print('Multiple configurations found matching listing %d, chapter %d in %s_listings.json' % (listing, chapter, schema))
-        exit(-4)
-
-    listing_name = matches[0]
     # Start with the chapter default parameters
-    listing_params = copy(param_dict[chapter_key]['params'])
+    listing_params = copy(param_dict[chapter_key]['defaults'])
 
-    # If there are specific parameters for this listing, add them here
-    if len(param_dict[chapter_key][listing_name])>0:
-        for k in param_dict[chapter_key][listing_name].keys():
-            listing_params[k]=param_dict[chapter_key][listing_name][k]
+    # If using the insert option, set the parameter source to insert sub-block rather than regular
+    if args.insert:
+        if 'insert' not in param_dict[chapter_key][list_key]:
+            print(f'No insert section for chapter {chapter} in {schema}_listings.json')
+            exit(-4)
+        param_source = param_dict[chapter_key][list_key]['insert']
+        # force the right mode forn insert sqls
+        listing_params['mode']='run'
+    else:
+        param_source = param_dict[chapter_key][list_key]
 
-    # Add the other contextual information
+    # Add additional specific parameters for this listing, possibly overwriting defaults
+    if len(param_source['params']) > 0:
+        for k in param_source['params'].keys():
+            listing_params[k]=param_source['params'][k]
+
+    # add additional specific parmeters for this version (if any), possibly overwriting
+    if vers_key and vers_key in param_source:
+        for k in param_source[vers_key].keys():
+            listing_params[k]=param_source[vers_key][k]
+
+    # Add the contextual information
     listing_params['schema'] = schema
     listing_params['chapter']=chapter
     listing_params['listing']=listing
-    if args.version is None:
-        listing_params['name'] = listing_name
-        if listing_params['type']=='sql': listing_params['prefix'] = 'listing_{c}_{l}_'.format(c=chapter,l=listing)
-    else:
-        pre = 'listing' if not args.insert else 'insert'
-        # For a versioned set of parameters, the listing file name must be the original...
-        version_prefix='{p}_{c}_{l}_{v}_'.format(p=pre,c=chapter,l=listing,v=version)
-        listing_prefix='{p}_{c}_{l}_'.format(p=pre,c=chapter,l=listing)
-        listing_params['name'] = listing_name.replace(version_prefix,listing_prefix)
-        if listing_params['type']=='sql': listing_params['prefix']=version_prefix
-
-    if args.insert: # force the right mode forn insert sqls
-        listing_params['mode']='run'
+    listing_params['name'] = param_dict[chapter_key][list_key]['name']
 
     return listing_params
 
@@ -221,34 +258,31 @@ def load_and_check_listing_params(args):
 
 
 def run_one_listing(args):
-    '''
+    """
     Load the dictionary of parameters for this schema
     Check the type of the listing (SQL or Python) and call the executor function
-    :param schema: string
-    :param chapter: number
-    :param listing: number (or sometimes a string)
+    :param args: from arg parse
     :return:
-    '''
+    """
     # Get arguments
     listing_params = load_and_check_listing_params(args)
 
-    print('\nRunning %d listing %s on schema %s' % (args.chapter,listing_params['name'],args.schema))
+    print('\nRunning chapter %d listing %d %s on schema %s' % (args.chapter,args.listing,listing_params['name'],args.schema))
 
     # Run the executor function for sql or for python...
     type = listing_params.get('type', listing_params['type']) # chap params should always have type
     if type=='sql':
-        sql_listing(listing_params)
+        _sql_listing_from_params(listing_params,args.insert)
     elif type=='py':
-        python_listing(listing_params)
+        _python_listing_from_params(listing_params)
     else:
         raise Exception('Unsupported type %s' % type)
 
-'''
+"""
 ####################################################################################################
-The main script for running Fight Churn With Data examples: If there are command line arguments, 
-use them. Otherwise defaults are hard coded
-
-'''
+The main script for running Fight Churn With Data examples.
+This will loop over multiple listings and versions in one chapter.
+"""
 
 if __name__ == "__main__":
     args, _ = parser.parse_known_args()

@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import pickle
 import matplotlib.pyplot as plt
-from listing_8_5_rescore_metrics import reload_churn_data
+from listing_8_4_rescore_metrics import reload_churn_data
 
 def churn_forecast(data_set_path,model_name='logreg_model'):
 
