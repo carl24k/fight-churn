@@ -40,6 +40,8 @@ if False:
         params["%new_metric_name"]=f'{e}_90d'
         sql_listing(3,4,'metric_name_insert','livebook',mode='run',param_dict=params)
 
+
+
 if False:
     for e in events:
         m = f'{e}_90d'
@@ -49,4 +51,24 @@ if False:
         py_params["qa_data_path"]  = "../../../fight-churn-output/livebook/livebook_metric_stats_over_time"
         python_listing(3, 7, 'metric_qa_plot', param_dict=py_params)
 
-sql_listing(3,8,'metric_coverage','livebook',mode='save',param_dict=params)
+    sql_listing(3,8,'metric_coverage','livebook',mode='save',param_dict=params)
+
+    sql_listing(4,7,'livebook_observations','livebook',mode='run',param_dict=params)
+
+    params['%metric_interval']=7
+    sql_listing(4,8,'dataset','livebook',mode='save',param_dict=params)
+
+
+from listing_5_2_dataset_stats import  dataset_stats
+from listing_5_1_cohort_plot import cohort_plot
+datapath='/Users/carl/Documents/churn/fight-churn-output/livebook/livebook_dataset.csv'
+
+if False:
+    dataset_stats(datapath)
+    cohort_plot(datapath,'readingownedbook_90d')
+    cohort_plot(datapath,'ebookdownloaded_90d')
+    cohort_plot(datapath,'highlightcreated_90d')
+    cohort_plot(datapath,'freecontentcheckout_90d')
+    cohort_plot(datapath,'readingopenchapter_90d')
+
+cohort_plot(datapath,'timereadingownedbook_90d')
