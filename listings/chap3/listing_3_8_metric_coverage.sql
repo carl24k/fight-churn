@@ -8,8 +8,8 @@ date_range as (
 	 e.event_time between start_date and end_date
 )
 select metric_name, 
-	count(distinct m.account_id) as count_with_metric,
-	n_account as n_account,    
+	'XXX' as count_with_metric,
+	'YYY' as n_account,
 	(count(distinct m.account_id))::float/n_account::float as pcnt_with_metric    ,
 	avg(metric_value) as avg_value,    
 	min(metric_value) as min_value,    
