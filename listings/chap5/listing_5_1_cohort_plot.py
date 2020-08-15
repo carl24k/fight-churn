@@ -15,6 +15,7 @@ def cohort_plot(data_set_path, metric_to_plot='',ncohort=10):
     plt.ylabel('Cohort purchase Rate')
     plt.grid()
     plt.gca().set_ylim(bottom=0)
+    plt.gca().get_yaxis().set_ticklabels([])
     save_path = data_set_path.replace('.csv', '_' + metric_to_plot + '_purchase_corhort.png')
     plt.savefig(save_path)
     print('Saving plot to %s' % save_path)
