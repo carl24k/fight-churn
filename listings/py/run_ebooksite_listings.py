@@ -77,5 +77,5 @@ if click.confirm('Do you want to run Cohort Plots??', default=False):
     cohort_plot(datapath,'freecontentcheckout_90d')
     cohort_plot(datapath,'readingopenchapter_90d')
     cohort_plot(datapath,'readingfreepreview_90d')
-    cohort_plot(datapath,'wishlistitemadded_90d')
-    cohort_plot(datapath,'crossreferencetermopened_90d')
+    # cohort_plot(datapath,'wishlistitemadded_90d')
+    # cohort_plot(datapath,'crossreferencetermopened_90d')
