@@ -3,6 +3,10 @@ import click
 from run_churn_listing import sql_listing, python_listing
 from listing_5_2_dataset_stats import  dataset_stats
 from listing_5_1_cohort_plot import cohort_plot
+from listing_5_5_cohort_plot_fixed import cohort_plot_fixed
+from listing_6_1_metric_pair_plot import metric_pair_plot
+from listing_6_2_dataset_correlation_matrix import dataset_correlation_matrix
+from listing_5_3_metric_scores import metric_scores
 
 datapath='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
 
@@ -27,6 +31,18 @@ events = ['ReadingOwnedBook',
     'CrossReferenceTermOpened']
 
 
+metrics = ['numberbooksread_90d',
+    'crossreferencetermopened_90d',
+    'totalevents_90d',
+    'highlightcreated_90d',
+    'readingownedbook_90d',
+    'ebookdownloaded_90d',
+    'freecontentcheckout_90d',
+    'readingopenchapter_90d',
+    'readingfreepreview_90d']
+
+
+
 if click.confirm('Do you want to run Event v Time QA??', default=False):
     for e in events:
         params['%event2measure']=e
@@ -37,13 +53,23 @@ if click.confirm('Do you want to run Event v Time QA??', default=False):
 
 
 if click.confirm('Do you want to run Metric Calculation??', default=False):
+
+    params['%new_metric_id'] = 9
+    params["%new_metric_name"] = 'num_books_read_90d'
+    sql_listing(3, 18, 'distinct_product_metric', 'ebooksite', mode='run', param_dict=params)
+    sql_listing(3,4,'metric_name_insert','ebooksite',mode='run',param_dict=params)
+
+    params['%new_metric_id'] = 8
+    params["%new_metric_name"] = 'total_events_90d'
+    sql_listing(3, 17, 'all_event_count_metric_insert', 'ebooksite', mode='run', param_dict=params)
+    sql_listing(3,4,'metric_name_insert','ebooksite',mode='run',param_dict=params)
+
     for idx,e in enumerate(events):
         params['%event2measure']=e
         params['%new_metric_id']=idx
         sql_listing(3, 3, 'count_metric_insert', 'ebooksite', mode='run', param_dict=params)
         params["%new_metric_name"]=f'{e}_90d'
         sql_listing(3,4,'metric_name_insert','ebooksite',mode='run',param_dict=params)
-
 
 
 if click.confirm('Do you want to run Metric QA??', default=False):
@@ -70,12 +96,40 @@ if click.confirm('Do you want to Create the Dataset??', default=False):
 if click.confirm('Do you want to run Data Set Stats??', default=False):
     dataset_stats(datapath)
 
+
+
+metrics = ['ReadingOwnedBook',
+    'EBookDownloaded',
+    'ReadingFreePreview',
+    'HighlightCreated',
+    'FreeContentCheckout',
+    'ReadingOpenChapter',
+    'WishlistItemAdded',
+    'CrossReferenceTermOpened']
+
+
+
 if click.confirm('Do you want to run Cohort Plots??', default=False):
-    cohort_plot(datapath,'readingownedbook_90d')
-    cohort_plot(datapath,'ebookdownloaded_90d')
-    cohort_plot(datapath,'highlightcreated_90d')
-    cohort_plot(datapath,'freecontentcheckout_90d')
-    cohort_plot(datapath,'readingopenchapter_90d')
-    cohort_plot(datapath,'readingfreepreview_90d')
-    # cohort_plot(datapath,'wishlistitemadded_90d')
-    # cohort_plot(datapath,'crossreferencetermopened_90d')
+    for m in metrics:
+        cohort_plot(datapath,m)
+    # These two work better with fixed cuts
+    cohort_plot_fixed(datapath,'crossreferencetermopened_90d',cuts=(-1e6,0.01,1e6))
+    cohort_plot_fixed(datapath,'highlightcreated_90d',cuts=(-1e6,0.01,1e6))
+
+score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
+
+if click.confirm('Do you want to calculate metric scores??', default=False):
+    metric_scores(data_set_path=datapath)
+    dataset_stats(score_path)
+
+
+if click.confirm('Do you want to run Metric Correlations??', default=False):
+    dataset_correlation_matrix(datapath)
+    for m in range(len(metrics)):
+        for n in range(m):
+            if m==n:
+                continue
+            m1=metrics[m]
+            m2=metrics[n]
+            print(f'Ploting {m1} vs {m2}')
+            metric_pair_plot(datapath,m1,m2)

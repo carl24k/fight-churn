@@ -12,8 +12,9 @@ sum(case when metric_name_id=3 then metric_value else 0 end) as HighlightCreated
 sum(case when metric_name_id=4 then metric_value else 0 end) as FreeContentCheckout_90d,
 sum(case when metric_name_id=5 then metric_value else 0 end) as ReadingOpenChapter_90d,
 sum(case when metric_name_id=6 then metric_value else 0 end) as WishlistItemAdded_90d,
-sum(case when metric_name_id=8 then metric_value else 0 end) as CrossReferenceTermOpened_90d,
-sum(case when metric_name_id=9 then metric_value else 0 end) as SearchMade_90d
+sum(case when metric_name_id=7 then metric_value else 0 end) as CrossReferenceTermOpened_90d,
+sum(case when metric_name_id=8 then metric_value else 0 end) as TotalEvents_90d,
+sum(case when metric_name_id=9 then metric_value else 0 end) as NumberBooksRead_90d
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id
