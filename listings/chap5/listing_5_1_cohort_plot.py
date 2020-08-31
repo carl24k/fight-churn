@@ -8,7 +8,7 @@ def cohort_plot(data_set_path, metric_to_plot='',ncohort=10):
     groups = pd.qcut(churn_data[metric_to_plot], ncohort, duplicates='drop')
     cohort_means = churn_data.groupby(groups)[metric_to_plot].mean()
     cohort_churns = churn_data.groupby(groups)['is_churn'].mean()
-    plot_frame = pd.DataFrame({metric_to_plot: cohort_means.values, 'churn_rate': cohort_churns})
+    plot_frame = pd.DataFrame({metric_to_plot: cohort_means.values, 'churn_rate': cohort_churns.values})
     plt.figure(figsize=(6, 4))
     plt.plot(metric_to_plot, 'churn_rate', data=plot_frame,marker='o', color='black', linewidth=2, label=metric_to_plot)
     plt.xlabel('Cohort Average of  "%s"' % metric_to_plot)
