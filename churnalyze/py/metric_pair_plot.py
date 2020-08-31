@@ -82,7 +82,7 @@ def plot_pair(cc,args,metric1,metric2):
         save_name += '_noax'
 
     plt.grid()
-    plt.savefig(cc.save_path(save_name, ext='svg',subdir='pair_scatter_plots'))
+    plt.savefig(cc.save_path(save_name, ext='png',subdir='pair_scatter_plots'))
     plt.close()
 
 if __name__ == "__main__":
