@@ -236,11 +236,10 @@ You will set environment variables that will hold your database and login inform
 it does not have to be hard coded.  The easiset way to do this in PyCharm is to
 set environment variables when you create a Run Configuration for the executables.
 
-Here is one example of creating a run configuration for one of the programs: If you have not created
-any Run Configurations yet, you start with the *Add Configuration* button...
+Here is one example of creating a run configuration for one of the programs: If you have not created any Run Configurations yet, you start with menu options `Run > Edit Configurations` as shown in pic below:
 
 
-![PyCharm Add Config](/readme_files/pycharm9_add_config.png)
+![PyCharm Add Config](./readme_files/pycharm9_add_config.png)
 
 In the Run/Debug Configuration dialog click the **+**  then **Python** to make a new python script configuration.
 
@@ -288,11 +287,9 @@ This will make another configuration the same as the existing one - you can rena
 path to a different script, keeping the environment variables you already setup.
 
 One last thing: After creating the Run Configuration you actually run a script in PyCharm
-using the little green arrow next to the Configuration drop down menu...
+using menu configurations `Run > Run 'churndb'` as shown in pic below:
 
-![PyCharm Run Script](/readme_files/pycharm16_run_script.png)
-
-(The green bug next to the arrow runs it in debug mode...)
+![PyCharm Run Script](./readme_files/pycharm16_run_script.png)
 
 
 ---
