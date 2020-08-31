@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import argparse
 from itertools import permutations
+import numpy as np
 
 from churn_calc import ChurnCalculator
 
@@ -16,8 +17,8 @@ parser.add_argument("--metrics", type=str,nargs=2, help="Two metrics to plot (if
 parser.add_argument("--hideax", action="store_true", default=False,help="Hide axis labeling for publication of case studies")
 parser.add_argument("--score", action="store_true", default=False,help="Plot Scores vs Scores")
 
-parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Brandon Grotesque')
-parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=14)
+# parser.add_argument("--fontfamily", type=str, help="The font to use for plots", default='Brandon Grotesque')
+# parser.add_argument("--fontsize", type=int, help="The font to use for plots", default=14)
 
 parser.add_argument("--ylim", type=float, nargs=2, help="The y maximum", default=None)
 parser.add_argument("--xlim", type=float, nargs=2, help="The y maximum", default=None)
@@ -59,7 +60,13 @@ def plot_pair(cc,args,metric1,metric2):
     corr = met1_data.corr(met2_data)
 
     plt.figure(figsize=(6, 6))
-    plt.scatter(met1_data,met2_data, marker='.')
+    downsamp = 10
+    # https://stackoverflow.com/questions/1403674/pythonic-way-to-return-list-of-every-nth-item-in-a-larger-list
+    if downsamp>1:
+        plt.scatter(met1_data[0::downsamp],met2_data[0::downsamp], marker='.',color='black')
+    else:
+        plt.scatter(met1_data,met2_data, marker='.',color='black')
+
     plt.xlabel(met1_label)
     plt.ylabel(met2_label)
     plt.title('Correlation = %.2f' % corr)
@@ -75,7 +82,7 @@ def plot_pair(cc,args,metric1,metric2):
         save_name += '_noax'
 
     plt.grid()
-    plt.savefig(cc.save_path(save_name, ext='png',subdir='pair_scatter_plots'))
+    plt.savefig(cc.save_path(save_name, ext='svg',subdir='pair_scatter_plots'))
     plt.close()
 
 if __name__ == "__main__":
@@ -86,8 +93,8 @@ if __name__ == "__main__":
 
     args, _ = parser.parse_known_args()
 
-    font = {'family': args.fontfamily, 'size': args.fontsize}
-    matplotlib.rc('font', **font)
+    # font = {'family': args.fontfamily, 'size': args.fontsize}
+    # matplotlib.rc('font', **font)
 
     churn_calc = ChurnCalculator(args.schema)
 

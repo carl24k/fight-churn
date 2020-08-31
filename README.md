@@ -10,6 +10,9 @@ http://www.fightchurnwithdata.com for more information.
 [1 Getting Started](#start)  
 [1.1 Prerequisites](#prereq)    
 [1.2 Development Environment Setup](#devenv)      
+[1.2.1 Database Setup](#createdb)      
+[1.2.2 PyCharm Setup](#pycharm)      
+[1.2.3 Command Line Setup](#command)      
 [1.3 Data Creation / Loading](#data)  
 [2 Running Book Code Listings](#examples)  
 [2.1 Running a Listing](#runlist)  
@@ -110,6 +113,8 @@ to igonre my instructions, which are primarily written for beginners to use GUI 
 running.
 
 ---
+<a name="createdb"/>
+
 #### 1.2.1 Creating a Database
 
 The first thing you might need to do is connect to your local server (when I do this on Mac this is necessary;
@@ -141,7 +146,9 @@ appropriate settings in your environment variable, section 1.2.6 below):
 
 
 ---
-#### 1.2.3 Create a PyCharm Project
+<a name="pycharm"/>
+
+#### 1.2.2 Pycharm Setup
 
 After you have cloned this repository
 
@@ -153,7 +160,7 @@ After you have cloned this repository
 ![Name the database](/readme_files/pycharm0_existing_sources.png)
 
 ---
-#### 1.2.4 Setup Python Project
+##### 1.2.2.1 Setup Python Project in Pycharm
 
 You should create a Python "virtual environment" for the project (I won't try to go into details here,
 but this allows you to install the packages used for the repo without interfering with anything else
@@ -207,7 +214,7 @@ When you are done your project preferences should look like this:
 (At the time of creation of these instructions, later chapters have not been written.)
 
 ---
-#### 1.2.5 Installing Python Package Requirements
+##### 1.2.2.2 Installing Python Package Requirements in Pycharm
 
 Now that you have created a Python project you can easily install the
 required packages.  Start by opening the file requirements.txt in the root
@@ -222,7 +229,7 @@ and installed.
 
 
 ---
-#### 1.2.6 Creating Run Configurations and Setting Database Environment Variables
+##### 1.2.2.3 Creating Run Configurations and Setting Database Environment Variables
 
 A lot of the python code depends on access to the database you created for the churn data.
 You will set environment variables that will hold your database and login information, so that
@@ -286,17 +293,46 @@ using menu configurations `Run > Run 'churndb'` as shown in pic below:
 
 
 ---
-#### 1.2.7 Running From the Command Line
+---
+<a name="command"/>
+
+#### 1.2.3 Running From the Command Line
 
 If you are not using PyCharm of course you can run all this code from a terminal shell. You will need
-to manually setup a Python virtual environment with the required packages, and  set a few environment variables 
-in your `.bash_profile` or `.bashrc` file (or whatever you use, but I will show this for bash because it seems to be the 
-most common.)    If you are running Python on the command line then I'm going to assume you know what you are doing
-and I will not go over installation of the requirements this way as it is standard (and I provided PyCharm
-instructions, above, in case you are really new to Python.)  
+to manually setup a Python virtual environment with the required packages, and  set a few environment variables.
 
+---
+
+##### 1.2.3.1 Installing Virtual Environment and Requirements
+
+In either Windows or Mac/Linux you should setup a virtual environment following the 
+instructions at pythong.org:
+
+https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+
+Then change to the repository folder ```fight-churn``` and install the requirements with:
+
+```
+pip install -r requirements.txt
+```
+
+The command for installing requirements is further documented on the same page at python.org.
+
+**NOTE:** The precise version of packages required may vary on different systems and in the future.
+What is in the requirements is mostly non-specific but you may need to tailor it to your system.
+
+__**WINDOWS XG-Boost Warning:**__ At the time of this writing there have been problems reported 
+ installing the xgboost package on  Windows: https://discuss.xgboost.ai/t/pip-install-xgboost-isnt-working-on-windows-x64/57.
+If you are unable to install xgboost with pip, then you can try to install using the instructions
+  outlined in that link. Alternatively, you can remove that requirement - note that you can
+still run all the code in the book except for the 2nd half of chapter 9 without xgboost.
+
+---
+
+##### 1.2.3.2 Mac/Linux Command Line Environment Variables
 The environment variables are specific to these programs and contain information need to access the
-databse. You should add a few lines like this:
+databse. You should add a few lines like this in your `.bash_profile` or `.bashrc` file on Mac/Linux 
+(or whatever is appropriate for the shell you use, but I will show this for bash because it seems to be the most common...)
 
 ```
 export CHURN_DB=your_db
@@ -308,6 +344,20 @@ Make sure to open a new terminal or source the `.bashrc` script after making the
 need to add the code folders you want to run from the project to your `PYTHONPATH` environement variable;
 note that because the code (particularly the examples) add code from packages defined in other directories
 you really need to add these paths (it is not sufficient to simply run the script from the directory it is in.)
+
+The rest of the README is written for people using PyCharm, but you can always run the same commands
+illustrated from the terminal...
+
+---
+
+
+##### 1.2.3.3 Windows Command Line Environment Variables
+If you are using Windows, you will need to setup the enviornment variables in the Advanced System Preferences.
+To make a long story short, you will need to end up with settings looking like this screenshot, but with 
+the correct database, username and password for your setup:
+
+![Windows Environment Variables](/readme_files/win_envvar.png)
+
 
 The rest of the README is written for people using PyCharm, but you can always run the same commands
 illustrated from the terminal...

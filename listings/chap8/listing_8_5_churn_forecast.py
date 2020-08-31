@@ -29,7 +29,7 @@ def forecast_histogram(data_set_path,predict_df,ext='reg'):
     plt.ylabel('# of Accounts')
     plt.title('Histogram of Active Customer Churn Probability ({})'.format(ext))
     plt.grid()
-    plt.savefig(data_set_path.replace('.csv', '_{}_churnhist.png'.format(ext)), format='png')
+    plt.savefig(data_set_path.replace('.csv', '_{}_churnhist.svg'.format(ext)), format='svg')
     plt.close()
     hist_df=pd.DataFrame({'n':n,'bins':bins[1:]})
     hist_df.to_csv(data_set_path.replace('.csv', '_current_churnhist.csv'))
