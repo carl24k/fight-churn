@@ -1,4 +1,4 @@
-import click
+import json
 
 from run_churn_listing import sql_listing, python_listing
 from listing_5_2_dataset_stats import  dataset_stats
@@ -8,7 +8,8 @@ from listing_6_1_metric_pair_plot import metric_pair_plot
 from listing_6_2_dataset_correlation_matrix import dataset_correlation_matrix
 from listing_5_3_metric_scores import metric_scores
 
-datapath='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
+datapath ='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
+score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
 
 params = {
     "%from_yyyy-mm-dd": "2019-12-01",
@@ -18,32 +19,28 @@ params = {
 py_params = {
 }
 
-if click.confirm('Do you want to run Events per Account QA??', default=False):
-    sql_listing(3, 11, 'events_per_account', 'ebooksite', mode='save', param_dict=params)
-
 events = ['ReadingOwnedBook',
-    'EBookDownloaded',
-    'ReadingFreePreview',
-    'HighlightCreated',
-    'FreeContentCheckout',
-    'ReadingOpenChapter',
-    'WishlistItemAdded',
-    'CrossReferenceTermOpened']
-
+            'EBookDownloaded',
+            'ReadingFreePreview',
+            'HighlightCreated',
+            'FreeContentCheckout',
+            'ReadingOpenChapter',
+            'WishlistItemAdded',
+            'CrossReferenceTermOpened']
 
 metrics = ['numberbooksread_90d',
-    'crossreferencetermopened_90d',
-    'totalevents_90d',
-    'highlightcreated_90d',
-    'readingownedbook_90d',
-    'ebookdownloaded_90d',
-    'freecontentcheckout_90d',
-    'readingopenchapter_90d',
-    'readingfreepreview_90d']
+            'crossreferencetermopened_90d',
+            'totalevents_90d',
+            'highlightcreated_90d',
+            'readingownedbook_90d',
+            'ebookdownloaded_90d',
+            'freecontentcheckout_90d',
+            'readingopenchapter_90d',
+            'readingfreepreview_90d']
 
 
-
-if click.confirm('Do you want to run Event v Time QA??', default=False):
+def event_qa():
+    sql_listing(3, 11, 'events_per_account', 'ebooksite', mode='save', param_dict=params)
     for e in events:
         params['%event2measure']=e
         sql_listing(3, 9, 'events_per_day', 'ebooksite', mode='save', param_dict=params, save_ext=e)
@@ -52,7 +49,7 @@ if click.confirm('Do you want to run Event v Time QA??', default=False):
         python_listing(3,10,'event_count_plot',param_dict=py_params)
 
 
-if click.confirm('Do you want to run Metric Calculation??', default=False):
+def metric_calc():
 
     params['%new_metric_id'] = 9
     params["%new_metric_name"] = 'num_books_read_90d'
@@ -72,7 +69,7 @@ if click.confirm('Do you want to run Metric Calculation??', default=False):
         sql_listing(3,4,'metric_name_insert','ebooksite',mode='run',param_dict=params)
 
 
-if click.confirm('Do you want to run Metric QA??', default=False):
+def metric_qa():
     for e in events:
         m = f'{e}_90d'
         params["%metric2measure"]=m
@@ -84,46 +81,28 @@ if click.confirm('Do you want to run Metric QA??', default=False):
     sql_listing(3,8,'metric_coverage','ebooksite',mode='save',param_dict=params)
 
 
-if click.confirm('Do you want to create observations??', default=False):
+def observations():
     sql_listing(4,7,'ebooksite_observations','ebooksite',mode='run',param_dict=params)
 
 
-if click.confirm('Do you want to Create the Dataset??', default=False):
+def dataset():
     params['%metric_interval']=7
     sql_listing(4,8,'dataset','ebooksite',mode='save',param_dict=params)
 
 
-if click.confirm('Do you want to run Data Set Stats??', default=False):
+def dataset_qa():
     dataset_stats(datapath)
 
 
-
-metrics = ['ReadingOwnedBook',
-    'EBookDownloaded',
-    'ReadingFreePreview',
-    'HighlightCreated',
-    'FreeContentCheckout',
-    'ReadingOpenChapter',
-    'WishlistItemAdded',
-    'CrossReferenceTermOpened']
-
-
-
-if click.confirm('Do you want to run Cohort Plots??', default=False):
+def cohort_plots():
     for m in metrics:
         cohort_plot(datapath,m)
     # These two work better with fixed cuts
     cohort_plot_fixed(datapath,'crossreferencetermopened_90d',cuts=(-1e6,0.01,1e6))
     cohort_plot_fixed(datapath,'highlightcreated_90d',cuts=(-1e6,0.01,1e6))
 
-score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
 
-if click.confirm('Do you want to calculate metric scores??', default=False):
-    metric_scores(data_set_path=datapath)
-    dataset_stats(score_path)
-
-
-if click.confirm('Do you want to run Metric Correlations??', default=False):
+def standard_correlation():
     dataset_correlation_matrix(datapath)
     for m in range(len(metrics)):
         for n in range(m):
@@ -133,3 +112,34 @@ if click.confirm('Do you want to run Metric Correlations??', default=False):
             m2=metrics[n]
             print(f'Ploting {m1} vs {m2}')
             metric_pair_plot(datapath,m1,m2)
+
+
+def score_dataset():
+    metric_scores(data_set_path=datapath)
+    dataset_stats(score_path)
+
+
+if __name__ == "__main__":
+
+    function_map = {
+        '1' : 'event_qa',
+        '2': 'metric_calc',
+        '3': 'metric_qa',
+        '4' : 'observations',
+        '5' : 'dataset',
+        '6' : 'dataset_qa',
+        '7' : 'cohort_plots',
+        '8' : 'standard_correlation',
+        '9' : 'score_dataset'
+    }
+
+    print(json.dumps(function_map,indent=4))
+    to_run = input('Enter steps to run:')
+    for c in to_run.split(sep=' '):
+        if c in function_map:
+            print(f'Running {function_map[c]}')
+            locals()[function_map[c]]()
+        else:
+            print('******************************')
+            print(f'* NO FUNCTION FOR INPUT "{c}" !')
+            print('******************************')
