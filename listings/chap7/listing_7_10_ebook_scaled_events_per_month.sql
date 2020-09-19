@@ -7,9 +7,8 @@ select m.account_id, metric_time,
 from event e inner join metric m    on m.account_id = e.account_id
     and event_time <= metric_time
     and event_time >  metric_time-interval '%obs_period days'
-inner join event_type t on t.event_type_id=e.event_type_id
 inner join metric_name  n on m.metric_name_id = n.metric_name_id
-where t.event_type_name='%event2measure'
+where event_type ='%event2measure'
     and n.metric_name='account_tenure'
     and metric_value >= %min_tenure
 group by m.account_id, metric_time, metric_value    

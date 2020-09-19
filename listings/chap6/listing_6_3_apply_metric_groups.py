@@ -7,7 +7,7 @@ def apply_metric_groups(data_set_path):
     score_save_path=data_set_path.replace('.csv','_scores.csv')
     assert os.path.isfile(score_save_path),'You must run listing 5.3 or 7.5 to save metric scores first'
     score_data = pd.read_csv(score_save_path,index_col=[0,1])
-    data_2group = score_data.drop('is_churn',axis=1)
+    data_2group = score_data.drop('purchase',axis=1)
 
     load_mat_path = data_set_path.replace('.csv', '_load_mat.csv')
     assert os.path.isfile(load_mat_path),'You must run listing 6.4 to save a loading matrix first'
@@ -20,7 +20,7 @@ def apply_metric_groups(data_set_path):
 
     churn_data_grouped = pd.DataFrame(grouped_ndarray,columns=load_mat_df.columns.values, index=score_data.index)
 
-    churn_data_grouped['is_churn'] = score_data['is_churn']
+    churn_data_grouped['purchase'] = score_data['purchase']
 
     save_path = data_set_path.replace('.csv', '_groupscore.csv')
     churn_data_grouped.to_csv(save_path,header=True)

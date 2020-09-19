@@ -12,7 +12,7 @@ def event_count_plot(qa_data_path, event_name,**kwargs):
     plt.gca().figure.autofmt_xdate()
     plt.xticks(list(filter(lambda x:x.endswith(("01")),qa_data_df['event_date'].tolist())))
     plt.tight_layout()
-    plt.gca().get_yaxis().set_ticklabels([])
+    # plt.gca().get_yaxis().set_ticklabels([])
     save_to_path=event_data_path.replace('.csv', '_' + event_name + '_event_qa.png')
     print('Saving metric qa plot to ' + save_to_path)
     plt.savefig(save_to_path)

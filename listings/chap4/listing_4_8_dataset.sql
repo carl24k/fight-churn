@@ -14,7 +14,10 @@ sum(case when metric_name_id=5 then metric_value else 0 end) as ReadingOpenChapt
 sum(case when metric_name_id=6 then metric_value else 0 end) as WishlistItemAdded_90d,
 sum(case when metric_name_id=7 then metric_value else 0 end) as CrossReferenceTermOpened_90d,
 sum(case when metric_name_id=8 then metric_value else 0 end) as TotalEvents_90d,
-sum(case when metric_name_id=9 then metric_value else 0 end) as NumberBooksRead_90d
+sum(case when metric_name_id=9 then metric_value else 0 end) as NumberBooksRead_90d,
+sum(case when metric_name_id=10 then metric_value else 0 end) as reads_per_book_90d,
+sum(case when metric_name_id=11 then metric_value else 0 end) as downloads_per_book_90d,
+sum(case when metric_name_id=12 then metric_value else 0 end) as events_per_book_90d
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id
