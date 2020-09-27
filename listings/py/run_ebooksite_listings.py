@@ -125,7 +125,7 @@ def dataset_qa():
 
 def cohort_plots():
     for m in metrics:
-        cohort_plot(datapath,m)
+        cohort_plot(score_path,m)
     # These two work better with fixed cuts
     cohort_plot_fixed(datapath,'crossreferencetermopened_90d',cuts=(-1e6,0.01,1e6))
     cohort_plot_fixed(datapath,'highlightcreated_90d',cuts=(-1e6,0.01,1e6))
@@ -162,7 +162,7 @@ def score_dataset():
 
 
 def average_scores():
-    find_metric_groups(datapath, group_corr_thresh=0.65)
+    find_metric_groups(datapath, group_corr_thresh=0.55)
     apply_metric_groups(datapath)
     ordered_correlation_matrix(datapath)
     dataset_correlation_matrix(group_path)
