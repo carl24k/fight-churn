@@ -166,7 +166,10 @@ You should create a Python "virtual environment" for the project (I won't try to
 but this allows you to install the packages used for the repo without interfering with anything else
 on your system).  
 
-In PyCharm, select from the menus:  *Pycharm*  / *Preferences...*  and go to the area for *Project*
+In PyCharm, select from the menus: 
+
+- Mac:  *Pycharm*  / *Preferences...*  and go to the area for *Project*
+- Windows:   *File*  / *Settings...*  and go to the area for *Project*
 
 ![PyCharm Project Preferences](/readme_files/pycharm1_project_preferences.png)
 
@@ -421,7 +424,7 @@ Creating table observation (if not exists)
 Process finished with exit code 0
 ```
 
- 
+
 A new schema and tables were created in your PostgreSQL database, which you can confirm by looking
 in PgAdmin:
 
@@ -557,10 +560,10 @@ You can run the book listings with the python script `listings/py/run_churn_list
 binds variables (for SQL) or passes parameters (for Python) and executes the code.  
 * The code (listings from the book) are in the folders `chapN` under the listings directory.
 * Exactly what listings to run and what parametes are used are set in JSON files in the directory `listings/conf`.
- 
+
 So you can use this utility as you go through the book - if you want to actually run the code
 from any listing on your local database, this is the easiest way to do it.
- 
+
 [(top)](#top)  
 
 ---
@@ -668,7 +671,7 @@ To see what listings are available to run, peruse the code in the chapter folder
 schema must be *configured* to run each listing, as described in the next  section.  The `socialnet7` (default) schema
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
 configuration.
- 
+
 [(top)](#top)  
 
 ---
@@ -729,7 +732,7 @@ The following summarizes the configuration:
     * The listings will print one result
 
 (More to come on running Python listings when Chapter 5 is released...) 
- 
+
 [(top)](#top)  
 
 ---
@@ -780,10 +783,10 @@ The output is a set of of png images shown in the folder indicated by the relati
 folder nmaed `fight-churn-output` that is located adjacent to the repository folder.  The figures will look
 like this:
 
- 
+
 ![Event QA Output](/readme_files/event_qa.png)
- 
- 
+
+
 You can also configure the QA to run on numeric event properties, if you events have any.  See the `event_properties`
 field in the metric configuration described in section 3.2.2 (below). 
 
@@ -1029,8 +1032,8 @@ are listed in the configuration and takes the start and end dates for the QA fro
 
 
 ![Metric QA Output](/readme_files/metric_qa.png)
- 
- 
+
+
 [(top)](#top)  
 
 ---
