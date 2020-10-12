@@ -7,17 +7,12 @@ with observation_params as
 select m.account_id, o.observation_date, purchase,
 sum(case when metric_name_id=14 then metric_value else 0 end) as ReadingOwnedBook_90d,
 sum(case when metric_name_id=15 then metric_value else 0 end) as EBookDownloaded_90d,
-sum(case when metric_name_id=16 then metric_value else 0 end) as ReadingFreePreview_90d,
-sum(case when metric_name_id=17 then metric_value else 0 end) as HighlightCreated_90d,
-sum(case when metric_name_id=18 then metric_value else 0 end) as FreeContentCheckout_90d,
-sum(case when metric_name_id=19 then metric_value else 0 end) as ReadingOpenChapter_90d,
-sum(case when metric_name_id=20 then metric_value else 0 end) as WishlistItemAdded_90d,
-sum(case when metric_name_id=21 then metric_value else 0 end) as CrossReferenceTermOpened_90d,
 sum(case when metric_name_id=22 then metric_value else 0 end) as TotalEvents_90d,
-sum(case when metric_name_id=9 then metric_value else 0 end) as NumberBooksRead_90d
-/* sum(case when metric_name_id=10 then metric_value else 0 end) as reads_per_book_90d,
-sum(case when metric_name_id=11 then metric_value else 0 end) as downloads_per_book_90d,
-sum(case when metric_name_id=12 then metric_value else 0 end) as events_per_book_90d */
+sum(case when metric_name_id=28 then metric_value else 0 end) as NumberBooksRead_90d,
+sum(case when metric_name_id=23 then metric_value else 0 end) as DaysSinceLastEvent,
+sum(case when metric_name_id=24 then metric_value else 0 end) as Percent_Reading_Own_Book,
+sum(case when metric_name_id=27 then metric_value else 0 end) as Total_Reading_Features_90d,
+sum(case when metric_name_id=29 then metric_value else 0 end) as Downloads_Per_Book
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id

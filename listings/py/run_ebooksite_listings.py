@@ -72,15 +72,30 @@ def metric_calc():
         params["%new_metric_name"]=f'{e}_90d'
         sql_listing(3,4,'metric_name_insert','ebooksite',mode='run',param_dict=params)
 
+def advanced_metric_calc():
+
+    params['%new_metric_id'] = 27
+    params['%new_metric_name'] = 'reading_features_90d'
+    params['%metric_list'] = "'CrossReferenceTermOpened_90d_tenscale','ReadingFreePreview_90d_tenscale',  'HighlightCreated_90d_tenscale','FreeContentCheckout_90d_tenscale', 'ReadingOpenChapter_90d_tenscale','WishlistItemAdded_90d_tenscale'"
+    sql_listing(7, 3, 'total_metric', 'ebooksite', mode='run', param_dict=params, insert=True)
+
+
+    # params['%new_metric_id'] = 23
+    # sql_listing(7, 12, 'days_since_any_event', 'ebooksite', mode='run', param_dict=params, insert=True)
 
 def scaled_metrics():
     params['%obs_period'] = 90
     params['%desc_period'] = 90
     params['%min_tenure'] = 15
-    params['%new_metric_id']=22
-    sql_listing(7, 11, 'ebook_scaled_total_events_per_month', 'ebooksite', mode='run', param_dict=params,insert=True)
-    params["%new_metric_name"] = f'total_events_90d_tenscale'
-    sql_listing(3, 4, 'metric_name_insert', 'ebooksite', mode='run', param_dict=params)
+    params['%new_metric_id'] = 28
+    params['%new_metric_name'] = 'numbooks_read_90d_tenscale'
+    sql_listing(7, 13, 'tenure_scaled_books_read', 'ebooksite', mode='run', param_dict=params, insert=True)
+
+
+    # params['%new_metric_id']=22
+    # sql_listing(7, 11, 'ebook_scaled_total_events_per_month', 'ebooksite', mode='run', param_dict=params,insert=True)
+    # params["%new_metric_name"] = f'total_events_90d_tenscale'
+    # sql_listing(3, 4, 'metric_name_insert', 'ebooksite', mode='run', param_dict=params)
 
     # for idx,e in enumerate(events):
     #     params['%event2measure']=e
@@ -124,11 +139,17 @@ def dataset_qa():
 
 
 def cohort_plots():
-    for m in metrics:
-        cohort_plot(score_path,m)
-    # These two work better with fixed cuts
-    cohort_plot_fixed(datapath,'crossreferencetermopened_90d',cuts=(-1e6,0.01,1e6))
-    cohort_plot_fixed(datapath,'highlightcreated_90d',cuts=(-1e6,0.01,1e6))
+    cohort_plot(datapath, 'downloads_per_book',ncohort=3)
+    # cohort_plot_fixed(datapath,'downloads_per_book',cuts=(-1e6,0.01,1.0,1e6))
+
+    # for m in metrics:
+    #     cohort_plot(datapath,m)
+    # cohort_plot(datapath, 'total_reading_features_90d')
+    # cohort_plot(datapath, 'percent_reading_own_book')
+    # cohort_plot(datapath, 'dayssincelastevent')
+    # # These two work better with fixed cuts
+    # cohort_plot_fixed(datapath,'crossreferencetermopened_90d',cuts=(-1e6,0.01,1e6))
+    # cohort_plot_fixed(datapath,'highlightcreated_90d',cuts=(-1e6,0.01,1e6))
 
 
 def standard_correlation():
@@ -157,7 +178,7 @@ def scores_correlation():
 
 
 def score_dataset():
-    metric_scores(data_set_path=datapath)
+    metric_scores(data_set_path=datapath,skew_thresh=12)
     dataset_stats(score_path)
 
 
@@ -171,7 +192,7 @@ def average_scores():
 def group_cohorts():
     cohort_plot(group_path, 'metric_group_1')
 
-def ratio_metrics():
+def ratio_metrics_v1():
     params['%num_metric']='EBookDownloaded_90d'
     params['%den_metric']='num_books_read_90d'
     params['%new_metric_name'] = 'downloads_per_book_90d'
@@ -197,6 +218,31 @@ def ratio_cohorts():
     cohort_plot(datapath,'events_per_book_90d')
 
 
+def ratio_metrics_v2():
+    params['%num_metric']='reading_features_90d'
+    params['%den_metric']='total_events_90d_tenscale'
+    params['%new_metric_name'] = 'percent_reading_features'
+    params['%new_metric_id'] = 30
+    sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
+
+    # params['%num_metric']='EBookDownloaded_90d_tenscale'
+    # params['%den_metric']='numbooks_read_90d_tenscale'
+    # params['%new_metric_name'] = 'downloads_per_book_tenscale'
+    # params['%new_metric_id'] = 29
+    # sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
+
+    # params['%num_metric']='EBookDownloaded_90d_tenscale'
+    # params['%den_metric']='num_books_read_90d'
+    # params['%new_metric_name'] = 'percent_events_download'
+    # params['%new_metric_id'] = 25
+    # sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
+
+    # params['%num_metric']='ReadingOwnedBook_90d_tenscale'
+    # params['%den_metric']='total_events_90d_tenscale'
+    # params['%new_metric_name'] = 'percent_events_readingown'
+    # params['%new_metric_id'] = 24
+    # sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
+
 
 if __name__ == "__main__":
 
@@ -216,7 +262,9 @@ if __name__ == "__main__":
         'D' : 'ratio_metrics',
         'E' : 'ratio_cohorts',
         'F' : 'tenure_metric',
-        'G' : 'scaled_metrics'
+        'G' : 'scaled_metrics',
+        'H' : 'advanced_metric_calc',
+        'I' : 'ratio_metrics_v2'
 }
 
     print(json.dumps(function_map,indent=4))
