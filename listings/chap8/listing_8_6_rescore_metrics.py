@@ -13,7 +13,7 @@ def clip_lo_cols(data, lo_vals):
 
 def rescore_metrics(data_set_path):
 
-    current_data = reload_churn_data(data_set_path,'current','8.2',is_customer_data=True)
+    current_data = reload_churn_data(data_set_path,'current','8.3',is_customer_data=True)
     load_mat_df = reload_churn_data(data_set_path,'load_mat','6.4',is_customer_data=False)
     score_df = reload_churn_data(data_set_path,'score_params','7.5',is_customer_data=False)
     stats = reload_churn_data(data_set_path,'summarystats','5.2',is_customer_data=False)

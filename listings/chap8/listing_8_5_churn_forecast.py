@@ -11,7 +11,7 @@ def churn_forecast(data_set_path,model_name='logreg_model'):
     with open(pickle_path, 'rb') as fid:
         logreg_model = pickle.load(fid)
 
-    current_score_df = reload_churn_data(data_set_path,'current_groupscore','8.3',is_customer_data=True)
+    current_score_df = reload_churn_data(data_set_path,'current_groupscore','8.4',is_customer_data=True)
 
     predictions = logreg_model.predict_proba(current_score_df.to_numpy())
 
