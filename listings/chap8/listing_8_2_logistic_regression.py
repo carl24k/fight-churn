@@ -17,9 +17,8 @@ def prepare_data(data_set_path,ext='_groupscore',as_retention=True):
     score_save_path = data_set_path.replace('.csv', '{}.csv'.format(ext))
     assert os.path.isfile(score_save_path), 'You must run listing 6.3 to save grouped metric scores first'
     grouped_data = pd.read_csv(score_save_path,index_col=[0,1])
-    y = grouped_data['is_churn'].astype(np.bool)
-    if as_retention: y=~y
-    X = grouped_data.drop(['is_churn'],axis=1)
+    y = grouped_data['purchase'].astype(np.bool)
+    X = grouped_data.drop(['purchase'],axis=1)
     return X,y
 
 def calculate_impacts(retain_reg):

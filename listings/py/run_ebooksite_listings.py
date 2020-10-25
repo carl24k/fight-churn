@@ -10,6 +10,7 @@ from listing_5_3_metric_scores import metric_scores
 from listing_6_4_find_metric_groups import find_metric_groups
 from listing_6_3_apply_metric_groups import apply_metric_groups
 from listing_6_5_ordered_correlation_matrix import ordered_correlation_matrix
+from listing_8_2_logistic_regression import logistic_regression
 
 datapath ='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
 score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
@@ -32,7 +33,7 @@ events = ['ReadingOwnedBook',
             'WishlistItemAdded',
             'CrossReferenceTermOpened']
 
-metrics = ['numberbooksread_90d',
+metrics_orig = ['numberbooksread_90d',
             'crossreferencetermopened_90d',
             'totalevents_90d',
             'highlightcreated_90d',
@@ -42,6 +43,9 @@ metrics = ['numberbooksread_90d',
             'readingopenchapter_90d',
             'readingfreepreview_90d']
 
+metrics = ['ebookdownloaded_90d','numberbooksread_90d','dayssincelastevent','downloads_per_book','percent_reading_own_book','reading_feature_ratio','readingownedbook_90d','totalevents_90d']
+
+metrics_grouped=['metric_group_1','dayssincelastevent','downloads_per_book','percent_reading_own_book','reading_feature_ratio','readingownedbook_90d','totalevents_90d']
 
 def event_qa():
     sql_listing(3, 11, 'events_per_account', 'ebooksite', mode='save', param_dict=params)
@@ -167,14 +171,14 @@ def standard_correlation():
 
 def scores_correlation():
     dataset_correlation_matrix(score_path)
-    for m in range(len(metrics)):
-        for n in range(m):
-            if m==n:
-                continue
-            m1=metrics[m]
-            m2=metrics[n]
-            print(f'Ploting {m1} vs {m2}')
-            metric_pair_plot(score_path,m1,m2)
+    # for m in range(len(metrics)):
+    #     for n in range(m):
+    #         if m==n:
+    #             continue
+    #         m1=metrics[m]
+    #         m2=metrics[n]
+    #         print(f'Ploting {m1} vs {m2}')
+    #         metric_pair_plot(score_path,m1,m2)
 
 
 def score_dataset():
@@ -183,14 +187,17 @@ def score_dataset():
 
 
 def average_scores():
-    find_metric_groups(datapath, group_corr_thresh=0.55)
+    find_metric_groups(datapath, group_corr_thresh=0.63)
     apply_metric_groups(datapath)
     ordered_correlation_matrix(datapath)
     dataset_correlation_matrix(group_path)
 
 
 def group_cohorts():
-    cohort_plot(group_path, 'metric_group_1')
+    # cohort_plot(group_path, 'metric_group_1')
+    # cohort_plot(group_path, 'metric_group_2')
+    for m in metrics_grouped:
+        cohort_plot(group_path,m)
 
 def ratio_metrics_v1():
     params['%num_metric']='EBookDownloaded_90d'
@@ -213,17 +220,25 @@ def ratio_metrics_v1():
 
 
 def ratio_cohorts():
-    cohort_plot(datapath,'reads_per_book_90d')
-    cohort_plot(datapath,'downloads_per_book_90d')
-    cohort_plot(datapath,'events_per_book_90d')
+    cohort_plot(datapath,'reading_feature_ratio')
+    cohort_plot(datapath,'percent_reading_features')
+    # cohort_plot(datapath,'reads_per_book_90d')
+    # cohort_plot(datapath,'downloads_per_book_90d')
+    # cohort_plot(datapath,'events_per_book_90d')
 
 
 def ratio_metrics_v2():
     params['%num_metric']='reading_features_90d'
-    params['%den_metric']='total_events_90d_tenscale'
-    params['%new_metric_name'] = 'percent_reading_features'
-    params['%new_metric_id'] = 30
+    params['%den_metric']='ReadingOwnedBook_90d_tenscale'
+    params['%new_metric_name'] = 'reading_feature_book_ratio'
+    params['%new_metric_id'] = 31
     sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
+
+    # params['%num_metric']='reading_features_90d'
+    # params['%den_metric']='total_events_90d_tenscale'
+    # params['%new_metric_name'] = 'percent_reading_features'
+    # params['%new_metric_id'] = 30
+    # sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
 
     # params['%num_metric']='EBookDownloaded_90d_tenscale'
     # params['%den_metric']='numbooks_read_90d_tenscale'
@@ -243,6 +258,9 @@ def ratio_metrics_v2():
     # params['%new_metric_id'] = 24
     # sql_listing(7,1,'ratio_metric', 'ebooksite',mode='run',param_dict=params,insert=True)
 
+
+def simple_regression():
+    logistic_regression(datapath)
 
 if __name__ == "__main__":
 
@@ -264,7 +282,8 @@ if __name__ == "__main__":
         'F' : 'tenure_metric',
         'G' : 'scaled_metrics',
         'H' : 'advanced_metric_calc',
-        'I' : 'ratio_metrics_v2'
+        'I' : 'ratio_metrics_v2',
+        'J' : 'simple_regression'
 }
 
     print(json.dumps(function_map,indent=4))

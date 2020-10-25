@@ -11,8 +11,8 @@ sum(case when metric_name_id=22 then metric_value else 0 end) as TotalEvents_90d
 sum(case when metric_name_id=28 then metric_value else 0 end) as NumberBooksRead_90d,
 sum(case when metric_name_id=23 then metric_value else 0 end) as DaysSinceLastEvent,
 sum(case when metric_name_id=24 then metric_value else 0 end) as Percent_Reading_Own_Book,
-sum(case when metric_name_id=27 then metric_value else 0 end) as Total_Reading_Features_90d,
-sum(case when metric_name_id=29 then metric_value else 0 end) as Downloads_Per_Book
+sum(case when metric_name_id=29 then metric_value else 0 end) as Downloads_Per_Book,
+sum(case when metric_name_id=31 then metric_value else 0 end) as Reading_Feature_Ratio
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id
