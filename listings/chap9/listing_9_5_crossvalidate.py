@@ -10,14 +10,15 @@ import matplotlib.pyplot as plt
 from listing_8_2_logistic_regression import prepare_data
 from listing_9_2_top_decile_lift import calc_lift
 
+def_c = [0.64, 0.32, 0.16, 0.08, 0.04, 0.02, 0.01, 0.005, 0.0025]
 
-def crossvalidate(data_set_path,n_test_split):
+def crossvalidate(data_set_path,n_test_split,test_params=def_c):
 
     X,y = prepare_data(data_set_path,as_retention=False)
     tscv = TimeSeriesSplit(n_splits=n_test_split)
     score_models = {'lift': make_scorer(calc_lift, needs_proba=True), 'AUC': 'roc_auc'}
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
-    test_params = {'C' : [0.64, 0.32, 0.16, 0.08, 0.04, 0.02, 0.01, 0.005, 0.0025]}
+    test_params = {'C' : test_params}
     gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=1,
                            return_train_score=False,  param_grid=test_params, refit=False)
     gsearch.fit(X,y)

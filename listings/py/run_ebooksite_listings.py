@@ -11,6 +11,9 @@ from listing_6_4_find_metric_groups import find_metric_groups
 from listing_6_3_apply_metric_groups import apply_metric_groups
 from listing_6_5_ordered_correlation_matrix import ordered_correlation_matrix
 from listing_8_2_logistic_regression import logistic_regression
+from listing_9_4_regression_cparam import regression_cparam
+from listing_9_5_crossvalidate import crossvalidate
+from listing_9_2_top_decile_lift import top_decile_lift
 
 datapath ='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
 score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
@@ -43,9 +46,17 @@ metrics_orig = ['numberbooksread_90d',
             'readingopenchapter_90d',
             'readingfreepreview_90d']
 
-metrics = ['ebookdownloaded_90d','numberbooksread_90d','dayssincelastevent','downloads_per_book','percent_reading_own_book','reading_feature_ratio','readingownedbook_90d','totalevents_90d']
+metrics = ['ebookdownloaded_90d','numberbooksread_90d',
+           'dayssincelastevent','downloads_per_book',
+           'percent_reading_own_book','reading_feature_ratio',
+           'readingownedbook_90d','totalevents_90d']
 
-metrics_grouped=['metric_group_1','dayssincelastevent','downloads_per_book','percent_reading_own_book','reading_feature_ratio','readingownedbook_90d','totalevents_90d']
+metrics_grouped=['metric_group_1','dayssincelastevent',
+                 'downloads_per_book','percent_reading_own_book',
+                 'reading_feature_ratio','readingownedbook_90d',
+                 'totalevents_90d']
+
+cparams = [0.008,0.004, 0.002, 0.001, 0.0005,0.00025]
 
 def event_qa():
     sql_listing(3, 11, 'events_per_account', 'ebooksite', mode='save', param_dict=params)
@@ -262,6 +273,21 @@ def ratio_metrics_v2():
 def simple_regression():
     logistic_regression(datapath)
 
+
+def regression_control_params():
+
+    for c in cparams:
+        regression_cparam(datapath,c)
+
+
+def regression_crossvalidate():
+    crossvalidate(datapath,3,cparams)
+
+
+def lift_demo():
+    top_decile_lift(datapath,predict_retention=True)
+
+
 if __name__ == "__main__":
 
     function_map = {
@@ -283,7 +309,10 @@ if __name__ == "__main__":
         'G' : 'scaled_metrics',
         'H' : 'advanced_metric_calc',
         'I' : 'ratio_metrics_v2',
-        'J' : 'simple_regression'
+        'J' : 'simple_regression',
+        'K' : 'regression_control_params',
+        'L' : 'regression_crossvalidate',
+        'M' : 'lift_demo'
 }
 
     print(json.dumps(function_map,indent=4))

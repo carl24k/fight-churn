@@ -13,10 +13,11 @@ def calc_lift(y_true, y_pred):
     lift = top_decile_churn/overall_churn
     return lift
 
-def top_decile_lift(data_set_path):
+def top_decile_lift(data_set_path,predict_retention=False):
 
     logreg_model = reload_regression(data_set_path)
     X,y = prepare_data(data_set_path,as_retention=False)
     predictions = logreg_model.predict_proba(X)
-    lift = calc_lift(y,predictions[:,0])
+    proba_col = 1 if predict_retention else 0
+    lift = calc_lift(y,predictions[:,proba_col])
     print('Regression Lift score={:.3f}'.format(lift))
