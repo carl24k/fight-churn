@@ -17,11 +17,11 @@ http://www.fightchurnwithdata.com for more information.
 [2 Running Book Code Listings](#examples)  
 [2.1 Running a Listing](#runlist)  
 [2.2 Configuring How Listings are Run](#conflist)  
-[3 Metric Calculation Framework](#metrics)  
+[3 Extras: Metric Calculation Framework](#metrics)  
 [3.1 Event QA](#eventqa)  
 [3.2 Batch Metric Calculation](#metcalc)  
 [3.3 Metric QA](#metqa)  
-[4 Dataset Export](#dataset)  
+[4 Extras: Dataset Export](#dataset)  
 [5 Analysis Framework](#analysis)  
 
 
@@ -741,10 +741,13 @@ The following summarizes the configuration:
 <a name="metrics"/>
 
 
-## 3 Calculating Metrics with the Framework
+## 3 EXTRAS: Calculating Metrics with a Framework
 
-Running the code listing by listing is useful for when you are learning the techniques described the book. But once you have 
-mastered the basics and you are trying to actually analyze churn for a live product or service you will need a more
+**Note that the code described in this section is not part of the book, Fighting Churn With Data. It is an extra example of code that the author used in his case studies. **
+
+- The code described in this section is under the `extras` foder in the repository.
+
+Running the code listing by listing is useful for when you are learning the techniques described the book. But once you have mastered the basics and you are trying to actually analyze churn for a live product or service you will need a more
 efficient way to operate.  The code described in this section is a partially automated framework for calculating metrics
 on events, and performing quality assurance (QA) checks associated with this process.  So these are all the topics
 described in chapter 3, but this is a more scalable system for applying the techniques to a large data set than the 
@@ -762,7 +765,7 @@ data.  This section of the code contains a script that will automatically run ge
 as described in chapter 3.
 
 The script that does is `metric-framework/event_qa.py`.  To run it, make a Run Configuration as described in Section 
-1.2.6.  If you are running for the default simulated data set, `chursim2` then the script is ready to run - just launch
+1.2.6.  If you are running for the default simulated data set, `socialnet7` then the script is ready to run - just launch
 it.  You should see output like the following:
 
 ```
@@ -1041,8 +1044,11 @@ are listed in the configuration and takes the start and end dates for the QA fro
 
 <a name="dataset"/>
 
+## 4 EXTRAS: Dataset Export
 
-## 4 Dataset Export
+**Note that the code described in this section is not part of the book, Fighting Churn With Data. It is an extra example of code that the author used in his case studies. **
+
+- The code described in this section is under the `extras` foder in the repository.
 
 Chapter four of the book explains how to create a churn dataset from a database schema 
 containing subscriptions and metrics. You can run each step of the process with the framework for running listings
@@ -1080,16 +1086,6 @@ from the listing program in the final step where it does the export.
 ---
 
 [(top)](#top)  
-
----
----
-
-<a name="analysis"/>
-
-
-## 5 Analysis Framework
-
-Coming Soon! (after Chapter 5 is written...)
 
 ---
 ---
