@@ -14,10 +14,13 @@ from listing_8_2_logistic_regression import logistic_regression
 from listing_9_4_regression_cparam import regression_cparam
 from listing_9_5_crossvalidate import crossvalidate
 from listing_9_2_top_decile_lift import top_decile_lift
+from listing_8_6_rescore_metrics import rescore_metrics
+from listing_8_5_churn_forecast import churn_forecast
 
 datapath ='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
 score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
 group_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_groupscore.csv'
+current_data_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_current_customers.csv'
 
 params = {
     "%from_yyyy-mm-dd": "2019-12-01",
@@ -287,6 +290,15 @@ def regression_crossvalidate():
 def lift_demo():
     top_decile_lift(datapath,predict_retention=True)
 
+def current_dataset():
+    sql_listing(4,9,'current_customers','ebooksite',mode='save',param_dict=params)
+
+def prepare_current_data():
+    rescore_metrics(datapath)
+
+def current_customer_forecast():
+    # churn_forecast(datapath)
+    churn_forecast(datapath, model_name='logreg_model_c0.00100')
 
 if __name__ == "__main__":
 
@@ -312,7 +324,10 @@ if __name__ == "__main__":
         'J' : 'simple_regression',
         'K' : 'regression_control_params',
         'L' : 'regression_crossvalidate',
-        'M' : 'lift_demo'
+        'M' : 'lift_demo',
+        'N' : 'current_dataset',
+        'O' : 'prepare_current_data',
+        'P' : 'current_customer_forecast'
 }
 
     print(json.dumps(function_map,indent=4))
