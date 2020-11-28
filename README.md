@@ -22,7 +22,7 @@ http://www.fightchurnwithdata.com for more information.
 [3.2 Batch Metric Calculation](#metcalc)  
 [3.3 Metric QA](#metqa)  
 [4 Extras: Dataset Export](#dataset)  
-[5 Analysis Framework](#analysis)  
+[5 Extras: Analysis Framework](#analysis)  
 
 
 ---
@@ -94,7 +94,7 @@ data, and run adhoc queries.  Follow the instructions  here:
 For Mac you should make sure Posgres is running - here's what it looks like if you installed with
 PostgresApp on a Mac:
 
-![Postgres Running on Mac](/readme_files/postico.png)
+![Postgres Running on Mac](./readme_files/postico.png)
 
 For Windows, I have not yet figured out how to make sure Postgres is running, but I also have not yet had a
 problem with it not running (please notify me if you have something to contribute on either subject.)
@@ -122,14 +122,14 @@ on Windows, the connection to the localhost server was already present by defaul
 If you don't already see `localhost` under the Servers tree in Pgadmin,  control (right)
 clicking on the root of the Servers tree and selecting *Create*
 
-![Connect to Server in PgAdmin](/readme_files/pgadmin_connect.png)
+![Connect to Server in PgAdmin](./readme_files/pgadmin_connect.png)
 
 A dialog will open. Assuming you are working on a PostgreSQL database installed on your own computer then  
 in the first tab (*General*) name your connection `localhost`, and on the second tab (*Connection*) enter the
 address `127.0.0.1` (which is the IP address to connect to a database locally.) You should also enter your
 user name and password.  So your dialog should look like the one below - then hit *Save*.
 
-![Connect to Server in PgAdmin](/readme_files/pgadmin_connect_details.png)
+![Connect to Server in PgAdmin](./readme_files/pgadmin_connect_details.png)
 
 
 Next you need to create a new database to hold all of the churn data schemas you create.
@@ -137,12 +137,12 @@ You will probably create multiple schemas as you work on the examples in the boo
 data so this will help keep these organized.  An easy way to create a database is in PgAdmin - right click
 on the *Databases* node under *localhost* in the tree:
 
-![Create Database in PgAdmin](/readme_files/pgadmin_createdb1.png)
+![Create Database in PgAdmin](./readme_files/pgadmin_createdb1.png)
 
 And enter the name of the new database (I used churn, but you can use whatever you want - just make the
-appropriate settings in your environment variable, section 1.2.6 below):
+appropriate settings in your environment variable, section 1.2.2.3 below):
 
-![Name the database](/readme_files/pgadmin_createdb2.png)
+![Name the database](./readme_files/pgadmin_createdb2.png)
 
 
 ---
@@ -157,7 +157,7 @@ After you have cloned this repository
 1. Click **Create**
 1. It should say "The directory ... is not empty.  Would you like to create a project from existing sources?"  Click Yes
 
-![Name the database](/readme_files/pycharm0_existing_sources.png)
+![Name the database](./readme_files/pycharm0_existing_sources.png)
 
 ---
 ##### 1.2.2.1 Setup Python Project in Pycharm
@@ -171,37 +171,35 @@ In PyCharm, select from the menus:
 - Mac:  *Pycharm*  / *Preferences...*  and go to the area for *Project*
 - Windows:   *File*  / *Settings...*  and go to the area for *Project*
 
-![PyCharm Project Preferences](/readme_files/pycharm1_project_preferences.png)
+![PyCharm Project Preferences](./readme_files/pycharm1_project_preferences.png)
 
 If you click on the gear wheel to the right of where it says <No Interpreter> you have the option to add
 a new one...
 
-![PyCharm Add Intepreter](/readme_files/pycharm2_add_interpreter.png)
+![PyCharm Add Intepreter](./readme_files/pycharm2_add_interpreter.png)
 
 It will look something like this:
 
-![PyCharm Interpreter Setting](/readme_files/pycharm3_interpreter_settings.png)
+![PyCharm Interpreter Setting](./readme_files/pycharm3_interpreter_settings.png)
 
 And after you click **Okay** it will take several seconds to create the virtual environment, and
 then it should look like this:
 
-![PyCharm After Create](/readme_files/pycharm4_after_create.png)
+![PyCharm After Create](./readme_files/pycharm4_after_create.png)
 
 You will add more packages in a minute, but first finish with the project setup by going to the
 *Project Structure* section of the preferences:
 
 
-![PyCharm Project Structure](/readme_files/pycharm5_project_structure.png)
+![PyCharm Project Structure](./readme_files/pycharm5_project_structure.png)
 
 Select each folder that contains python source code, and click on the button *Sources*
 (with the blue folder next to it):
 
-![PyCharm Select One Source Folder](/readme_files/pycharm6_source_select.png)
+![PyCharm Select One Source Folder](./readme_files/pycharm6_source_select.png)
 
 You should select the following folders:
-* churnalyze/py
 * data-generation/py
-* metric-framework/py
 * listings/py
     * listings/chap5
     * listings/chap6
@@ -212,23 +210,21 @@ You should select the following folders:
 
 When you are done your project preferences should look like this:
 
-![PyCharm Source Folders Selected](/readme_files/pycharm7_sources_selected.png)
-
-(At the time of creation of these instructions, later chapters have not been written.)
+![PyCharm Source Folders Selected](./readme_files/pycharm7_sources_selected.png)
 
 ---
 ##### 1.2.2.2 Installing Python Package Requirements in Pycharm
 
 Now that you have created a Python project you can easily install the
-required packages.  Start by opening the file requirements.txt in the root
-project folder
+required packages.  
 
-![PyCharm Requirements](/readme_files/pycharm8_requirements.png)
-
-Notice that at the top it says: *Install requirements* - click on that and the click
-**Install** in the dialog that comes up. Note that you have to be connected to the internet for
-this to work, and it will take several minutes for all the packages to be downloaded 
-and installed.
+1. Start by opening the Python file *data-generation/py/churndb.py* . At this point you are not going to use it, but PyCharm might not do the requirements for you if you don't have a Python file open. (Thats actually a weird PyCharm gotcha.) At this point it should give you a bunch of message about Installing requirements at the top. 
+2. Now, go ahead and opena the file *requirements.txt* in the root project folder - these are the packages you will install.
+3. ![PyCharm Requirements](./readme_files/pycharm8_requirements.png)
+4. Notice that at the top it says: *Install requirements* - click on that and the click
+   **Install** in the dialog that comes up. Note that you have to be connected to the internet for
+   this to work, and it will take several minutes for all the packages to be downloaded 
+   and installed.
 
 
 ---
@@ -247,7 +243,7 @@ Here is one example of creating a run configuration for one of the programs: If 
 In the Run/Debug Configuration dialog click the **+**  then **Python** to make a new python script configuration.
 
 
-![PyCharm Python Config](/readme_files/pycharm10_new_python_config.png)
+![PyCharm Python Config](./readme_files/pycharm10_new_python_config.png)
 
 You will get an empty configuration, and the first thing to do is click on the Folder icon in the 
 script path text box and pick the script path.  The first script everyone will need to run is 
@@ -255,12 +251,12 @@ script path text box and pick the script path.  The first script everyone will n
 configuration should look like this, with both the script path and the working directory set to 
 wherever the script is on your system:
 
-![PyCharm Script Path](/readme_files/pycharm11_script_path.png)
+![PyCharm Script Path](./readme_files/pycharm11_script_path.png)
 
 The next step is to add the environment variables, by clicking on the *Browse* button at the end
 of the environment variables text box:
 
-![PyCharm Add Config](/readme_files/pycharm12_browse_environ.png)
+![PyCharm Add Config](./readme_files/pycharm12_browse_environ.png)
 
 That button launches a dialog to add the environment variables.  You need to add three:
 1.  CHURN_DB  : the name of the database for your churn analysis schemas (step 1.2.1 above)
@@ -269,10 +265,14 @@ That button launches a dialog to add the environment variables.  You need to add
 
 After setting these, your environment variable dialog should look something like this:
 
-![PyCharm Add Config](/readme_files/pycharm13_environ_vars.png)
+![PyCharm Add Config](./readme_files/pycharm13_environ_vars.png)
 
 Select **OK** and save all the configuration changes.  I'll say more about running this script in the 
 next section on Data Loading / Creation.
+
+------
+
+##### 1.2.2.4 Duplicating Run Configurations
 
 For creating additional Run configurations, note that PyCharm allows you to duplicate 
 and modify an existing configuration.  So when you want to make another script with the same environment
@@ -280,14 +280,16 @@ variables open the Configuration Dialog, now by clicking on the run configuratio
 **Edit Configuration**
 
 
-![PyCharm Add Config](/readme_files/pycharm14_edit_config.png)
+![PyCharm Add Config](./readme_files/pycharm14_edit_config.png)
 
 Now choose to duplicate your existing Run configuration:
 
-![PyCharm Add Config](/readme_files/pycharm15_copy_config.png)
+![PyCharm Add Config](./readme_files/pycharm15_copy_config.png)
 
 This will make another configuration the same as the existing one - you can rename it and reset the 
 path to a different script, keeping the environment variables you already setup.
+
+- Duplicating run configurations saves you the trouble of re-entering the environment variables
 
 One last thing: After creating the Run Configuration you actually run a script in PyCharm
 using menu configurations `Run > Run 'churndb'` as shown in pic below:
@@ -359,7 +361,7 @@ If you are using Windows, you will need to setup the enviornment variables in th
 To make a long story short, you will need to end up with settings looking like this screenshot, but with 
 the correct database, username and password for your setup:
 
-![Windows Environment Variables](/readme_files/win_envvar.png)
+![Windows Environment Variables](./readme_files/win_envvar.png)
 
 
 The rest of the README is written for people using PyCharm, but you can always run the same commands
@@ -428,7 +430,7 @@ Process finished with exit code 0
 A new schema and tables were created in your PostgreSQL database, which you can confirm by looking
 in PgAdmin:
 
-![PgAdmin Churn Schema Tables](/readme_files/pgadmin_create_schema.png)
+![PgAdmin Churn Schema Tables](./readme_files/pgadmin_create_schema.png)
 
 If you made it this far then congratulations!  You just ran your first bit of the fight-churn code.
 
@@ -441,8 +443,7 @@ Code for generating artificial data to run the code is in the directory `data-ge
 the near future there will be a blog post explaining how the simulation works, and the instructions
 here are limited to simply running the simulation.
 
-* Create a run configuration for the script `data-generation/churnsim.py` following the instructions in
-section 1.2.6.  
+*  Follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `data-generation/churndb.py` (which you ran above) to make a *new* run configuration  for the script `data-generation/churnsim.py` (which you are about to run.)  
 
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
@@ -462,13 +463,7 @@ Simulated customer 4: 5 subscription, 9869 events @ 2019-05-21 06:00:02.433102
 
 There will be more like this and the whole process will take from around 10-30 minutes depending on the speed of your
 system (**so this may be a good time to go for a coffee break, lunch, nap, etc.**.) Please pardon the delay,
- but the program is simulating the
-subscriptions, behavior and churn of more than 10,000 customers over 6 months time. The results of the simulation are
- all inserted into the
- database tables `subscription` and `event`. (There is no data for churns yet : you will derive that as part of the
- analysis process described in the book chapters 2 and 4.)  You can (and should) confirm the results of the data
- simulation by querying the database directly, and you don't have to wait for the simulation to complete (so this is
- actually a good next step to take while you are waiting...)
+ but the program is simulating the subscriptions, behavior and churn of more than 10,000 customers over 6 months time. The results of the simulation are  all inserted into the  database tables `subscription` and `event`. (There is no data for churns yet : you will derive that as part of the  analysis process described in the book chapters 2 and 4.)  You can (and should) confirm the results of the data  simulation by querying the database directly, and you don't have to wait for the simulation to complete (so this is  actually a good next step to take while you are waiting...)
 
 ```
 churn=# select count(*) from socialnet7.subscription;
@@ -494,7 +489,7 @@ Those are examples of what the numbers will look like when the simulation is ove
 the database.  Mine doesn't actually launch the terminal directly, but it points in the right direction....)
 
 
-![Mac PostgreSQL terminal launch](/readme_files/mac_launch_psql_terminal.png)
+![Mac PostgreSQL terminal launch](./readme_files/mac_launch_psql_terminal.png)
 
 
 Great!  Now you have the data you need to run the code and learn the techniques in the book.
@@ -542,7 +537,7 @@ it with the PgAdmin Import/Export GUI, which you launch by command clicking (rig
 listing for the table you want to import into:
 
 
-![Mac PostgreSQL terminal launch](/readme_files/mac_launch_psql_terminal.png)
+![Mac PostgreSQL terminal launch](./readme_files/mac_launch_psql_terminal.png)
 
 [(top)](#top)  
 
@@ -573,7 +568,7 @@ from any listing on your local database, this is the easiest way to do it.
 ### 2.1 Running a Listing
 
 Start by making a Run Configuration for the script `listings/py/run_churn_listing.py`, 
-following the instructions in Section 1.2.6.
+following the instructions in Section 1.2.2.4 (duplicate and modify one of your old configurations.)
 
 The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
 simulated data set `socialnet7`.  If you have created a simulated dataset named `socialnet7` as described
@@ -765,7 +760,7 @@ data.  This section of the code contains a script that will automatically run ge
 as described in chapter 3.
 
 The script that does is `metric-framework/event_qa.py`.  To run it, make a Run Configuration as described in Section 
-1.2.6.  If you are running for the default simulated data set, `socialnet7` then the script is ready to run - just launch
+1.2.2.4.  If you are running for the default simulated data set, `socialnet7` then the script is ready to run - just launch
 it.  You should see output like the following:
 
 ```
@@ -787,7 +782,7 @@ folder nmaed `fight-churn-output` that is located adjacent to the repository fol
 like this:
 
 
-![Event QA Output](/readme_files/event_qa.png)
+![Event QA Output](./readme_files/event_qa.png)
 
 
 You can also configure the QA to run on numeric event properties, if you events have any.  See the `event_properties`
@@ -938,7 +933,7 @@ you should spend some time automating that process as well.  Maybe that will be 
 #### 3.2.3 Running Metric Calculations
 
 Once you have configured metrics (or if you are using the default `socialnet7`) you calculate the metrics with the
-`metric-framework/metric_calc.py`.  You create a configuration for this script as described in Section 1.2.6 of this
+`metric-framework/metric_calc.py`.  You create a configuration for this script as described in Section 1.2.2.4 of this
 README.  If you run the default configuration you should see this in your terminal (or the "Run" window in PyCharm):
 
 ```
@@ -1004,9 +999,8 @@ directly, or you can use the script described in the next section.
 
 ### 3.3 Metric QA
 
-
 The script `metric-framework/metric_qa.py` will create plots for metric QA (Quality Assurance) like the ones described
-in Chapter 3 of the book.  To get started, just make a new Run Configuration (Section 1.2.6 of this README) and if
+in Chapter 3 of the book.  To get started, just make a new Run Configuration (Section 1.2.2.4 of this README) and if
 you are using the default `socialnet7` data set just run it.  You should see the following printout:
 
 
@@ -1034,7 +1028,7 @@ Note that the metric QA uses the metric configuration to run - it only runs on m
 are listed in the configuration and takes the start and end dates for the QA from the configuration.
 
 
-![Metric QA Output](/readme_files/metric_qa.png)
+![Metric QA Output](./readme_files/metric_qa.png)
 
 
 [(top)](#top)  
@@ -1061,7 +1055,7 @@ of a dataset for a real project.
 
 The code in the folder `dataset-export` handles these problems by making a single script that does everything. The python
 script is `dataset-export/observe_churn.py`. To get started, just make a new Run Configuration 
-(Section 1.2.6 of this README) and if you are using the default `socialnet7` data set just run it. The script prints out 
+(Section 1.2.2.4 of this README) and if you are using the default `socialnet7` data set just run it. The script prints out 
 the SQL from each step, just like the script that runs the book SQL listings.  When it is done it should print
 that it is saving the dataset:
 
