@@ -10,7 +10,7 @@ def metric_qa_plot(qa_data_path, metric_name,**kwargs):
     plt.title(metric_name)
     qa_subplot(qa_data_df,'avg',2,'--')
     qa_subplot(qa_data_df,'min',3,'-.')
-    qa_subplot(qa_data_df,'n_calc',4,':',noax=True)
+    qa_subplot(qa_data_df,'n_calc',4,':',noax=False)
     plt.gca().figure.autofmt_xdate()
     save_to_path=metric_data_path.replace('.csv', '.png')
     print('Saving metric qa plot to ' + save_to_path)

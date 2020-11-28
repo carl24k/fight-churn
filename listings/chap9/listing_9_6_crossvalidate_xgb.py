@@ -11,16 +11,20 @@ from listing_8_5_churn_forecast import forecast_histogram
 def crossvalidate_xgb(data_set_path,n_test_split):
 
     X,y = prepare_data(data_set_path,ext='',as_retention=False)
-
+    temp = X.describe()
     tscv = TimeSeriesSplit(n_splits=n_test_split)
 
     score_models = {'lift': make_scorer(calc_lift, needs_proba=True), 'AUC': 'roc_auc'}
 
     xgb_model = xgb.XGBClassifier(objective='binary:logistic')
-    test_params = { 'max_depth': [1,2,4,6],
+    test_params_orig = { 'max_depth': [1,2,4,6],
                     'learning_rate': [0.1,0.2,0.3,0.4],
                     'n_estimators': [20,40,80,120],
                     'min_child_weight' : [3,6,9,12]}
+    test_params = { 'max_depth': [3,4,5],
+                    'learning_rate': [0.01,0.05,0.1],
+                    'n_estimators': [60,80,100],
+                    'min_child_weight' : [12,15,18]}
     gsearch = GridSearchCV(estimator=xgb_model,n_jobs=-1, scoring=score_models, cv=tscv, verbose=1,
                            return_train_score=False,  param_grid=test_params,refit='AUC')
     gsearch.fit(X.values,y)

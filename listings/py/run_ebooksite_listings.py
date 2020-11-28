@@ -14,8 +14,11 @@ from listing_8_2_logistic_regression import logistic_regression
 from listing_9_4_regression_cparam import regression_cparam
 from listing_9_5_crossvalidate import crossvalidate
 from listing_9_2_top_decile_lift import top_decile_lift
+from listing_9_1_regression_auc import regression_auc
 from listing_8_6_rescore_metrics import rescore_metrics
 from listing_8_5_churn_forecast import churn_forecast
+from listing_9_6_crossvalidate_xgb import crossvalidate_xgb
+from listing_9_7_churn_forecast_xgb import churn_forecast_xgb
 
 datapath ='/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset.csv'
 score_path = '/Users/carl/Documents/churn/fight-churn-output/ebooksite/ebooksite_dataset_scores.csv'
@@ -39,7 +42,7 @@ events = ['ReadingOwnedBook',
             'WishlistItemAdded',
             'CrossReferenceTermOpened']
 
-metrics_orig = ['numberbooksread_90d',
+metrics = ['numberbooksread_90d',
             'crossreferencetermopened_90d',
             'totalevents_90d',
             'highlightcreated_90d',
@@ -49,7 +52,7 @@ metrics_orig = ['numberbooksread_90d',
             'readingopenchapter_90d',
             'readingfreepreview_90d']
 
-metrics = ['ebookdownloaded_90d','numberbooksread_90d',
+metrics_final = ['ebookdownloaded_90d','numberbooksread_90d',
            'dayssincelastevent','downloads_per_book',
            'percent_reading_own_book','reading_feature_ratio',
            'readingownedbook_90d','totalevents_90d']
@@ -287,7 +290,8 @@ def regression_crossvalidate():
     crossvalidate(datapath,3,cparams)
 
 
-def lift_demo():
+def accuracy_demo():
+    regression_auc(datapath)
     top_decile_lift(datapath,predict_retention=True)
 
 def current_dataset():
@@ -299,6 +303,12 @@ def prepare_current_data():
 def current_customer_forecast():
     # churn_forecast(datapath)
     churn_forecast(datapath, model_name='logreg_model_c0.00100')
+
+def xgb_crossval():
+    crossvalidate_xgb(datapath,3)
+
+def xgb_current_forecast():
+    churn_forecast_xgb(datapath)
 
 if __name__ == "__main__":
 
@@ -324,10 +334,12 @@ if __name__ == "__main__":
         'J' : 'simple_regression',
         'K' : 'regression_control_params',
         'L' : 'regression_crossvalidate',
-        'M' : 'lift_demo',
+        'M' : 'accuracy_demo',
         'N' : 'current_dataset',
         'O' : 'prepare_current_data',
-        'P' : 'current_customer_forecast'
+        'P' : 'current_customer_forecast',
+        'Q' : 'xgb_crossval',
+        'R' : 'xgb_current_forecast'
 }
 
     print(json.dumps(function_map,indent=4))

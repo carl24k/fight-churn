@@ -7,9 +7,9 @@ date_range as (
 	from event e inner join date_range d on
 	 e.event_time between start_date and end_date
 )
-select metric_name, 
-	'XXX' as count_with_metric,
-	'YYY' as n_account,
+select n.metric_name_id, metric_name,
+	count(distinct m.account_id) as count_with_metric,
+	n_account as n_account,
 	(count(distinct m.account_id))::float/n_account::float as pcnt_with_metric    ,
 	avg(metric_value) as avg_value,    
 	min(metric_value) as min_value,    
@@ -21,5 +21,5 @@ inner join date_range on
 	metric_time >= start_date
 	and metric_time <= end_date
 inner join metric_name  n on m.metric_name_id = n.metric_name_id
-group by metric_name,n_account
-order by metric_name;
+group by n.metric_name_id, metric_name,n_account
+order by n.metric_name_id;
