@@ -96,7 +96,7 @@ class UtilityModel:
 
 
     def uprade_probability(self,u):
-        up_prob=1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+2))
+        up_prob=1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+8))
         return up_prob
 
     def simulate_churn(self,event_counts,customer):
