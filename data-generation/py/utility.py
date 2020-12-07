@@ -91,12 +91,12 @@ class UtilityModel:
         return churn_prob
 
     def downgrade_probability(self,u):
-        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*0.5 + self.offset))
+        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+0.5))
         return down_prob
 
 
     def uprade_probability(self,u):
-        up_prob=1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+8))
+        up_prob=1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+7.5))
         return up_prob
 
     def simulate_churn(self,event_counts,customer):
