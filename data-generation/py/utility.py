@@ -91,6 +91,17 @@ class UtilityModel:
 
         return churn_prob
 
+    def downgrade_probability(self,event_counts,customer):
+        u=self.utility_function(event_counts,customer)
+        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*0.5 + self.offset))
+        return down_prob
+
+
+    def uprade_probability(self,event_counts,customer):
+        u=self.utility_function(event_counts,customer)
+        up_prob=1.0/(1.0+exp(self.kappa*u*(-2.0) + self.offset))
+        return up_prob
+
     def simulate_churn(self,event_counts,customer):
         '''
         Simulates one customer churn, given a set of event counts.  The retention probability is a sigmoidal function
@@ -100,3 +111,16 @@ class UtilityModel:
         :return:
         '''
         return uniform(0, 1) < self.churn_probability(event_counts,customer)
+
+    def simulate_upgrade_downgrade(self,event_counts,customer,plans):
+        current_plan = plans.loc[plans['mrr']==customer.mrr].index[0]
+        if current_plan < plans.shape[0]-1:
+            upgrade_probability = self.uprade_probability(event_counts, customer)
+            if uniform(0, 1) < upgrade_probability:
+                new_plan = current_plan+1
+                customer.mrr = plans['mrr'].loc[new_plan]
+        elif current_plan > 0:
+            downgrade_probability = self.downgrade_probability(event_counts,customer)
+            if uniform(0, 1) < downgrade_probability:
+                new_plan = current_plan-1
+                customer.mrr = plans['mrr'].loc[new_plan]

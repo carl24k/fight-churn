@@ -42,7 +42,7 @@ class ChurnSimulation:
         self.model_list = []
         for b in behavior_versions:
             version = b[(b.find(self.model_name) + len(self.model_name)+1):-4]
-            if version in ('utility','population','country'):
+            if version in ('utility','population','country','plans'):
                 continue
             behave_mod=FatTailledBehaviorModel(self.model_name,seed,version)
             self.behavior_models[behave_mod.version]=behave_mod
@@ -53,6 +53,7 @@ class ChurnSimulation:
         self.util_mod.setChurnScale(self.behavior_models,self.population_percents)
         self.population_picker = np.cumsum(self.population_percents)
 
+        self.plans = pd.read_csv('../conf/'+self.model_name + '_plans.csv')
         self.country_lookup = pd.read_csv('../conf/'+self.model_name + '_country.csv')
 
         self.subscription_count = 0
@@ -100,6 +101,8 @@ class ChurnSimulation:
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
 
+        new_customer.pick_plan(self.plans)
+
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
         this_month=start_of_month + timedelta(days=random.randrange((end_range-start_of_month).days))
@@ -107,10 +110,11 @@ class ChurnSimulation:
         churned = False
         while not churned:
             next_month=this_month+relativedelta(months=1)
-            new_customer.subscriptions.append( (this_month,next_month) )
+            new_customer.subscriptions.append( (this_month,next_month, new_customer.mrr) )
             month_count = new_customer.generate_events(this_month,next_month)
             churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
             if not churned:
+                self.util_mod.simulate_upgrade_downgrade(month_count,new_customer,self.plans)
                 this_month = next_month
         return new_customer
 
@@ -143,7 +147,7 @@ class ChurnSimulation:
         with open(self.tmp_sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
                 tmp_file.write("%d,%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], 9.99)) # mrr is 9.99
+                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], s[2])) # mrr is 3rd element
                 self.subscription_count += 1
         with open(self.tmp_event_file_name, 'w') as tmp_file:
             for e in customer.events:
@@ -235,7 +239,6 @@ if __name__ == "__main__":
 
     start = date(2020, 1, 1)
     end = date(2020, 6, 1)
-    init = 10000
 
     random_seed = None
     if random_seed is not None:
