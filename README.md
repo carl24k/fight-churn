@@ -37,14 +37,9 @@ This page contains the most up to date setup instructions, as well as informatio
 
 ## 1 Getting Started
 
-These are basic startup/setup instructions that I think should work for most people using a recent Mac.
-I apologize that so far I have not had a chance to provide more detailed setup instructions for Windows,
-but I will do so ASAP (and I would welcome contributions in this area.)   I also want to apologize in advance
-because I am neither an expert in PostgreSQL nor an expert in Python, but I am about to give a lot
-of advice on how to setup and use these technologies - if you find I am not doing things the best
+Note from the author: These are basic startup/setup instructions that I think should work for most people using either shell Python or an IDE, on either Mac or Windows. (I would like to give Jupyter Notebook setup instructions in the future - if you have done it, please contact me.)  I also want to apologize in advance because I am neither an expert in PostgreSQL nor an expert in Python, but I am about to give a lot of advice on how to setup and use these technologies - if you find I am not doing things the best
 way, or just not how you would have done it, please be patient.  Same goes for the rudimentary state
-of some of the code - I'm doing the best I can with the time I've got.  If you want to make things
-better please help help out! :)
+of some of the code - I'm doing the best I can with the time I've got.  If you want to make things better please help help out! :)
 
 
 ---
