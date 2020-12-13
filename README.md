@@ -2,11 +2,15 @@
 
 <a name="top"/>
 
-This is code for the (forthcoming) book "Fighting Churn With Data: The
-Subscribed Institute Guide to Data Driven Customer Engagement".  See
-http://www.fightchurnwithdata.com for more information.
+This is code for the book "***Fighting Churn With Data: Science and strategy for keeping your customers***"; the book serves as a detailed guide to the code.  You can get more information at:
 
-**Table of Contents**  
+- https://www.manning.com/books/fighting-churn-with-data, the publisher (Manning Publications)'s page for the book
+- http://www.fightchurnwithdata.com, the author's blog site
+- https://www.twitch.tv/carl24k_datascience, the author's live stream
+
+This page contains the most up to date setup instructions, as well as information about some extra code that is mentioned in the book.
+
+**Setup Instructions**  
 [1 Getting Started](#start)  
 [1.1 Prerequisites](#prereq)    
 [1.2 Development Environment Setup](#devenv)      
@@ -17,6 +21,9 @@ http://www.fightchurnwithdata.com for more information.
 [2 Running Book Code Listings](#examples)  
 [2.1 Running a Listing](#runlist)  
 [2.2 Configuring How Listings are Run](#conflist)  
+
+**Extras**
+
 [3 Extras: Metric Calculation Framework](#metrics)  
 [3.1 Event QA](#eventqa)  
 [3.2 Batch Metric Calculation](#metcalc)  
