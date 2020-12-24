@@ -1,0 +1,268 @@
+{
+    "chap3": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2019-12-01",
+            "%to_yyyy-mm-dd": "2020-06-01",
+            "mode": "run",
+            "type": "sql",
+            "%field2sum": "0"
+        },
+        "list3": {
+            "name": "count_metric_insert",
+            "params": {
+                "mode": "run",
+                "%event2measure": "ReadingOwnedBook",
+                "%new_metric_id": 0
+            },
+            "v1": {
+                "%event2measure": "ReadingOwnedBook",
+                "%new_metric_id": 0
+            },
+            "v2": {
+                "%event2measure": "EBookDownloaded",
+                "%new_metric_id": 1
+            },
+            "v3": {
+                "%event2measure": "ReadingFreePreview",
+                "%new_metric_id": 2
+            },
+            "v4": {
+                "%event2measure": "HighlightCreated",
+                "%new_metric_id": 3
+            },
+            "v5": {
+                "%event2measure": "FreeContentCheckout",
+                "%new_metric_id": 4
+            },
+            "v6": {
+                "%event2measure": "ReadingOpenChapter",
+                "%new_metric_id": 5
+            },
+            "v7": {
+                "%event2measure": "WishlistItemAdded",
+                "%new_metric_id": 6
+            },
+            "v8": {
+                "%event2measure": "CrossReferenceTermOpened",
+                "%new_metric_id": 7
+            }
+        },
+        "list4": {
+            "name": "metric_name_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_name": "ReadingOwnedBook_90d",
+                "%new_metric_id": 0
+            },
+            "v1": {
+                "%new_metric_name": "ReadingOwnedBook_90d",
+                "%new_metric_id": 0
+            },
+            "v2": {
+                "%new_metric_name": "EBookDownloaded_90d",
+                "%new_metric_id": 1
+            },
+            "v3": {
+                "%new_metric_name": "ReadingFreePreview_90d",
+                "%new_metric_id": 2
+            },
+            "v4": {
+                "%new_metric_name": "HighlightCreated_90d",
+                "%new_metric_id": 3
+            },
+            "v5": {
+                "%new_metric_name": "FreeContentCheckout_90d",
+                "%new_metric_id": 4
+            },
+            "v6": {
+                "%new_metric_name": "ReadingOpenChapter_90d",
+                "%new_metric_id": 5
+            },
+            "v7": {
+                "%new_metric_name": "WishlistItemAdded",
+                "%new_metric_id": 6
+            },
+            "v8": {
+                "%new_metric_name": "CrossReferenceTermOpened",
+                "%new_metric_id": 7
+            }
+        },
+        "list6": {
+            "name": "metric_stats_over_time",
+            "params": {
+                "mode": "save",
+                "%metric2measure": "ReadingOwnedBook_90d",
+                "save_ext": "ReadingOwnedBook_90d"
+            },
+            "v1": {
+                "%event2measure": "ReadingOwnedBook_90d",
+                "save_ext": "ReadingOwnedBook_90d"
+            },
+            "v2": {
+                "%event2measure": "EBookDownloaded_90d",
+                "save_ext": "EBookDownloaded_90d"
+            },
+            "v3": {
+                "%event2measure": "ReadingFreePreview_90d",
+                "save_ext": "ReadingFreePreview_90d"
+            },
+            "v4": {
+                "%event2measure": "HighlightCreated_90d",
+                "save_ext": "HighlightCreated_90d"
+            },
+            "v5": {
+                "%event2measure": "FreeContentCheckout_90d",
+                "save_ext": "FreeContentCheckout_90d"
+            },
+            "v6": {
+                "%event2measure": "ReadingOpenChapter_90d",
+                "save_ext": "ReadingOpenChapter_90d"
+            },
+            "v7": {
+                "%event2measure": "WishlistItemAdded_90d",
+                "save_ext": "WishlistItemAdded_90d"
+            },
+            "v8": {
+                "%event2measure": "CrossReferenceTermOpened_90d",
+                "save_ext": "CrossReferenceTermOpened_90d"
+            }
+        },
+        "list7": {
+            "name": "metric_qa_plot",
+            "params": {
+                "type": "py",
+                "qa_data_path": "../../../fight-churn-output/livebook/livebook_metric_stats_over_time",
+                "metric_name": "ReadingOwnedBook_90d"
+            },
+            "v1": {
+                "metric_name": "ReadingOwnedBook_90d"},
+            "v2": {
+                "metric_name": "EBookDownloaded_90d"
+            },
+            "v3": {
+                "metric_name": "ReadingFreePreview_90d"
+            },
+            "v4": {
+                "metric_name": "HighlightCreated_90d"
+            },
+            "v5": {
+                "metric_name": "FreeContentCheckout_90d"
+            },
+            "v6": {
+                "metric_name": "ReadingOpenChapter_90d"
+            },
+            "v7": {
+                "metric_name": "WishlistItemAdded_90d"
+            },
+            "v8": {
+                "metric_name": "CrossReferenceTermOpened_90d"
+            }
+        },
+        "list8": {
+            "name": "metric_coverage",
+            "params": {
+                "mode": "save"
+            }
+        },
+        "list9": {
+            "name": "events_per_day",
+            "params": {
+                "mode": "save",
+                "%from_yyyy-mm-dd": "2020-02-01",
+                "%to_yyyy-mm-dd": "2020-06-01",
+                "save_ext": "like"
+            },
+            "params": {
+                "mode": "save",
+                "%metric2measure": "ReadingOwnedBook",
+                "save_ext": "ReadingOwnedBook"
+            },
+            "v1": {
+                "%event2measure": "ReadingOwnedBook",
+                "save_ext": "ReadingOwnedBook"
+            },
+            "v2": {
+                "%event2measure": "EBookDownloaded",
+                "save_ext": "EBookDownloaded"
+            },
+            "v3": {
+                "%event2measure": "ReadingFreePreview",
+                "save_ext": "ReadingFreePreview"
+            },
+            "v4": {
+                "%event2measure": "HighlightCreated",
+                "save_ext": "HighlightCreated"
+            },
+            "v5": {
+                "%event2measure": "FreeContentCheckout",
+                "save_ext": "FreeContentCheckout"
+            },
+            "v6": {
+                "%event2measure": "ReadingOpenChapter",
+                "save_ext": "ReadingOpenChapter"
+            },
+            "v7": {
+                "%event2measure": "WishlistItemAdded",
+                "save_ext": "WishlistItemAdded"
+            },
+            "v8": {
+                "%event2measure": "CrossReferenceTermOpened",
+                "save_ext": "CrossReferenceTermOpened"
+            }
+        },
+        "list10": {
+            "name": "event_count_plot",
+            "params": {
+                "type": "py",
+                "qa_data_path": "../../../fight-churn-output/livebook/livebook_events_per_day",
+                "event_name": "ReadingOwnedBook"
+            },
+            "v1": {
+                "event_name": "ReadingOwnedBook"},
+            "v2": {
+                "event_name": "EBookDownloaded"
+            },
+            "v3": {
+                "event_name": "ReadingFreePreview"
+            },
+            "v4": {
+                "event_name": "HighlightCreated"
+            },
+            "v5": {
+                "event_name": "FreeContentCheckout"
+            },
+            "v6": {
+                "event_name": "ReadingOpenChapter"
+            },
+            "v7": {
+                "event_name": "WishlistItemAdded"
+            },
+            "v8": {
+                "event_name": "CrossReferenceTermOpened"
+            }
+        },
+        "list11": {
+            "name": "events_per_account",
+            "params": {
+                "mode": "save"
+            }
+        }
+    },
+    "chap4": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2020-02-09",
+            "%to_yyyy-mm-dd": "2020-05-10",
+            "mode": "run",
+            "type": "sql"
+        },
+        "list6": {
+            "name": "current_customers",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day",
+                "%from_yyyy-mm-dd": "2020-05-10",
+                "%to_yyyy-mm-dd": "2020-05-10"
+            }
+        }
+    }
+}

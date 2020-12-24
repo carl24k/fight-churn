@@ -11,16 +11,6 @@ events = ['ReadingOwnedBook',
             'WishlistItemAdded',
             'CrossReferenceTermOpened']
 
-metrics = ['numberbooksread_90d',
-            'crossreferencetermopened_90d',
-            'totalevents_90d',
-            'highlightcreated_90d',
-            'readingownedbook_90d',
-            'ebookdownloaded_90d',
-            'freecontentcheckout_90d',
-            'readingopenchapter_90d',
-            'readingfreepreview_90d']
-
 sql_params = {
     "%from_yyyy-mm-dd": "2019-12-01",
     "%to_yyyy-mm-dd": "2020-06-01"
@@ -58,5 +48,5 @@ def metric_qa():
 
 if __name__ == "__main__":
     event_qa()
-    # metric_calc()
+    metric_calc()
     metric_qa()
