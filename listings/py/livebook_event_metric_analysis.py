@@ -1,6 +1,7 @@
 from run_churn_listing import sql_listing
 from listing_3_7_metric_qa_plot import metric_qa_plot
 from listing_3_10_event_count_plot import event_count_plot
+from listing_5_2_dataset_stats import dataset_stats
 
 events = ['ReadingOwnedBook',
             'EBookDownloaded',
@@ -28,7 +29,6 @@ def event_qa():
 
 
 def metric_calc():
-
     for idx,e in enumerate(events):
         sql_params['%event2measure']=e
         sql_params['%new_metric_id']=idx
@@ -46,7 +46,13 @@ def metric_qa():
         metric_qa_plot("../../../fight-churn-output/livebook/livebook_metric_stats_over_time", m)
 
 
+def current_customer_dataset():
+    sql_listing(4,6,'current_customers','livebook',mode='save',param_dict=sql_params)
+    dataset_stats('../../../fight-churn-output/livebook/livebook_current_customers.csv')
+
+
 if __name__ == "__main__":
     event_qa()
     metric_calc()
     metric_qa()
+    current_customer_dataset()

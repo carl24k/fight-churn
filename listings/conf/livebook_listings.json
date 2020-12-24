@@ -248,10 +248,20 @@
             }
         }
     },
+    "chap5": {
+        "defaults": {
+            "data_set_path": "../../../fight-churn-output/livebook/livebook_current_customers.csv",
+            "type": "py"
+        },
+        "list2": {
+            "name": "dataset_stats",
+            "params": {}
+        }
+    },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2020-02-09",
-            "%to_yyyy-mm-dd": "2020-05-10",
+            "%from_yyyy-mm-dd": "2019-12-01",
+            "%to_yyyy-mm-dd": "2020-06-01",
             "mode": "run",
             "type": "sql"
         },
@@ -259,9 +269,7 @@
             "name": "current_customers",
             "params": {
                 "mode": "save",
-                "%metric_interval": "7 day",
-                "%from_yyyy-mm-dd": "2020-05-10",
-                "%to_yyyy-mm-dd": "2020-05-10"
+                "%metric_interval": "7 day"
             }
         }
     }
