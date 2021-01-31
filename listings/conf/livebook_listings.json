@@ -5,6 +5,12 @@
             "type": "sql"
         },
         "list7": {
+            "name": "create_observation",
+            "params": {
+                "mode": "run"
+            }
+        },
+        "list8": {
             "name": "livebook_observations",
             "params": {
                 "mode": "save",
@@ -13,7 +19,7 @@
                 "%to_yyyy-mm-dd": "2020-05-10"
             }
         },
-        "list8": {
+        "list9": {
             "name": "dataset",
             "params": {
                 "mode": "save",
