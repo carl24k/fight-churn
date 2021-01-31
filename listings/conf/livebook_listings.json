@@ -1,0 +1,36 @@
+{
+    "chap4": {
+        "defaults": {
+            "mode": "run",
+            "type": "sql"
+        },
+        "list7": {
+            "name": "livebook_observations",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day",
+                "%from_yyyy-mm-dd": "2020-05-10",
+                "%to_yyyy-mm-dd": "2020-05-10"
+            }
+        },
+        "list8": {
+            "name": "dataset",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day",
+                "%from_yyyy-mm-dd": "2020-05-10",
+                "%to_yyyy-mm-dd": "2020-05-10"
+            }
+        }
+    },
+    "chap5": {
+        "defaults": {
+            "data_set_path": "../../../fight-churn-output/livebook/livebook_dataset.csv",
+            "type": "py"
+        },
+        "list2": {
+            "name": "dataset_stats",
+            "params": {}
+        }
+    }
+}
