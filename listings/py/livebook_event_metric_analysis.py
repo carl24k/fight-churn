@@ -36,6 +36,10 @@ def metric_calc():
         sql_params["%new_metric_name"]= f'{e}_90d'
         sql_listing(3, 4,'metric_name_insert', schema, mode='run', param_dict=sql_params)
 
+    sql_listing(3, 17, 'total_count_metric', schema, mode='run', param_dict=sql_params)
+    sql_listing(3, 4,'metric_name_insert', schema, mode='run', param_dict={'%new_metric_id':8, "%new_metric_name":'TotalEvents'})
+    sql_listing(3, 18, 'distinct_product_metric', schema, mode='run', param_dict=sql_params)
+    sql_listing(3, 4,'metric_name_insert', schema, mode='run', param_dict={'%new_metric_id':9, "%new_metric_name":'DistinctProducts'})
 
 def metric_qa():
     sql_listing(3, 8,'metric_coverage', schema, mode='save', param_dict=sql_params)

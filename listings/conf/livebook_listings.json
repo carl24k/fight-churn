@@ -85,6 +85,14 @@
             "v8": {
                 "%new_metric_name": "CrossReferenceTermOpened",
                 "%new_metric_id": 7
+            },
+            "v9": {
+                "%new_metric_name": "TotalEvents",
+                "%new_metric_id": 8
+            },
+            "v10": {
+                "%new_metric_name": "DistinctProducts",
+                "%new_metric_id": 9
             }
         },
         "list6": {
@@ -245,6 +253,18 @@
             "name": "events_per_account",
             "params": {
                 "mode": "save"
+            }
+        },
+        "list17": {
+            "name": "total_count_metric",
+            "params": {
+                "%new_metric_id": 8
+            }
+        },
+        "list18": {
+            "name": "distinct_product_metric",
+            "params": {
+                "%new_metric_id": 9
             }
         }
     },
