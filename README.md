@@ -16,7 +16,8 @@ This page contains the most up to date setup instructions, as well as informatio
 [1.2 Development Environment Setup](#devenv)      
 [1.2.1 Database Setup](#createdb)      
 [1.2.2 PyCharm Setup](#pycharm)      
-[1.2.3 Command Line Setup](#command)      
+[1.2.3 Jupyter Notebook Setup](#notebook)      
+[1.2.4 Command Line Setup](#command)      
 [1.3 Data Creation / Loading](#data)  
 [2 Running Book Code Listings](#examples)  
 [2.1 Running a Listing](#runlist)  
@@ -56,8 +57,9 @@ Required:
 * PostgreSQL
 
 Recommended:
-* PyCharm (Community Edition)
-* PgAdmin
+* PgAdmin - for PostgreSQL database setup
+* PyCharm (Community Edition)   OR  Jupyter Notebooks - for running Python programs
+  * If you have never used Python before (or used Python and never used Jupyter) then start with the PyCharm because it is an all GUI set up process. Jupyter instructions are provided below for those who are already familiar with it.
 
 ---
 #### 1.1.1 Python 3
@@ -301,16 +303,58 @@ using menu configurations `Run > Run 'churndb'` as shown in pic below:
 
 ---
 ---
+
+
+<a name="notebook"/>
+
+#### 1.2.3 Jupyter Notebook Setup
+
+These instructions assume you already have Jupyter Notebooks installed. If you don't then you can consider the resources at https://jupyter.org/install. 
+
+##### 1.2.3.1 Installing Packages Under Jupyter
+
+1. launch a Jupyter  notebook from the project root directory. It should look like the view shown below : 
+
+   ![note1_start](/Users/carl/Documents/churn/fight-churn/readme_files/note1_start.png)
+1. Start a new notebook from here (new button on the upper right...)
+
+   ![note2_new](/Users/carl/Documents/churn/fight-churn/readme_files/note2_new.png)
+1. To install the required packages, run `pip install -r requirements.txt`
+
+   ![note3_pip](/Users/carl/Documents/churn/fight-churn/readme_files/note3_pip.png)
+
+##### 1.2.3.2 Opening the Notebook & Setting the environment variables
+
+1. Change the current directory to `data-generation/py`
+
+2. ![note4_listdir](/Users/carl/Documents/churn/fight-churn/readme_files/note4_datagen.png)
+
+3. Open the Notbook `churn_db_sim.ipnyb`
+
+4. In the second cell, change the environment variables to match the database, username and password that you have created...
+
+   ![note5_environ](/Users/carl/Documents/churn/fight-churn/readme_files/note5_environ.png)
+   
+5. Run the first two cells to set the environment variables. You will need to re-run these cells every time you re-open the notebook, and the similar notebook that you use to run the listings.
+
+6. The first program to run, which will create the required database tables, is in the next cell of the notebook - this is explained in more detail below in section 1.3.1.
+
+------
+
+------
+
+
+
 <a name="command"/>
 
-#### 1.2.3 Running From the Command Line
+#### 1.2.4 Running From the Command Line
 
 If you are not using PyCharm of course you can run all this code from a terminal shell. You will need
 to manually setup a Python virtual environment with the required packages, and  set a few environment variables.
 
 ---
 
-##### 1.2.3.1 Installing Virtual Environment and Requirements
+##### 1.2.4.1 Installing Virtual Environment and Requirements
 
 In either Windows or Mac/Linux you should setup a virtual environment following the 
 instructions at pythong.org:
@@ -336,7 +380,7 @@ still run all the code in the book except for the 2nd half of chapter 9 without 
 
 ---
 
-##### 1.2.3.2 Mac/Linux Command Line Environment Variables
+##### 1.2.4.2 Mac/Linux Command Line Environment Variables
 The environment variables are specific to these programs and contain information need to access the
 databse. You should add a few lines like this in your `.bash_profile` or `.bashrc` file on Mac/Linux 
 (or whatever is appropriate for the shell you use, but I will show this for bash because it seems to be the most common...)
@@ -358,13 +402,12 @@ illustrated from the terminal...
 ---
 
 
-##### 1.2.3.3 Windows Command Line Environment Variables
+##### 1.2.4.3 Windows Command Line Environment Variables
 If you are using Windows, you will need to setup the enviornment variables in the Advanced System Preferences.
 To make a long story short, you will need to end up with settings looking like this screenshot, but with 
 the correct database, username and password for your setup:
 
 ![Windows Environment Variables](./readme_files/win_envvar.png)
-
 
 The rest of the README is written for people using PyCharm, but you can always run the same commands
 illustrated from the terminal...
@@ -404,13 +447,13 @@ such data that you would be willing to make publicly available please contact th
 Regardless of where you get your data from, you need to create the database schema and tables that it
 to hold it.  There is a python script in the folder *data-generation* for this.  If you have been
 following the instructions above then you have already made a Run Configuration for the script in
-PyCharm.  There's just one more thing to do: name the schema that you will create.
+PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just one more thing to do: name the schema that you will create.
 
 1. Open the file *data-generation/py/churndb.py*
 1. Edit the schema name in the file to the name you want
     1. If you are loading your own data, name it whatever you want
-    1. If you are generating simulated data, leave it set to the name **chunrsim2** which is the default model for simulation
-1. Run the script using PyCharm, as described above
+    1. If you are generating simulated data, leave it set to the name **socialnet7** which is the default model for simulation
+1. Run the script using PyCharm or a Jupyter Notebook, as described above.
 
 If everything works as planned you should see something like the following output:
 
@@ -445,7 +488,8 @@ Code for generating artificial data to run the code is in the directory `data-ge
 the near future there will be a blog post explaining how the simulation works, and the instructions
 here are limited to simply running the simulation.
 
-*  Follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `data-generation/churndb.py` (which you ran above) to make a *new* run configuration  for the script `data-generation/churnsim.py` (which you are about to run.)  
+*  For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `data-generation/churndb.py` (which you ran above) to make a *new* run configuration  for the script `data-generation/churnsim.py` (which you are about to run.)  
+*  For *JupyterNotebooks* you should have already run the first 3 cells of the notebook `churn_db_sim.ipynb`. The simulation command is in the 4th cell of the notebook: `run churnsim.py`
 
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
@@ -569,8 +613,10 @@ from any listing on your local database, this is the easiest way to do it.
 
 ### 2.1 Running a Listing
 
-Start by making a Run Configuration for the script `listings/py/run_churn_listing.py`, 
-following the instructions in Section 1.2.2.4 (duplicate and modify one of your old configurations.)
+* For *PyCharm*, start by making a Run Configuration for the script `listings/py/run_churn_listing.py`, 
+  following the instructions in Section 1.2.2.4 (duplicate and modify one of your old configurations.)
+
+* For a *Jupyter Notebook*  change to the folder `listings/py` and use the notebook  `run_churn_listing.ipnyb`. Set the environment variables in the 2nd cell, as described above sin  Section 1.2.3.2. The comand to run a listing is in the 3rd cell.
 
 The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
 simulated data set `socialnet7`.  If you have created a simulated dataset named `socialnet7` as described
@@ -643,11 +689,11 @@ One way you  can change what the script will run for by simply editing the const
 
 The most common thing you will do is run a different listing on the same schema and chapter, so you would edit this line:
 
-`listing=1`
+`--listing=1`
 
 to whatever listing you want. So for example, to run listing 2.2 you can change the variable to:
 
-`listing=2`
+`--listing=2`
 
 Alternatively, the script accepts command line parameters.  To run this way, provide the following three parameters 
 (all required) and it will use those instead of the hard coded constants:
