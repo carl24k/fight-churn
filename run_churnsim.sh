@@ -4,13 +4,13 @@
 
 # run_churn_listing.py
 
-SCHEMA=socialnet7
+SCHEMA=biznet1
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
-CHURN_DB_USER=user
-CHURN_DB_PASS=pass
+CHURN_DB_USER=carl
+CHURN_DB_PASS=churn
 
-CHURN_ROOT=path_from_home_to_code
+CHURN_ROOT=/Documents/churn/
 
 PYTHONPATH="${PYTHONPATH}:$HOME/$CHURN_ROOT/fight-churn/listings/chap3:"\
 "$HOME/$CHURN_ROOT/fight-churn/listings/chap5:"\
@@ -28,10 +28,10 @@ export CHURN_DB_PASS
 
 cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
-cd $HOME/$CHURN_ROOT/fight-churn/data-generation/py
-../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py $SCHEMA
-cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
+#cd $HOME/$CHURN_ROOT/fight-churn/data-generation/py
+#../../venv/bin/python churndb.py $SCHEMA
+#../../venv/bin/python churnsim.py $SCHEMA
+#cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
 
 # churn rate
