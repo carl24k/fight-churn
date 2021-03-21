@@ -28,10 +28,10 @@ export CHURN_DB_PASS
 
 cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
-#cd $HOME/$CHURN_ROOT/fight-churn/data-generation/py
-#../../venv/bin/python churndb.py $SCHEMA
-#../../venv/bin/python churnsim.py $SCHEMA
-#cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
+cd $HOME/$CHURN_ROOT/fight-churn/data-generation/py
+../../venv/bin/python churndb.py $SCHEMA
+../../venv/bin/python churnsim.py $SCHEMA
+cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
 
 # churn rate
