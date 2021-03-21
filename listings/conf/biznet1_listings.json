@@ -287,7 +287,9 @@
         },
         "list14": {
             "name": "mrr",
-            "params": {}
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 9}
         },
         "list16": {
             "name": "billing_period",
@@ -411,6 +413,10 @@
             "v17": {
                 "data_set_path": "../../../fight-churn-output/biznet1/biznet1_dataset3.csv",
                 "metric_to_plot": "customer_age"
+            },
+            "v18": {
+                "metric_to_plot": "mrr",
+                "ncohort" : 3
             }
         },
         "list2": {
