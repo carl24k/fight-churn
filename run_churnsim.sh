@@ -134,7 +134,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 4
 
 # Re-prepare the non-dummy part of categorical data
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 2 --version 3
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1 --version 3
 
 # Merge dummies & groupscores
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 5
