@@ -734,7 +734,7 @@
         "list1": {
             "name": "prepare_data",
             "params": {
-                "group_corr_thresh": 0.65
+                "group_corr_thresh": 0.6
             },
             "v2": {
                 "data_set_path": "../../../fight-churn-output/biznet1/biznet1_dataset.csv"
