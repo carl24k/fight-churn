@@ -49,6 +49,8 @@ cd $HOME/$CHURN_ROOT/fight-churn/listings/py/
 
 # Account tenure metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
+# MRR metric
+../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 14
 
 # standard metric
 ../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3
