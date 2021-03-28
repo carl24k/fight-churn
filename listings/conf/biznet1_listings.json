@@ -766,6 +766,10 @@
             "v2": {
                 "data_set_path": "../../../fight-churn-output/biznet1/biznet1_dataset3.csv",
                 "model_name": "logreg_model_c0.040"
+            },
+            "v3": {
+                "data_set_path": "../../../fight-churn-output/biznet1/biznet1_dataset2.csv",
+                "model_name": "logreg_model_c0.040"
             }
         },
         "list6": {
@@ -810,6 +814,9 @@
             },
             "v5": {
                 "data_set_path": "../../../fight-churn-output/biznet1/biznet1_dataset3.csv",
+                "C_param": 0.04
+            },
+            "v6": {
                 "C_param": 0.04
             }
         },
