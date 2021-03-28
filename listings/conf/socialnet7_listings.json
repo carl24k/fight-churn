@@ -844,6 +844,10 @@
         "list8": {
             "name": "shap_explain_xgb",
             "params": {}
+        },
+        "list9": {
+            "name": "shap_explain_logreg",
+            "params": {}
         }
     },
     "chap10": {

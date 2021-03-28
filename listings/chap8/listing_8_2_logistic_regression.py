@@ -18,7 +18,7 @@ def prepare_data(data_set_path,ext='_groupscore',as_retention=True):
     assert os.path.isfile(score_save_path), 'You must run listing 6.3 to save grouped metric scores first'
     grouped_data = pd.read_csv(score_save_path,index_col=[0,1])
     y = grouped_data['is_churn'].astype(np.int)
-    if as_retention: y=~y
+    if as_retention: y=np.subtract(1,y)
     X = grouped_data.drop(['is_churn'],axis=1)
     return X,y
 
