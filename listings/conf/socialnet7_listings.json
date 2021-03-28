@@ -840,6 +840,10 @@
             "v2": {
                 "data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_xgbdummies.csv"
             }
+        },
+        "list8": {
+            "name": "shap_explain_xgb",
+            "params": {}
         }
     },
     "chap10": {
