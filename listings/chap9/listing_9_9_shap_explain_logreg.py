@@ -1,4 +1,3 @@
-import numpy as np
 import os
 import pickle
 import shap
@@ -7,14 +6,12 @@ from listing_8_4_rescore_metrics import reload_churn_data
 
 def shap_explain_logreg(data_set_path):
 
-    pickle_path = data_set_path.replace('.csv', '_logreg_model.pkl')
-    assert os.path.isfile(pickle_path), 'You must run listing 9.6 to save an XGB regression model first'
+    pickle_path = data_set_path.replace('.csv', '_logreg_model_churn.pkl')
+    assert os.path.isfile(pickle_path), 'You must run listing 8.2 with param as_retention=False to save a churn logistic regression model first'
     with open(pickle_path, 'rb') as fid:
         logreg_model = pickle.load(fid)
 
     current_df = reload_churn_data(data_set_path,'current_groupscore','8.4',is_customer_data=True)
-    prediction_test = logreg_model.predict_proba(current_df)
-    print(f'mean predictions={np.mean(prediction_test,axis=0)}')
     explainer_mask = shap.maskers.Impute(data=current_df)
     explainer = shap.LinearExplainer(logreg_model, masker=explainer_mask, model_output='probability')
     shap_values = explainer(current_df)

@@ -739,7 +739,10 @@
         },
         "list2": {
             "name": "logistic_regression",
-            "params": {}
+            "params": {},
+            "v1" : {
+                "as_retention" : false
+            }
         },
         "list3": {
             "name": "dataset2_current",
