@@ -5,20 +5,21 @@ from sklearn.linear_model import LogisticRegression
 from math import exp
 import pickle
 
-def logistic_regression(data_set_path):
-    X,y = prepare_data(data_set_path)
+def logistic_regression(data_set_path,as_retention=True):
+    X,y = prepare_data(data_set_path,as_retention=as_retention)
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
     retain_reg.fit(X, y)
-    save_regression_summary(data_set_path,retain_reg)
-    save_regression_model(data_set_path,retain_reg)
-    save_dataset_predictions(data_set_path,retain_reg,X)
+    file_ext = '' if as_retention else '_churn'
+    save_regression_summary(data_set_path,retain_reg, file_ext)
+    save_regression_model(data_set_path,retain_reg, file_ext)
+    save_dataset_predictions(data_set_path,retain_reg,X, file_ext)
 
 def prepare_data(data_set_path,ext='_groupscore',as_retention=True):
     score_save_path = data_set_path.replace('.csv', '{}.csv'.format(ext))
     assert os.path.isfile(score_save_path), 'You must run listing 6.3 to save grouped metric scores first'
     grouped_data = pd.read_csv(score_save_path,index_col=[0,1])
-    y = grouped_data['is_churn'].astype(np.bool)
-    if as_retention: y=~y
+    y = grouped_data['is_churn'].astype(np.int)
+    if as_retention: y=np.subtract(1,y)
     X = grouped_data.drop(['is_churn'],axis=1)
     return X,y
 

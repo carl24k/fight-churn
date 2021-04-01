@@ -739,7 +739,10 @@
         },
         "list2": {
             "name": "logistic_regression",
-            "params": {}
+            "params": {},
+            "v1" : {
+                "as_retention" : false
+            }
         },
         "list3": {
             "name": "dataset2_current",
@@ -840,6 +843,14 @@
             "v2": {
                 "data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3_xgbdummies.csv"
             }
+        },
+        "list8": {
+            "name": "shap_explain_xgb",
+            "params": {}
+        },
+        "list9": {
+            "name": "shap_explain_logreg",
+            "params": {}
         }
     },
     "chap10": {

@@ -71,6 +71,16 @@ For Windows there are resources here:
 
 (If you are on linux I'm going to assume you know how to install your own python...)
 
+##### Note about Python and Package versions
+
+Nearly all of the code for Fighitng Churn With Data should run with any Python 3.x version and all common package versions.
+
+The only packages used that have version dependencies are the `xgoost` and and `shap` packages introduced in the later listings of chapter 9. These packages contain recent updates and  may only be compatible with versions of Python later than 3.9, at the time of this writing. *Note `xgboost` has other installation issues on Windows and Mac platforms, as described below in the section "Installing Virtual Environment and Requirements"*.
+
+Please create an issue in the repository if you find any other instances of package or version incompatibilities.
+
+##### Python IDE
+
 I also recommend installing an Integrated Development Environment like PyCharm. PyCharm 
 **Community Edition** was used by the author to write and run
 all the code for the book, so this README will include how to setup PyCharm (this is especially useful if you 
@@ -372,10 +382,15 @@ The command for installing requirements is further documented on the same page a
 **NOTE:** The precise version of packages required may vary on different systems and in the future.
 What is in the requirements is mostly non-specific but you may need to tailor it to your system.
 
-__**WINDOWS XG-Boost Warning:**__ At the time of this writing there have been problems reported 
+__**Windows XG-Boost Warning:**__ At the time of this writing there have been problems reported 
  installing the xgboost package on  Windows: https://discuss.xgboost.ai/t/pip-install-xgboost-isnt-working-on-windows-x64/57.
 If you are unable to install xgboost with pip, then you can try to install using the instructions
   outlined in that link. Alternatively, you can remove that requirement - note that you can
+still run all the code in the book except for the 2nd half of chapter 9 without xgboost.
+
+__**Mac XG-Boost Warning:**__ At the time of this writing there have been problems reported 
+ installing the xgboost package on recent versions of  Mac OS: https://stackoverflow.com/questions/61971851/getting-this-simple-problem-while-importing-xgboost-on-jupyter-notebook
+If you are unable to install xgboost with pip, try performing the Lib OMP installation described above first. Alternatively, you can remove the xgboost requirement - note that you can
 still run all the code in the book except for the 2nd half of chapter 9 without xgboost.
 
 ---
