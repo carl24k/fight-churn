@@ -851,6 +851,24 @@
         "list9": {
             "name": "shap_explain_logreg",
             "params": {}
+        },
+        "list10": {
+            "name": "xgb_fit",
+            "params": {}
+        },
+        "list11": {
+            "name": "xgb_auc",
+            "params": {}
+        },
+        "list12": {
+            "name": "xgb_lift",
+            "params": {}
+        },
+        "list13": {
+            "name": "backtest_xgb",
+            "params": {
+                "n_test_split" : 2
+            }
         }
     },
     "chap10": {
