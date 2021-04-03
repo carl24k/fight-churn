@@ -16,9 +16,9 @@ def backtest_xgb(data_set_path,n_test_split):
     score_models = {'lift': lift_scorer, 'AUC': 'roc_auc', 'loss' : 'neg_log_loss'}
 
     xgb_model = xgb.XGBClassifier(objective='binary:logistic',use_label_encoder=False, eval_metric='logloss')
-    the_params = { 'max_depth': [1],'learning_rate': [0.2],'n_estimators': [120],'min_child_weight' : [12]}
+
     gsearch = GridSearchCV(estimator=xgb_model,n_jobs=-1, scoring=score_models, cv=tscv, verbose=1,
-                           return_train_score=False,  param_grid=the_params,refit='loss')
+                           return_train_score=True,  param_grid={},refit='loss')
     gsearch.fit(X,y,verbose=1)
 
     gsearch.fit(X,y)
