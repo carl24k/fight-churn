@@ -23,7 +23,7 @@ def shap_explain_xgb(data_set_path, plot_n=None):
 
     if plot_n is not None:
         for n in plot_n:
-            shap.waterfall_plot(shap_values[n,:],show=False)
+            shap.waterfall_plot(shap_values[n],show=False)
             save_file = data_set_path.replace('.csv', f'_shap_water_xgb_{n}.png')
             plt.tight_layout()
             plt.savefig(save_file, format='png')
