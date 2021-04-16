@@ -7,10 +7,16 @@ from listing_6_3_apply_metric_groups import apply_metric_groups
 from listing_6_5_ordered_correlation_matrix import ordered_correlation_matrix
 from listing_8_5_churn_forecast import churn_forecast
 from listing_8_6_rescore_metrics import rescore_metrics
+from listing_8_1_prepare_data import prepare_data
+from listing_6_2_dataset_correlation_matrix import dataset_correlation_matrix
 
 train_data_path = '/Users/carl/Documents/churn/fight-churn-output/livebook/livebook_dataset.csv'
 
-def prepare_data():
+def prepare_data_1line():
+    prepare_data(train_data_path,group_corr_thresh=0.75)
+
+
+def prepare_data_steps():
     dataset_stats(train_data_path)
     fat_tail_scores(train_data_path)
     find_metric_groups(train_data_path,group_corr_thresh=0.75)
@@ -26,6 +32,7 @@ def score():
     churn_forecast(train_data_path,model_name='logreg_model_c0.040')
 
 if __name__=='__main__':
-    prepare_data()
+    prepare_data_1line()
+    # prepare_data_steps()
     train()
     score()
