@@ -846,7 +846,10 @@
         },
         "list8": {
             "name": "shap_explain_xgb",
-            "params": {}
+            "params": {},
+            "v1" : {
+                "plot_n" : [0, 1, 2, 3 ,4 ,5]
+            }
         },
         "list9": {
             "name": "shap_explain_logreg",
