@@ -808,6 +808,9 @@
             "v5": {
                 "data_set_path": "../../../fight-churn-output/socialnet7/socialnet7_dataset3.csv",
                 "C_param": 0.04
+            },
+            "v6": {
+                "C_param": 0.04
             }
         },
         "list5": {
