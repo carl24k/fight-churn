@@ -92,7 +92,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
     :return:
     """
 
-    with open('../../listings/chap%d/%s.sql' % (chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
+    with open('chap%d/%s.sql' % (chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
 
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
@@ -203,7 +203,7 @@ def load_and_check_listing_params(args):
     vers_key = f'v{version}' if version else None
 
     # Error if there is no file for this schema
-    conf_path='../../listings/conf/%s_listings.json' % schema
+    conf_path='conf/%s_listings.json' % schema
     if not os.path.isfile(conf_path):
         print(f'No params {conf_path} to run listings on schema {schema}')
         exit(-1)
