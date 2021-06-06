@@ -215,6 +215,7 @@ Select each folder that contains python source code, and click on the button *So
 You should select the following folders:
 * data-generation/py
 * listings/py
+    * listings/chap3
     * listings/chap5
     * listings/chap6
     * listings/chap7
@@ -583,8 +584,8 @@ Follow the order in the churn analysis subscription table:
     1. bill_period_months : integer
 
 * Export the data from your equivalent of an `event` table, and from whatever table names the event types (assuming
-there is a code name table separate from the event table.  Every event must have an account identifier, a timestamp,
-and a type.  The required fields for the events are:
+  there is a code name table separate from the event table.  Every event must have an account identifier, a timestamp,
+  and a type.  The required fields for the events are:
     1. id : integer
     1. event_time : timestamp
     1. event_type_id : integer
@@ -750,7 +751,7 @@ The configuration his a JSON with the following structure:
 1. The next level is a set of objects representing each listing in the chapter
     * The key for each object is the listing name, beginning with "listing_<chapter>_<number>"
     * The values for each object are parameters that apply to running that listing.  
-    There are a few possible types of parameters.
+      There are a few possible types of parameters.
         1. Variables which are substituted in SQL, or passed as values to python functions
         1. Control parameters (described more below)
 1. There is a special object of chapter default parameters in each chapter, with the key `params`. The defaults for the 
