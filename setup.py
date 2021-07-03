@@ -1,12 +1,22 @@
 import setuptools
-from pip._internal.req import parse_requirements
+import pkg_resources
+import pathlib
+# from pip._internal.req import parse_requirements
+
+
+with pathlib.Path('requirements.txt').open() as requirements_txt:
+    install_requires = [
+        str(requirement)
+        for requirement
+        in pkg_resources.parse_requirements(requirements_txt)
+    ]
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="fightchurn",
-    version="0.0.12",
+    version="0.0.1",
     author="Carl Gold",
     author_email="carl24k@fightchurnwithdata.com",
     description="Code from the book Fighting Churn With Data",
@@ -32,5 +42,5 @@ setuptools.setup(
               'fightchurn.listings.chap10'],
     scripts=['fightchurn/run_churn_listing.py'],
     python_requires=">=3.6",
-    install_reqs = parse_requirements('requirements.txt', session="temp")
+    install_requires= install_requires
 )
