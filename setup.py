@@ -40,6 +40,6 @@ setuptools.setup(
               'fightchurn.listings.chap9',
               'fightchurn.listings.chap10'],
     scripts=['fightchurn/run_churn_listing.py'],
-    python_requires=">=3.6",
+    python_requires=">=3.9",
     install_requires= install_requires
 )
