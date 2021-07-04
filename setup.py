@@ -1,9 +1,8 @@
 import setuptools
 import pkg_resources
 import pathlib
-# from pip._internal.req import parse_requirements
 
-
+# https://stackoverflow.com/questions/49689880/proper-way-to-parse-requirements-file-after-pip-upgrade-to-pip-10-x-x
 with pathlib.Path('requirements.txt').open() as requirements_txt:
     install_requires = [
         str(requirement)
