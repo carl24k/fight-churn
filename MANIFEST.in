@@ -1,0 +1,3 @@
+include *.py
+recursive-include fightchurn/listings *.py *.json *.sql
+include README.md

@@ -15,7 +15,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="fightchurn",
-    version="0.0.1",
+    version="0.0.15",
     author="Carl Gold",
     author_email="carl24k@fightchurnwithdata.com",
     description="Code from the book Fighting Churn With Data",
@@ -30,8 +30,12 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    package_data={'fightchurn' : ['fightchurn/listings/conf/*.json',
+                                  'fightchurn/listings/*/*.sql']},
+    include_package_data=True,
     packages=['fightchurn',
               'fightchurn.listings',
+              'fightchurn.listings.conf',
               'fightchurn.listings.chap3',
               'fightchurn.listings.chap5',
               'fightchurn.listings.chap6',

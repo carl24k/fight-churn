@@ -7,6 +7,7 @@ import re
 import os
 import sys
 import argparse
+from argparse import Namespace
 
 """
 ####################################################################################################
@@ -20,7 +21,6 @@ parser.add_argument("--listing", nargs='*', type=int, help="The number of the li
 parser.add_argument("--insert", action="store_true", default=False,help="Use the insert version of a metric SQL, if available")
 parser.add_argument("--version", nargs='*', help="Alternative listing _parameter_ verions (optional)",default=[])
 
-
 """
 ####################################################################################################
 Constants
@@ -31,6 +31,9 @@ pd.set_option('display.width', 1000)
 print_num_rows=10
 
 reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter','full_name')
+
+
+
 
 """
 ####################################################################################################
@@ -92,7 +95,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
     :return:
     """
 
-    with open('../../listings/chap%d/%s.sql' % (chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
+    with open(f'%s/listings/chap%d/%s.sql' % (os.path.abspath(os.path.dirname(__file__)),chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
 
         db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
 
@@ -203,7 +206,7 @@ def load_and_check_listing_params(args):
     vers_key = f'v{version}' if version else None
 
     # Error if there is no file for this schema
-    conf_path='../../listings/conf/%s_listings.json' % schema
+    conf_path=f'{os.path.abspath(os.path.dirname(__file__))}/listings/conf/%s_listings.json' % schema
     if not os.path.isfile(conf_path):
         print(f'No params {conf_path} to run listings on schema {schema}')
         exit(-1)
@@ -284,9 +287,27 @@ The main script for running Fight Churn With Data examples.
 This will loop over multiple listings and versions in one chapter.
 """
 
-if __name__ == "__main__":
-    args, _ = parser.parse_known_args()
+def set_churn_environment(db, user,password):
+    print(f"Setting Environment Variables user={user} for db={db}")
+    os.environ['CHURN_DB']=db
+    os.environ['CHURN_DB_USER']=user
+    os.environ['CHURN_DB_PASS']=password
 
+
+def run_listing(chapter=2, listing=1, version=[],schema='socialnet7',insert=False):
+    if isinstance(listing,int):
+        listing = [listing]
+    if isinstance(version,int):
+        version = [version]
+    args = Namespace(chapter=chapter,
+                     listing=listing,
+                     version=version,
+                     schema=schema,
+                     insert=insert)
+    run_churn_listing_from_args(args)
+
+
+def run_churn_listing_from_args(args):
     for l in args.listing:
         list_args = copy(args)
         list_args.listing = l
@@ -298,3 +319,8 @@ if __name__ == "__main__":
                 vers_args = copy(list_args)
                 vers_args.version =v
                 run_one_listing(vers_args)
+
+if __name__ == "__main__":
+    args, _ = parser.parse_known_args()
+    run_churn_listing_from_args(args)
+

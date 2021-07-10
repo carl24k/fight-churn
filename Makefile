@@ -6,6 +6,7 @@ build:
 clean:
 	rm -rf dist
 	rm -rf build
+	rm -rf fightchurn.egg-info
 
 test:
 	python3 -m twine upload --repository testpypi dist/*
