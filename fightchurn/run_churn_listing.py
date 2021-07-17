@@ -124,10 +124,10 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
             res = db.all(sql)
             df = pd.DataFrame(res)
             if  mode  == 'save':
-                save_path = '../../../fight-churn-output/' + schema+ '/'
+                save_path = os.path.join(os.getenv('CHURN_OUT_DIR'), schema)
                 os.makedirs(save_path,exist_ok=True)
-                csv_path= save_path + schema+ '_' + name.replace(
-                    'listing_{}_{}_'.format(chapter,listing),'')
+                file_name = schema+ '_' + name.replace('listing_{}_{}_'.format(chapter,listing),'')
+                csv_path= os.path.join(save_path, file_name)
                 if save_ext:
                     csv_path = csv_path + '_' + save_ext
                 csv_path = csv_path + '.csv'
@@ -170,7 +170,10 @@ def python_listing(chapter, listing, name, param_dict):
     example_params = {}
     for k in param_dict.keys():
         if k in reserved_param_keywords: continue
-        example_params[k]=param_dict[k]
+        if not k.endswith('path'):
+            example_params[k]=param_dict[k]
+        else:
+            example_params[k]=os.path.join(os.getenv('CHURN_OUT_DIR'), param_dict[k])
 
     # Load the listing name module
     module_name = _full_listing_name(chapter, listing, name)
@@ -288,11 +291,13 @@ The main script for running Fight Churn With Data examples.
 This will loop over multiple listings and versions in one chapter.
 """
 
-def set_churn_environment(db, user,password):
+def set_churn_environment(db, user,password,output_dir='../../../fight-churn-output/'):
     print(f"Setting Environment Variables user={user} for db={db}")
     os.environ['CHURN_DB']=db
     os.environ['CHURN_DB_USER']=user
     os.environ['CHURN_DB_PASS']=password
+    os.environ['CHURN_OUT_DIR']=output_dir
+    os.makedirs(output_dir,exist_ok=True)
 
 
 def run_listing(chapter=2, listing=1, version=[],schema='socialnet7',insert=False):
