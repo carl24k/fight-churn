@@ -173,7 +173,8 @@ def python_listing(chapter, listing, name, param_dict):
         example_params[k]=param_dict[k]
 
     # Load the listing name module
-    full_name = _full_listing_name(chapter, listing, name)
+    module_name = _full_listing_name(chapter, listing, name)
+    full_name = f'fightchurn.listings.chap{chapter}.{module_name}'
     mod = import_module(full_name)
 
     ex_fun = getattr(mod, name,None)

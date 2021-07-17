@@ -15,7 +15,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="fightchurn",
-    version="0.0.15",
+    version="0.0.16",
     author="Carl Gold",
     author_email="carl24k@fightchurnwithdata.com",
     description="Code from the book Fighting Churn With Data",
