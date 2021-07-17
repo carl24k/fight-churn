@@ -3,8 +3,9 @@ import pandas as pd
 import numpy as np
 from math import log, exp
 from random import uniform
+import os
 
-from customer import Customer
+from fightchurn.datagen.customer import Customer
 
 class UtilityModel:
 
@@ -29,7 +30,8 @@ class UtilityModel:
         :param behavior_model: The behavior model that this utility function works withy
         '''
         self.name=name
-        data=pd.read_csv('../conf/'+name+'_utility.csv',index_col=0)
+        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
+        data=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
         self.linear_utility=data['util']
         self.behave_names=data.index.values
 

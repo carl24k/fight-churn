@@ -10,11 +10,10 @@ import sys
 import tempfile
 import pandas as pd
 import numpy as np
-
-from customer import Customer
-from behavior import GaussianBehaviorModel, FatTailledBehaviorModel
-from utility import UtilityModel
 import psycopg2 as post
+
+from fightchurn.datagen.behavior import FatTailledBehaviorModel
+from fightchurn.datagen.utility import UtilityModel
 
 
 class ChurnSimulation:
@@ -37,7 +36,8 @@ class ChurnSimulation:
         self.monthly_growth_rate = 0.1
 
         self.util_mod=UtilityModel(self.model_name)
-        behavior_versions = glob.glob('../conf/'+self.model_name+'_*.csv')
+        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
+        behavior_versions = glob.glob(local_dir+self.model_name+'_*.csv')
         self.behavior_models = {}
         self.model_list = []
         for b in behavior_versions:
@@ -48,12 +48,13 @@ class ChurnSimulation:
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
+        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         if len(self.behavior_models)>1:
-            self.population_percents = pd.read_csv('../conf/'+self.model_name + '_population.csv',index_col=0)
+            self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
         self.util_mod.setChurnScale(self.behavior_models,self.population_percents)
         self.population_picker = np.cumsum(self.population_percents)
 
-        self.country_lookup = pd.read_csv('../conf/'+self.model_name + '_country.csv')
+        self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
 
         self.subscription_count = 0
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),'{}_tmp_sub.csv'.format(self.model_name))
@@ -227,20 +228,21 @@ class ChurnSimulation:
 
         self.remove_tmp_files()
 
+def run_churn_simulation(model_name, start_date, end_date, init_customers, random_seed=None):
+    if random_seed is not None:
+        random.seed(random_seed) # for random
+    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers,random_seed)
+    churn_sim.run_simulation()
+
 if __name__ == "__main__":
 
     model_name = 'socialnet7'
     if len(sys.argv) >= 2:
         model_name = sys.argv[1]
 
-    start = date(2020, 1, 1)
-    end = date(2020, 6, 1)
-    init = 10000
+    start_date = date(2020, 1, 1)
+    end_date = date(2020, 6, 1)
+    init_customers = 10000
 
-    random_seed = None
-    if random_seed is not None:
-        random.seed(random_seed) # for random
 
-    churn_sim = ChurnSimulation(model_name, start, end, init,random_seed)
-    churn_sim.run_simulation()
-
+    run_churn_simulation(model_name, start_date, end_date, init_customers, random_seed)

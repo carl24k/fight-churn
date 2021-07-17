@@ -5,7 +5,7 @@ import numpy as np
 import os
 from shutil import copyfile
 
-from customer import Customer
+from fightchurn.datagen.customer import Customer
 
 def is_pos_def(x):
     '''
@@ -68,7 +68,8 @@ class GaussianBehaviorModel(BehaviorModel):
         '''
         self.name=name
         self.version=version
-        model_path='../conf/'+name + '_' + version + '.csv'
+        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
+        model_path= local_dir +name + '_' + version + '.csv'
         model=pd.read_csv(model_path)
         model.set_index(['behavior'],inplace=True)
         self.behave_means=model['mean']
