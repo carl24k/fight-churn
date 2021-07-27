@@ -167,7 +167,7 @@ appropriate settings in your environment variable, section 1.2.2.3 below):
 After you have cloned this repository
 
 1. launch PyCharm and go to the menu *File* / *New Project*
-1. In the file section window, select the folder for the repo.  Leave it set to "Create New Virtual environment for htis project"
+1. In the file section window, select the folder for the repo.  Leave it set to "Create New Virtual environment for this project"
 1. Click **Create**
 1. It should say "The directory ... is not empty.  Would you like to create a project from existing sources?"  Click Yes
 
