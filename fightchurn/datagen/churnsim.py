@@ -245,4 +245,4 @@ if __name__ == "__main__":
     init_customers = 10000
 
 
-    run_churn_simulation(model_name, start_date, end_date, init_customers, random_seed)
+    run_churn_simulation(model_name, start_date, end_date, init_customers)
