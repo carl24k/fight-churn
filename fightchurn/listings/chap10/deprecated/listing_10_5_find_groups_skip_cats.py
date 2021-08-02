@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from listing_6_4_find_metric_groups import find_correlation_clusters, relabel_clusters, make_load_matrix, save_load_matrix
+from fightchurn.listings.chap6.listing_6_4_find_metric_groups import find_correlation_clusters, relabel_clusters, make_load_matrix, save_load_matrix
 
 def find_groups_skip_cats(data_set_path,group_corr_thresh=0.5):
 

@@ -1,8 +1,8 @@
 import pandas as pd
 import os
 import pickle
-from listing_8_4_rescore_metrics import reload_churn_data
-from listing_8_5_churn_forecast import forecast_histogram
+from fightchurn.listings.chap8.listing_8_4_rescore_metrics import reload_churn_data
+from fightchurn.listings.chap8.listing_8_5_churn_forecast import forecast_histogram
 
 def churn_forecast_xgb(data_set_path):
 

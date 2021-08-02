@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-from listing_10_2_category_churn_cohorts import category_churn_summary, category_churn_plot, prepare_category_data
+from fightchurn.listings.chap10.listing_10_2_category_churn_cohorts import category_churn_summary, category_churn_plot, prepare_category_data
 
 
 

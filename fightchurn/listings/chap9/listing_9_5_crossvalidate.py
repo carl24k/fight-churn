@@ -7,8 +7,8 @@ from sklearn.metrics import make_scorer
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 
-from listing_8_2_logistic_regression import prepare_data
-from listing_9_2_top_decile_lift import calc_lift
+from fightchurn.listings.chap8.listing_8_2_logistic_regression import prepare_data
+from fightchurn.listings.chap9.listing_9_2_top_decile_lift import calc_lift
 
 
 def crossvalidate(data_set_path,n_test_split):

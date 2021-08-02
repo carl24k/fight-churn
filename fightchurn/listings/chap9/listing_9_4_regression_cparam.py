@@ -1,6 +1,6 @@
 from sklearn.linear_model import LogisticRegression
-from listing_8_2_logistic_regression import prepare_data, save_regression_model
-from listing_8_2_logistic_regression import save_regression_summary, save_dataset_predictions
+from fightchurn.listings.chap8.listing_8_2_logistic_regression import prepare_data, save_regression_model
+from fightchurn.listings.chap8.listing_8_2_logistic_regression import save_regression_summary, save_dataset_predictions
 
 def regression_cparam(data_set_path, C_param):
     X,y = prepare_data(data_set_path)

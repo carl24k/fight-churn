@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
+from fightchurn.listings.chap7.listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 
 def clip_hi_cols(data, hi_vals):
     for col in hi_vals.index.values:

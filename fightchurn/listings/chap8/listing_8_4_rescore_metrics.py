@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
-from listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
+from fightchurn.listings.chap7.listing_7_5_fat_tail_scores import transform_fattail_columns, transform_skew_columns
 
 def rescore_metrics(data_set_path):
 

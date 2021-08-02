@@ -2,7 +2,7 @@ import os
 import pickle
 import shap
 import matplotlib.pyplot as plt
-from listing_8_4_rescore_metrics import reload_churn_data
+from fightchurn.listings.chap8.listing_8_4_rescore_metrics import reload_churn_data
 
 def shap_explain_xgb(data_set_path, plot_n=None):
 

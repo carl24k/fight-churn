@@ -8,6 +8,9 @@ import os
 import sys
 import argparse
 from argparse import Namespace
+from fightchurn.datagen import churndb
+from fightchurn.datagen import churnsim
+from datetime import date
 
 """
 ####################################################################################################
@@ -325,6 +328,154 @@ def run_churn_listing_from_args(args):
                 vers_args = copy(list_args)
                 vers_args.version =v
                 run_one_listing(vers_args)
+
+
+def run_standard_simulation(schema='socialnet7', init_customers=10000):
+    churndb.setup_churn_db(schema)
+    start_date = date(2020, 1, 1)
+    end_date = date(2020, 6, 1)
+    churnsim.run_churn_simulation(schema, start_date=start_date, end_date=end_date,
+                                                     init_customers=init_customers)
+
+
+def run_everything(db, user,password,output_dir='../../../fight-churn-output/',init_customers=500,schema='socialnet7'):
+    set_churn_environment(db, user,password,output_dir)
+    run_standard_simulation(schema=schema,init_customers=init_customers)
+    run_churn_rates(schema)
+    run_metrics(schema)
+    run_analytics(schema)
+    run_forecasting(schema)
+    run_categorical_listings(schema)
+
+
+def run_churn_rates(schema):
+    # churn rate
+    for list_num in range(1,6):
+        run_listing(2, list_num, schema=schema)
+
+
+def run_metrics(schema):
+    # simple counts
+    for list_num in range(1,3):
+        run_listing(3, list_num, schema=schema)
+
+    # event QA
+    run_listing(3, 11, schema=schema)
+    for vers_num in range(1,9):
+        run_listing(3, 9, version=vers_num, schema=schema)
+        run_listing(3, 10, version=vers_num, schema=schema)
+
+    # standard metric names
+    for vers_num in range(1,12):
+        run_listing(3, 4, version=vers_num, schema=schema)
+
+    # Account tenure metric
+    run_listing(3, 13, schema=schema)
+
+    # standard metrics
+    for vers_num in range(1,9):
+        run_listing(3, 3, version=vers_num, schema=schema)
+        # metric QA
+        run_listing(3, 6, version=vers_num, schema=schema)
+        run_listing(3, 7, version=vers_num, schema=schema)
+
+    # Metric coverage
+    run_listing(3, 8, schema=schema)
+
+    # non-versioned chap-7 inserts: total, change, scaled v1
+    for list_num in [3,4,6,7]:
+        run_listing(7, list_num, insert=True, schema=schema)
+
+    # versioned scaled metrics
+    for vers_num in range(1,3):
+        run_listing(7, 8, version=vers_num, insert=True, schema=schema)
+
+    ## ratios
+    for vers_num in range(1,8):
+        run_listing(7, 1, version=vers_num, insert=True, schema=schema)
+
+
+def run_analytics(schema):
+
+    # Calculate active periods and observation dates
+    for list_num in [1,2,4,5]:
+        run_listing(4, list_num, schema=schema)
+
+    # First dataset stats & scores
+    for list_num in [2,3]:
+        run_listing(5, list_num, schema=schema)
+
+    ## pair scatter plots
+    for vers_num in range(1,17):
+        run_listing(6, 1, version=vers_num, schema=schema)
+
+    # Grouping data set 1
+    for list_num in [2,4,3,5]:
+        run_listing(6, list_num, schema=schema)
+
+    # Dataset2 Extract & Processing
+    for list_num in range(0,7):
+        run_listing(8, list_num, schema=schema)
+
+    # Current Stats
+    for vers_num in range(7,10):
+        run_listing(5, 2, version=vers_num, schema=schema)
+
+
+def run_forecasting(schema):
+    # Accuracy code test
+    for list_num in range(1,4):
+        run_listing(9, list_num, schema=schema)
+
+    # Levels of C param
+    for vers_num in range(1,4):
+        run_listing(9, 4, version=vers_num, schema=schema)
+
+    # Cross validation
+    for list_num in range(5,7):
+        run_listing(9, list_num, schema=schema)
+        run_listing(9, list_num, version=1, schema=schema)
+
+    # Forecast xgb
+    run_listing(9, 7, schema=schema)
+
+
+def run_categorical_listings(schema):
+
+    # Categorical data
+    for list_num in [1,3,4]:
+        run_listing(10, list_num, schema=schema)
+
+    for vers_num in range(1,3):
+        run_listing(10, 2, version=vers_num, schema=schema)
+
+    # Re-prepare the non-dummy part of categorical data
+    run_listing(8, 1, version=3, schema=schema)
+
+    # Merge dummies & groupscores
+    run_listing(10, 5, schema=schema)
+    run_listing(6, 2, version=3, schema=schema)
+
+    #  Categorical cross valid / regression
+    for vers_num in range(2,4):
+        run_listing(9, 5, version=vers_num, schema=schema)
+    for vers_num in range(4,6):
+        run_listing(9, 4, version=vers_num, schema=schema)
+    run_listing(9, 6, version=2, schema=schema)
+
+    # Current Categorical data
+    for list_num in range(6,8):
+        run_listing(10, list_num, schema=schema)
+
+    # Categorical current forecast
+    run_listing(8, 5, version=2, schema=schema)
+    run_listing(9, 7, version=2, schema=schema)
+
+    # Cohorts (after all metrics & datasets generated)
+    for vers_num in range(1,18):
+        run_listing(5, 1, version=vers_num, schema=schema)
+
+
 
 if __name__ == "__main__":
     args, _ = parser.parse_known_args()

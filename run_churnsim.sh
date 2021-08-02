@@ -156,7 +156,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 # Current categorical data prep (call 4 and 5)
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 7
 
-# Categorical current foecast
+# Categorical current forecast
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 5 --version 2
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7 --version 2
 

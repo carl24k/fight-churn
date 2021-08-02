@@ -1,6 +1,6 @@
 import pandas as pd
 
-from listing_10_3_grouped_category_cohorts import group_category_column
+from fightchurn.listings.chap10.listing_10_3_grouped_category_cohorts import group_category_column
 
 def dummy_variables(data_set_path, groups={},current=False):
 
