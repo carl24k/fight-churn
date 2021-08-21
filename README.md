@@ -17,6 +17,13 @@ This page contains the most up to date setup instructions, as well as informatio
 [1.2 Postgres](#postgres)    
 [1.2.1 Database Setup](#createdb)
 [2 Quickstart With Python Package](#package)
+[2.1 Create a virtual environment](#virtual)
+[2.2 Install the fightchurn package](#fightchurn)
+[2.3 Create a directory for output](#output)
+[2.4 Start the Python virtual environment](#start)
+[2.5 Set the churn environment variables](#envvar)
+[2.6 Run the data simulation](#simulate)
+[2.7 Run code listings](#run)
 
 **Links to Other Setup Instructions**  
 
@@ -29,7 +36,7 @@ This page contains the most up to date setup instructions, as well as informatio
 ---
 <a name="start"/>
 
-## Getting Started
+## 0 Getting Started
 
 Note from the author: These are basic startup/setup instructions that I think should work for most people using either shell Python, Jupyter Notebook, or an IDE, on either Mac or Windows.  I also want to apologize in advance because I am neither an expert in PostgreSQL nor an expert in Python, but I am about to give a lot of advice on how to setup and use these technologies - if you find I am not doing things the best way, or just not how you would have done it, please be patient.  Same goes for the rudimentary state of some of the code - I'm doing the best I can with the time I've got.  If you want to make things better please help help out! :)
 
@@ -60,7 +67,9 @@ Recommended:
 
 ---
 <a name="pyton"/>
+
 #### 1.1 Python 3
+
 If you need help installing Python 3, you can refer to this page for Mac:
 * https://docs.python-guide.org/starting/install3/osx/
 
@@ -84,8 +93,11 @@ The only packages used that have version dependencies are the `xgoost` and and `
 Please create an issue in the repository if you find any other instances of package or version incompatibilities.
 
 ---
+
 <a name="postgres"/>
+
 #### 1.2 PostgreSQL
+
 To install PostgreSQL for Mac following these instructions:
 
 * https://postgresapp.com/downloads.html
@@ -149,11 +161,30 @@ appropriate settings in your environment variable, section 1.2.2.3 below):
 
 <a name="package"/>
 
-## Quickstart With Python Package
+## 2 Quickstart With Python Package
+
+
+---
+<a name="#virtual"/>
+
+### 2.1 Create a virtual environment
+
+```shell
+python3 -m venv churn_env
+```
+
 
 
 
 ---
+<a name="#fightchurn"/>
+
+### 2.2 Install the fightchurn package
+
+```shell
+pip install fightchurn
+```
+
 __**Windows XG-Boost Warning:**__ At the time of this writing there have been problems reported 
  installing the xgboost package on  Windows: https://discuss.xgboost.ai/t/pip-install-xgboost-isnt-working-on-windows-x64/57.
 If you are unable to install xgboost with pip, then you can try to install using the instructions
@@ -167,7 +198,74 @@ still run all the code in the book except for the 2nd half of chapter 9 without 
 
 
 
+
 ---
+
+<a name="#output"/>
+
+### 2.3 Create a directory for output
+
+```shell
+mkdir my_churn_output_folder
+```
+
+
+
+---
+<a name="#start"/>
+
+
+### 2.4 Start the Python virtual environment
+
+```shell
+source churn_env/bin/activate
+python
+```
+
+
+
+---
+
+<a name="#envvar"/>
+
+
+### 2.5 Set the churn environment variables
+
+```python
+from fightchurn import run_churn_listing
+```
+
+### 
+
+```python
+run_churn_listing.set_churn_environment('churn','user','password','/path/to/my_churn_output_folder')
+```
+
+
+
+---
+<a name="#simulate"/>
+
+### 2.6 Run the data simulation
+
+
+```python
+run_churn_listing.run_standard_simulation(init_customers=10000)
+```
+
+
+---
+<a name="#run"/>
+
+### 2.7 Run code listings
+
+
+```python
+run_churn_listing.run_listing(2,1)
+```
+
+
+
 ---
 
 ## Authors
