@@ -21,8 +21,8 @@ This page contains the most up to date setup instructions, as well as informatio
 [2.1 Create a virtual environment](#virtual)  
 [2.2 Install the fightchurn package](#fightchurn)  
 [2.3 Create a directory for output](#output)  
-[2.4 Start the Python virtual environment](#start)  
-[2.5 Import the run_churn_listing_module](#import)
+[2.4 Start the Python virtual environment](#start)   
+[2.5 Import the run_churn_listing_module](#import)  
 [2.6 Set the churn environment variables](#envvar)  
 [2.7 Run the data simulation](#simulate)  
 [2.8 Run code listings](#run)  
@@ -170,14 +170,12 @@ appropriate settings in your environment variable, section 1.2.2.3 below):
 
 <a name="#virtual"/>
 
+
 ### 2.1 Create a virtual environment
 
 ```shell
 python3 -m venv churn_env
 ```
-
-
-
 
 ---
 
