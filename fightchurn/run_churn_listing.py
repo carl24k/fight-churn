@@ -267,7 +267,7 @@ def load_and_check_listing_params(args):
 
 
 
-def run_one_listing(args):
+def run_listing_from_args(args):
     """
     Load the dictionary of parameters for this schema
     Check the type of the listing (SQL or Python) and call the executor function
@@ -322,12 +322,12 @@ def run_churn_listing_from_args(args):
         list_args.listing = l
         if len(args.version)==0:
             list_args.version=None
-            run_one_listing(list_args)
+            run_listing_from_args(list_args)
         else:
             for v in args.version:
                 vers_args = copy(list_args)
                 vers_args.version =v
-                run_one_listing(vers_args)
+                run_listing_from_args(vers_args)
 
 
 def run_standard_simulation(schema='socialnet7', init_customers=10000):
