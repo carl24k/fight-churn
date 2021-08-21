@@ -56,7 +56,7 @@ folder nmaed `fight-churn-output` that is located adjacent to the repository fol
 like this:
 
 
-![Event QA Output](/Users/carl/Documents/churn/fight-churn/readme_files/event_qa.png)
+![Event QA Output](event_qa.png)
 
 
 You can also configure the QA to run on numeric event properties, if you events have any.  See the `event_properties`
@@ -305,7 +305,7 @@ Note that the metric QA uses the metric configuration to run - it only runs on m
 are listed in the configuration and takes the start and end dates for the QA from the configuration.
 
 
-![Metric QA Output](/Users/carl/Documents/churn/fight-churn/readme_files/metric_qa.png)
+![Metric QA Output](metric_qa.png)
 
 [(top)](#top)  
 
