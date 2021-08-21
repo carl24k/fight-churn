@@ -18,7 +18,7 @@ This page contains the most up to date setup instructions, as well as informatio
 [1.2 Postgres](#postgres)  
 [1.2.1 Database Setup](#createdb)  
 [2 Quickstart With Python Package](#package)  
-[2.1 Create a virtual environment](#2.1-create-a-virtual-environment)  
+[2.1 Create a virtual environment](#virtual)  
 [2.2 Install the fightchurn package](#fightchurn)  
 [2.3 Create a directory for output](#output)  
 [2.4 Start the Python virtual environment](#start)   
@@ -168,7 +168,7 @@ appropriate settings in your environment variable, section 1.2.2.3 below):
 
 ---
 
-<a name="#virtual"/>
+<a name="virtual"/>
 
 
 ### 2.1 Create a virtual environment
@@ -240,7 +240,7 @@ from fightchurn import run_churn_listing
 
 ---
 
-<a name="#envvar"/>
+<a name="envvar"/>
 
 
 ### 2.6  Set the churn environment variables
@@ -254,7 +254,7 @@ run_churn_listing.set_churn_environment('churn','user','password','/path/to/my_c
 
 ---
 
-<a name="#simulate"/>
+<a name="simulate"/>
 
 ### 2.7 Run the data simulation
 
@@ -266,7 +266,7 @@ run_churn_listing.run_standard_simulation(init_customers=10000)
 
 ---
 
-<a name="#run"/>
+<a name="run"/>
 
 ### 2.8 Run code listings
 
