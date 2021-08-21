@@ -11,19 +11,20 @@ This is code for the book "***Fighting Churn With Data: Science and strategy for
 This page contains the most up to date setup instructions, as well as information about some extra code that is mentioned in the book.
 
 **Quick Start Setup Instructions**  
+
 [0 Getting Started](#start)  
-[1 Prerequisites](#prereq)
-[1.1 PYthon 3](#python)
-[1.2 Postgres](#postgres)    
-[1.2.1 Database Setup](#createdb)
-[2 Quickstart With Python Package](#package)
-[2.1 Create a virtual environment](#virtual)
-[2.2 Install the fightchurn package](#fightchurn)
-[2.3 Create a directory for output](#output)
-[2.4 Start the Python virtual environment](#start)
-[2.5 Set the churn environment variables](#envvar)
-[2.6 Run the data simulation](#simulate)
-[2.7 Run code listings](#run)
+[1 Prerequisites](#prereq)  
+[1.1 PYthon 3](#python)  
+[1.2 Postgres](#postgres)  
+[1.2.1 Database Setup](#createdb)  
+[2 Quickstart With Python Package](#package)  
+[2.1 Create a virtual environment](#virtual)  
+[2.2 Install the fightchurn package](#fightchurn)  
+[2.3 Create a directory for output](#output)  
+[2.4 Start the Python virtual environment](#start)  
+[2.5 Set the churn environment variables](#envvar)  
+[2.6 Run the data simulation](#simulate)  
+[2.7 Run code listings](#run)  
 
 **Links to Other Setup Instructions**  
 
