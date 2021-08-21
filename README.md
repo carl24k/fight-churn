@@ -18,7 +18,7 @@ This page contains the most up to date setup instructions, as well as informatio
 [1.2 Postgres](#postgres)  
 [1.2.1 Database Setup](#createdb)  
 [2 Quickstart With Python Package](#package)  
-[2.1 Create a virtual environment](#2.1-Create-a-virtual-environment)  
+[2.1 Create a virtual environment](#2.1-create-a-virtual-environment)  
 [2.2 Install the fightchurn package](#fightchurn)  
 [2.3 Create a directory for output](#output)  
 [2.4 Start the Python virtual environment](#start)   
