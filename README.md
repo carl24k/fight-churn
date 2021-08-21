@@ -179,7 +179,7 @@ python3 -m venv churn_env
 
 ---
 
-<a name="#fightchurn"/>
+<a name="fightchurn"/>
 
 ### 2.2 Install the fightchurn package
 
@@ -203,7 +203,7 @@ still run all the code in the book except for the 2nd half of chapter 9 without 
 
 ---
 
-<a name="#output"/>
+<a name="output"/>
 
 ### 2.3 Create a directory for output
 
@@ -215,7 +215,7 @@ mkdir my_churn_output_folder
 
 ---
 
-<a name="#start"/>
+<a name="start"/>
 
 
 ### 2.4 Start the Python virtual environment
@@ -229,7 +229,7 @@ python
 
 ---
 
-<a name="#import"/>
+<a name="import"/>
 
 
 ### 2.5 Import the run_churn_listing_module
