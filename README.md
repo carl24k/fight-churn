@@ -22,9 +22,10 @@ This page contains the most up to date setup instructions, as well as informatio
 [2.2 Install the fightchurn package](#fightchurn)  
 [2.3 Create a directory for output](#output)  
 [2.4 Start the Python virtual environment](#start)  
-[2.5 Set the churn environment variables](#envvar)  
-[2.6 Run the data simulation](#simulate)  
-[2.7 Run code listings](#run)  
+[2.5 Import the run_churn_listing_module](#import)
+[2.6 Set the churn environment variables](#envvar)  
+[2.7 Run the data simulation](#simulate)  
+[2.8 Run code listings](#run)  
 
 **Links to Other Setup Instructions**  
 
@@ -166,6 +167,7 @@ appropriate settings in your environment variable, section 1.2.2.3 below):
 
 
 ---
+
 <a name="#virtual"/>
 
 ### 2.1 Create a virtual environment
@@ -178,6 +180,7 @@ python3 -m venv churn_env
 
 
 ---
+
 <a name="#fightchurn"/>
 
 ### 2.2 Install the fightchurn package
@@ -213,6 +216,7 @@ mkdir my_churn_output_folder
 
 
 ---
+
 <a name="#start"/>
 
 
@@ -227,16 +231,22 @@ python
 
 ---
 
-<a name="#envvar"/>
+<a name="#import"/>
 
 
-### 2.5 Set the churn environment variables
+### 2.5 Import the run_churn_listing_module
 
 ```python
 from fightchurn import run_churn_listing
 ```
 
-### 
+---
+
+<a name="#envvar"/>
+
+
+### 2.6  Set the churn environment variables
+
 
 ```python
 run_churn_listing.set_churn_environment('churn','user','password','/path/to/my_churn_output_folder')
@@ -245,9 +255,10 @@ run_churn_listing.set_churn_environment('churn','user','password','/path/to/my_c
 
 
 ---
+
 <a name="#simulate"/>
 
-### 2.6 Run the data simulation
+### 2.7 Run the data simulation
 
 
 ```python
@@ -256,16 +267,15 @@ run_churn_listing.run_standard_simulation(init_customers=10000)
 
 
 ---
+
 <a name="#run"/>
 
-### 2.7 Run code listings
+### 2.8 Run code listings
 
 
 ```python
 run_churn_listing.run_listing(2,1)
 ```
-
-
 
 ---
 
