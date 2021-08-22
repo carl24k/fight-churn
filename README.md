@@ -10,11 +10,15 @@ This is code for the book "***Fighting Churn With Data: Science and strategy for
 
 This page contains the most up to date setup instructions, as well as information about some extra code that is mentioned in the book.
 
+*WARNING TO PYPI USERS: None of the links or images in this document work on the pypi.org website! 
+[To 
+use the links in this README view it on github](https://github.com/carl24k/fight-churn/tree/20210605_packaging#fight-churn).*
+
 **Quick Start Setup Instructions**  
 
 [0 Getting Started](#start)  
 [1 Prerequisites](#prereq)  
-[1.1 PYthon 3](#python)  
+[1.1 Python 3](#python)  
 [1.2 Postgres](#postgres)  
 [1.2.1 Database Setup](#createdb)  
 [2 Quickstart With Python Package](#package)  
@@ -27,12 +31,16 @@ This page contains the most up to date setup instructions, as well as informatio
 [2.7 Run the data simulation](#simulate)  
 [2.8 Run code listings](#run)  
 
-**Links to Other Setup Instructions**  
+**Advanced Setup Instructions**  
 
 - [Notebook Setup](readme_files/notebook.md)
 - [Developers IDE Setup](readme_files/ide.md)
 - [Command Line Setup](cmdline.md)
 - [Extras](readme_files/extras.md)
+
+*WARNING TO PYPI USERS: None of the links or images in this document work on the pypi.org website! 
+[To 
+use the links in this README view it on github](https://github.com/carl24k/fight-churn/tree/20210605_packaging#fight-churn).*
 
 
 ---
