@@ -20,11 +20,11 @@ import sys
 
 You should see a bunch of outputs about collecting and installing packages. Yours might not look exactly like this, but something along these lines...
 
-![note1_env_start](note1_env_start.png)
+![note1_env_start](./note1_env_start.png)
 
 After several minutes (depending on your sytem and internet speed) you should see this at the end of the install...
 
-![note2_env_done](/Users/carl/Documents/churn/fight-churn/readme_files/note2_env_done.png)
+![note2_env_done](./note2_env_done.png)
 
 (You might not see the warning about upgrading pip but if you do don't worry about it.)
 
@@ -76,7 +76,7 @@ The example is for a standard simulation of 10,000 customers. If you want to spe
 
 You will see output as follows...
 
-![note3_sim](note3_sim.png)
+![note3_sim](./note3_sim.png)
 
 This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 customer simulation.
 
@@ -93,7 +93,7 @@ run_listing(2,2)
 
 You should see output like this:
 
-![note4_churn](note4_churn.png)
+![note4_churn](./note4_churn.png)
 
 Explaining what you ares seeing there is beyond the scope of this README, thats what the book is about! But if you have gotten this far, then you have completed all the setup and you are ready to follow along with the book (or videos, however you are learning the code...)
 
