@@ -9,6 +9,7 @@ This is code for the book "***Fighting Churn With Data: Science and strategy for
 - https://www.manning.com/books/fighting-churn-with-data, the publisher (Manning Publications)'s page for the book
 - http://www.fightchurnwithdata.com, the author's blog site
 - https://www.twitch.tv/carl24k_datascience, the author's live stream
+- [The author's You Tube Channel, Fighting Churn With Data Science](https://www.youtube.com/channel/UCGVh5vcL4AAxErNdqJrr_Sw/featured)
 
 This page contains the most up to date setup instructions, as well as information about some extra code that is mentioned in the book.
 
