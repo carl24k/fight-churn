@@ -49,27 +49,18 @@ then it should look like this:
 ![PyCharm After Create](pycharm4_after_create.png)
 
 You will add more packages in a minute, but first finish with the project setup by going to the
-*Project Structure* section of the preferences:
-
+*Project Structure* section of the preferences. If it starts out blank, and click on "Add Content Root"
 
 ![PyCharm Project Structure](pycharm5_project_structure.png)
 
-Select each folder that contains python source code, and click on the button *Sources*
+Then select the root folder of the downloaded code. You should see some like this (at your own source code location):
+
+![pycharm5A_project_structure](pycharm5A_project_structure.png)
+
+Select the `fightchurn` folder that contains python source code, and click on the button *Sources*
 (with the blue folder next to it):
 
 ![PyCharm Select One Source Folder](pycharm6_source_select.png)
-
-You should select the following folders:
-
-* data-generation/py
-* listings/py
-  * listings/chap3
-  * listings/chap5
-  * listings/chap6
-  * listings/chap7
-  * listings/chap8
-  * listings/chap9
-  * listings/chap10
 
 When you are done your project preferences should look like this:
 
@@ -82,7 +73,7 @@ When you are done your project preferences should look like this:
 Now that you have created a Python project you can easily install the
 required packages.  
 
-1. Start by opening the Python file *data-generation/py/churndb.py* . At this point you are not going to use it, but PyCharm might not do the requirements for you if you don't have a Python file open. (Thats actually a weird PyCharm gotcha.) At this point it should give you a bunch of message about Installing requirements at the top. 
+1. Start by opening the Python file *fightchurn/datagen/churndb.py* . At this point you are not going to use it, but PyCharm might not do the requirements for you if you don't have a Python file open. (Thats actually a weird PyCharm gotcha.) At this point it should give you a bunch of message about Installing requirements at the top. 
 2. Now, go ahead and opena the file *requirements.txt* in the root project folder - these are the packages you will install.
 3. ![PyCharm Requirements](pycharm8_requirements.png)
 4. Notice that at the top it says: *Install requirements* - click on that and the click
@@ -112,7 +103,7 @@ In the Run/Debug Configuration dialog click the **+**  then **Python** to make a
 
 You will get an empty configuration, and the first thing to do is click on the Folder icon in the 
 script path text box and pick the script path.  The first script everyone will need to run is 
-*data-generation/py/churndb.py*, which creates a schema for an analysis.  After selecting this script, your
+*fightchurn/datagen/churndb.py*, which creates a schema for an analysis.  After selecting this script, your
 configuration should look like this, with both the script path and the working directory set to 
 wherever the script is on your system:
 
@@ -128,6 +119,7 @@ That button launches a dialog to add the environment variables.  You need to add
 1.  CHURN_DB  : the name of the database for your churn analysis schemas (step 1.2.1 above)
 1.  CHURN_DB_USER : the user name to login to the database
 1.  CHURN_DB_PASS : the password to login to the database
+1.  CHURN_OUT_DIR : the location of a directory where you want to write program output
 
 After setting these, your environment variable dialog should look something like this:
 
@@ -203,7 +195,7 @@ to hold it.  There is a python script in the folder *data-generation* for this. 
 following the instructions above then you have already made a Run Configuration for the script in
 PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just one more thing to do: name the schema that you will create.
 
-1. Open the file *data-generation/py/churndb.py*
+1. Open the file *fightchurn/datagen/churndb.py*
 1. Edit the schema name in the file to the name you want
    1. If you are loading your own data, name it whatever you want
    1. If you are generating simulated data, leave it set to the name **socialnet7** which is the default model for simulation
@@ -212,7 +204,7 @@ PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just on
 If everything works as planned you should see something like the following output:
 
 ```
-/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/data-generation/py/churndb.py
+/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/datagen/churndb.py
 Creating schema test (if not exists)...
 Creating table event (if not exists)
 Creating table subscription (if not exists)
@@ -243,13 +235,13 @@ Code for generating artificial data to run the code is in the directory `data-ge
 the near future there will be a blog post explaining how the simulation works, and the instructions
 here are limited to simply running the simulation.
 
-*  For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `data-generation/churndb.py` (which you ran above) to make a *new* run configuration  for the script `data-generation/churnsim.py` (which you are about to run.)  
+*  For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `fightchurn/datagen/churndb.py` (which you ran above) to make a *new* run configuration  for the script `fightchurn/datagen/churnsim.py` (which you are about to run.)  
 *  For *JupyterNotebooks* you should have already run the first 3 cells of the notebook `churn_db_sim.ipynb`. The simulation command is in the 4th cell of the notebook: `run churnsim.py`
 
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
 ```
-/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/data-generation/py/churnsim.py
+/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/datagen/churnsim.py
 Matrix is not positive semi-definite: Multiplying by transpose
 
 Creating 10000 initial customers for 2019-01-01 start date
@@ -331,7 +323,7 @@ someone else in your oganization.  That said, for those of you have your own dat
     1. event_type_id : integer
 * You can and should also export whatever additional data fields you have for your events that you think
   are important (amounts viewed or consumed, prices, content categories, etc.) Start by updating the the event table
-  schema in `data-generation/schema/create_event.sql` and recreate the table including your fields (You will have to 
+  schema in `fightchurn/datagen/schema/create_event.sql` and recreate the table including your fields (You will have to 
   drop the existing table that you created in step 1.3.1.)
 
 If you know how to import and export PostgreSQL data using the command line then have it.  Personally I did 
@@ -353,12 +345,12 @@ listing for the table you want to import into:
 
 ## 2 Running the Code from the Book Listings
 
-You can run the book listings with the python script `listings/py/run_churn_listing.py`.
+You can run the book listings with the python script `fightchurn/listings/run_churn_listing.py`.
 
 * This script reads SQL and Python source code, and either
   binds variables (for SQL) or passes parameters (for Python) and executes the code.  
 * The code (listings from the book) are in the folders `chapN` under the listings directory.
-* Exactly what listings to run and what parametes are used are set in JSON files in the directory `listings/conf`.
+* Exactly what listings to run and what parametes are used are set in JSON files in the directory `fightchurn/listings/conf`.
 
 So you can use this utility as you go through the book - if you want to actually run the code
 from any listing on your local database, this is the easiest way to do it.
@@ -371,17 +363,16 @@ from any listing on your local database, this is the easiest way to do it.
 
 ### 2.1 Running a Listing
 
-* For *PyCharm*, start by making a Run Configuration for the script `listings/py/run_churn_listing.py`, 
+* For *PyCharm*, start by making a Run Configuration for the script `fightchurn/listings/run_churn_listing.py`, 
   following the instructions in Section 1.2.2.4 (duplicate and modify one of your old configurations.)
 
-* For a *Jupyter Notebook*  change to the folder `listings/py` and use the notebook  `run_churn_listing.ipnyb`. Set the environment variables in the 2nd cell, as described above sin  Section 1.2.3.2. The comand to run a listing is in the 3rd cell.
 
 The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
 simulated data set `socialnet7`.  If you have created a simulated dataset named `socialnet7` as described
 in section 1.3.2 you can run your configuration as is and you should see a result like this:
 
 ```
-/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/listings/py/run_churn_listing.py
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/fightchurn/listings/run_churn_listing.py
 
 Running chap2 listing listing_2_1_net_retention
 SQL:
@@ -462,11 +453,9 @@ Alternatively, the script accepts command line parameters.  To run this way, pro
 
 **Note:**
 If you want to run listings from the command line, you also need to setup your Python virtual environment
-and add the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  
-Command line setup is not covered in this README at this time (but if you want to add such instructions please contribute!)
+and add the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  Command line setup is not covered in this README at this time (but if you want to add such instructions please contribute!)
 
-You can also set command line arguments in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command 
-line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
+You can also set command line arguments in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
 
 To see what listings are available to run, peruse the code in the chapter folders below `listing`.  But note that your
 schema must be *configured* to run each listing, as described in the next  section.  The `socialnet7` (default) schema
@@ -485,7 +474,7 @@ Your schema must be *configured* to run each listing.  The `socialnet7` (default
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
 configuration. Also if you want to change how the listings are run on `socialnet7` this section will explain how to do it.
 
-The configuration files are all in folder `listings/conf` and each schema has a configuration file that must have a name
+The configuration files are all in folder `fightchurn/listings/conf` and each schema has a configuration file that must have a name
 that is `<schema_name>_listings.json`.  So the configuration for the `socialnet7` data set is in the file `socialnet7_listings.json`.
 The configuration his a JSON with the following structure:
 

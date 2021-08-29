@@ -365,6 +365,10 @@ def run_metrics(schema):
         run_listing(3, 9, version=vers_num, schema=schema)
         run_listing(3, 10, version=vers_num, schema=schema)
 
+    insert_metrics(schema)
+
+
+def insert_metrics(schema):
     # standard metric names
     for vers_num in range(1,12):
         run_listing(3, 4, version=vers_num, schema=schema)
