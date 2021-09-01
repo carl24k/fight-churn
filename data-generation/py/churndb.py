@@ -22,8 +22,8 @@ if len(sys.argv) >= 2:
     schema_name = sys.argv[1]
 
 
-db = Postgres("postgres://%s:%s@localhost/%s" % (
-os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
+con_string = f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+db = Postgres(con_string)
 
 tables=['event','subscription','event_type','metric','metric_name','active_period','observation','active_week','account']
 

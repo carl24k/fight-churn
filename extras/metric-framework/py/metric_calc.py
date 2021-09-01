@@ -33,8 +33,7 @@ class MetricCalculator:
 
 		self.non_metrics=('date_range','event_properties')
 
-		self.URI="postgres://%s:%s@localhost/%s" % (
-			os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB'])
+		self.URI=  f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
 		self.db = Postgres(self.URI)
 
 		with open('../sql/qa_metric.sql', 'r') as myfile:

@@ -17,8 +17,8 @@ def remove_obsevations(schema):
     :return:
     '''
     print('Removing old active_period and observation entries...')
-    db = Postgres("postgres://%s:%s@localhost/%s" % (
-        os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB']))
+    con_string = f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+    db = Postgres(con_string)
     db.run('truncate table %s.active_period' % schema)
     db.run('truncate table %s.observation' % schema)
 
@@ -84,7 +84,8 @@ if __name__ == "__main__":
     sql = sql.replace(INTBIND,args.interval)
 
     # Generate the SQL that flattens the metrics (KEY STEP)
-    db = Postgres("postgres://%s:%s@localhost/%s" % (os.environ['CHURN_DB_USER'],os.environ['CHURN_DB_PASS'],os.environ['CHURN_DB']))
+    con_string = f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+    db = Postgres(con_string)
     sql = sql.replace(METRIC_BIND, generate_flat_metric_sql(db, args.schema))
     print('EXPORT SQL:\n----------\n' + sql + '\n----------\n')
     sql = sql.replace('\n', ' ')

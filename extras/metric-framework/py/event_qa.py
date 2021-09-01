@@ -45,8 +45,7 @@ class EventChecker:
 		os.makedirs(self.save_path,exist_ok=True)
 
 		# Make a sql connection with sqlalchmey
-		self.URI="postgres://%s:%s@localhost/%s" % (
-			os.environ['CHURN_DB_USER'], os.environ['CHURN_DB_PASS'], os.environ['CHURN_DB'])
+		self.URI=  f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
 		print('Saving results to %s' % self.save_path)
 		engine = sqlalchemy.create_engine(self.URI)
 		self.conn = engine.connect()
