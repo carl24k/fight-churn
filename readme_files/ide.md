@@ -1,6 +1,6 @@
 <a name="pycharm"/>
 
-##### Python IDE
+# Python IDE Setup
 
 If you are a developer who wants to work on the code directly, I recommend installing an Integrated Development Environment like PyCharm. PyCharm **Community Edition** was used by the author to write and run
 all the code for the book, so this README will include how to setup PyCharm (this is especially useful if you 
