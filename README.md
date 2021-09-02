@@ -314,10 +314,10 @@ Now you need to set a few enviroment variables. These are:
 run_churn_listing.set_churn_environment('churn','user','password','/path/to/my_churn_output_folder')
 ```
 
-This will print out a confirmation line as follows:
+This will print out a confirmation line like this:
 
 ```
-Setting Environment Variables user=carl for db=churn
+Setting Environment Variables user=your_user_name for db=churn, output path =`/path/to/my_churn_output_folder`
 ```
 
 ---
@@ -364,6 +364,8 @@ This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 
 
 ### 2.8 Run code listings
 
+#### 2.8.1 Running one linsting
+
 Now you are ready to run some code from the book! To do that you use the `run_listing` function that you previously imported. For examle, the following is chapter 2, listing 2:
 
 
@@ -396,6 +398,43 @@ Record(churn_rate=0.0570875665215288, retention_rate=0.942912433478471, n_start=
 ```
 
 Explaining what you ares seeing there is beyond the scope of this README, thats what the book is about! But if you have gotten this far, then you have completed all the setup and you are ready to follow along with the book (or videos, however you are learning the code...)
+
+
+#### 2.8.2 Running multiple listings
+
+In some parts of the book you might want to run more than one listing at once. To do this, 
+pass as a list for the listing argument. For example, to run all four chapter 2 churn 
+calculation listings try:
+
+
+```python
+run_churn_listing.run_listing(2,[1,2,3,4])
+```
+
+
+#### 2.8.3 Running listing versions
+
+Later in the book, some of the listings have multiple versions with different arguments. The 
+`run_listing` function also takes a version argument. For example, to run a query and plot the 
+results of the events per day for the first event created by the simulation, try the following:
+
+
+```python
+run_churn_listing.run_listing(chapter=3,listing=[9,10],version=1)
+```
+
+That command should save a plot like this to your output directory:
+
+![like_per_day](./readme_files/like_per_day.png)
+
+You can also run multiple versions at once:
+
+
+```python
+run_churn_listing.run_listing(chapter=3,listing=[9,10],version=[2,3])
+```
+
+For more information about what the code listings do, see the book Fighting Churn With Data.
 
 ***Advanced Setup Instructions***  
 

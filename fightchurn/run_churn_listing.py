@@ -296,7 +296,7 @@ This will loop over multiple listings and versions in one chapter.
 """
 
 def set_churn_environment(db, user,password,output_dir='../../../fight-churn-output/'):
-    print(f"Setting Environment Variables user={user} for db={db}")
+    print(f"Setting Environment Variables user={user} for db={db}, output path =`{output_dir}`")
     os.environ['CHURN_DB']=db
     os.environ['CHURN_DB_USER']=user
     os.environ['CHURN_DB_PASS']=password
