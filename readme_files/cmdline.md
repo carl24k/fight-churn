@@ -190,7 +190,7 @@ This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 
 
 ### 2.8 Run code listings
 
-#### 2.8.1 Running one linsting
+#### 2.8.1 Running one listing
 
 Now you are ready to run some code from the book! To do that you use the `run_listing` function that you previously imported. For examle, the following is chapter 2, listing 2:
 

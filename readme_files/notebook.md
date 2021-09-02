@@ -76,13 +76,15 @@ The example is for a standard simulation of 10,000 customers. If you want to spe
 
 You will see output as follows...
 
-![Setup environment and Run Simulation](./note3_sim.png)
+![Setup environment and Run Simulation](note3_sim.png)
 
 This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 customer simulation.
 
 <a name="run"/>
 
 ## 4 Run code listings from the book
+
+### 4.1 Running One Listing
 
 Now you are ready to run some code from the book! To do that you use the `run_listing` function that you previously imported. For examle, the following is chapter 2, listing 2:
 
@@ -93,9 +95,45 @@ run_listing(2,2)
 
 You should see output like this:
 
-![Run Listing](./note4_churn.png)
+![Run Listing](note4_churn.png)
 
 Explaining what you ares seeing there is beyond the scope of this README, thats what the book is about! But if you have gotten this far, then you have completed all the setup and you are ready to follow along with the book (or videos, however you are learning the code...)
+
+#### 4.2 Running multiple listings
+
+In some parts of the book you might want to run more than one listing at once. To do this, 
+pass as a list for the listing argument. For example, to run all four chapter 2 churn 
+calculation listings try:
+
+
+```python
+run_churn_listing.run_listing(2,[1,2,3,4])
+```
+
+
+#### 4.3 Running listing versions
+
+Later in the book, some of the listings have multiple versions with different arguments. The 
+`run_listing` function also takes a version argument. For example, to run a query and plot the 
+results of the events per day for the first event created by the simulation, try the following:
+
+
+```python
+run_churn_listing.run_listing(chapter=3,listing=[9,10],version=1)
+```
+
+That command should save a plot like this to your output directory:
+
+![like_per_day](/Users/carl/Documents/churn/fight-churn/readme_files/like_per_day.png)
+
+You can also run multiple versions at once:
+
+
+```python
+run_churn_listing.run_listing(chapter=3,listing=[9,10],version=[2,3])
+```
+
+For more information about what the code listings do, see the book Fighting Churn With Data.
 
 ------
 
