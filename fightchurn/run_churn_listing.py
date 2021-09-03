@@ -11,6 +11,7 @@ from argparse import Namespace
 from fightchurn.datagen import churndb
 from fightchurn.datagen import churnsim
 from datetime import date
+from typing import List, Union
 
 """
 ####################################################################################################
@@ -295,7 +296,19 @@ The main script for running Fight Churn With Data examples.
 This will loop over multiple listings and versions in one chapter.
 """
 
-def set_churn_environment(db, user,password,output_dir='../../../fight-churn-output/'):
+def set_churn_environment(db : str, user : str,password : str,output_dir : str ='../../../fight-churn-output/'):
+    '''
+    Setup the environment variables for running the book listing code. The required environment variables
+    are a database name, and the username and password for the database. An additional optional argument
+    is the directory to write program outputs to; if not provided it defaults to '../../../fight-churn-output/'
+    (to match the original edition, a directory in the same folder as the download directory.)
+    Note: The output directory will be created if it does not exist.
+    :param db: string name of the database
+    :param user: username for the database
+    :param password: password for the database
+    :param output_dir: folder to which program outputs will be written
+    :return:
+    '''
     print(f"Setting Environment Variables user={user} for db={db}, output path =`{output_dir}`")
     os.environ['CHURN_DB']=db
     os.environ['CHURN_DB_USER']=user
@@ -304,7 +317,17 @@ def set_churn_environment(db, user,password,output_dir='../../../fight-churn-out
     os.makedirs(output_dir,exist_ok=True)
 
 
-def run_listing(chapter=2, listing=1, version=[],schema='socialnet7',insert=False):
+def run_listing(chapter : int = 2, listing : Union[int,List[int]] = 1, version : Union[int,List[int]] = [],
+                schema:str = 'socialnet7', insert: bool =False):
+    '''
+    Run one or more listings from the book
+    :param chapter: integer chapter rnumber
+    :param listing: integer or list of integers listing number
+    :param version: integer or list of integers version number, for pre-configured parameters described in the book
+    :param schema: string name of the database schema from which data originates
+    :param insert: boolean flag to run the version of SQLs that inserts to the database in chapter 7
+    :return: None
+    '''
     if isinstance(listing,int):
         listing = [listing]
     if isinstance(version,int):
@@ -317,7 +340,13 @@ def run_listing(chapter=2, listing=1, version=[],schema='socialnet7',insert=Fals
     run_churn_listing_from_args(args)
 
 
-def run_churn_listing_from_args(args):
+def run_churn_listing_from_args(args : Namespace):
+    '''
+    Given arguments in Namespace, runs the loops to execute multiple listings or versions. Versions are run in
+    an inner loop, so if there are multiple listings and multiple versions the versions are run for each listing.
+    :param args:
+    :return:
+    '''
     for l in args.listing:
         list_args = copy(args)
         list_args.listing = l
@@ -332,6 +361,12 @@ def run_churn_listing_from_args(args):
 
 
 def run_standard_simulation(schema='socialnet7', init_customers=10000):
+    '''
+    Wrapper function to call churnsim.run_churn_simulation
+    :param schema: string name of schema and simulation configuration
+    :param init_customers: number of initial customers to generate
+    :return:
+    '''
     churndb.setup_churn_db(schema)
     start_date = date(2020, 1, 1)
     end_date = date(2020, 6, 1)
@@ -340,6 +375,18 @@ def run_standard_simulation(schema='socialnet7', init_customers=10000):
 
 
 def run_everything(db, user,password,output_dir='../../../fight-churn-output/',init_customers=500,schema='socialnet7'):
+    '''
+    Run a new simulation in the database and then run all the listings in the book, writing output to the indicated
+    directory. Mainly for debugging purposes, it can be a convenient way to refresh all the results.
+    quick start.
+    :param db: string name of the database
+    :param user: username for the database
+    :param password: password for the database
+    :param output_dir: folder to which program outputs will be written
+    :param schema: string name of schema and simulation configuration
+    :param init_customers: number of initial customers to generate
+    :return:
+    '''
     set_churn_environment(db, user,password,output_dir)
     run_standard_simulation(schema=schema,init_customers=init_customers)
     run_churn_rates(schema)
@@ -351,12 +398,22 @@ def run_everything(db, user,password,output_dir='../../../fight-churn-output/',i
 
 
 def run_churn_rates(schema):
+    '''
+    Runn all the listings for churn rates from chapter 2
+    :param schema:
+    :return:
+    '''
     # churn rate
     for list_num in range(1,6):
         run_listing(2, list_num, schema=schema)
 
 
 def run_metrics(schema):
+    '''
+    Run all the listings for QA of events and insertion of metrics to the database
+    :param schema:
+    :return:
+    '''
     # simple counts
     for list_num in range(1,3):
         run_listing(3, list_num, schema=schema)
@@ -371,6 +428,11 @@ def run_metrics(schema):
 
 
 def insert_metrics(schema):
+    '''
+    Run all the metric inserts from chapters 3 and 7
+    :param schema:
+    :return:
+    '''
     # standard metric names
     for vers_num in range(1,12):
         run_listing(3, 4, version=vers_num, schema=schema)
@@ -449,6 +511,15 @@ def run_dataset_processing(schema):
 
 
 def run_forecasting(schema):
+    '''
+    Run all of the chapter 8  9 listings for forecasting.
+    :param schema:
+    :return:
+    '''
+
+    # Chapter 8 examples for logistic regression
+    run_listing(8, [2,5], schema=schema)
+
     # Accuracy code test
     for list_num in range(1,4):
         run_listing(9, list_num, schema=schema)
@@ -467,6 +538,12 @@ def run_forecasting(schema):
 
 
 def run_categorical_listings(schema):
+    '''
+    Run all of the listings related to the categorical dataset created for chapter 10
+    Includes the listings from earlier chapters for processing that data
+    :param schema:
+    :return:
+    '''
 
     # Categorical data
     for list_num in [1,3,4]:
