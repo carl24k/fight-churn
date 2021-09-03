@@ -395,7 +395,7 @@ def run_everything(db, user,password,output_dir='../../../fight-churn-output/',i
     run_dataset_processing(schema)
     run_forecasting(schema)
     run_categorical_listings(schema)
-
+    return True
 
 def run_churn_rates(schema):
     '''

@@ -9,7 +9,10 @@ clean:
 	rm -rf fightchurn.egg-info
 
 test:
-	python3 -m twine upload --repository testpypi dist/*
+	pytest tests --verbose
+
+test_verbose:
+	pytest tests --verbose --capture=no
 
 publish:
 	python3 -m twine upload dist/*
