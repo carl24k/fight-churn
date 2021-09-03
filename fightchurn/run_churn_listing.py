@@ -344,7 +344,8 @@ def run_everything(db, user,password,output_dir='../../../fight-churn-output/',i
     run_standard_simulation(schema=schema,init_customers=init_customers)
     run_churn_rates(schema)
     run_metrics(schema)
-    run_analytics(schema)
+    run_dataset(schema)
+    run_dataset_processing(schema)
     run_forecasting(schema)
     run_categorical_listings(schema)
 
@@ -400,11 +401,29 @@ def insert_metrics(schema):
         run_listing(7, 1, version=vers_num, insert=True, schema=schema)
 
 
-def run_analytics(schema):
+def run_dataset(schema):
+    '''
+    Run the chapter 4 listings that create the dataset, and also the dataset
+    with extended metrics from chapter 8.
+    :param schema:
+    :return:
+    '''
 
     # Calculate active periods and observation dates
     for list_num in [1,2,4,5]:
         run_listing(4, list_num, schema=schema)
+    # Dataset 2
+    run_listing(8,0,schema=schema)
+
+
+def run_dataset_processing(schema):
+    '''
+    Run all the listings in chapters 5 through 8 that have to do with transforming the dataset
+    to scores and grouping together metrics.
+    :param schema:
+    :return:
+    '''
+
 
     # First dataset stats & scores
     for list_num in [2,3]:
@@ -419,7 +438,9 @@ def run_analytics(schema):
         run_listing(6, list_num, schema=schema)
 
     # Dataset2 Extract & Processing
-    for list_num in range(0,7):
+    for list_num in [0,1]:
+        run_listing(8, list_num, schema=schema)
+    for list_num in [3,4]:
         run_listing(8, list_num, schema=schema)
 
     # Current Stats
