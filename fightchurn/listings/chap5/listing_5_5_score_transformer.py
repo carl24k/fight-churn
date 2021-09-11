@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.base import BaseEstimator, TransformerMixin
+import joblib
 
 
 class LogSkewNormalizingTransformer(BaseEstimator, TransformerMixin):
@@ -71,3 +72,7 @@ def score_transformer(data_set_path,skew_thresh=4.0):
     score_save_path=data_set_path.replace('.csv','_scores.csv')
     print('Saving results to %s' % score_save_path)
     churn_scores.to_csv(score_save_path,header=True)
+
+    transformer_save_path=data_set_path.replace('.csv','_score_transform.pkl')
+    print('Saving fit Transformer to %s' % transformer_save_path)
+    joblib.dump(churn_data_transformer, transformer_save_path)
