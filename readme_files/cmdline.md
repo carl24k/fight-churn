@@ -15,6 +15,13 @@
 
 <a name="virtual"/>
 
+### 2.0 Open a Terminal Session
+
+Star by opening a terminal session.
+
+* [Instructions for Windows](https://www.lifewire.com/how-to-open-command-prompt-2618089)
+* [Instructions for Mac](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
+
 ### 2.1 Create a virtual environment
 
 First, you should make a new virtual environment in which to install the Fight Churn code...
@@ -25,14 +32,35 @@ python3 -m venv <python_environment_name>
 
 Use whatever you like for `<python_environment_name>` ; if you don't normally make python environments, call it "py_venv". That command doesn't have any output. 
 
-Next, your need to activate your environment:
+Next, your need to activate your environment. 
+
+#### 2.1.1 Active environment on Mac/Linux
+
+On Mac or Linux you source the `activate` script in the bin folder:
 
 ```
 ~ user$ source py_venv/bin/activate
+```
+
+The prompt will change and you will see:
+
+```
 (py_venv) ~ user$ 
 ```
 
+#### 2.1.2 Active environment on Windows
 
+On Windows you activate the environment by running the `activate` script as follows:
+
+```
+C:\Users\Owner\desktop> py_env\Scripts\activate
+```
+
+The prompt will change and you will see:
+
+```
+(py_env)C:\Users\Owner\desktop\>
+```
 
 <a name="fightchurn"/>
 
@@ -45,7 +73,7 @@ pip install fightchurn
 This will lead to a lot of outputs, starting with something like this:
 
 ```shell
-(py_venv) MacBook-Yo:~ carl$ pip install fightchurn
+(py_venv) ~ user$ pip install fightchurn
 Collecting fightchurn
   Using cached fightchurn-0.3.5-py3-none-any.whl (99 kB)
 Collecting docutils==0.17.1
@@ -94,11 +122,11 @@ Naturally you can make your folder using the GUI if you are on Mac or Windows
 Next you should start your Python environment, and enter a python shell:
 
 ```shell
-source churn_env/bin/activate
+source py_venv/bin/activate
 python
 ```
 
-You should see something like the following...
+(The command above is assuming you named your virtual environment `py_env`). You should see something like the following...
 
 ```shell
 (py_venv) :~ user$ python
