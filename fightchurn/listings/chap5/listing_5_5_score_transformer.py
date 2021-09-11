@@ -11,6 +11,7 @@ class LogSkewNormalizingTransformer(BaseEstimator, TransformerMixin):
         self.means = None
         self.stddevs = None
         self.skews = None
+        self.skewed_columns = None
         self.mins = None
         self.columns = None
         self.out_col = out_col
@@ -27,6 +28,17 @@ class LogSkewNormalizingTransformer(BaseEstimator, TransformerMixin):
         self.stddevs = DataToMeasure.std()
         self.skews = DataToMeasure.skew()
 
+        self.skewed_columns = (self.skews > self.skew_thresh) & (self.mins >= 0)
+        self.skewed_columns=self.skewed_columns[self.skewed_columns]
+
+        S = X.copy()
+        if self.out_col is not None:
+            S.drop(self.out_col, axis=1, inplace=True)
+        for col in self.skewed_columns.keys():
+            S[col] = np.log(1.0 + S[col])
+            self.means[col] = S[col].mean()
+            self.stddevs[col] = S[col].std()
+
 
     def transform(self, X, y=None):
         S = X.copy()
@@ -36,13 +48,8 @@ class LogSkewNormalizingTransformer(BaseEstimator, TransformerMixin):
         assert all([col in self.columns for col in S.columns])
         S = S[self.columns]
 
-        skewed_columns = (self.skews > self.skew_thresh) & (self.mins >= 0)
-
-
-        for col in skewed_columns.keys():
+        for col in self.skewed_columns.keys():
             S[col] = np.log(1.0 + S[col])
-            self.means[col] = S[col].mean()
-            self.stddevs[col] = S[col].std()
 
         S = (S - self.means) / self.stddevs
         if self.out_col is not None:
