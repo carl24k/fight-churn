@@ -19,7 +19,7 @@ Before you can load data or run the code you have to do some setup on your syste
 
 ## **Setup Instructions**  
 
-*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/).*
+*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
 
 ### Pre-Requisite Setup
 
