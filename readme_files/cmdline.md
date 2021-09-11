@@ -1,6 +1,6 @@
-# 2 Command Line Setup
+# 2 Quick Start Command Line Setup
 
-
+[2.0 Open a Terminal Session](#terminal)  
 [2.1 Create a virtual environment](#virtual)  
 [2.2 Install the fightchurn package](#fightchurn)  
 [2.3 Create a directory for output](#output)  
@@ -13,14 +13,16 @@
 
 ---
 
-<a name="virtual"/>
+<a name="terminal"/>
 
 ### 2.0 Open a Terminal Session
 
-Star by opening a terminal session.
+Start by opening a terminal session.
 
 * [Instructions for Windows](https://www.lifewire.com/how-to-open-command-prompt-2618089)
 * [Instructions for Mac](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125/mac)
+
+<a name="virtual"/>
 
 ### 2.1 Create a virtual environment
 
