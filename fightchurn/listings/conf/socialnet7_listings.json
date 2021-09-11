@@ -1,0 +1,1030 @@
+{
+    "chap2": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2020-03-01",
+            "%to_yyyy-mm-dd": "2020-04-01",
+            "mode": "one",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "net_retention",
+            "params": {}
+        },
+        "list3": {
+            "name": "activity_churn",
+            "params": {
+                "%max_inactive": "1 month"
+            }
+        },
+        "list2": {
+            "name": "churn_rate",
+            "params": {}
+        },
+        "list4": {
+            "name": "mrr_churn",
+            "params": {}
+        },
+        "list5": {
+            "name": "churn_rate_scaled",
+            "params": {
+                "%from_yyyy-mm-dd": "2020-03-01",
+                "%to_yyyy-mm-dd": "2020-06-01"
+            }
+        }
+    },
+    "chap3": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2020-02-02",
+            "%to_yyyy-mm-dd": "2020-05-10",
+            "mode": "top",
+            "type": "sql",
+            "%event2measure": "like",
+            "%field2sum": "0"
+        },
+        "list1": {
+            "name": "event_count",
+            "params": {}
+        },
+        "list2": {
+            "name": "multi_date_count",
+            "params": {}
+        },
+        "list3": {
+            "name": "count_metric_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 0
+            },
+            "v1": {
+                "%event2measure": "like"
+            },
+            "v2": {
+                "%event2measure": "newfriend",
+                "%new_metric_id": 1
+            },
+            "v3": {
+                "%event2measure": "post",
+                "%new_metric_id": 2
+            },
+            "v4": {
+                "%event2measure": "adview",
+                "%new_metric_id": 3
+            },
+            "v5": {
+                "%event2measure": "dislike",
+                "%new_metric_id": 4
+            },
+            "v6": {
+                "%event2measure": "unfriend",
+                "%new_metric_id": 5
+            },
+            "v7": {
+                "%event2measure": "message",
+                "%new_metric_id": 6
+            },
+            "v8": {
+                "%event2measure": "reply",
+                "%new_metric_id": 7
+            }
+        },
+        "list4": {
+            "name": "metric_name_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_name": "like_per_month",
+                "%new_metric_id": 0
+            },
+            "v11": {
+                "%new_metric_name": "account_tenure",
+                "%new_metric_id": 8
+            },
+            "v1": {},
+            "v2": {
+                "%new_metric_name": "newfriend_per_month",
+                "%new_metric_id": 1
+            },
+            "v3": {
+                "%new_metric_name": "post_per_month",
+                "%new_metric_id": 2
+            },
+            "v4": {
+                "%new_metric_name": "adview_per_month",
+                "%new_metric_id": 3
+            },
+            "v5": {
+                "%new_metric_name": "dislike_per_month",
+                "%new_metric_id": 4
+            },
+            "v6": {
+                "%new_metric_name": "unfriend_per_month",
+                "%new_metric_id": 5
+            },
+            "v7": {
+                "%new_metric_name": "message_per_month",
+                "%new_metric_id": 6
+            },
+            "v8": {
+                "%new_metric_name": "reply_per_month",
+                "%new_metric_id": 7
+            }
+        },
+        "list6": {
+            "name": "metric_stats_over_time",
+            "params": {
+                "mode": "save",
+                "%metric2measure": "like_per_month",
+                "save_ext": "like_per_month"
+            },
+            "v1": {},
+            "v2": {
+                "%metric2measure": "newfriend_per_month",
+                "save_ext": "newfriend_per_month"
+            },
+            "v3": {
+                "save_ext": "post_per_month"
+            },
+            "v4": {
+                "%metric2measure": "adview_per_month",
+                "save_ext": "adview_per_month"
+            },
+            "v5": {
+                "%metric2measure": "dislike_per_month",
+                "save_ext": "dislike_per_month"
+            },
+            "v6": {
+                "%metric2measure": "unfriend_per_month",
+                "save_ext": "unfriend_per_month"
+            },
+            "v7": {
+                "%metric2measure": "message_per_month",
+                "save_ext": "message_per_month"
+            },
+            "v8": {
+                "%metric2measure": "reply_per_month",
+                "save_ext": "reply_per_month"
+            }
+        },
+        "list7": {
+            "name": "metric_qa_plot",
+            "params": {
+                "type": "py",
+                "qa_data_path": "socialnet7/socialnet7_metric_stats_over_time",
+                "metric_name": "like_per_month"
+            },
+            "v1": {},
+            "v2": {
+                "metric_name": "newfriend_per_month"
+            },
+            "v3": {
+                "metric_name": "post_per_month"
+            },
+            "v4": {
+                "metric_name": "adview_per_month"
+            },
+            "v5": {
+                "metric_name": "dislike_per_month"
+            },
+            "v6": {
+                "metric_name": "unfriend_per_month"
+            },
+            "v7": {
+                "metric_name": "message_per_month"
+            },
+            "v8": {
+                "metric_name": "reply_per_month"
+            }
+        },
+        "list8": {
+            "name": "metric_coverage",
+            "params": {
+                "mode": "save"
+            }
+        },
+        "list9": {
+            "name": "events_per_day",
+            "params": {
+                "mode": "save",
+                "%from_yyyy-mm-dd": "2020-02-01",
+                "%to_yyyy-mm-dd": "2020-06-01",
+                "save_ext": "like"
+            },
+            "v1": {},
+            "v2": {
+                "%event2measure": "newfriend",
+                "save_ext": "newfriend"
+            },
+            "v3": {
+                "%event2measure": "post",
+                "save_ext": "post"
+            },
+            "v4": {
+                "%event2measure": "adview",
+                "save_ext": "adview"
+            },
+            "v5": {
+                "%event2measure": "dislike",
+                "save_ext": "dislike"
+            },
+            "v6": {
+                "%event2measure": "unfriend",
+                "save_ext": "unfriend"
+            },
+            "v7": {
+                "%event2measure": "message",
+                "save_ext": "message"
+            },
+            "v8": {
+                "%event2measure": "reply",
+                "save_ext": "reply"
+            }
+        },
+        "list10": {
+            "name": "event_count_plot",
+            "params": {
+                "type": "py",
+                "qa_data_path": "socialnet7/socialnet7_events_per_day",
+                "event_name": "like"
+            },
+            "v1": {},
+            "v2": {
+                "event_name": "newfriend"
+            },
+            "v3": {
+                "event_name": "post"
+            },
+            "v4": {
+                "event_name": "adview"
+            },
+            "v5": {
+                "event_name": "dislike"
+            },
+            "v6": {
+                "event_name": "unfriend"
+            },
+            "v7": {
+                "event_name": "message"
+            },
+            "v8": {
+                "event_name": "reply"
+            }
+        },
+        "list11": {
+            "name": "events_per_account",
+            "params": {
+                "mode": "save"
+            }
+        },
+        "list12": {
+            "name": "account_tenure",
+            "params": {}
+        },
+        "list13": {
+            "name": "account_tenure_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 8
+            }
+        },
+        "list14": {
+            "name": "mrr",
+            "params": {}
+        },
+        "list16": {
+            "name": "billing_period",
+            "params": {}
+        }
+    },
+    "chap4": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2020-02-09",
+            "%to_yyyy-mm-dd": "2020-05-10",
+            "mode": "run",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "ongoing_active_periods",
+            "params": {
+                "%gap_interval": "7 day"
+            }
+        },
+        "list2": {
+            "name": "churned_periods",
+            "params": {
+                "%gap_interval": "7 day"
+            }
+        },
+        "list3": {
+            "name": "active_event_weeks",
+            "params": {}
+        },
+        "list4": {
+            "name": "observation_dates",
+            "params": {
+                "%obs_interval": "1 month",
+                "%lead_time": "5 day"
+            }
+        },
+        "list5": {
+            "name": "dataset",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day"
+            }
+        },
+        "list6": {
+            "name": "current_customers",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day",
+                "%from_yyyy-mm-dd": "2020-05-10",
+                "%to_yyyy-mm-dd": "2020-05-10"
+            }
+        }
+    },
+    "chap5": {
+        "defaults": {
+            "data_set_path": "socialnet7/socialnet7_dataset.csv",
+            "type": "py"
+        },
+        "list1": {
+            "name": "cohort_plot",
+            "params": {
+                "metric_to_plot": "post_per_month"
+            },
+            "v1": {},
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv"
+            },
+            "v3": {
+                "data_set_path": "socialnet7/socialnet7_dataset_groupscore.csv",
+                "metric_to_plot": "metric_group_1"
+            },
+            "v4": {
+                "metric_to_plot": "adview_per_month"
+            },
+            "v5": {
+                "metric_to_plot": "adview_per_post",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v6": {
+                "metric_to_plot": "like_per_month"
+            },
+            "v7": {
+                "metric_to_plot": "dislike_per_month"
+            },
+            "v8": {
+                "metric_to_plot": "dislike_pcnt",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v9": {
+                "metric_to_plot": "newfriend_pcnt_chng",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v10": {
+                "metric_to_plot": "days_since_newfriend",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v11": {
+                "metric_to_plot": "reply_per_message",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v12": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv",
+                "metric_to_plot": "like_per_post"
+            },
+            "v13": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv",
+                "metric_to_plot": "post_per_message"
+            },
+            "v14": {
+                "metric_to_plot": "unfriend_per_month",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v15": {
+                "metric_to_plot": "newfriend_per_month",
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v16": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv",
+                "metric_to_plot": "unfriend_per_newfriend"
+            },
+            "v17": {
+                "data_set_path": "socialnet7/socialnet7_dataset3.csv",
+                "metric_to_plot": "customer_age"
+            }
+        },
+        "list2": {
+            "name": "dataset_stats",
+            "params": {},
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv"
+            },
+            "v3": {
+                "data_set_path": "socialnet7/socialnet7_dataset_groupscore.csv"
+            },
+            "v4": {
+                "data_set_path": "socialnet7/socialnet7_dataset_current.csv"
+            },
+            "v5": {
+                "data_set_path": "socialnet7/socialnet7_dataset_current_scores.csv"
+            },
+            "v6": {
+                "data_set_path": "socialnet7/socialnet7_dataset_current_groupscore.csv"
+            },
+            "v7": {
+                "data_set_path": "socialnet7/socialnet7_dataset2_current.csv"
+            },
+            "v8": {
+                "data_set_path": "socialnet7/socialnet7_dataset2_current_scores.csv"
+            },
+            "v9": {
+                "data_set_path": "socialnet7/socialnet7_dataset2_current_groupscore.csv"
+            },
+            "v10": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_dumcat.csv"
+            }
+        },
+        "list3": {
+            "name": "metric_scores",
+            "params": {}
+        }
+    },
+    "chap6": {
+        "defaults": {
+            "data_set_path": "socialnet7/socialnet7_dataset.csv",
+            "type": "py"
+        },
+        "list1": {
+            "name": "metric_pair_plot",
+            "params": {
+                "metric1": "post_per_month",
+                "metric2": "like_per_month"
+            },
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv"
+            },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv"
+            },
+            "v3": {
+                "metric2": "message_per_month"
+            },
+            "v4": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "message_per_month"
+            },
+            "v5": {
+                "metric2": "newfriend_per_month"
+            },
+            "v6": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "newfriend_per_month"
+            },
+            "v7": {
+                "metric2": "adview_per_month"
+            },
+            "v8": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "adview_per_month"
+            },
+            "v9": {
+                "metric2": "dislike_per_month"
+            },
+            "v10": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "dislike_per_month"
+            },
+            "v11": {
+                "metric2": "unfriend_per_month"
+            },
+            "v12": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "unfriend_per_month"
+            },
+            "v13": {
+                "metric2": "reply_per_month"
+            },
+            "v14": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "reply_per_month"
+            },
+            "v15": {
+                "metric2": "account_tenure"
+            },
+            "v16": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric2": "account_tenure"
+            },
+            "v17": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv",
+                "metric1": "like_per_month",
+                "metric2": "dislike_per_month"
+            }
+        },
+        "list2": {
+            "name": "dataset_correlation_matrix",
+            "params": {},
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset_scores.csv"
+            },
+            "v3": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_groupscore.csv"
+            }
+        },
+        "list3": {
+            "name": "apply_metric_groups",
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_dumcat.csv"
+            },
+            "params": {}
+        },
+        "list4": {
+            "name": "find_metric_groups",
+            "params": {
+                "group_corr_thresh": 0.65
+            }
+        },
+        "list5": {
+            "name": "ordered_correlation_matrix",
+            "params": {}
+        }
+    },
+    "chap7": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2020-03-01",
+            "%to_yyyy-mm-dd": "2020-05-10",
+            "mode": "top",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "ratio_metric",
+            "params": {
+                "%num_metric": "adview_per_month",
+                "%den_metric": "post_per_month"
+            },
+            "insert": {
+                "params": {
+                    "%num_metric": "adview_per_month",
+                    "%den_metric": "post_per_month",
+                    "%new_metric_id": 21,
+                    "%new_metric_name": "adviw_per_post"
+                },
+                "v1": {},
+                "v2": {
+                    "%num_metric": "reply_per_month",
+                    "%den_metric": "message_per_month",
+                    "%new_metric_id": 22,
+                    "%new_metric_name": "reply_per_message"
+                },
+                "v3": {
+                    "%num_metric": "like_per_month",
+                    "%new_metric_id": 23,
+                    "%new_metric_name": "like_per_post"
+                },
+                "v4": {
+                    "%num_metric": "post_per_month",
+                    "%den_metric": "message_per_month",
+                    "%new_metric_id": 24,
+                    "%new_metric_name": "post_per_message"
+                },
+                "v5": {
+                    "%num_metric": "unfriend_per_month",
+                    "%den_metric": "newfriend_per_month",
+                    "%new_metric_id": 25,
+                    "%new_metric_name": "unfriend_per_newfriend"
+                },
+                "v6": {
+                    "%num_metric": "dislike_per_month",
+                    "%den_metric": "total_opinions",
+                    "%new_metric_id": 27,
+                    "%new_metric_name": "dislike_percent"
+                },
+                "v7": {
+                    "%num_metric": "unfriend_28day_avg_84day_obs_scaled",
+                    "%den_metric": "newfriend_per_month",
+                    "%new_metric_id": 28,
+                    "%new_metric_name": "unfriend_per_newfriend_scaled"
+                }
+            }
+        },
+        "list2": {
+            "name": "dataset2",
+            "params": {
+                "%metric_interval": "7 day",
+                "mode": "save",
+                "type": "sql"
+            }
+        },
+        "list3": {
+            "name": "total_metric",
+            "params": {
+                "%metric_list": " 'like_per_month', 'dislike_per_month' "
+            },
+            "insert": {
+                "params": {
+                    "%metric_list": " 'like_per_month', 'dislike_per_month' ",
+                    "%new_metric_id": 26,
+                    "%new_metric_name": "total_opinions"
+                }
+            }
+        },
+        "list4": {
+            "name": "percent_change_metric",
+            "params": {
+                "%metric2measure": "newfriend_per_month",
+                "%period_weeks": 4
+            },
+            "insert": {
+                "params": {
+                    "%metric2measure": "newfriend_per_month",
+                    "%period_weeks": 4,
+                    "%new_metric_id": 30,
+                    "%new_metric_name": "new_friends_pcnt_change"
+                }
+            }
+        },
+        "list5": {
+            "name": "fat_tail_scores",
+            "params": {
+                "data_set_path": "socialnet7/socialnet7_dataset.csv",
+                "type": "py"
+            },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_dumcat.csv"
+            }
+        },
+        "list6": {
+            "name": "days_since_event",
+            "params": {
+                "%event2measure": "newfriend",
+                "%from_yyyy-mm-dd": "2020-05-03",
+                "%to_yyyy-mm-dd": "2020-05-10"
+            },
+            "insert": {
+                "params": {
+                    "%event2measure": "newfriend",
+                    "%new_metric_id": 31,
+                    "%new_metric_name": "days_since_newfriend"
+                }
+            }
+        },
+        "list7": {
+            "name": "scaled_events_per_month",
+            "params": {
+                "%event2measure": "unfriend",
+                "%obs_period": 84,
+                "%desc_period": 32
+            },
+            "insert": {
+                "params": {
+                    "%event2measure": "unfriend",
+                    "%obs_period": 84,
+                    "%desc_period": 28,
+                    "%new_metric_id": 33
+                }
+            }
+        },
+        "list8": {
+            "name": "tenure_scaled_events_per_month",
+            "params": {
+                "%event2measure": "unfriend",
+                "%obs_period": 84,
+                "%desc_period": 28,
+                "%min_tenure": 14,
+                "%from_yyyy-mm-dd": "2020-05-10",
+                "%to_yyyy-mm-dd": "2020-05-10",
+                "mode": "save"
+            },
+            "insert": {
+                "params": {
+                    "%event2measure": "unfriend",
+                    "%obs_period": 84,
+                    "%desc_period": 28,
+                    "%min_tenure": 14,
+                    "%new_metric_id": 34
+                },
+                "v1": {}
+            }
+        }
+    },
+    "chap8": {
+        "defaults": {
+            "data_set_path": "socialnet7/socialnet7_dataset2.csv",
+            "type": "py"
+        },
+        "list0": {
+            "name": "dataset2",
+            "params": {
+                "%from_yyyy-mm-dd": "2020-03-01",
+                "%to_yyyy-mm-dd": "2020-05-10",
+                "%metric_interval": "7 day",
+                "mode": "save",
+                "type": "sql"
+            }
+        },
+        "list1": {
+            "name": "prepare_data",
+            "params": {
+                "group_corr_thresh": 0.65
+            },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset.csv"
+            },
+            "v3": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_nocat.csv"
+            }
+        },
+        "list2": {
+            "name": "logistic_regression",
+            "params": {},
+            "v1" : {
+                "as_retention" : false
+            }
+        },
+        "list3": {
+            "name": "dataset2_current",
+            "params": {
+                "type": "sql",
+                "mode": "save",
+                "%metric_interval": "7 day"
+            }
+        },
+        "list4": {
+            "name": "rescore_metrics",
+            "params": {}
+        },
+        "list5": {
+            "name": "churn_forecast",
+            "params": {},
+            "v1": {},
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset3.csv",
+                "model_name": "logreg_model_c0.040"
+            }
+        },
+        "list6": {
+            "name": "rescore_metrics",
+            "params": {}
+        }
+    },
+    "chap9": {
+        "defaults": {
+            "data_set_path": "socialnet7/socialnet7_dataset2.csv",
+            "type": "py"
+        },
+        "list1": {
+            "name": "regression_auc",
+            "params": {}
+        },
+        "list2": {
+            "name": "top_decile_lift",
+            "params": {}
+        },
+        "list3": {
+            "name": "backtest",
+            "params": {
+                "n_test_split": 2
+            }
+        },
+        "list4": {
+            "name": "regression_cparam",
+            "params": {
+                "C_param": 0.02
+            },
+            "v1": {},
+            "v2": {
+                "C_param": 0.01
+            },
+            "v3": {
+                "C_param": 0.005
+            },
+            "v4": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_dummies.csv",
+                "C_param": 0.32
+            },
+            "v5": {
+                "data_set_path": "socialnet7/socialnet7_dataset3.csv",
+                "C_param": 0.04
+            },
+            "v6": {
+                "C_param": 0.04
+            }
+        },
+        "list5": {
+            "name": "crossvalidate",
+            "params": {
+                "n_test_split": 2
+            },
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset.csv"
+            },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_dummies.csv"
+            },
+            "v3": {
+                "data_set_path": "socialnet7/socialnet7_dataset3.csv"
+            }
+        },
+        "list6": {
+            "name": "crossvalidate_xgb",
+            "params": {
+                "n_test_split": 2
+            },
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset.csv"
+            },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_xgbdummies.csv"
+            }
+        },
+        "list7": {
+            "name": "churn_forecast_xgb",
+            "params": {},
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset3_xgbdummies.csv"
+            }
+        },
+        "list8": {
+            "name": "shap_explain_xgb",
+            "params": {},
+            "v1" : {
+                "plot_n" : [0, 1, 2, 3 ,4 ,5]
+            }
+        },
+        "list9": {
+            "name": "shap_explain_logreg",
+            "params": {}
+        }
+    },
+    "chap10": {
+        "defaults": {
+            "type": "py",
+            "data_set_path": "socialnet7/socialnet7_dataset3.csv"
+        },
+        "list1": {
+            "name": "dataset3",
+            "params": {
+                "%from_yyyy-mm-dd": "2020-03-01",
+                "%to_yyyy-mm-dd": "2020-05-10",
+                "%metric_interval": "7 day",
+                "mode": "save",
+                "type": "sql"
+            }
+        },
+        "list2": {
+            "name": "category_churn_cohorts",
+            "params": {
+                "cat_col": "channel"
+            },
+            "v1": {},
+            "v2": {
+                "cat_col": "country"
+            }
+        },
+        "list3": {
+            "name": "grouped_category_cohorts",
+            "params": {
+                "cat_col": "country",
+                "groups": {
+                    "APac": [
+                        "AU",
+                        "ID",
+                        "IN",
+                        "JP",
+                        "KR",
+                        "NZ"
+                    ],
+                    "Eur": [
+                        "CH",
+                        "DE",
+                        "DK",
+                        "ES",
+                        "FR",
+                        "GB",
+                        "GR",
+                        "IT",
+                        "NL",
+                        "NO",
+                        "PT",
+                        "RU",
+                        "SE"
+                    ],
+                    "LaAm": [
+                        "AR",
+                        "BR",
+                        "CO",
+                        "MX"
+                    ],
+                    "NoAm": [
+                        "US",
+                        "CA"
+                    ]
+                }
+            }
+        },
+        "list4": {
+            "name": "dummy_variables",
+            "params": {
+                "groups": {
+                    "country": {
+                        "APac": [
+                            "AU",
+                            "ID",
+                            "IN",
+                            "JP",
+                            "KR",
+                            "NZ"
+                        ],
+                        "Eur": [
+                            "CH",
+                            "DE",
+                            "DK",
+                            "ES",
+                            "FR",
+                            "GB",
+                            "GR",
+                            "IT",
+                            "NL",
+                            "NO",
+                            "PT",
+                            "RU",
+                            "SE"
+                        ],
+                        "LaAm": [
+                            "AR",
+                            "BR",
+                            "CO",
+                            "MX"
+                        ],
+                        "NoAm": [
+                            "US",
+                            "CA"
+                        ]
+                    }
+                }
+            }
+        },
+        "list5": {
+            "name": "merge_groups_dummies",
+            "params": {}
+        },
+        "list6": {
+            "name": "dataset3_current",
+            "params": {
+                "type": "sql",
+                "%metric_interval": "7 day",
+                "mode": "save"
+            }
+        },
+        "list7": {
+            "name": "rescore_wcats",
+            "params": {
+                "categories": [
+                    "channel",
+                    "country"
+                ],
+                "groups": {
+                    "country": {
+                        "APac": [
+                            "AU",
+                            "ID",
+                            "IN",
+                            "JP",
+                            "KR",
+                            "NZ"
+                        ],
+                        "Eur": [
+                            "CH",
+                            "DE",
+                            "DK",
+                            "ES",
+                            "FR",
+                            "GB",
+                            "GR",
+                            "IT",
+                            "NL",
+                            "NO",
+                            "PT",
+                            "RU",
+                            "SE"
+                        ],
+                        "LaAm": [
+                            "AR",
+                            "BR",
+                            "CO",
+                            "MX"
+                        ],
+                        "NoAm": [
+                            "US",
+                            "CA"
+                        ]
+                    }
+                },
+                "data_set_path": "socialnet7/socialnet7_dataset3.csv"
+            }
+        }
+    }
+}

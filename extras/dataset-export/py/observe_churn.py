@@ -2,7 +2,7 @@
 import os
 import pandas as pd
 from postgres import Postgres
-from run_churn_listing import run_one_listing
+from run_churn_listing import run_listing_from_args
 import argparse
 
 METRIC_BIND = 'FLAT_METRIC_SELECT'
@@ -61,11 +61,11 @@ if __name__ == "__main__":
         argd['insert']=False
         argd['version']=None
         argd['listing']=1
-        run_one_listing(args)
+        run_listing_from_args(args)
         argd['listing']=2
-        run_one_listing(args)
+        run_listing_from_args(args)
         argd['listing']=4
-        run_one_listing(args)
+        run_listing_from_args(args)
 
     # Load the base SQL from the adjacent sql directory
     sql = "set search_path = '%s'; " % args.schema;

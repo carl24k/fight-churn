@@ -1,3 +1,6 @@
 .idea/
 venv/
 .ipynb*
+build**
+dist**
+fightchurn.egg-info**
