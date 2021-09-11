@@ -450,6 +450,10 @@
         "list3": {
             "name": "metric_scores",
             "params": {}
+        },
+        "list5": {
+            "name": "score_transformer",
+            "params": {}
         }
     },
     "chap6": {
