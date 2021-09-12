@@ -20,7 +20,7 @@ packaging==20.9
 pandas==1.2.3
 patsy==0.5.1
 pep517==0.10.0
-Pillow==8.1.2
+Pillow==8.3.2
 pkginfo==1.7.0
 postgres==3.0.0
 psycopg2-binary==2.8.6
@@ -45,7 +45,7 @@ threadpoolctl==2.1.0
 toml==0.10.2
 tqdm==4.59.0
 twine==3.4.1
-urllib3==1.26.4
+urllib3==1.26.5
 webencodings==0.5.1
 xgboost==1.3.3
 zipp==3.4.1
