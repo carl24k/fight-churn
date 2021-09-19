@@ -12,11 +12,12 @@ def dataset_stats(data_set_path):
     summary = summary.transpose()
 
     summary['skew'] = churn_data.skew()
+    summary['kurtosis'] = churn_data.kurtosis()
     summary['1%'] = churn_data.quantile(q=0.01)
     summary['99%'] = churn_data.quantile(q=0.99)
     summary['nonzero'] = churn_data.astype(bool).sum(axis=0) / churn_data.shape[0]
 
-    summary = summary[ ['count','nonzero','mean','std','skew','min','1%','25%','50%','75%','99%','max'] ]
+    summary = summary[ ['count','nonzero','mean','std','skew','kurtosis','min','1%','25%','50%','75%','99%','max'] ]
     summary.columns = summary.columns.str.replace("%", "pct")
 
     save_path = data_set_path.replace('.csv', '_summarystats.csv')

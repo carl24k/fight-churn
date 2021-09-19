@@ -445,6 +445,9 @@
             },
             "v10": {
                 "data_set_path": "socialnet7/socialnet7_dataset3_dumcat.csv"
+            },
+            "v11": {
+                "data_set_path": "socialnet7/socialnet7_dataset2_scores.csv"
             }
         },
         "list3": {
@@ -711,6 +714,13 @@
                     "%new_metric_id": 34
                 },
                 "v1": {}
+            }
+        },
+        "list10" : {
+            "name": "fattails_transformer",
+            "params": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv",
+                "type": "py"
             }
         }
     },
