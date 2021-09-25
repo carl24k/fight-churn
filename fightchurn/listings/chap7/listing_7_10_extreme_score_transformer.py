@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import joblib
 
 
-class FatTailsNormalizer(BaseEstimator, TransformerMixin):
+class ExtremeScorer(BaseEstimator, TransformerMixin):
 
     def __init__(self, skew_thresh=4.0, kurt_thresh=7.0, out_col='is_churn'):
         self.skew_thresh = skew_thresh
@@ -75,11 +75,11 @@ class FatTailsNormalizer(BaseEstimator, TransformerMixin):
         return S
 
 
-def fattails_transformer(data_set_path,skew_thresh=4.0,**kwargs):
+def extreme_score_transformer(data_set_path,skew_thresh=4.0,**kwargs):
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
 
-    churn_data_transformer = FatTailsNormalizer(skew_thresh=skew_thresh)
+    churn_data_transformer = ExtremeScorer(skew_thresh=skew_thresh)
 
     churn_data_transformer.fit(churn_data)
 
