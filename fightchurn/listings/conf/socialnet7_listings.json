@@ -539,6 +539,9 @@
             },
             "v3": {
                 "data_set_path": "socialnet7/socialnet7_dataset3_groupscore.csv"
+            },
+            "v3": {
+                "data_set_path": "socialnet7/socialnet7_dataset2_scores.csv"
             }
         },
         "list3": {
@@ -546,17 +549,33 @@
             "v1": {
                 "data_set_path": "socialnet7/socialnet7_dataset3_dumcat.csv"
             },
+            "v2": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            },
             "params": {}
         },
         "list4": {
             "name": "find_metric_groups",
             "params": {
                 "group_corr_thresh": 0.65
+            },
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
             }
         },
         "list5": {
             "name": "ordered_correlation_matrix",
             "params": {}
+        },
+        "list6" : {
+            "name": "metric_group_transformer",
+            "params": {
+                "group_corr_thresh": 0.65
+            },
+            "v1": {
+                "data_set_path": "socialnet7/socialnet7_dataset2.csv"
+            }
+
         }
     },
     "chap7": {

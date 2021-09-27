@@ -29,8 +29,6 @@ class ExtremeScorer(BaseEstimator, TransformerMixin):
 
         self.columns = copy.deepcopy(DataToMeasure.columns.values)
         self.mins = DataToMeasure.min()
-        self.means = DataToMeasure.mean()
-        self.stddevs = DataToMeasure.std()
         self.skews = DataToMeasure.skew()
         self.kurts = DataToMeasure.kurtosis()
 
@@ -45,14 +43,12 @@ class ExtremeScorer(BaseEstimator, TransformerMixin):
 
         for col in self.skewed_columns.keys():
             S[col] = np.log(1.0 + S[col])
-            self.means[col] = S[col].mean()
-            self.stddevs[col] = S[col].std()
 
         for col in self.fattail_columns.keys():
             S[col] = np.log(S[col] + np.sqrt(np.power(S[col], 2) + 1.0))
-            self.means[col] = S[col].mean()
-            self.stddevs[col] = S[col].std()
 
+        self.means = S.mean()
+        self.stddevs = S.std()
 
     def transform(self, X, y=None):
         S = X.copy()
