@@ -801,6 +801,16 @@
         "list6": {
             "name": "rescore_metrics",
             "params": {}
+        },
+        "list7" : {
+            "name" : "transform_new_metrics",
+            "params": {
+                "new_data_path": "socialnet7/socialnet7_dataset2_current.csv"
+            }
+        },
+        "list8" : {
+            "name" : "transform_forecast",
+            "params": {}
         }
     },
     "chap9": {
