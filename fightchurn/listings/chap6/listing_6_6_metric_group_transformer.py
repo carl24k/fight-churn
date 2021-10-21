@@ -18,6 +18,11 @@ class HeirarchicalClusterDimReducer( BaseEstimator, TransformerMixin ):
         self.load_mat_ndarray = None
         self.metric_columns = None
 
+    def reset_out_col(self,new_col=None):
+        old_col = self.out_col
+        self.out_col = None
+        return old_col
+
     def _find_correlation_clusters(self, corr):
         dissimilarity = 1.0 - corr
         hierarchy = linkage(squareform(dissimilarity), method='single')

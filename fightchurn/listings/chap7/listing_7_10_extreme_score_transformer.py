@@ -21,6 +21,11 @@ class ExtremeScorer(BaseEstimator, TransformerMixin):
         self.mins = None
         self.columns = None
 
+    def reset_out_col(self,new_col=None):
+        old_col = self.out_col
+        self.out_col = None
+        return old_col
+
     def fit(self, X : pd.DataFrame, y=None):
         if self.out_col is not None:
             DataToMeasure = X.drop(self.out_col,axis=1)
@@ -85,6 +90,6 @@ def extreme_score_transformer(data_set_path,skew_thresh=4.0,**kwargs):
     print('Saving results to %s' % score_save_path)
     churn_scores.to_csv(score_save_path,header=True)
 
-    transformer_save_path=data_set_path.replace('.csv','_fattail_transform.pkl')
+    transformer_save_path=data_set_path.replace('.csv','_extreme_transformer.pkl')
     print('Saving fit Transformer to %s' % transformer_save_path)
     joblib.dump(churn_data_transformer, transformer_save_path)
