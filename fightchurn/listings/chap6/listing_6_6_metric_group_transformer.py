@@ -10,7 +10,7 @@ from scipy.spatial.distance import squareform
 
 class HeirarchicalClusterDimReducer( BaseEstimator, TransformerMixin ):
 
-    def __init__( self, corr_thresh, out_col='is_churn'):
+    def __init__( self, corr_thresh=0.4, out_col='is_churn'):
         self.corr_thresh = corr_thresh
         self.diss_thresh = 1.0 - corr_thresh # dissimilarity threshold
         self.out_col = out_col
@@ -80,6 +80,8 @@ class HeirarchicalClusterDimReducer( BaseEstimator, TransformerMixin ):
         labeled_column_df, relabled_count = self._relabel_clusters(labels)
         self.load_mat_df = self._make_load_matrix(labeled_column_df, relabled_count)
         self.load_mat_ndarray = self.load_mat_df.to_numpy()
+
+        return self
 
     def transform( self, X, y = None ):
         data_to_fit, outcome = self._drop_outcome(X, return_outcome=True)

@@ -810,7 +810,9 @@
         },
         "list8" : {
             "name" : "transform_forecast",
-            "params": {}
+            "params": {
+                "new_data_path": "socialnet7/socialnet7_dataset2_current.csv"
+            }
         }
     },
     "chap9": {
@@ -900,6 +902,12 @@
         "list9": {
             "name": "shap_explain_logreg",
             "params": {}
+        },
+        "list10" : {
+            "name" : "crossvalidate_transformers",
+            "params" : {
+                "n_test_split" : 3
+            }
         }
     },
     "chap10": {

@@ -39,7 +39,7 @@ def plot_regression_test(data_set_path, result_df):
     result_df['plot_C']=result_df['param_C'].astype(str)
     plt.figure(figsize=(4,6))
     plt.rcParams.update({'font.size':8})
-    one_subplot(result_df,1,'mean_test_AUC',ylim=(0.5,0.8),ytick=.05)
+    one_subplot(result_df,1,'mean_test_AUC',ylim=(0.5,1.0),ytick=.05)
     plt.title(ntpath.basename(data_set_path).replace('_dataset.csv',' Cross Validation'))
     one_subplot(result_df,2,'mean_test_lift',ylim=(1, 6),ytick=0.5)
     one_subplot(result_df,3,'n_weights', ylim=(0, int(1 + result_df['n_weights'].max())),ytick=2)

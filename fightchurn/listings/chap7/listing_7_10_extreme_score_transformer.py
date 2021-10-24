@@ -38,9 +38,9 @@ class ExtremeScorer(BaseEstimator, TransformerMixin):
         self.kurts = DataToMeasure.kurtosis()
 
         self.skewed_columns = (self.skews > self.skew_thresh) & (self.mins >= 0)
-        self.fattail_columns = (self.kurts > self.kurt_thresh) & (~self.skewed_columns)
+        self.extreme_columns = (self.kurts > self.kurt_thresh) & (~self.skewed_columns)
         self.skewed_columns=self.skewed_columns[self.skewed_columns]
-        self.fattail_columns=self.fattail_columns[self.fattail_columns]
+        self.extreme_columns=self.extreme_columns[self.extreme_columns]
 
         S = X.copy()
         if self.out_col is not None:
@@ -49,11 +49,13 @@ class ExtremeScorer(BaseEstimator, TransformerMixin):
         for col in self.skewed_columns.keys():
             S[col] = np.log(1.0 + S[col])
 
-        for col in self.fattail_columns.keys():
+        for col in self.extreme_columns.keys():
             S[col] = np.log(S[col] + np.sqrt(np.power(S[col], 2) + 1.0))
 
         self.means = S.mean()
         self.stddevs = S.std()
+
+        return self
 
     def transform(self, X, y=None):
         S = X.copy()
@@ -66,7 +68,7 @@ class ExtremeScorer(BaseEstimator, TransformerMixin):
         for col in self.skewed_columns.keys():
             S[col] = np.log(1.0 + S[col])
 
-        for col in self.fattail_columns.keys():
+        for col in self.extreme_columns.keys():
             S[col] = np.log(S[col] + np.sqrt(np.power(S[col], 2) + 1.0))
 
         S = (S - self.means) / self.stddevs
