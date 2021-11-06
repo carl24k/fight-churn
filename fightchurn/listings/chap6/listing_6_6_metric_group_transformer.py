@@ -12,7 +12,6 @@ class HeirarchicalClusterDimReducer( BaseEstimator, TransformerMixin ):
 
     def __init__( self, corr_thresh=0.4, out_col='is_churn'):
         self.corr_thresh = corr_thresh
-        self.diss_thresh = 1.0 - corr_thresh # dissimilarity threshold
         self.out_col = out_col
         self.load_mat_df = None
         self.load_mat_ndarray = None
@@ -25,8 +24,9 @@ class HeirarchicalClusterDimReducer( BaseEstimator, TransformerMixin ):
 
     def _find_correlation_clusters(self, corr):
         dissimilarity = 1.0 - corr
+        diss_thresh = 1.0 - self.corr_thresh
         hierarchy = linkage(squareform(dissimilarity), method='single')
-        labels = fcluster(hierarchy, self.diss_thresh, criterion='distance')
+        labels = fcluster(hierarchy, diss_thresh, criterion='distance')
         return labels
 
     def _relabel_clusters(self, labels):
