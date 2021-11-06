@@ -23,10 +23,10 @@ def crossvalidate_transformers(data_set_path, n_test_split):
         ('logistic', logistic)
     ]
     param_grid = {
-        'scorer__skew_thresh' : [2,4,8],
-        'scorer__kurt_thresh' : [4,7,15],
-        'reducer__corr_thresh' : [.5, .65, .8],
-        'logistic__C' : [0.32, 0.16, 0.08]
+        'scorer__skew_thresh' : [3, 4, 5],
+        'scorer__kurt_thresh' : [8, 10, 12],
+        'reducer__corr_thresh' : [0.55,.65, .75],
+        'logistic__C' : [0.64, 0.32, 0.16, 0.08]
     }
 
     pipe = Pipeline(steps)
@@ -39,4 +39,5 @@ def crossvalidate_transformers(data_set_path, n_test_split):
     gsearch.fit(X, y)
 
     result_df = pd.DataFrame(gsearch.cv_results_)
+    result_df.sort_values('mean_test_AUC',ascending=False,inplace=True)
     result_df.to_csv(data_set_path.replace('.csv', '_pipeline_crossval.csv'), index=False)
