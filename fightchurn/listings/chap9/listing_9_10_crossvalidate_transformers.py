@@ -12,7 +12,6 @@ def crossvalidate_transformers(data_set_path, n_test_split):
 
     data_df = pd.read_csv(data_set_path,index_col=[0,1])
     y = data_df['is_churn'].astype(int)
-    y=np.subtract(1,y)
     X = data_df.drop(['is_churn'],axis=1)
 
     scorer = ExtremeScorer(out_col=None)
