@@ -23,9 +23,9 @@ def crossvalidate_transformers(data_set_path, n_test_split):
         ('logistic', logistic)
     ]
     param_grid = {
-        'scorer__skew_thresh' : [3, 4, 5],
-        'scorer__kurt_thresh' : [8, 10, 12],
-        'reducer__corr_thresh' : [0.55,.65, .75],
+        'scorer__skew_thresh' : [4, 8, 16, 32, 1000],
+        'scorer__kurt_thresh' : [4, 8, 16, 32, 1000],
+        'reducer__corr_thresh' : [0.55,.65, .75, .9],
         'logistic__C' : [0.64, 0.32, 0.16, 0.08]
     }
 
@@ -34,7 +34,7 @@ def crossvalidate_transformers(data_set_path, n_test_split):
     score_models = {'AUC': 'roc_auc'}
 
     gsearch = GridSearchCV(pipe,scoring=score_models, cv=tscv, verbose=1,
-                           return_train_score=False,  param_grid=param_grid, refit='AUC')
+                           return_train_score=False,  param_grid=param_grid, refit='AUC',n_jobs=-1)
 
     gsearch.fit(X, y)
 
