@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS  x.metric
+CREATE TABLE IF NOT EXISTS  liveproject.metric
 (
-    account_id integer NOT NULL,
+    account_id text COLLATE pg_catalog."default" NOT NULL,
     metric_time timestamp(6) without time zone NOT NULL,
     metric_name_id integer NOT NULL,
     metric_value real
@@ -10,28 +10,28 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE x.metric
+ALTER TABLE liveproject.metric
     OWNER to postgres;
 
 
 CREATE INDEX IF NOT EXISTS  idx_metric_account_id
-    ON x.metric USING btree
+    ON liveproject.metric USING btree
     (account_id)
     TABLESPACE pg_default;
 
 
 CREATE UNIQUE INDEX IF NOT EXISTS  idx_metric_account_time
-    ON x.metric USING btree
+    ON liveproject.metric USING btree
     (account_id, metric_name_id, metric_time)
     TABLESPACE pg_default;
 
 
 CREATE INDEX IF NOT EXISTS  idx_metric_time
-    ON x.metric USING btree
+    ON liveproject.metric USING btree
     (metric_time, metric_name_id)
     TABLESPACE pg_default;
 
 CREATE INDEX IF NOT EXISTS  idx_metric_type
-    ON x.metric USING btree
+    ON liveproject.metric USING btree
     (metric_name_id)
     TABLESPACE pg_default;

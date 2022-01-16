@@ -1,7 +1,7 @@
 with 
 date_range as (     
 	select i::timestamp as calc_date 
-from generate_series('%from_yyyy-mm-dd', '%to_yyyy-mm-dd', '7 day'::interval) i
+from generate_series('%from_yyyy-mm-dd', '%to_yyyy-mm-dd', '28 day'::interval) i
 ), the_metric as (  
 	select * from metric m
 	inner join metric_name n on m.metric_name_id = n.metric_name_id

@@ -1,12 +1,12 @@
 with 
 date_range as (     
-	select  '%from_yyyy-mm-dd'::timestamp as start_date,
-		'%to_yyyy-mm-dd'::timestamp as end_date
+	select  '2020-02-022'::timestamp as start_date,
+		'2020-06-01'::timestamp as end_date
 ), account_count as (    
-	select count(distinct account_id) as n_account    
-	from subscription s inner join date_range d on
-	 s.start_date <= d.end_date
-	and (s.end_date >= d.start_date or s.end_date is null)
+	select count(distinct account_id) as n_account
+	from event e inner join date_range d on
+	 e.event_time <= d.end_date
+	and e.event_Time >= d.start_date
 )
 select metric_name, 
 	count(distinct m.account_id) as count_with_metric,
@@ -22,8 +22,5 @@ inner join date_range on
 	metric_time >= start_date
 	and metric_time <= end_date
 inner join metric_name  n on m.metric_name_id = n.metric_name_id
-inner join subscription s on s.account_id = m.account_id
-    and s.start_date <= m.metric_time
-    and (s.end_date >= m.metric_time or s.end_date is null)
 group by metric_name,n_account
 order by metric_name;
