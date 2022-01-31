@@ -7,7 +7,11 @@ all_events = ['ReadingOwnedBook', 'FirstLivebookAccess', 'FirstManningAccess', '
               'ProductTocLivebookLinkOpened', 'LivebookLogin', 'DashboardLivebookLinkOpened',
               'WishlistItemAdded', 'CrossReferenceTermOpened', 'SearchMade']
 
-metric_events = ['ReadingOwnedBook','EBookDownloaded','ReadingFreePreview','HighlightCreated','FreeContentCheckout','ReadingOpenChapter','ProductTocLivebookLinkOpened','LivebookLogin','DashboardLivebookLinkOpened','WishlistItemAdded','CrossReferenceTermOpened','SearchMade','SearchResultOpened','ProductLookInsideLivebookLinkOpened']
+metric_events = ['ReadingOwnedBook','EBookDownloaded','ReadingFreePreview',
+                 'HighlightCreated','FreeContentCheckout','ReadingOpenChapter',
+                 'ProductTocLivebookLinkOpened','LivebookLogin','DashboardLivebookLinkOpened',
+                 'WishlistItemAdded','CrossReferenceTermOpened','SearchMade','SearchResultOpened',
+                 'ProductLookInsideLivebookLinkOpened']
 
 
 calc =  False

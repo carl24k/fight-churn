@@ -93,6 +93,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
         run : The SQL returns no result
         one : The SQL should return one row result to be printed
         top : The SQL returns many results, print the top N (given by global print_num_rows)
+        save : save the result to a file, adding save_ext to the name
     :param param_dict: the bind variables as a dictionary
     :param insert: flag to use the insert form of a query; see chapter 7
     :param save_ext:

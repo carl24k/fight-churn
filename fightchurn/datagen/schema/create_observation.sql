@@ -1,6 +1,6 @@
-CREATE TABLE IF NOT EXISTS  x.observation
+CREATE TABLE IF NOT EXISTS  liveproject.observation
 (
-    account_id integer NOT NULL,
+    account_id text COLLATE pg_catalog."default" NOT NULL,
     observation_date date NOT NULL,
     is_churn boolean NULL)
 WITH (
@@ -8,15 +8,15 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE x.observation
+ALTER TABLE liveproject.observation
     OWNER to postgres;
 
 CREATE INDEX IF NOT EXISTS  observation_date_idx
-    ON x.observation USING btree
+    ON liveproject.observation USING btree
     (observation_date)
     TABLESPACE pg_default;
 
 CREATE UNIQUE INDEX IF NOT EXISTS  idx_observation_account_date
-    ON x.observation USING btree
+    ON liveproject.observation USING btree
     (account_id, observation_date)
     TABLESPACE pg_default;
