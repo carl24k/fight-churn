@@ -14,7 +14,7 @@ def cohort_plot(data_set_path, metric_to_plot='',ncohort=10):
     plt.xlabel('Cohort Average of  "%s"' % metric_to_plot)
     plt.ylabel('Cohort Churn Rate')
     plt.grid()
-    plt.gca().set_ylim(bottom=0)
+    plt.gca().set_ylim(bottom=0,top=1)
     save_path = data_set_path.replace('.csv', '_' + metric_to_plot + '_churn_cohort.png')
     plt.savefig(save_path)
     print('Saving plot to %s' % save_path)

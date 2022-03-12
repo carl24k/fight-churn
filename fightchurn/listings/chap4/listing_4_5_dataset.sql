@@ -5,15 +5,20 @@ with observation_params as
     '%to_yyyy-mm-dd'::timestamp as obs_end
 )
 select m.account_id, o.observation_date, is_churn,
-sum(case when metric_name_id=0 then metric_value else 0 end) as like_per_month,
-sum(case when metric_name_id=1 then metric_value else 0 end) as newfriend_per_month,
-sum(case when metric_name_id=2 then metric_value else 0 end) as post_per_month,
-sum(case when metric_name_id=3 then metric_value else 0 end) as adview_per_month,
-sum(case when metric_name_id=4 then metric_value else 0 end) as dislike_per_month,
-sum(case when metric_name_id=5 then metric_value else 0 end) as unfriend_per_month,
-sum(case when metric_name_id=6 then metric_value else 0 end) as message_per_month,
-sum(case when metric_name_id=7 then metric_value else 0 end) as reply_per_month,
-sum(case when metric_name_id=8 then metric_value else 0 end) as account_tenure
+sum(case when metric_name_id=0 then metric_value else 0 end) as ReadingOwnedBook,
+sum(case when metric_name_id=3 then metric_value else 0 end) as EBookDownloaded,
+sum(case when metric_name_id=4 then metric_value else 0 end) as ReadingFreePreview,
+sum(case when metric_name_id=5 then metric_value else 0 end) as HighlightCreated,
+sum(case when metric_name_id=6 then metric_value else 0 end) as FreeContentCheckout,
+sum(case when metric_name_id=7 then metric_value else 0 end) as ReadingOpenChapter,
+sum(case when metric_name_id=8 then metric_value else 0 end) as ProductTocLivebookLinkOpened,
+sum(case when metric_name_id=9 then metric_value else 0 end) as LivebookLogin,
+sum(case when metric_name_id=10 then metric_value else 0 end) as DashboardLivebookLinkOpened,
+sum(case when metric_name_id=11 then metric_value else 0 end) as WishlistItemAdded,
+sum(case when metric_name_id=12 then metric_value else 0 end) as CrossReferenceTermOpened,
+sum(case when metric_name_id=13 then metric_value else 0 end) as SearchMade,
+sum(case when metric_name_id=14 then metric_value else 0 end) as SearchResultOpened,
+sum(case when metric_name_id=15 then metric_value else 0 end) as ProductLookInsideLivebookLinkOpened
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id
