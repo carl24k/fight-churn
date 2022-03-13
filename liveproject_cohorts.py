@@ -26,9 +26,10 @@ rare_metrics = [
 
 ]
 
-for met in rare_metrics:
-    cohort_plot(dataset_path, met,2)
 
-# for met in metrics:
-#     cohort_plot(dataset_path, met)
+for met in metrics:
+    cohort_plot(dataset_path, met)
 
+
+# for met in rare_metrics:
+#     cohort_plot(dataset_path, met,2)
