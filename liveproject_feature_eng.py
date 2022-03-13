@@ -9,7 +9,8 @@ run_freebies = False
 run_highlights = False
 run_read_ratio = False
 run_downloads_per = False
-run_total_time = True
+run_total_time = False
+run_qa = True
 
 if run_total:
     param_dict = {
@@ -104,3 +105,6 @@ if run_total_time:
     param_dict['%metric2measure'] = param_dict['%new_metric_name']
     sql_listing(3, 6, 'metric_stats_over_time', 'liveproject', 'save', param_dict, save_ext=param_dict['%new_metric_name'])
     metric_qa_plot(metric_qa_path, param_dict['%new_metric_name'])
+
+if run_qa:
+    sql_listing(3, 8, 'metric_coverage', 'liveproject', 'save', {}, save_ext='qa_coverage')
