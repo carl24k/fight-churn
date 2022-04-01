@@ -536,6 +536,9 @@ def run_forecasting(schema):
     # Forecast xgb
     run_listing(9, 7, schema=schema)
 
+    # SHAP, just XGB is enough of a test
+    run_listing(9,8,schema=schema)
+
 
 def run_categorical_listings(schema):
     '''
