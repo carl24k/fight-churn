@@ -221,7 +221,7 @@ Process finished with exit code 0
 A new schema and tables were created in your PostgreSQL database, which you can confirm by looking
 in PgAdmin:
 
-![PgAdmin Churn Schema Tables](/Users/carl/Documents/churn/fight-churn/readme_files/pgadmin_create_schema.png)
+![PgAdmin Churn Schema Tables](https://user-images.githubusercontent.com/32722692/162481492-8e946430-0b3d-4a7a-859d-d71c4fe5244c.png)
 
 If you made it this far then congratulations!  You just ran your first bit of the fight-churn code.
 
