@@ -18,7 +18,16 @@ sum(case when metric_name_id=11 then metric_value else 0 end) as WishlistItemAdd
 sum(case when metric_name_id=12 then metric_value else 0 end) as CrossReferenceTermOpened,
 sum(case when metric_name_id=13 then metric_value else 0 end) as SearchMade,
 sum(case when metric_name_id=14 then metric_value else 0 end) as SearchResultOpened,
-sum(case when metric_name_id=15 then metric_value else 0 end) as ProductLookInsideLivebookLinkOpened
+sum(case when metric_name_id=15 then metric_value else 0 end) as LookInsideLinkOpen,
+sum(case when metric_name_id=17 then metric_value else 0 end) as ReadingBook_Recalc,
+sum(case when metric_name_id=20 then metric_value else 0 end) as total_event,
+sum(case when metric_name_id=21 then metric_value else 0 end) as distinct_product,
+sum(case when metric_name_id=22 then metric_value else 0 end) as total_freebies,
+sum(case when metric_name_id=23 then metric_value else 0 end) as total_highlights,
+sum(case when metric_name_id=28 then metric_value else 0 end) as percent_reading_v2,
+sum(case when metric_name_id=25 then metric_value else 0 end) as download_per_book,
+sum(case when metric_name_id=26 then metric_value else 0 end) as total_time_reading
+
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id

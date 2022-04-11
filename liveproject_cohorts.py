@@ -23,13 +23,18 @@ rare_metrics = [
     'wishlistitemadded',
     'crossreferencetermopened',
     'highlightcreated',
-
 ]
 
+new_metrics = ['distinct_product','total_freebies',
+               'total_highlights', 'percent_reading', 'download_per_book',
+               'percent_reading', 'total_time_reading']
+
+
+for met in new_metrics:
+    cohort_plot(dataset_path, met)
 
 for met in metrics:
     cohort_plot(dataset_path, met)
 
-
-# for met in rare_metrics:
-#     cohort_plot(dataset_path, met,2)
+for met in rare_metrics:
+    cohort_plot(dataset_path, met,2)

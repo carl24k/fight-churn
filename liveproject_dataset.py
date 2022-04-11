@@ -17,7 +17,7 @@ if current:
 if past:
     param_dict = {
         '%from_yyyy-mm-dd' : '2020-01-01',
-        '%to_yyyy-mm-dd' : '2020-06-01',
+        '%to_yyyy-mm-dd' : '2020-03-01',
         '%metric_interval' : '28 days'
     }
     sql_listing(4, 5, 'dataset', 'liveproject', 'save', param_dict, save_ext='')
