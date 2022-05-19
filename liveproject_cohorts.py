@@ -16,7 +16,6 @@ metrics = [
     'dashboardlivebooklinkopened',
     'searchmade',
     'searchresultopened',
-    'productlookinsidelivebooklinkopened'
 ]
 
 rare_metrics = [
@@ -26,8 +25,8 @@ rare_metrics = [
 ]
 
 new_metrics = ['distinct_product','total_freebies',
-               'total_highlights', 'percent_reading', 'download_per_book',
-               'percent_reading', 'total_time_reading']
+               'total_highlights',  'download_per_book',
+               'total_time_reading']
 
 
 for met in new_metrics:

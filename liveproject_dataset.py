@@ -2,8 +2,8 @@ from fightchurn.run_churn_listing import sql_listing
 from fightchurn.listings.chap5.listing_5_2_dataset_stats import dataset_stats
 
 # Extracting the data
-current = False
-past = True
+current = True
+past = False
 
 if current:
     param_dict = {}
@@ -12,7 +12,7 @@ if current:
     dataset_path = '/Users/carl/Documents/churn/liveproject_stream_output/liveproject/liveproject_current_customers.csv'
 
     # Run QA Stats
-    dataset_stats(dataset_path)
+    # dataset_stats(dataset_path)
 
 if past:
     param_dict = {
