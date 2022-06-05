@@ -18,13 +18,13 @@ import os
 import sys
 
 def drop_test_schema():
-    con_string = f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+    con_string = f"postgresql://{os.environ['CHURN_DB_HOST']}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
     db = Postgres(con_string)
     db.run('DROP SCHEMA IF EXISTS test CASCADE;')
 
 def setup_churn_db(schema_name):
 
-    con_string = f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+    con_string = f"postgresql://{os.environ['CHURN_DB_HOST']}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
     db = Postgres(con_string)
 
     tables=['event','subscription','event_type','metric','metric_name','active_period','observation','active_week','account']

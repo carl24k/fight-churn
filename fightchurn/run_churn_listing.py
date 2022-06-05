@@ -101,7 +101,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
 
     with open(f'%s/listings/chap%d/%s.sql' % (os.path.abspath(os.path.dirname(__file__)),chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
 
-        con_string = f"postgresql://localhost/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+        con_string = f"postgresql://{os.environ['CHURN_DB_HOST']}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
         db = Postgres(con_string)
 
         # prefix the search path onto the listing, which does not specify the schema
@@ -296,7 +296,7 @@ The main script for running Fight Churn With Data examples.
 This will loop over multiple listings and versions in one chapter.
 """
 
-def set_churn_environment(db : str, user : str,password : str,output_dir : str ='../../../fight-churn-output/'):
+def set_churn_environment(db : str, user : str,password : str,output_dir : str ='../../../fight-churn-output/', host : str = 'localhost'):
     '''
     Setup the environment variables for running the book listing code. The required environment variables
     are a database name, and the username and password for the database. An additional optional argument
@@ -311,6 +311,7 @@ def set_churn_environment(db : str, user : str,password : str,output_dir : str =
     '''
     print(f"Setting Environment Variables user={user} for db={db}, output path =`{output_dir}`")
     os.environ['CHURN_DB']=db
+    os.environ['CHURN_DB_HOST']=host
     os.environ['CHURN_DB_USER']=user
     os.environ['CHURN_DB_PASS']=password
     os.environ['CHURN_OUT_DIR']=output_dir
