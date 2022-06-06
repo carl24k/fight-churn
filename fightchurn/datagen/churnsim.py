@@ -65,7 +65,8 @@ class ChurnSimulation:
 
         self.con = post.connect( database= os.environ['CHURN_DB'],
                                  user= os.environ['CHURN_DB_USER'],
-                                 password=os.environ['CHURN_DB_PASS'])
+                                 password=os.environ['CHURN_DB_PASS'],
+                                 host=os.environ['CHURN_DB_HOST'])
 
     def remove_tmp_files(self):
         '''
