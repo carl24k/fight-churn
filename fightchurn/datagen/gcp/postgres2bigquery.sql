@@ -1,6 +1,6 @@
 # To create connection in Big Query:
 # On Query Tab, at the top "ADD DATA" button -> "External Data Source"
-# Get the Connection ID (path) from the Connection Info
+# Get the Connection ID (path) from the Connection Info and replace the path in the EXTERNAL_QUERY
 
 DROP TABLE IF EXISTS socialnet7.account;
 
@@ -8,7 +8,7 @@ CREATE TABLE socialnet7.account AS
 SELECT *
 FROM
    EXTERNAL_QUERY(
-     "projects/.../locations/us-west1/connections/...",
+     "projects/___/locations/___/connections/___",
       "Select * from socialnet7.account");
 
 DROP TABLE IF EXISTS socialnet7.subscription;
@@ -20,7 +20,7 @@ SELECT
 *
 FROM
    EXTERNAL_QUERY(
-     "projects/churn-1-352914/locations/us-west1/connections/churn_1",
+     "projects/___/locations/___/connections/___",
       "Select * from socialnet7.subscription");
 
 DROP TABLE IF EXISTS socialnet7.event;
@@ -32,7 +32,7 @@ SELECT
 *
 FROM
    EXTERNAL_QUERY(
-     "projects/churn-1-352914/locations/us-west1/connections/churn_1",
+     "projects/___/locations/___/connections/___",
       "Select * from socialnet7.event");
 
 DROP TABLE IF EXISTS socialnet7.event_type;
@@ -45,6 +45,6 @@ SELECT
 *
 FROM
    EXTERNAL_QUERY(
-     "projects/churn-1-352914/locations/us-west1/connections/churn_1",
+     "projects/___/locations/___/connections/___",
       "Select * from socialnet7.event_type");
 
