@@ -221,7 +221,7 @@ Process finished with exit code 0
 A new schema and tables were created in your PostgreSQL database, which you can confirm by looking
 in PgAdmin:
 
-![PgAdmin Churn Schema Tables](/Users/carl/Documents/churn/fight-churn/readme_files/pgadmin_create_schema.png)
+![PgAdmin Churn Schema Tables](pgadmin_create_schema.png)
 
 If you made it this far then congratulations!  You just ran your first bit of the fight-churn code.
 
@@ -282,7 +282,7 @@ Those are examples of what the numbers will look like when the simulation is ove
 the database.  Mine doesn't actually launch the terminal directly, but it points in the right direction....)
 
 
-![Mac PostgreSQL terminal launch](/Users/carl/Documents/churn/fight-churn/readme_files/mac_launch_psql_terminal.png)
+![Mac PostgreSQL terminal launch](mac_launch_psql_terminal.png)
 
 
 Great!  Now you have the data you need to run the code and learn the techniques in the book.
@@ -331,7 +331,7 @@ it with the PgAdmin Import/Export GUI, which you launch by command clicking (rig
 listing for the table you want to import into:
 
 
-![Mac PostgreSQL terminal launch](/Users/carl/Documents/churn/fight-churn/readme_files/mac_launch_psql_terminal.png)
+![Mac PostgreSQL terminal launch](mac_launch_psql_terminal.png)
 
 [(top)](#top)  
 
@@ -523,6 +523,5 @@ The following summarizes the configuration:
    * The listings are SQL
    * The listings will print one result
 
-(More to come on running Python listings when Chapter 5 is released...) 
 
 [(top)](#top)  
