@@ -7,7 +7,7 @@ past = False
 
 if current:
     param_dict = {}
-    sql_listing(4, 6, 'current_customers', 'liveproject', 'save', param_dict, save_ext='')
+    sql_listing(4, 6, 'current_customers', 'liveproject', 'save', param_dict, save_ext='dataset_current')
 
     dataset_path = '/Users/carl/Documents/churn/liveproject_stream_output/liveproject/liveproject_current_customers.csv'
 

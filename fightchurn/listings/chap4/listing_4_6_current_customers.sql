@@ -22,7 +22,6 @@ sum(case when metric_name_id=20 then metric_value else 0 end) as total_event,
 sum(case when metric_name_id=21 then metric_value else 0 end) as distinct_product,
 sum(case when metric_name_id=22 then metric_value else 0 end) as total_freebies,
 sum(case when metric_name_id=23 then metric_value else 0 end) as total_highlights,
-sum(case when metric_name_id=28 then metric_value else 0 end) as percent_reading_v2,
 sum(case when metric_name_id=25 then metric_value else 0 end) as download_per_book,
 sum(case when metric_name_id=26 then metric_value else 0 end) as total_time_reading
 from metric m inner join metric_date d on m.metric_time = d.last_metric_time
