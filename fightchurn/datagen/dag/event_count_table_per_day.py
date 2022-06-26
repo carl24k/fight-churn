@@ -10,6 +10,16 @@ from airflow.providers.google.cloud.operators.bigquery import BigQueryCheckOpera
 project_id = 'churn-test-353716'
 dataset_name = 'socialnet7'
 
+expected_events = [['adview',10000],
+                   ['dislike',4000],
+                   ['like',20000],
+                   ['message',10000],
+                   ['newfriend',1500],
+                   ['post',10000],
+                   ['reply',2500],
+                   ['unfriend',50]
+                   ]
+
 yesterday = datetime.datetime.combine(
     datetime.datetime.today() - datetime.timedelta(1),
     datetime.datetime.min.time())
@@ -60,6 +70,20 @@ with models.DAG('event_count_table_per_day',
         },
     )
 
+    delete_old_rows_job = BigQueryInsertJobOperator(
+        task_id="delete_event_count",
+        configuration={
+            "query": {
+                "query": f"""
+                    DELETE FROM `{project_id}.{dataset_name}.events_per_day`
+                    where event_date ='{{{{  ds }}}}'
+                """,
+                "useLegacySql": False,
+            }
+        },
+        location='us-west1',
+    )
+
     insert_query_job = BigQueryInsertJobOperator(
         task_id="insert_event_count",
         configuration={
@@ -80,5 +104,19 @@ with models.DAG('event_count_table_per_day',
         location='us-west1',
     )
 
+    event_per_day_checks = [
+         BigQueryCheckOperator(
+             task_id= f'check_{event[0]}_count',
+              sql=f"""
+                    select event_count > {event[1]}
+                    from {project_id}.{dataset_name}.events_per_day
+                    where event_name = '{event[0]}'
+                    and event_date  = '{{{{  ds }}}}'
+                """,
+                                  location="us-west1",
+                                  use_legacy_sql=False)
+        for event in expected_events
+    ]
 
-check_private >> event_count_table >> insert_query_job
+
+check_private >> event_count_table >> delete_old_rows_job >> insert_query_job >> event_per_day_checks
