@@ -93,7 +93,7 @@ with models.DAG('metric_pipeline',
                 "query": f"""
                     INSERT INTO `{project_id}.{dataset_name}.events_per_day`
                     select event_type_name as event_name, date(event_time) as event_date, count(*) as event_count
-                    from `{project_id}.{dataset_name}.event` e 
+                    from `{project_id}.{dataset_name}.event` e
                     inner join `{project_id}.{dataset_name}.event_type` t
                     on e.event_type_id = t.event_type_id
                     where date(event_time)='{{{{  ds }}}}'
@@ -169,7 +169,31 @@ with models.DAG('metric_pipeline',
         location='us-west1',
     )
 
+    metric_calcs = [
+        BigQueryInsertJobOperator(
+            task_id=f"insert_{event[0]}_metric",
+            configuration={
+                "query": {
+                    "query": f"""
+                        INSERT INTO `{project_id}.{dataset_name}.metric`
+                        SELECT account_id, DATE('{{{{  ds }}}}') as metric_date,  '{event[0]}_per_month' as metric_name, count(*) as metric_value
+                        FROM `{project_id}.{dataset_name}.event` e 
+                        INNER JOIN `{project_id}.{dataset_name}.event_type` t
+                        ON e.event_type_id = t.event_type_id
+                        WHERE event_type_name = '{event[0]}'
+                        AND event_time <= '{{{{  ds }}}}'
+                        AND event_time > date_add('{{{{  ds }}}}',interval -4 WEEK)
+                        GROUP BY account_id;
+                    """,
+                    "useLegacySql": False,
+                }
+            },
+            location='us-west1',
+        )
+
+        for event in expected_events
+    ]
 
 
 check_private >> event_count_table >> delete_old_count_rows >> event_count_query_job >> event_per_day_checks >> join_branch
-join_branch >> metric_table >> delete_old_metric_rows
+join_branch >> metric_table >> delete_old_metric_rows >> metric_table >> delete_old_metric_rows >> metric_calcs
