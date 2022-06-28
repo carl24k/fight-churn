@@ -4,6 +4,7 @@
 import datetime
 
 from airflow import models
+from airflow.operators.dummy_operator import DummyOperator
 from airflow.providers.google.cloud.operators import bigquery
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCheckOperator, BigQueryUpsertTableOperator, BigQueryInsertJobOperator
 
@@ -31,7 +32,7 @@ default_dag_args = {
 }
 
 
-with models.DAG('event_count_table_per_day',
+with models.DAG('metric_pipeline',
         schedule_interval=datetime.timedelta(days=1),
         default_args=default_dag_args) as dag:
 
@@ -45,7 +46,7 @@ with models.DAG('event_count_table_per_day',
                                           use_legacy_sql=False)
 
     event_count_table = BigQueryUpsertTableOperator(
-        task_id="upsert_table",
+        task_id="upsert_event_count_table",
         project_id = project_id,
         dataset_id=dataset_name,
         location="us-west1",
@@ -70,7 +71,8 @@ with models.DAG('event_count_table_per_day',
         },
     )
 
-    delete_old_rows_job = BigQueryInsertJobOperator(
+
+    delete_old_count_rows = BigQueryInsertJobOperator(
         task_id="delete_event_count",
         configuration={
             "query": {
@@ -84,7 +86,7 @@ with models.DAG('event_count_table_per_day',
         location='us-west1',
     )
 
-    insert_query_job = BigQueryInsertJobOperator(
+    event_count_query_job = BigQueryInsertJobOperator(
         task_id="insert_event_count",
         configuration={
             "query": {
@@ -118,5 +120,56 @@ with models.DAG('event_count_table_per_day',
         for event in expected_events
     ]
 
+    join_branch = DummyOperator(
+        task_id="join_event_check_branch",
+        trigger_rule="none_failed"
+    )
 
-check_private >> event_count_table >> delete_old_rows_job >> insert_query_job >> event_per_day_checks
+    metric_table = BigQueryUpsertTableOperator(
+        task_id="upsert_metric_table",
+        project_id = project_id,
+        dataset_id=dataset_name,
+        location="us-west1",
+        table_resource={
+            "tableReference": {"tableId": "metric"},
+            "schema" : {
+                "fields" : [
+                    {
+                        "name" : "account_id",
+                        "type" : "integer"
+                    },
+                    {
+                        "name" : "metric_date",
+                        "type" : "date"
+                    },
+                    {
+                        "name" : "metric_name",
+                        "type" : "string"
+                    },
+                    {
+                        "name" : "metric_value",
+                        "type" : "float"
+                    }
+                ]
+            }
+        },
+    )
+
+    delete_old_metric_rows = BigQueryInsertJobOperator(
+        task_id="delete_metric",
+        configuration={
+            "query": {
+                "query": f"""
+                    DELETE FROM `{project_id}.{dataset_name}.metric`
+                    where metric_date ='{{{{  ds }}}}'
+                """,
+                "useLegacySql": False,
+            }
+        },
+        location='us-west1',
+    )
+
+
+
+check_private >> event_count_table >> delete_old_count_rows >> event_count_query_job >> event_per_day_checks >> join_branch
+join_branch >> metric_table >> delete_old_metric_rows
