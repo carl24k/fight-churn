@@ -196,4 +196,4 @@ with models.DAG('metric_pipeline',
 
 
 check_private >> event_count_table >> delete_old_count_rows >> event_count_query_job >> event_per_day_checks >> join_branch
-join_branch >> metric_table >> delete_old_metric_rows >> metric_table >> delete_old_metric_rows >> metric_calcs
+join_branch >> metric_table >> delete_old_metric_rows >> metric_calcs
