@@ -4,23 +4,15 @@
 import datetime
 
 from airflow import models
-from airflow.operators.dummy_operator import DummyOperator
 from airflow.providers.google.cloud.operators import bigquery
-from airflow.providers.google.cloud.operators.bigquery import BigQueryCheckOperator, BigQueryUpsertTableOperator, BigQueryInsertJobOperator
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.providers.google.cloud.operators.bigquery import BigQueryCheckOperator, \
+    BigQueryUpsertTableOperator, BigQueryInsertJobOperator
+
 
 project_id = 'churn-stream'
 dataset_name = 'socialnet7'
 location = "us-west1"
-
-expected_events = [['adview',10000],
-                   ['dislike',4000],
-                   ['like',20000],
-                   ['message',10000],
-                   ['newfriend',1500],
-                   ['post',10000],
-                   ['reply',2500],
-                   ['unfriend',50]
-                   ]
 
 yesterday = datetime.datetime.combine(
     datetime.datetime.today() - datetime.timedelta(1),
@@ -32,19 +24,28 @@ default_dag_args = {
     'retries': 1,
 }
 
+expected_events = [['adview',10000],
+                   ['dislike',4000],
+                   ['like',20000],
+                   ['message',10000],
+                   ['newfriend',1500],
+                   ['post',10000],
+                   ['reply',2500],
+                   ['unfriend',50]]
 
-with models.DAG('metric_pipeline',
+
+with models.DAG('churn_metric_pipeline',
         schedule_interval=datetime.timedelta(days=1),
         default_args=default_dag_args) as dag:
 
-    # Checking the churn data & Connection
-    check_private = BigQueryCheckOperator(task_id='check_churn_event_data',
-                                          sql=f"""
+    # Checking the churn data
+    connect_test = BigQueryCheckOperator(task_id='check_churn_event_data',
+                                         sql="""
                             select count(*) > 0
-                            from {project_id}.{dataset_name}.event
+                            from churn-stream.socialnet7.event
                         """,
-                                          location=location,
-                                          use_legacy_sql=False)
+                                         location="us-west1",
+                                         use_legacy_sql=False)
 
     event_count_table = BigQueryUpsertTableOperator(
         task_id="upsert_event_count_table",
@@ -71,7 +72,6 @@ with models.DAG('metric_pipeline',
             }
         },
     )
-
 
     delete_old_count_rows = BigQueryInsertJobOperator(
         task_id="delete_event_count",
@@ -169,7 +169,6 @@ with models.DAG('metric_pipeline',
         },
         location=location,
     )
-
     metric_calcs = [
         BigQueryInsertJobOperator(
             task_id=f"insert_{event[0]}_metric",
@@ -196,5 +195,15 @@ with models.DAG('metric_pipeline',
     ]
 
 
-check_private >> event_count_table >> delete_old_count_rows >> event_count_query_job >> event_per_day_checks >> join_branch
-join_branch >> metric_table >> delete_old_metric_rows >> metric_calcs
+    metric_join = DummyOperator(
+        task_id="join_metric_calc_branch",
+        trigger_rule="none_failed"
+    )
+
+
+connect_test \
+    >> event_count_table >> delete_old_count_rows \
+    >> event_count_query_job >> event_per_day_checks >> join_branch \
+    >> metric_table >> delete_old_metric_rows  >> metric_calcs >> metric_join
+
+
