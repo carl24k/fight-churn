@@ -55,7 +55,7 @@ with models.DAG('churn_data_test',
     check_private = BigQueryCheckOperator(task_id='check_churn_event_data',
                                           sql="""
                             select count(*) > 0
-                            from churn-XXXXX.socialnet7.event
+                            from churn-stream.socialnet7.event
                         """,
                                           location="us-west1",
                                           use_legacy_sql=False)
