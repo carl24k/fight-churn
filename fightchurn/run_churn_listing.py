@@ -101,7 +101,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
 
     with open(f'%s/listings/chap%d/%s.sql' % (os.path.abspath(os.path.dirname(__file__)),chapter, _full_listing_name(chapter, listing, name, insert)), 'r') as myfile:
 
-        con_string = f"postgresql://{os.environ['CHURN_DB_HOST']}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+        con_string = f"postgresql://{os.environ.get('CHURN_DB_HOST','localhost')}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
         db = Postgres(con_string)
 
         # prefix the search path onto the listing, which does not specify the schema
