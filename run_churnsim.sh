@@ -11,8 +11,8 @@ CHURN_DB_USER=carl
 CHURN_DB_PASS=churn
 
 
-CHURN_ROOT=path_from_home_to_code
-CHURN_OUT_DIR=path_to_output_dir
+CHURN_ROOT=Documents/churn/
+CHURN_OUT_DIR=/Users/carl/Documents/churn/fight-churn-output
 
 PYTHONPATH="${PYTHONPATH}:$HOME/$CHURN_ROOT/fight-churn/fightchurn/listings/chap3:"\
 "$HOME/$CHURN_ROOT/fight-churn/fightchurn/listings/chap5:"\
@@ -53,13 +53,10 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4 5 6 7 8 11
 
 # Account tenure metric
-<<<<<<< HEAD
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
-=======
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
 # MRR metric
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 14
->>>>>>> 20201206_multi_mrr
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 14
+
 
 # standard metric
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3
@@ -145,11 +142,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 4
 
 # Re-prepare the non-dummy part of categorical data
-<<<<<<< HEAD
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1 --version 3
-=======
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 8 --listing 1 --version 3
->>>>>>> 20201206_multi_mrr
 
 # Merge dummies & groupscores
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 5
@@ -172,10 +165,5 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 7 --version 2
 
 # Cohorts (after all metrics generated)
-<<<<<<< HEAD
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
-=======
-../../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
 
-
->>>>>>> 20201206_multi_mrr
