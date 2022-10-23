@@ -1,8 +1,8 @@
 {
     "chap2": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2020-03-01",
-            "%to_yyyy-mm-dd": "2020-04-01",
+            "%from_yyyy-mm-dd": "2022-03-01",
+            "%to_yyyy-mm-dd": "2022-04-01",
             "mode": "one",
             "type": "sql"
         },
@@ -27,15 +27,15 @@
         "list5": {
             "name": "churn_rate_scaled",
             "params": {
-                "%from_yyyy-mm-dd": "2020-03-01",
-                "%to_yyyy-mm-dd": "2020-06-01"
+                "%from_yyyy-mm-dd": "2022-03-01",
+                "%to_yyyy-mm-dd": "2022-06-01"
             }
         }
     },
     "chap3": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2020-02-02",
-            "%to_yyyy-mm-dd": "2020-05-10",
+            "%from_yyyy-mm-dd": "2022-02-02",
+            "%to_yyyy-mm-dd": "2022-05-10",
             "mode": "top",
             "type": "sql",
             "%event2measure": "like",
@@ -204,8 +204,8 @@
             "name": "events_per_day",
             "params": {
                 "mode": "save",
-                "%from_yyyy-mm-dd": "2020-02-01",
-                "%to_yyyy-mm-dd": "2020-06-01",
+                "%from_yyyy-mm-dd": "2022-02-01",
+                "%to_yyyy-mm-dd": "2022-06-01",
                 "save_ext": "like"
             },
             "v1": {},
@@ -298,8 +298,8 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2020-02-09",
-            "%to_yyyy-mm-dd": "2020-05-10",
+            "%from_yyyy-mm-dd": "2022-02-09",
+            "%to_yyyy-mm-dd": "2022-05-10",
             "mode": "run",
             "type": "sql"
         },
@@ -338,8 +338,8 @@
             "params": {
                 "mode": "save",
                 "%metric_interval": "7 day",
-                "%from_yyyy-mm-dd": "2020-05-10",
-                "%to_yyyy-mm-dd": "2020-05-10"
+                "%from_yyyy-mm-dd": "2022-05-10",
+                "%to_yyyy-mm-dd": "2022-05-10"
             }
         }
     },
@@ -560,8 +560,8 @@
     },
     "chap7": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2020-03-01",
-            "%to_yyyy-mm-dd": "2020-05-10",
+            "%from_yyyy-mm-dd": "2022-03-01",
+            "%to_yyyy-mm-dd": "2022-05-10",
             "mode": "top",
             "type": "sql"
         },
@@ -666,8 +666,8 @@
             "name": "days_since_event",
             "params": {
                 "%event2measure": "newfriend",
-                "%from_yyyy-mm-dd": "2020-05-03",
-                "%to_yyyy-mm-dd": "2020-05-10"
+                "%from_yyyy-mm-dd": "2022-05-03",
+                "%to_yyyy-mm-dd": "2022-05-10"
             },
             "insert": {
                 "params": {
@@ -700,8 +700,8 @@
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
-                "%from_yyyy-mm-dd": "2020-05-10",
-                "%to_yyyy-mm-dd": "2020-05-10",
+                "%from_yyyy-mm-dd": "2022-05-10",
+                "%to_yyyy-mm-dd": "2022-05-10",
                 "mode": "save"
             },
             "insert": {
@@ -724,8 +724,8 @@
         "list0": {
             "name": "dataset2",
             "params": {
-                "%from_yyyy-mm-dd": "2020-03-01",
-                "%to_yyyy-mm-dd": "2020-05-10",
+                "%from_yyyy-mm-dd": "2022-03-01",
+                "%to_yyyy-mm-dd": "2022-05-10",
                 "%metric_interval": "7 day",
                 "mode": "save",
                 "type": "sql"
@@ -863,8 +863,8 @@
         "list1": {
             "name": "dataset3",
             "params": {
-                "%from_yyyy-mm-dd": "2020-03-01",
-                "%to_yyyy-mm-dd": "2020-05-10",
+                "%from_yyyy-mm-dd": "2022-03-01",
+                "%to_yyyy-mm-dd": "2022-05-10",
                 "%metric_interval": "7 day",
                 "mode": "save",
                 "type": "sql"

@@ -245,9 +245,9 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         model_name = sys.argv[1]
 
-    start_date = date(2020, 1, 1)
-    end_date = date(2020, 6, 1)
-    init_customers = 10000
+    start_date = date(2022, 1, 1)
+    end_date = date(2022, 6, 1)
+    init_customers = 3000
 
 
     run_churn_simulation(model_name, start_date, end_date, init_customers)
