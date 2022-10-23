@@ -54,7 +54,7 @@ class ChurnSimulation:
         self.util_mod.setChurnScale(self.behavior_models,self.population_percents)
         self.population_picker = np.cumsum(self.population_percents)
 
-        self.plans = pd.read_csv('../conf/'+self.model_name + '_plans.csv')
+        self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv')
         self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
 
         self.subscription_count = 0
