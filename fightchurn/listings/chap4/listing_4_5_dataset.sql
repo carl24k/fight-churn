@@ -13,7 +13,8 @@ sum(case when metric_name_id=4 then metric_value else 0 end) as dislike_per_mont
 sum(case when metric_name_id=5 then metric_value else 0 end) as unfriend_per_month,
 sum(case when metric_name_id=6 then metric_value else 0 end) as message_per_month,
 sum(case when metric_name_id=7 then metric_value else 0 end) as reply_per_month,
-sum(case when metric_name_id=8 then metric_value else 0 end) as account_tenure
+sum(case when metric_name_id=8 then metric_value else 0 end) as account_tenure,
+sum(case when metric_name_id=9 then metric_value else 0 end) as mrr
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id

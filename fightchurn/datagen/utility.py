@@ -86,12 +86,20 @@ class UtilityModel:
         utility *= multiplier
         return utility
 
-    def churn_probability(self,event_counts,customer):
+    def churn_probability(self,u):
 
-        u=self.utility_function(event_counts,customer)
         churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
 
         return churn_prob
+
+    def downgrade_probability(self,u):
+        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+0.5))
+        return down_prob
+
+
+    def uprade_probability(self,u):
+        up_prob=1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+7.5))
+        return up_prob
 
     def simulate_churn(self,event_counts,customer):
         '''
@@ -101,4 +109,22 @@ class UtilityModel:
         :param event_counts:
         :return:
         '''
-        return uniform(0, 1) < self.churn_probability(event_counts,customer)
+        utility = self.utility_function(event_counts,customer)
+        return uniform(0, 1) < self.churn_probability(utility)
+
+    def simulate_upgrade_downgrade(self,event_counts,customer,plans):
+        current_plan = plans.loc[plans['mrr']==customer.mrr].index[0]
+        u=self.utility_function(event_counts,customer)
+        upgrade_probability = self.uprade_probability(u)
+        downgrade_probability = self.downgrade_probability(u)
+        churn_probability = self.downgrade_probability(u)
+        # print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
+
+        if current_plan < plans.shape[0]-1:
+            if uniform(0, 1) < upgrade_probability:
+                new_plan = current_plan+1
+                customer.mrr = plans['mrr'].loc[new_plan]
+        elif current_plan > 0:
+            if uniform(0, 1) < downgrade_probability:
+                new_plan = current_plan-1
+                customer.mrr = plans['mrr'].loc[new_plan]

@@ -2,7 +2,7 @@
 from datetime import date, datetime, timedelta,time
 from dateutil import relativedelta
 from numpy import random
-from random import randrange
+from random import randrange, uniform
 import numpy as np
 
 
@@ -38,6 +38,7 @@ class Customer:
             self.date_of_birth=None
 
         self.country=country
+        self.mrr=None
 
         if satisfaction is None:
             age_contrib = 0.5* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
@@ -46,6 +47,11 @@ class Customer:
             self.satisfaction_propensity = satisfaction
         self.subscriptions=[]
         self.events=[]
+
+
+    def pick_plan(self,plans):
+        self.mrr = np.random.choice(plans['mrr'],p=plans['prob'])
+
 
     def generate_events(self,start_date,end_date):
         '''
