@@ -120,18 +120,12 @@
             },
             "insert": {
                 "params": {
-                    "%num_metric": "newfriend_28avg_84obs",
-                    "%den_metric": "mrr",
-                    "%new_metric_id": 21,
-                    "%new_metric_name": "newfriend_per_dollar"
-                },
-                "v1": {},
-                "v2": {
                     "%num_metric": "like_28avg_84obs",
                     "%den_metric": "mrr",
-                    "%new_metric_id": 22,
+                    "%new_metric_id": 21,
                     "%new_metric_name": "like_per_dollar"
-                }
+                },
+                "v1": {}
             }
         },
         "list7": {
