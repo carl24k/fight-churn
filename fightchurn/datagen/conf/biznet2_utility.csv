@@ -1,9 +1,9 @@
 behavior,util
 search,1
-close_opportunity,6
+close_opportunity,15
 advance_stage,0.5
 add_competition,-1.5
 revert_stage,-1
 lose_opportunity,-10
 meeting_held,1
-schedule_meeting,1
+schedule_meeting,0.5

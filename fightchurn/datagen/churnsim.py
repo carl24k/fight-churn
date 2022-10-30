@@ -51,10 +51,10 @@ class ChurnSimulation:
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         if len(self.behavior_models)>=1:
             self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
-        self.util_mod.setChurnScale(self.behavior_models,self.population_percents)
+        self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv')
+        self.util_mod.setChurnScale(self.behavior_models,self.population_percents, self.plans)
         self.population_picker = np.cumsum(self.population_percents)
 
-        self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv')
         self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
 
         self.subscription_count = 0

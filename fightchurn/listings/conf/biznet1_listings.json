@@ -100,6 +100,13 @@
             "data_set_path": "biznet1/biznet1_dataset.csv",
             "type": "py"
         },
+        "list1": {
+            "name": "cohort_plot",
+            "params": {
+                "metric_to_plot": "mrr",
+                "ncohort" : 3
+            }
+        },
         "list2": {
             "name": "dataset_stats",
             "params": {}

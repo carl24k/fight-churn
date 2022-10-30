@@ -75,3 +75,6 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # SHAP
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 8
+
+# MRR Cohorts
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1
