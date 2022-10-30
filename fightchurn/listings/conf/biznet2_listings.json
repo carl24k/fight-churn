@@ -97,7 +97,7 @@
     },
     "chap5": {
         "defaults": {
-            "data_set_path": "biznet1/biznet1_dataset.csv",
+            "data_set_path": "biznet2/biznet2_dataset.csv",
             "type": "py"
         },
         "list2": {
@@ -120,10 +120,10 @@
             },
             "insert": {
                 "params": {
-                    "%num_metric": "advance_stage_28avg_84obs",
+                    "%num_metric": "close_opportunity_28avg_84obs",
                     "%den_metric": "mrr",
                     "%new_metric_id": 21,
-                    "%new_metric_name": "advance_stage_per_dollar"
+                    "%new_metric_name": "opp_close_per_dollar"
                 },
                 "v1": {}
             }
@@ -189,7 +189,7 @@
     },
     "chap9": {
         "defaults": {
-            "data_set_path": "biznet1/biznet1_dataset.csv",
+            "data_set_path": "biznet2/biznet2_dataset.csv",
             "type": "py"
         },
         "list6": {
