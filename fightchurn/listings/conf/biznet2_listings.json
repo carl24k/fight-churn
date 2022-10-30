@@ -1,0 +1,210 @@
+{
+    "chap2": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2022-03-01",
+            "%to_yyyy-mm-dd": "2022-04-01",
+            "mode": "one",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "net_retention",
+            "params": {}
+        },
+        "list2": {
+            "name": "churn_rate",
+            "params": {}
+        },
+        "list4": {
+            "name": "mrr_churn",
+            "params": {}
+        },
+        "list5": {
+            "name": "churn_rate_scaled",
+            "params": {
+                "%from_yyyy-mm-dd": "2022-03-01",
+                "%to_yyyy-mm-dd": "2022-06-01"
+            }
+        }
+    },
+    "chap3": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2022-02-02",
+            "%to_yyyy-mm-dd": "2022-05-10",
+            "mode": "top",
+            "type": "sql",
+            "%event2measure": "like",
+            "%field2sum": "0"
+        },
+        "list1": {
+            "name": "event_count",
+            "params": {}
+        },
+        "list2": {
+            "name": "multi_date_count",
+            "params": {}
+        },
+        "list12": {
+            "name": "account_tenure",
+            "params": {}
+        },
+        "list13": {
+            "name": "account_tenure_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 10
+            }
+        },
+        "list14": {
+            "name": "mrr",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 20}
+        }
+    },
+    "chap4": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2022-02-09",
+            "%to_yyyy-mm-dd": "2022-05-10",
+            "mode": "run",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "ongoing_active_periods",
+            "params": {
+                "%gap_interval": "7 day"
+            }
+        },
+        "list2": {
+            "name": "churned_periods",
+            "params": {
+                "%gap_interval": "7 day"
+            }
+        },
+        "list4": {
+            "name": "observation_dates",
+            "params": {
+                "%obs_interval": "1 month",
+                "%lead_time": "5 day"
+            }
+        },
+        "list5": {
+            "name": "dataset",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day"
+            }
+        }
+    },
+    "chap5": {
+        "defaults": {
+            "data_set_path": "biznet1/biznet1_dataset.csv",
+            "type": "py"
+        },
+        "list2": {
+            "name": "dataset_stats",
+            "params": {}
+        }
+    },
+    "chap7": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2022-02-01",
+            "%to_yyyy-mm-dd": "2022-05-10",
+            "mode": "top",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "ratio_metric",
+            "params": {
+                    "%num_metric": "newfriend_28avg_84obs",
+                    "%den_metric": "mrr"
+            },
+            "insert": {
+                "params": {
+                    "%num_metric": "like_28avg_84obs",
+                    "%den_metric": "mrr",
+                    "%new_metric_id": 21,
+                    "%new_metric_name": "like_per_dollar"
+                },
+                "v1": {}
+            }
+        },
+        "list7": {
+            "name": "scaled_events_per_month",
+            "params": {
+                "%event2measure": "unfriend",
+                "%obs_period": 84,
+                "%desc_period": 32
+            }
+        },
+        "list8": {
+            "name": "tenure_scaled_events_per_month",
+            "params": {
+                "%event2measure": "unfriend",
+                "%obs_period": 84,
+                "%desc_period": 28,
+                "%min_tenure": 14,
+                "%from_yyyy-mm-dd": "2022-03-01",
+                "%to_yyyy-mm-dd": "2022-05-10"
+            },
+            "insert": {
+                "params": {
+                    "%obs_period": 84,
+                    "%desc_period": 28,
+                    "%min_tenure": 14
+                },
+                "v1": {
+                    "%event2measure": "like",
+                    "%new_metric_id": 11
+                },
+                "v2": {
+                    "%event2measure": "newfriend",
+                    "%new_metric_id": 12
+                },
+                "v3": {
+                    "%event2measure": "post",
+                    "%new_metric_id": 13
+                },
+                "v4": {
+                    "%event2measure": "adview",
+                    "%new_metric_id": 14
+                },
+                "v5": {
+                    "%event2measure": "dislike",
+                    "%new_metric_id": 15
+                },
+                "v6": {
+                    "%event2measure": "unfriend",
+                    "%new_metric_id": 16
+                },
+                "v7": {
+                    "%event2measure": "message",
+                    "%new_metric_id": 17
+                },
+                "v8": {
+                    "%event2measure": "reply",
+                    "%new_metric_id": 18
+                }
+            }
+        }
+    },
+    "chap9": {
+        "defaults": {
+            "data_set_path": "biznet1/biznet1_dataset.csv",
+            "type": "py"
+        },
+        "list6": {
+            "name": "crossvalidate_xgb",
+            "params": {
+                "n_test_split": 2
+            }
+        },
+        "list7": {
+            "name": "churn_forecast_xgb",
+            "params": {}
+        },
+        "list8": {
+            "name": "shap_explain_xgb",
+            "params": {}
+        }
+    }
+}
