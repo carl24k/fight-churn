@@ -241,7 +241,7 @@ def run_churn_simulation(model_name, start_date, end_date, init_customers, rando
 
 if __name__ == "__main__":
 
-    model_name = 'socialnet7'
+    model_name = 'biznet2'
     if len(sys.argv) >= 2:
         model_name = sys.argv[1]
 

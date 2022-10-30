@@ -41,7 +41,7 @@ def setup_churn_db(schema_name):
         db.run(sql)
 
 if __name__ == "__main__":
-    schema_name='socialnet7'
+    schema_name='biznet2'
     if len(sys.argv) >= 2:
         schema_name = sys.argv[1]
     setup_churn_db(schema_name)
