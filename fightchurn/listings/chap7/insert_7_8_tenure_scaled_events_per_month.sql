@@ -1,6 +1,6 @@
 
 
-INSERT into metric_name values (%new_metric_id,'%event2measure_%desc_periodday_avg_%obs_periodday_obs_scaled')
+INSERT into metric_name values (%new_metric_id,'%event2measure_%desc_periodavg_%obs_periodobs')
 ON CONFLICT DO NOTHING;
 
 
