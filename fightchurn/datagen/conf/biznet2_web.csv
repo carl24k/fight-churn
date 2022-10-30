@@ -1,9 +1,0 @@
-﻿behavior,mean,search,close_opportunity,advance_stage,add_competition,revert_stage,lose_opportunity,meeting_held,schedule_meeting
-search,25,1,0.7,0.7,0.7,0.5,0.6,0.2,0.2
-close_opportunity,6,0.7,1,0.7,0.7,0.5,0.6,0.2,0.2
-advance_stage,50,0.7,0.7,1,0.7,0.5,0.6,0.2,0.2
-add_competition,24,0.7,0.7,0.7,1,0.5,0.6,0.2,0.2
-revert_stage,10,0.5,0.5,0.5,0.5,1,0.6,0.2,0.2
-lose_opportunity,1,0.6,0.6,0.6,0.6,0.6,1,0.2,0.2
-meeting_held,8,0.2,0.2,0.2,0.2,0.2,0.2,1,0.99
-schedule_meeting,2,0.2,0.2,0.2,0.2,0.2,0.2,0.99,1
