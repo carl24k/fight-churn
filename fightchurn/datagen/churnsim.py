@@ -49,7 +49,7 @@ class ChurnSimulation:
             self.model_list.append(behave_mod)
 
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
-        if len(self.behavior_models)>1:
+        if len(self.behavior_models)>=1:
             self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
         self.util_mod.setChurnScale(self.behavior_models,self.population_percents)
         self.population_picker = np.cumsum(self.population_percents)
