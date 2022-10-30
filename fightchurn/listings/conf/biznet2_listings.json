@@ -32,7 +32,7 @@
             "%to_yyyy-mm-dd": "2022-05-10",
             "mode": "top",
             "type": "sql",
-            "%event2measure": "like",
+            "%event2measure": "advance_stage",
             "%field2sum": "0"
         },
         "list1": {
@@ -115,15 +115,15 @@
         "list1": {
             "name": "ratio_metric",
             "params": {
-                    "%num_metric": "newfriend_28avg_84obs",
+                    "%num_metric": "close_opportunity_28avg_84obs",
                     "%den_metric": "mrr"
             },
             "insert": {
                 "params": {
-                    "%num_metric": "like_28avg_84obs",
+                    "%num_metric": "advance_stage_28avg_84obs",
                     "%den_metric": "mrr",
                     "%new_metric_id": 21,
-                    "%new_metric_name": "like_per_dollar"
+                    "%new_metric_name": "advance_stage_per_dollar"
                 },
                 "v1": {}
             }
@@ -131,7 +131,7 @@
         "list7": {
             "name": "scaled_events_per_month",
             "params": {
-                "%event2measure": "unfriend",
+                "%event2measure": "lose_opportunity",
                 "%obs_period": 84,
                 "%desc_period": 32
             }
@@ -139,7 +139,7 @@
         "list8": {
             "name": "tenure_scaled_events_per_month",
             "params": {
-                "%event2measure": "unfriend",
+                "%event2measure": "lose_opportunity",
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
@@ -153,35 +153,35 @@
                     "%min_tenure": 14
                 },
                 "v1": {
-                    "%event2measure": "like",
+                    "%event2measure": "advance_stage",
                     "%new_metric_id": 11
                 },
                 "v2": {
-                    "%event2measure": "newfriend",
+                    "%event2measure": "close_opportunity",
                     "%new_metric_id": 12
                 },
                 "v3": {
-                    "%event2measure": "post",
+                    "%event2measure": "search",
                     "%new_metric_id": 13
                 },
                 "v4": {
-                    "%event2measure": "adview",
+                    "%event2measure": "add_competition",
                     "%new_metric_id": 14
                 },
                 "v5": {
-                    "%event2measure": "dislike",
+                    "%event2measure": "revert_stage",
                     "%new_metric_id": 15
                 },
                 "v6": {
-                    "%event2measure": "unfriend",
+                    "%event2measure": "lose_opportunity",
                     "%new_metric_id": 16
                 },
                 "v7": {
-                    "%event2measure": "message",
+                    "%event2measure": "meeting_held",
                     "%new_metric_id": 17
                 },
                 "v8": {
-                    "%event2measure": "reply",
+                    "%event2measure": "schedule_meeting",
                     "%new_metric_id": 18
                 }
             }
