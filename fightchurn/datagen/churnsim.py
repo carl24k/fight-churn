@@ -247,7 +247,7 @@ if __name__ == "__main__":
 
     start_date = date(2022, 1, 1)
     end_date = date(2022, 6, 1)
-    init_customers = 4000
+    init_customers = 3000
 
 
     run_churn_simulation(model_name, start_date, end_date, init_customers)

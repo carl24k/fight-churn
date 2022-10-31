@@ -98,7 +98,7 @@ class UtilityModel:
         return churn_prob
 
     def downgrade_probability(self,u):
-        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+0.5))
+        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*2 + self.offset+0.5))
         return down_prob
 
 
@@ -123,7 +123,7 @@ class UtilityModel:
         u=self.utility_function(event_counts,customer)
         upgrade_probability = self.uprade_probability(u)
         downgrade_probability = self.downgrade_probability(u)
-        churn_probability = self.downgrade_probability(u)
+        # churn_probability = self.churn_probability(u)
         # print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
 
         if current_plan < plans.shape[0]-1:
