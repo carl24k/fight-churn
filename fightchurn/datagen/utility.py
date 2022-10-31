@@ -51,8 +51,8 @@ class UtilityModel:
             self.behave_means = self.behave_means + weight * bemod.behave_means.values
             self.behave_var = self.behave_var + weight * bemod.behave_var()
 
-        self.mrr_utility_cost = 0.1
-        self.offset = -2 # chosen to give around 5% churn rate on the simulation
+        self.mrr_utility_cost = 0.115
+        self.offset = -5 # chosen to give around 5% churn rate on the simulation
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means * self.linear_utility.values
         temp_customer = Customer(self.behave_means, satisfaction=1.0)
@@ -66,12 +66,12 @@ class UtilityModel:
         # self.offset = log(1.0 / r - 1.0) - self.kappa * self.expected_utility
         # print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(churn_fudge, r,log(1.0 / r - 1.0)))
 
-        print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
-        print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
-        expected_unscaled_prob = self.downgrade_probability(self.expected_utility)
-        print('\tExpected downgrade/churn prob={}'.format(expected_unscaled_prob))
-        if input("okay? (enter y to proceed) ") != 'y':
-            exit(0)
+        # print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
+        # print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
+        # expected_unscaled_prob = self.downgrade_probability(self.expected_utility)
+        # print('\tExpected downgrade/churn prob={}'.format(expected_unscaled_prob))
+        # if input("okay? (enter y to proceed) ") != 'y':
+        #     exit(0)
 
     def utility_function(self,event_counts,customer):
         '''
