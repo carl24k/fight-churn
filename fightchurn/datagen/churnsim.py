@@ -33,7 +33,7 @@ class ChurnSimulation:
         self.start_date = start
         self.end_date = end
         self.init_customers=init_customers
-        self.monthly_growth_rate = 0.1
+        self.monthly_growth_rate = 0.04
 
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
@@ -247,7 +247,7 @@ if __name__ == "__main__":
 
     start_date = date(2022, 1, 1)
     end_date = date(2022, 6, 1)
-    init_customers = 3000
+    init_customers = 4000
 
 
     run_churn_simulation(model_name, start_date, end_date, init_customers)
