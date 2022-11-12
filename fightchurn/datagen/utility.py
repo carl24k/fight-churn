@@ -51,7 +51,7 @@ class UtilityModel:
             self.behave_means = self.behave_means + weight * bemod.behave_means.values
             self.behave_var = self.behave_var + weight * bemod.behave_var()
 
-        self.mrr_utility_cost = 0.115
+        self.mrr_utility_cost = 0.1
         self.offset = -5 # chosen to give around 5% churn rate on the simulation
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means * self.linear_utility.values

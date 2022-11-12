@@ -1,4 +1,4 @@
 plan,mrr,prob
-basic,5,0.34
-standard,20,0.33
-premier,35,0.33
+basic,10,0.34
+standard,50,0.33
+premier,100,0.33
