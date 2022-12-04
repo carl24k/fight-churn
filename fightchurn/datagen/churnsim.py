@@ -1,9 +1,12 @@
 
 from datetime import date, timedelta, datetime
+from dateutil import parser
 from dateutil.relativedelta import *
 import random
 from postgres import Postgres
 from math import ceil
+
+import argparse
 import os
 import glob
 import sys
@@ -18,7 +21,7 @@ from fightchurn.datagen.utility import UtilityModel
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers,seed):
+    def __init__(self, model, start, end, init_customers,growth_rate, seed):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -33,7 +36,7 @@ class ChurnSimulation:
         self.start_date = start
         self.end_date = end
         self.init_customers=init_customers
-        self.monthly_growth_rate = 0.04
+        self.monthly_growth_rate = growth_rate
 
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
@@ -233,21 +236,25 @@ class ChurnSimulation:
 
         self.remove_tmp_files()
 
-def run_churn_simulation(model_name, start_date, end_date, init_customers, random_seed=None):
+def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, random_seed=None):
     if random_seed is not None:
         random.seed(random_seed) # for random
-    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers,random_seed)
+    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth, random_seed)
     churn_sim.run_simulation()
 
 if __name__ == "__main__":
 
-    model_name = 'biznet2'
-    if len(sys.argv) >= 2:
-        model_name = sys.argv[1]
+    arg_parse = argparse.ArgumentParser()
+    # Run control arguments
+    arg_parse.add_argument("--model", type=str, help="The name of the schema", default='socialnet7')
+    arg_parse.add_argument("--start_date", type=str, help="The name of the schema", default='2020-01-01')
+    arg_parse.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
+    arg_parse.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
+    arg_parse.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
 
-    start_date = date(2022, 1, 1)
-    end_date = date(2022, 6, 1)
-    init_customers = 10000
+    args, _ = arg_parse.parse_known_args()
 
+    start_date = parser.parse(args.start_date)
+    end_date = parser.parse(args.end_date)
 
-    run_churn_simulation(model_name, start_date, end_date, init_customers)
+    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate)

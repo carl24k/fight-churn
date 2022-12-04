@@ -36,7 +36,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py $SCHEMA
+../../venv/bin/python churnsim.py --model $SCHEMA --start_date 2022-01-01 --end_date 2022-06-01
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
@@ -65,7 +65,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
 
 # Extract the data
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 5
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 7
 
 # Stats
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2

@@ -14,7 +14,6 @@ sum(case when metric_name_id=5 then metric_value else 0 end) as unfriend_per_mon
 sum(case when metric_name_id=6 then metric_value else 0 end) as message_per_month,
 sum(case when metric_name_id=7 then metric_value else 0 end) as reply_per_month,
 sum(case when metric_name_id=8 then metric_value else 0 end) as account_tenure,
-sum(case when metric_name_id=9 then metric_value else 0 end) as mrr,
 sum(case when metric_name_id=21 then metric_value else 0 end) as adview_per_post,
 sum(case when metric_name_id=22 then metric_value else 0 end) as reply_per_message,
 sum(case when metric_name_id=23 then metric_value else 0 end) as like_per_post,

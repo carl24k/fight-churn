@@ -4,7 +4,7 @@
 
 # run_churn_listing.py
 
-SCHEMA=biznet1
+SCHEMA=socialnet7
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
 CHURN_DB_USER=carl
@@ -36,7 +36,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py $SCHEMA
+../../venv/bin/python churnsim.py --model $SCHEMA
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
