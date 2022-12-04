@@ -32,10 +32,20 @@ class UtilityModel:
         self.name=name
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         data=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
-        self.linear_utility=data['util']
-        self.behave_names=data.index.values
-
-        # exit(0)
+        self.utility_weights=data['util']
+        self.offset = self.utility_weights.loc['offset']
+        self.mrr_utility_cost=self.utility_weights.loc['mrr']
+        if self.mrr_utility_cost > 0:
+            print(f"*** WARNING: MRR Should have a non-positive utility impact, but found {self.mrr_utility_cost}")
+        self.utility_weights = self.utility_weights.drop(['offset','mrr'],axis=0)
+        self.behave_names=self.utility_weights.index.values
+        # Setup in setChurnScale,below
+        self.behave_means = None
+        self.behave_var = None
+        self.expected_contributions = None
+        self.expected_utility = None
+        self.ex_util_vol = None
+        self.kappa = None
 
     def setChurnScale(self,bemodDict,model_weights, plans):
 
@@ -51,21 +61,14 @@ class UtilityModel:
             self.behave_means = self.behave_means + weight * bemod.behave_means.values
             self.behave_var = self.behave_var + weight * bemod.behave_var()
 
-        self.mrr_utility_cost = 0.1
-        self.offset = -5 # chosen to give around 5% churn rate on the simulation
         # pick the constant so the mean behavior has the target churn rate
-        self.expected_contributions = self.behave_means * self.linear_utility.values
+        self.expected_contributions = self.behave_means * self.utility_weights.values
         temp_customer = Customer(self.behave_means, satisfaction=1.0)
-        temp_customer.mrr = plans['mrr'][0]
-        self.expected_utility = self.utility_function(self.behave_means, temp_customer)
-        self.ex_util_vol = np.sqrt(np.dot(self.behave_var, self.linear_utility.values))
-        assert self.expected_utility > 0, "Print model requires utility >0, instead expected utility is %f" % self.expected_utility
-        # churn_fudge = 0.02
-        # r = 1.0 - churn_fudge
+        temp_customer.mrr = plans['mrr'].mean()
+        self.ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))
         self.kappa = -1.0 / self.ex_util_vol
-        # self.offset = log(1.0 / r - 1.0) - self.kappa * self.expected_utility
-        # print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(churn_fudge, r,log(1.0 / r - 1.0)))
 
+        # print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(churn_fudge, r,log(1.0 / r - 1.0)))
         # print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
         # print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
         # expected_unscaled_prob = self.downgrade_probability(self.expected_utility)
@@ -83,7 +86,7 @@ class UtilityModel:
         contrib_ratios = event_counts / self.behave_means
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
         utility = np.sum(utility_contribs)
-        utility = utility - customer.mrr* self.mrr_utility_cost
+        utility = utility + customer.mrr* self.mrr_utility_cost
         if customer.satisfaction_propensity != 1.0:
             multiplier = customer.satisfaction_propensity if utility > 0.0  else (1.0/customer.satisfaction_propensity)
         else:
