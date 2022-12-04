@@ -87,7 +87,7 @@
                 "%lead_time": "5 day"
             }
         },
-        "list5": {
+        "list7": {
             "name": "dataset",
             "params": {
                 "mode": "save",
