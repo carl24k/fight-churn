@@ -59,6 +59,12 @@
                 "%new_metric_id": 20
             }
         },
+        "list8": {
+            "name": "metric_coverage",
+            "params": {
+                "mode": "save"
+            }
+        },
         "list12": {
             "name": "account_tenure",
             "params": {}
@@ -71,7 +77,7 @@
             }
         },
         "list17": {
-            "name": "mrr",
+            "name": "mrr_insert",
             "params": {
                 "mode": "run",
                 "%new_metric_id": 20}

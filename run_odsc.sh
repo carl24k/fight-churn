@@ -63,6 +63,9 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ## ratios
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1  --insert
 
+# Metric QA
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 8
+
 # Calculate active periods and observation dates
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
 
