@@ -70,7 +70,7 @@
                 "%new_metric_id": 10
             }
         },
-        "list14": {
+        "list17": {
             "name": "mrr",
             "params": {
                 "mode": "run",
