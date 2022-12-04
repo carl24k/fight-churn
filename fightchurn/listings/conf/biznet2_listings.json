@@ -43,6 +43,22 @@
             "name": "multi_date_count",
             "params": {}
         },
+        "list4": {
+            "name": "metric_name_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_name": "account_tenure",
+                "%new_metric_id": 10
+            },
+            "v1": {
+                "%new_metric_name": "account_tenure",
+                "%new_metric_id": 10
+            },
+            "v2": {
+                "%new_metric_name": "mrr",
+                "%new_metric_id": 20
+            }
+        },
         "list12": {
             "name": "account_tenure",
             "params": {}

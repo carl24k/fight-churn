@@ -51,6 +51,8 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
 # MRR metric
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 14
+# MRR & Tenure names
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2
 
 
 # Scaled metrics
