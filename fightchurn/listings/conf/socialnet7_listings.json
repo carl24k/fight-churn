@@ -603,7 +603,7 @@
                     "%new_metric_name": "dislike_percent"
                 },
                 "v7": {
-                    "%num_metric": "unfriend_28day_avg_84day_obs_scaled",
+                    "%num_metric": "unfriend_28avg_84obs",
                     "%den_metric": "newfriend_per_month",
                     "%new_metric_id": 28,
                     "%new_metric_name": "unfriend_per_newfriend_scaled"
