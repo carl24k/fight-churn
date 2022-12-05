@@ -90,9 +90,9 @@ class GaussianBehaviorModel(BehaviorModel):
             self.scale_correlation_to_covariance()
 
         # Save to a csv
-        save_path = os.getenv('CHURN_OUT_DIR') + name + '/'
+        save_path = save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
         os.makedirs(save_path, exist_ok=True)
-        copy_path = save_path + name + '_simulation_model.csv'
+        copy_path = os.path.join(save_path,  name + '_simulation_model.csv')
         copyfile(model_path, copy_path)
 
         # For debugging

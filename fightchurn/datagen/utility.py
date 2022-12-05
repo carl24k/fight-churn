@@ -69,8 +69,20 @@ class UtilityModel:
         expected_utility = self.utility_function(self.behave_means, temp_customer)
         print(f'Utility model expected util={expected_utility}, util_vol={ex_util_vol}')
         print(f'\tKappa={self.kappa}, Offset={self.utility_offset}')
-        expected_prob = self.downgrade_probability(expected_utility)
-        print(f'\tExpected downgrade/churn prob={expected_prob}')
+        down_prob = self.downgrade_probability(expected_utility)
+        churn_prob = self.churn_probability(expected_utility)
+        up_prob = self.uprade_probability(expected_utility)
+        print(f'\tExpected churn/down/up prob={churn_prob} /  { down_prob} / {up_prob}')
+        util_series = np.linspace(0,5*expected_utility,20)
+        expectated_df=pd.DataFrame({'utility':util_series,
+                                    'churn' : [self.churn_probability(u) for u in util_series],
+                                    'down' : [self.downgrade_probability(u) for u in util_series],
+                                    'up' : [self.uprade_probability(u) for u in util_series]})
+        print(expectated_df)
+        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        os.makedirs(save_path, exist_ok=True)
+        expectated_df.to_csv(os.path.join(save_path, f'{self.name}_expected_probabilities.csv'))
+
         if input("okay? (enter y to proceed) ") != 'y':
             exit(0)
 
