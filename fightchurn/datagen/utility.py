@@ -33,7 +33,7 @@ class UtilityModel:
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         data=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
         self.utility_weights=data['util']
-        self.offset = self.utility_weights.loc['offset']
+        self.utility_offset = self.utility_weights.loc['offset']
         self.mrr_utility_cost=self.utility_weights.loc['mrr']
         if self.mrr_utility_cost > 0:
             print(f"*** WARNING: MRR Should have a non-positive utility impact, but found {self.mrr_utility_cost}")
@@ -43,8 +43,6 @@ class UtilityModel:
         self.behave_means = None
         self.behave_var = None
         self.expected_contributions = None
-        self.expected_utility = None
-        self.ex_util_vol = None
         self.kappa = None
 
     def setChurnScale(self,bemodDict,model_weights, plans):
@@ -63,23 +61,24 @@ class UtilityModel:
 
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means * self.utility_weights.values
+        ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))
+        self.kappa = -1.0 / ex_util_vol
+
         temp_customer = Customer(self.behave_means, satisfaction=1.0)
         temp_customer.mrr = plans['mrr'].mean()
-        self.ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))
-        self.kappa = -1.0 / self.ex_util_vol
-
-        # print('Churn={}, Retention={}, offset offset = {} [log(1.0/r-1.0) ]'.format(churn_fudge, r,log(1.0 / r - 1.0)))
-        # print('Utility model expected util={}, util_vol={}'.format(self.expected_utility, self.ex_util_vol))
-        # print('\tKappa={}, Offset={}'.format(self.kappa, self.offset))
-        # expected_unscaled_prob = self.downgrade_probability(self.expected_utility)
-        # print('\tExpected downgrade/churn prob={}'.format(expected_unscaled_prob))
-        # if input("okay? (enter y to proceed) ") != 'y':
-        #     exit(0)
+        expected_utility = self.utility_function(self.behave_means, temp_customer)
+        print(f'Utility model expected util={expected_utility}, util_vol={ex_util_vol}')
+        print(f'\tKappa={self.kappa}, Offset={self.utility_offset}')
+        expected_prob = self.downgrade_probability(expected_utility)
+        print(f'\tExpected downgrade/churn prob={expected_prob}')
+        if input("okay? (enter y to proceed) ") != 'y':
+            exit(0)
 
     def utility_function(self,event_counts,customer):
         '''
-        Given a vector of event_counts counts, calculate the model for customer utility.  Right now its just a dot
-        product and doesn't use the matrix.  That can be added in the future to make more complex simulations.
+        Utility calculation for a customer:
+        1. Take the ratios of the customer's event counts to the mean event counts
+        
         :param event_counts:
         :return:
         '''
@@ -96,18 +95,18 @@ class UtilityModel:
 
     def churn_probability(self,u):
 
-        churn_prob=1.0-1.0/(1.0+exp(self.kappa*u + self.offset))
+        churn_prob=1.0-1.0/(1.0 + exp(self.kappa * u + self.utility_offset))
 
         return churn_prob
 
     def downgrade_probability(self,u):
-        down_prob=1.0-1.0/(1.0+exp(self.kappa*u*2 + self.offset+0.5))
+        down_prob=1.0-1.0/(1.0 + exp(self.kappa * u * 2 + self.utility_offset + 0.5))
         return down_prob
 
 
     def uprade_probability(self,u):
         # up_prob=1.0/(1.0+exp(self.kappa*u*2 + self.offset+6))
-        up_prob=1.0/(1.0+exp(self.kappa*u*0.5 + self.offset+7.5))
+        up_prob=1.0/(1.0 + exp(self.kappa * u * 0.5 + self.utility_offset + 7.5))
         return up_prob
 
     def simulate_churn(self,event_counts,customer):
