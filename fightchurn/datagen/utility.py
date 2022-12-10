@@ -31,19 +31,21 @@ class UtilityModel:
         '''
         self.name=name
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
-        data=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
-        self.utility_weights=data['util']
-        self.utility_offset = self.utility_weights.loc['offset']
+
+        util_df=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
+        self.utility_weights=util_df['util']
         self.mrr_utility_cost=self.utility_weights.loc['mrr']
         if self.mrr_utility_cost > 0:
             print(f"*** WARNING: MRR Should have a non-positive utility impact, but found {self.mrr_utility_cost}")
-        self.utility_weights = self.utility_weights.drop(['offset','mrr'],axis=0)
+        self.utility_weights = self.utility_weights.drop(['mrr'],axis=0)
         self.behave_names=self.utility_weights.index.values
+
+        self.transition_df = pd.read_csv(local_dir + name+'_updownchurn.csv',index_col=0)
+
         # Setup in setChurnScale,below
         self.behave_means = None
         self.behave_var = None
         self.expected_contributions = None
-        self.kappa = None
 
     def setChurnScale(self,bemodDict,model_weights, plans):
 
@@ -62,26 +64,25 @@ class UtilityModel:
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means * self.utility_weights.values
         ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))[0]
-        self.kappa = -1.0 / ex_util_vol
 
         temp_customer = Customer(self.behave_means, satisfaction=1.0)
         temp_customer.mrr = plans['mrr'].mean()
         expected_utility = self.utility_function(self.behave_means, temp_customer)
         print(f'Utility model expected util={expected_utility}, util_vol={ex_util_vol}')
-        print(f'\tKappa={self.kappa}, Offset={self.utility_offset}')
+        print(self.transition_df)
         down_prob = self.downgrade_probability(expected_utility)
         churn_prob = self.churn_probability(expected_utility)
         up_prob = self.uprade_probability(expected_utility)
         print(f'\tExpected churn/down/up prob={churn_prob} /  { down_prob} / {up_prob}')
         util_series = np.linspace(np.round(expected_utility-5*ex_util_vol),np.round(expected_utility+5*ex_util_vol),20)
-        expectated_df=pd.DataFrame({'utility':util_series,
+        expected_df=pd.DataFrame({'utility':util_series,
                                     'churn' : [self.churn_probability(u) for u in util_series],
                                     'down' : [self.downgrade_probability(u) for u in util_series],
                                     'up' : [self.uprade_probability(u) for u in util_series]})
-        print(expectated_df)
+        print(expected_df)
         save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
         os.makedirs(save_path, exist_ok=True)
-        expectated_df.to_csv(os.path.join(save_path, f'{self.name}_expected_probabilities.csv'))
+        expected_df.to_csv(os.path.join(save_path, f'{self.name}_expected_probabilities.csv'))
 
         if input("okay? (enter y to proceed) ") != 'y':
             exit(0)
@@ -105,20 +106,26 @@ class UtilityModel:
         utility *= multiplier
         return utility
 
+    def transition_probility(self,u,trans):
+        offset = self.transition_df.loc[trans,'offset']
+        scale = self.transition_df.loc[trans,'scale']
+        prob=1.0/(1.0 + exp(-1.*scale * u + offset))
+        if trans in ['downsell','churn']:
+            prob = 1.0 - prob
+        return prob
+
+
     def churn_probability(self,u):
-
-        churn_prob=1.0-1.0/(1.0 + exp(self.kappa * u + self.utility_offset))
-
+        churn_prob = self.transition_probility(u,'churn')
         return churn_prob
 
     def downgrade_probability(self,u):
-        down_prob=1.0-1.0/(1.0 + exp(self.kappa * u * 2 + self.utility_offset + 0.5))
+        down_prob= self.transition_probility(u,'downsell')
         return down_prob
 
 
     def uprade_probability(self,u):
-        # up_prob=1.0/(1.0+exp(self.kappa*u*2 + self.offset+6))
-        up_prob=1.0/(1.0 + exp(self.kappa * u * 0.5 + self.utility_offset + 7.5))
+        up_prob = self.transition_probility(u,'upsell')
         return up_prob
 
     def simulate_churn(self,event_counts,customer):

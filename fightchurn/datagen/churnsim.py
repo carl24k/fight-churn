@@ -45,7 +45,7 @@ class ChurnSimulation:
         self.model_list = []
         for b in behavior_versions:
             version = b[(b.find(self.model_name) + len(self.model_name)+1):-4]
-            if version in ('utility','population','country','plans'):
+            if version in ('utility','population','country','plans','updownchurn'):
                 continue
             behave_mod=FatTailledBehaviorModel(self.model_name,seed,version)
             self.behavior_models[behave_mod.version]=behave_mod
