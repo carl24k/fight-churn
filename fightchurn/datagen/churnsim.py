@@ -21,7 +21,7 @@ from fightchurn.datagen.utility import UtilityModel
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers,growth_rate, seed):
+    def __init__(self, model, start, end, init_customers,growth_rate, devmode, seed):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -37,7 +37,7 @@ class ChurnSimulation:
         self.end_date = end
         self.init_customers=init_customers
         self.monthly_growth_rate = growth_rate
-
+        self.devmode= devmode
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         behavior_versions = glob.glob(local_dir+self.model_name+'_*.csv')
@@ -56,7 +56,8 @@ class ChurnSimulation:
             self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
         self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv')
         self.util_mod.setExpectations(self.behavior_models,self.population_percents)
-        self.util_mod.checkTransitionRates(self.behavior_models, self.population_percents, self.plans)
+        if self.devmode:
+            self.util_mod.checkTransitionRates(self.behavior_models, self.population_percents, self.plans)
         self.population_picker = np.cumsum(self.population_percents)
 
         self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
@@ -237,10 +238,10 @@ class ChurnSimulation:
 
         self.remove_tmp_files()
 
-def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, random_seed=None):
+def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None):
     if random_seed is not None:
         random.seed(random_seed) # for random
-    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth, random_seed)
+    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth,devmode, random_seed)
     churn_sim.run_simulation()
 
 if __name__ == "__main__":
@@ -252,10 +253,11 @@ if __name__ == "__main__":
     arg_parse.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
     arg_parse.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
     arg_parse.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
+    arg_parse.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
 
     args, _ = arg_parse.parse_known_args()
 
     start_date = parser.parse(args.start_date)
     end_date = parser.parse(args.end_date)
 
-    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate)
+    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.dev)

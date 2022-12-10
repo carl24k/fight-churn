@@ -143,8 +143,8 @@ class UtilityModel:
         u=self.utility_function(event_counts,customer)
         upgrade_probability = self.uprade_probability(u)
         downgrade_probability = self.downgrade_probability(u)
-        churn_probability = self.churn_probability(u)
-        print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
+        # churn_probability = self.churn_probability(u)
+        # print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
 
         if current_plan < plans.shape[0]-1:
             if uniform(0, 1) < upgrade_probability:
