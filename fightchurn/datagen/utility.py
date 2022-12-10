@@ -42,38 +42,37 @@ class UtilityModel:
 
         self.transition_df = pd.read_csv(local_dir + name+'_updownchurn.csv',index_col=0)
 
-        # Setup in setChurnScale,below
+        # Setup in setExpectations,below
         self.behave_means = None
-        self.behave_var = None
         self.expected_contributions = None
 
-    def setChurnScale(self,bemodDict,model_weights, plans):
-
+    def setExpectations(self,bemodDict,model_weights):
         assert sum(model_weights['pcnt'])==1.0, "Model weights should sum to 1.0"
         n_behaviors = len(self.behave_names)
         self.behave_means = np.zeros((1,n_behaviors))
-        self.behave_var = np.zeros((1,n_behaviors))
-
         for bemod in bemodDict.values():
             assert n_behaviors == len(bemod.behave_names)
             assert all(self.behave_names == bemod.behave_names)
             weight = model_weights.loc[bemod.version,'pcnt']
             self.behave_means = self.behave_means + weight * bemod.behave_means.values
-            self.behave_var = self.behave_var + weight * bemod.behave_var()
-
-        # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means * self.utility_weights.values
-        ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))[0]
 
+    def checkTransitionRates(self, bemodDict, model_weights, plans):
+        # Make a single weighted average covariance matrix
+        n_behaviors = len(self.behave_names)
+        behave_var = np.zeros((1,n_behaviors))
+        for bemod in bemodDict.values():
+            weight = model_weights.loc[bemod.version,'pcnt']
+            behave_var = behave_var + weight * bemod.behave_var()
+        # Volatility of Utility
+        ex_util_vol = np.sqrt(np.dot(behave_var, self.utility_weights.values))[0]
+        # Temporary Customer
         temp_customer = Customer(self.behave_means, satisfaction=1.0)
         temp_customer.mrr = plans['mrr'].mean()
         expected_utility = self.utility_function(self.behave_means, temp_customer)
-        print(f'Utility model expected util={expected_utility}, util_vol={ex_util_vol}')
+        print(f'Utility model expected utility={expected_utility}, utility volatility estaimte={ex_util_vol}')
         print(self.transition_df)
-        down_prob = self.downgrade_probability(expected_utility)
-        churn_prob = self.churn_probability(expected_utility)
-        up_prob = self.uprade_probability(expected_utility)
-        print(f'\tExpected churn/down/up prob={churn_prob} /  { down_prob} / {up_prob}')
+        print(f'\tExpected churn/down/up prob:')
         util_series = np.linspace(np.round(expected_utility-5*ex_util_vol),np.round(expected_utility+5*ex_util_vol),20)
         expected_df=pd.DataFrame({'utility':util_series,
                                     'churn' : [self.churn_probability(u) for u in util_series],
