@@ -61,7 +61,7 @@ class UtilityModel:
 
         # pick the constant so the mean behavior has the target churn rate
         self.expected_contributions = self.behave_means * self.utility_weights.values
-        ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))
+        ex_util_vol = np.sqrt(np.dot(self.behave_var, self.utility_weights.values))[0]
         self.kappa = -1.0 / ex_util_vol
 
         temp_customer = Customer(self.behave_means, satisfaction=1.0)
@@ -73,7 +73,7 @@ class UtilityModel:
         churn_prob = self.churn_probability(expected_utility)
         up_prob = self.uprade_probability(expected_utility)
         print(f'\tExpected churn/down/up prob={churn_prob} /  { down_prob} / {up_prob}')
-        util_series = np.linspace(0,5*expected_utility,20)
+        util_series = np.linspace(np.round(expected_utility-5*ex_util_vol),np.round(expected_utility+5*ex_util_vol),20)
         expectated_df=pd.DataFrame({'utility':util_series,
                                     'churn' : [self.churn_probability(u) for u in util_series],
                                     'down' : [self.downgrade_probability(u) for u in util_series],
@@ -137,8 +137,8 @@ class UtilityModel:
         u=self.utility_function(event_counts,customer)
         upgrade_probability = self.uprade_probability(u)
         downgrade_probability = self.downgrade_probability(u)
-        # churn_probability = self.churn_probability(u)
-        # print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
+        churn_probability = self.churn_probability(u)
+        print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
 
         if current_plan < plans.shape[0]-1:
             if uniform(0, 1) < upgrade_probability:
