@@ -1,19 +1,22 @@
 
+from filelock import FileLock
 from datetime import date, datetime, timedelta,time
 from dateutil import relativedelta
 from numpy import random
 from random import randrange, uniform
+import tempfile
 import numpy as np
-
+import os
 
 
 class Customer:
-    id_counter=0
     MIN_AGE = 12.0
     MAX_AGE = 82.0
     AGE_RANGE = MAX_AGE - MIN_AGE
     AVG_AGE = (MAX_AGE + MIN_AGE) / 2.0
     date_multipliers = {}
+    ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
+    ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
     def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None):
         '''
@@ -22,8 +25,17 @@ class Customer:
         own subscriptions and events.
         :param behavior_rates: ndarray of behavior rates, which are assumed to be PER MONTH
         '''
-        self.id=Customer.id_counter # set the id to the current class variable
-        Customer.id_counter+=1 # increment the class variable
+        with FileLock(Customer.ID_LOCK_FILE):
+            next_id = 0
+            if os.path.exists(Customer.ID_FILE):
+                with open(Customer.ID_FILE, 'r') as id_file:
+                    next_id = int(id_file.readline())
+            self.id=next_id # set the id to the current class variable
+            with open(Customer.ID_FILE, 'w') as id_file:
+                id_file.write(f'{next_id+1}\n')
+            if self.id % 100==0:
+                print(f'Simulating customer {self.id}...')
+
 
         self.behave_per_month=behavior_rates
         self.behave_per_day = (1.0/30.0)*self.behave_per_month

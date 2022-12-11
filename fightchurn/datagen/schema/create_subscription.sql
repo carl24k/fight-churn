@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS  x.subscription
 (
-    id integer NOT NULL,
     account_id integer NOT NULL,
     product text COLLATE pg_catalog."default" NOT NULL,
     start_date date NOT NULL,
@@ -8,8 +7,7 @@ CREATE TABLE IF NOT EXISTS  x.subscription
     mrr double precision NOT NULL,
     quantity double precision NULL,
     units  text COLLATE pg_catalog."default" NULL,
-    bill_period_months integer NOT NULL,
-    CONSTRAINT subscription_pkey PRIMARY KEY (id)
+    bill_period_months integer NOT NULL
 )
 WITH (
     OIDS = FALSE

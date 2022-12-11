@@ -8,16 +8,16 @@ from math import ceil
 
 import argparse
 import os
+from joblib import Parallel, delayed
 import glob
-import sys
-import tempfile
 import pandas as pd
 import numpy as np
 import psycopg2 as post
+import tempfile
 
 from fightchurn.datagen.behavior import FatTailledBehaviorModel
 from fightchurn.datagen.utility import UtilityModel
-
+from fightchurn.datagen.customer import  Customer
 
 class ChurnSimulation:
 
@@ -62,25 +62,20 @@ class ChurnSimulation:
 
         self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
 
-        self.subscription_count = 0
-        self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),'{}_tmp_sub.csv'.format(self.model_name))
-        self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),'{}_tmp_event.csv'.format(self.model_name))
+        self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_sub.csv')
+        self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
 
-        con_string = f"postgresql://{os.environ.get('CHURN_DB_HOST','localhost')}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
-        self.db = Postgres(con_string)
+    def con_string(self):
+        return f"postgresql://{os.environ.get('CHURN_DB_HOST','localhost')}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
 
-        self.con = post.connect( database= os.environ['CHURN_DB'],
-                                 user= os.environ['CHURN_DB_USER'],
-                                 password=os.environ['CHURN_DB_PASS'],
-                                 host=os.environ.get('CHURN_DB_HOST','localhost'))
 
     def remove_tmp_files(self):
         '''
         Remove temp files when the simulation is over
         :return:
         '''
-        os.remove(self.tmp_event_file_name)
-        os.remove(self.tmp_sub_file_name)
+        os.remove(Customer.ID_LOCK_FILE)
+        os.remove(Customer.ID_FILE)
 
     def pick_customer_model(self):
         choice = random.uniform(0,1)
@@ -134,15 +129,11 @@ class ChurnSimulation:
         :return:
         '''
 
-        total_subscriptions=0
-        total_events=0
-        for i in range(n_to_create):
+        def create_one_customer():
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
-            total_subscriptions+=len(customer.subscriptions)
-            total_events+=len(customer.events)
-            if i % 100==0:
-                print('Simulated customer {}/{}: {:,} subscriptions & {:,} events'.format(i,n_to_create, total_subscriptions, total_events))
+
+        Parallel(n_jobs=-1)(delayed(create_one_customer)() for i in range(n_to_create))
 
 
     def copy_customer_to_database(self,customer):
@@ -151,32 +142,44 @@ class ChurnSimulation:
         :param customer: a Customer object that has already had its simulation run
         :return:
         '''
-        with open(self.tmp_sub_file_name, 'w') as tmp_file:
+        sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
+        event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
+        db = Postgres(self.con_string())
+
+        with open(sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
-                tmp_file.write("%d,%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (self.subscription_count, customer.id, self.model_name, s[0], s[1], s[2])) # mrr is 3rd element
-                self.subscription_count += 1
-        with open(self.tmp_event_file_name, 'w') as tmp_file:
+                tmp_file.write("%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
+                               (customer.id, self.model_name, s[0], s[1], s[2])) # mrr is 3rd element
+        with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write("%d,'%s',%d\n" % (customer.id, e[0], e[1]))
 
-        sql =         "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
+        sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
                                                                 customer.date_of_birth.isoformat(),
                                                                 'NULL' if customer.country == 'None' else "'{}'".format(
                                                                     customer.country))
-        self.db.run(sql)
 
-        cur = self.con.cursor()
+        db.run(sql)
+
+        con = post.connect( database= os.environ['CHURN_DB'],
+                                 user= os.environ['CHURN_DB_USER'],
+                                 password=os.environ['CHURN_DB_PASS'],
+                                 host=os.environ.get('CHURN_DB_HOST','localhost'))
+        cur = con.cursor()
 
         sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
-        with open(self.tmp_sub_file_name, 'r') as f:
+        with open(sub_file_name, 'r') as f:
             cur.copy_expert(sql, f)
-        self.con.commit()
+        con.commit()
 
         sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
-        with open(self.tmp_event_file_name, 'r') as f:
+        with open(event_file_name, 'r') as f:
             cur.copy_expert(sql, f)
-        self.con.commit()
+        con.commit()
+        con.close()
+
+        os.remove(event_file_name)
+        os.remove(sub_file_name)
 
 
     def truncate_old_sim(self):
@@ -184,21 +187,23 @@ class ChurnSimulation:
         Removes an old simulation from the database, if it already exists for this model
         :return: True if is safe to proceed (no data or data removed); False means old data not removed
         '''
-        oldEvent= self.db.one('select count(*) from %s.event' % self.model_name)
-        oldSubs= self.db.one('select count(*) from %s.subscription' % self.model_name)
-        oldAccount = self.db.one('select count(*) from %s.account' % self.model_name)
+        db= Postgres(self.con_string())
+
+        oldEvent= db.one('select count(*) from %s.event' % self.model_name)
+        oldSubs= db.one('select count(*) from %s.subscription' % self.model_name)
+        oldAccount = db.one('select count(*) from %s.account' % self.model_name)
         if oldEvent > 0 or oldSubs>0 or oldAccount>0:
             print('TRUNCATING *Events/Metrics & Subscriptions/Observations* in schema -> %s <-  ...' % self.model_name)
             if input("are you sure? (enter %s to proceed) " % self.model_name) == self.model_name:
                 if oldEvent > 0:
-                    self.db.run('truncate table %s.event' % self.model_name)
-                    self.db.run('truncate table %s.metric' % self.model_name)
+                    db.run('truncate table %s.event' % self.model_name)
+                    db.run('truncate table %s.metric' % self.model_name)
                 if oldAccount > 0:
-                    self.db.run('truncate table %s.account' % self.model_name)
+                    db.run('truncate table %s.account' % self.model_name)
                 if oldSubs > 0:
-                    self.db.run('truncate table %s.subscription' % self.model_name)
-                    self.db.run('truncate table %s.active_period' % self.model_name)
-                    self.db.run('truncate table %s.observation' % self.model_name)
+                    db.run('truncate table %s.subscription' % self.model_name)
+                    db.run('truncate table %s.active_period' % self.model_name)
+                    db.run('truncate table %s.observation' % self.model_name)
                 return True
             else:
                 return False
@@ -218,13 +223,16 @@ class ChurnSimulation:
         # database setup
         if not self.truncate_old_sim():
             return
+        self.remove_tmp_files()
+
         # Any model can insert the event types
-        self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,self.db)
+        db = Postgres(self.con_string())
+        self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
 
         # Initial customer count
         print('\nCreating %d initial customers for month of %s' % (self.init_customers,self.start_date))
         self.create_customers_for_month(self.start_date,self.init_customers)
-        print('Created %d initial customers with %d subscriptions for start date %s' % (self.init_customers,self.subscription_count,str(self.start_date)))
+        print('Created %d initial customers for start date %s' % (self.init_customers,str(self.start_date)))
 
         # Advance to additional months
         next_month=self.start_date+relativedelta(months=+1)
@@ -232,7 +240,7 @@ class ChurnSimulation:
         while next_month < self.end_date:
             print('\nCreating %d new customers for month of %s:' % (n_to_add,next_month))
             self.create_customers_for_month(next_month,n_to_add)
-            print('Created %d new customers for month %s, now %d subscriptions\n' % (n_to_add,str(next_month),self.subscription_count))
+            print('Created %d new customers for month %s\n' % (n_to_add,str(next_month)))
             next_month=next_month+relativedelta(months=+1)
             n_to_add = int(ceil( n_to_add * (1.0+self.monthly_growth_rate))) # increase the new customers by growth
 
