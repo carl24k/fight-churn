@@ -71,11 +71,17 @@ class ChurnSimulation:
 
     def remove_tmp_files(self):
         '''
-        Remove temp files when the simulation is over
+        Remove temp files. Runs at the start in case a previous run failed, and at the end.
         :return:
         '''
-        os.remove(Customer.ID_LOCK_FILE)
-        os.remove(Customer.ID_FILE)
+        try:
+            os.remove(Customer.ID_LOCK_FILE)
+        except OSError:
+            pass
+        try:
+            os.remove(Customer.ID_FILE)
+        except OSError:
+            pass
 
     def pick_customer_model(self):
         choice = random.uniform(0,1)
@@ -265,7 +271,7 @@ if __name__ == "__main__":
 
     args, _ = arg_parse.parse_known_args()
 
-    start_date = parser.parse(args.start_date)
-    end_date = parser.parse(args.end_date)
+    start_date = parser.parse(args.start_date).date()
+    end_date = parser.parse(args.end_date).date()
 
     run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.dev)
