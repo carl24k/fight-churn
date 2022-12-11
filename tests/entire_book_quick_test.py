@@ -15,7 +15,7 @@ class TestFightChurnWIthData(unittest.TestCase):
         test_ouput_dir = os.path.join(tempfile.gettempdir(),'fightchurn_test_output')
         print(f'TestFightChurnWIthData writing to temporary output directory {test_ouput_dir}')
         run_churn_listing.set_churn_environment(database,username,password)
-        churndb.drop_test_schema()
+        churndb.drop_schema('test')
         self.assertEqual(True, run_churn_listing.run_everything(database, username, password,
                                                                 schema='test', output_dir=test_ouput_dir))
 

@@ -16,12 +16,13 @@ import psycopg2 as post
 import tempfile
 
 from fightchurn.datagen.behavior import FatTailledBehaviorModel
+from fightchurn.datagen.churndb import drop_schema, setup_churn_db
 from fightchurn.datagen.utility import UtilityModel
 from fightchurn.datagen.customer import  Customer
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers,growth_rate, devmode, seed):
+    def __init__(self, model, start, end, init_customers,growth_rate, devmode, seed, n_parallel=1):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -38,6 +39,7 @@ class ChurnSimulation:
         self.init_customers=init_customers
         self.monthly_growth_rate = growth_rate
         self.devmode= devmode
+        self.n_parallel = n_parallel
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         behavior_versions = glob.glob(local_dir+self.model_name+'_*.csv')
@@ -139,7 +141,7 @@ class ChurnSimulation:
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
 
-        Parallel(n_jobs=-1)(delayed(create_one_customer)() for i in range(n_to_create))
+        Parallel(n_jobs=self.n_parallel)(delayed(create_one_customer)() for i in range(n_to_create))
 
 
     def copy_customer_to_database(self,customer):
@@ -195,26 +197,19 @@ class ChurnSimulation:
         '''
         db= Postgres(self.con_string())
 
-        oldEvent= db.one('select count(*) from %s.event' % self.model_name)
-        oldSubs= db.one('select count(*) from %s.subscription' % self.model_name)
-        oldAccount = db.one('select count(*) from %s.account' % self.model_name)
-        if oldEvent > 0 or oldSubs>0 or oldAccount>0:
+        exists = db.one(f"SELECT exists(select schema_name FROM information_schema.schemata WHERE schema_name = '{self.model_name}')")
+        if exists:
             print('TRUNCATING *Events/Metrics & Subscriptions/Observations* in schema -> %s <-  ...' % self.model_name)
             if input("are you sure? (enter %s to proceed) " % self.model_name) == self.model_name:
-                if oldEvent > 0:
-                    db.run('truncate table %s.event' % self.model_name)
-                    db.run('truncate table %s.metric' % self.model_name)
-                if oldAccount > 0:
-                    db.run('truncate table %s.account' % self.model_name)
-                if oldSubs > 0:
-                    db.run('truncate table %s.subscription' % self.model_name)
-                    db.run('truncate table %s.active_period' % self.model_name)
-                    db.run('truncate table %s.observation' % self.model_name)
+                drop_schema(self.model_name)
+                setup_churn_db(self.model_name)
                 return True
             else:
                 return False
         else:
+            setup_churn_db(self.model_name)
             return True
+
 
     def run_simulation(self):
         '''
@@ -252,10 +247,10 @@ class ChurnSimulation:
 
         self.remove_tmp_files()
 
-def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None):
+def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, n_parallel=1):
     if random_seed is not None:
         random.seed(random_seed) # for random
-    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth,devmode, random_seed)
+    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth,devmode, random_seed,n_parallel)
     churn_sim.run_simulation()
 
 if __name__ == "__main__":
@@ -268,10 +263,11 @@ if __name__ == "__main__":
     arg_parse.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
     arg_parse.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
     arg_parse.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
+    arg_parse.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
 
     args, _ = arg_parse.parse_known_args()
 
     start_date = parser.parse(args.start_date).date()
     end_date = parser.parse(args.end_date).date()
 
-    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.dev)
+    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.dev, n_parallel=args.n_parallel)

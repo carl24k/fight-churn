@@ -17,10 +17,10 @@ from postgres import Postgres
 import os
 import sys
 
-def drop_test_schema():
+def drop_schema(schema_name):
     con_string = f"postgresql://{os.environ.get('CHURN_DB_HOST','localhost')}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
     db = Postgres(con_string)
-    db.run('DROP SCHEMA IF EXISTS test CASCADE;')
+    db.run(f'DROP SCHEMA IF EXISTS {schema_name} CASCADE;')
 
 def setup_churn_db(schema_name):
 
@@ -29,7 +29,7 @@ def setup_churn_db(schema_name):
 
     tables=['event','subscription','event_type','metric','metric_name','active_period','observation','active_week','account']
 
-    print('Creating schema %s (if not exists)...' % schema_name)
+    print('Creating schema %s...' % schema_name)
     db.run('CREATE SCHEMA IF NOT EXISTS %s;' % schema_name)
 
     for t in tables:
@@ -37,11 +37,12 @@ def setup_churn_db(schema_name):
         with open('%s/schema/create_%s.sql' % (file_root,t), 'r') as sqlfile:
             sql = sqlfile.read().replace('\n', ' ')
         sql=sql.replace('x.','%s.' % schema_name)
-        print('Creating table %s (if not exists)' % t)
+        print('Creating table %s' % t)
         db.run(sql)
 
 if __name__ == "__main__":
     schema_name='socialnet7'
     if len(sys.argv) >= 2:
         schema_name = sys.argv[1]
+    drop_schema(schema_name)
     setup_churn_db(schema_name)
