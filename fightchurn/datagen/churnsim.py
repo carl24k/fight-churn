@@ -7,6 +7,7 @@ from postgres import Postgres
 from math import ceil
 
 import argparse
+from filelock import FileLock
 import os
 from joblib import Parallel, delayed
 import glob
@@ -69,6 +70,18 @@ class ChurnSimulation:
 
     def con_string(self):
         return f"postgresql://{os.environ.get('CHURN_DB_HOST','localhost')}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
+
+
+    def sim_rate_debug_query(self):
+
+        file_root = os.path.abspath(os.path.dirname(__file__))
+        with open(f'{file_root}/schema/churn_by_plan.sql', 'r') as sqlfile:
+            sql = sqlfile.read().replace('\n', ' ')
+        sql = sql.replace('%schema',self.model_name)
+        with FileLock(Customer.ID_LOCK_FILE):
+            db = Postgres(self.con_string())
+            res = pd.DataFrame(db.all(sql))
+            print(res)
 
 
     def remove_tmp_files(self):
@@ -140,6 +153,8 @@ class ChurnSimulation:
         def create_one_customer():
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
+            if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
+                self.sim_rate_debug_query()
 
         Parallel(n_jobs=self.n_parallel)(delayed(create_one_customer)() for i in range(n_to_create))
 
@@ -246,6 +261,7 @@ class ChurnSimulation:
             n_to_add = int(ceil( n_to_add * (1.0+self.monthly_growth_rate))) # increase the new customers by growth
 
         self.remove_tmp_files()
+        self.sim_rate_debug_query()
 
 def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, n_parallel=1):
     if random_seed is not None:
