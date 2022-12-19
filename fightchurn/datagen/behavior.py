@@ -121,7 +121,7 @@ class GaussianBehaviorModel(BehaviorModel):
         '''
         customer_rates=np.random.multivariate_normal(mean=self.behave_means,cov=self.behave_cov)
         customer_rates=customer_rates.clip(min=self.min_rate) # clip : no negative rates!
-        new_customer= Customer(customer_rates)
+        new_customer= Customer( pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}))
         # print(customer_rates)
         return new_customer
 
@@ -157,6 +157,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)
         customer_rates = np.maximum(customer_rates-0.667,0.333)
-        new_customer= Customer(customer_rates,channel_name=self.version,start_of_month=start_of_month)
+        new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}),
+                               channel_name=self.version,start_of_month=start_of_month)
         # print(customer_rates)
         return new_customer

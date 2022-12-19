@@ -36,9 +36,8 @@ class Customer:
             if self.id % 100==0:
                 print(f'Simulating customer {self.id}...')
 
-
-        self.behave_per_month=behavior_rates
-        self.behave_per_day = (1.0/30.0)*self.behave_per_month
+        self.behavior_rates = behavior_rates
+        self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
 
         if start_of_month:
@@ -51,6 +50,8 @@ class Customer:
 
         self.country=country
         self.mrr=None
+        self.plan=None
+        self.limits= {}
 
         if satisfaction is None:
             age_contrib = 0.5* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
@@ -62,8 +63,16 @@ class Customer:
 
 
     def pick_plan(self,plans):
-        self.mrr = np.random.choice(plans['mrr'],p=plans['prob'])
+        choice_index = np.random.choice(range(len(plans)),p=plans['prob'])
+        self.set_plan(plans,choice_index)
 
+    def set_plan(self,plans,plan_idx):
+        self.plan = plans.index.values[plan_idx]
+        self.mrr = plans.loc[self.plan,'mrr']
+        if plans.shape[1]>2:
+            self.limits = {
+                behave : plans.loc[self.plan, behave] for behave in plans.columns[2:]
+            }
 
     def generate_events(self,start_date,end_date):
         '''
@@ -79,7 +88,8 @@ class Customer:
         delta = end_date - start_date
 
         events=[]
-        counts=[0]*len(self.behave_per_day)
+        counts=[0]*len(self.behavior_rates)
+        limit_counts = {b : 0 for b in self.limits.keys()}
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
             if the_date in Customer.date_multipliers:
@@ -90,12 +100,18 @@ class Customer:
                 else:
                     multiplier = random.uniform(0.825,1.025)
                 Customer.date_multipliers[the_date]=multiplier
-            for event_idx,rate in  enumerate(self.behave_per_day):
+            for row in  self.behavior_rates.iterrows():
+                rate = row[1]['daily_rate']
+                behavior_name = row[1]['behavior']
                 new_count= int(round(multiplier*random.poisson(rate)))
-                counts[event_idx] += new_count
+                if behavior_name in self.limits:
+                    # print(new_count, self.limits, limit_counts)
+                    new_count = min(new_count, self.limits[behavior_name]-limit_counts[behavior_name])
+                    limit_counts[behavior_name]=limit_counts[behavior_name]+new_count
+                counts[row[0]] += new_count
                 for n in range(0,new_count):
                     event_time=datetime.combine(the_date,time(randrange(24),randrange(60),randrange(60)))
-                    new_event=(event_time,event_idx)
+                    new_event=(event_time,row[0])
                     events.append(new_event )
 
         self.events.extend(events)

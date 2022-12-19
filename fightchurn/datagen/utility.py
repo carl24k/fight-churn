@@ -49,7 +49,7 @@ class UtilityModel:
     def setExpectations(self,bemodDict,model_weights):
         assert sum(model_weights['pcnt'])==1.0, "Model weights should sum to 1.0"
         n_behaviors = len(self.behave_names)
-        self.behave_means = np.zeros((1,n_behaviors))
+        self.behave_means = np.zeros(n_behaviors)
         for bemod in bemodDict.values():
             assert n_behaviors == len(bemod.behave_names)
             assert all(self.behave_names == bemod.behave_names)
@@ -67,7 +67,7 @@ class UtilityModel:
         # Volatility of Utility
         ex_util_vol = np.sqrt(np.dot(behave_var, self.utility_weights.values))[0]
         # Temporary Customer
-        temp_customer = Customer(self.behave_means, satisfaction=1.0)
+        temp_customer = Customer( pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': self.behave_means}), satisfaction=1.0)
         temp_customer.mrr = plans['mrr'].mean()
         expected_utility = self.utility_function(self.behave_means, temp_customer)
         print(f'Utility model expected utility={expected_utility}, utility volatility estaimte={ex_util_vol}')
@@ -139,7 +139,14 @@ class UtilityModel:
         return uniform(0, 1) < self.churn_probability(utility)
 
     def simulate_upgrade_downgrade(self,event_counts,customer,plans):
-        current_plan = plans.loc[plans['mrr']==customer.mrr].index[0]
+        '''
+        Assuming plans are sorted by MRR, an upgrade means higher index
+        :param event_counts:
+        :param customer:
+        :param plans:
+        :return:
+        '''
+        current_plan = np.where(plans.index.values==customer.plan)[0][0]
         u=self.utility_function(event_counts,customer)
         upgrade_probability = self.uprade_probability(u)
         downgrade_probability = self.downgrade_probability(u)
@@ -149,8 +156,8 @@ class UtilityModel:
         if current_plan < plans.shape[0]-1:
             if uniform(0, 1) < upgrade_probability:
                 new_plan = current_plan+1
-                customer.mrr = plans['mrr'].loc[new_plan]
+                customer.set_plan(plans,new_plan)
         elif current_plan > 0:
             if uniform(0, 1) < downgrade_probability:
                 new_plan = current_plan-1
-                customer.mrr = plans['mrr'].loc[new_plan]
+                customer.set_plan(plans,new_plan)

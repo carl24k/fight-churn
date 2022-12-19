@@ -1,4 +1,4 @@
-plan,mrr,prob
-basic,10,0.34
-standard,50,0.33
-premier,100,0.33
+plan,mrr,prob,schedule_meeting
+basic,10,0.34,5
+standard,50,0.33,15
+premier,100,0.33,1000

@@ -57,7 +57,8 @@ class ChurnSimulation:
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         if len(self.behavior_models)>=1:
             self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
-        self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv')
+        self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv',index_col=0)
+        self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR
         self.util_mod.setExpectations(self.behavior_models,self.population_percents)
         if self.devmode:
             self.util_mod.checkTransitionRates(self.behavior_models, self.population_percents, self.plans)
@@ -133,7 +134,7 @@ class ChurnSimulation:
         churned = False
         while not churned:
             next_month=this_month+relativedelta(months=1)
-            new_customer.subscriptions.append( (this_month,next_month, new_customer.mrr) )
+            new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.mrr) )
             month_count = new_customer.generate_events(this_month,next_month)
             churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
             if not churned:
@@ -172,7 +173,7 @@ class ChurnSimulation:
         with open(sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
                 tmp_file.write("%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (customer.id, self.model_name, s[0], s[1], s[2])) # mrr is 3rd element
+                               (customer.id, s[0], s[1], s[2], s[3])) # plan name, start, end, mrr
         with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write("%d,'%s',%d\n" % (customer.id, e[0], e[1]))
