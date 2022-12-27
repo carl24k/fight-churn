@@ -36,7 +36,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py --model $SCHEMA --start_date 2022-01-01 --end_date 2022-06-01
+../../venv/bin/python churnsim.py --model $SCHEMA --start_date 2022-01-01 --end_date 2022-06-01  --growth_rate 0.04  --n_parallel 5
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
