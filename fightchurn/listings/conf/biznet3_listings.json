@@ -1,8 +1,8 @@
 {
     "chap2": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-04-01",
-            "%to_yyyy-mm-dd": "2022-05-01",
+            "%from_yyyy-mm-dd": "2023-04-01",
+            "%to_yyyy-mm-dd": "2023-05-01",
             "mode": "one",
             "type": "sql"
         },
@@ -21,15 +21,15 @@
         "list5": {
             "name": "churn_rate_scaled",
             "params": {
-                "%from_yyyy-mm-dd": "2022-03-01",
-                "%to_yyyy-mm-dd": "2022-06-01"
+                "%from_yyyy-mm-dd": "2023-03-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
             }
         }
     },
     "chap3": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-02-02",
-            "%to_yyyy-mm-dd": "2022-05-10",
+            "%from_yyyy-mm-dd": "2023-02-02",
+            "%to_yyyy-mm-dd": "2023-05-10",
             "mode": "top",
             "type": "sql",
             "%event2measure": "advance_stage",
@@ -85,8 +85,8 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-02-09",
-            "%to_yyyy-mm-dd": "2022-05-10",
+            "%from_yyyy-mm-dd": "2023-02-09",
+            "%to_yyyy-mm-dd": "2023-05-10",
             "mode": "run",
             "type": "sql"
         },
@@ -136,8 +136,8 @@
     },
     "chap7": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-02-01",
-            "%to_yyyy-mm-dd": "2022-05-10",
+            "%from_yyyy-mm-dd": "2023-02-01",
+            "%to_yyyy-mm-dd": "2023-05-10",
             "mode": "top",
             "type": "sql"
         },
@@ -172,8 +172,8 @@
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
-                "%from_yyyy-mm-dd": "2022-03-01",
-                "%to_yyyy-mm-dd": "2022-05-10"
+                "%from_yyyy-mm-dd": "2023-03-01",
+                "%to_yyyy-mm-dd": "2023-05-10"
             },
             "insert": {
                 "params": {
@@ -212,6 +212,18 @@
                 "v8": {
                     "%event2measure": "schedule_meeting",
                     "%new_metric_id": 18
+                }
+            }
+        },
+        "list9": {
+            "name": "count_active_users",
+            "params": {
+                "%obs_period": 30
+            },
+            "insert" : {
+                "params": {
+                    "%obs_period": 30,
+                    "%new_metric_id": 30
                 }
             }
         }
