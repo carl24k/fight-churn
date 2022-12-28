@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS  x.event
 (
     account_id integer NOT NULL,
     event_time timestamp(6) without time zone NOT NULL,
-    event_type_id integer NOT NULL
+    event_type_id integer NOT NULL,
+    user_id integer NULL
 )
 WITH (
     OIDS = FALSE

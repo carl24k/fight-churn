@@ -3,7 +3,8 @@ from filelock import FileLock
 from datetime import date, datetime, timedelta,time
 from dateutil import relativedelta
 from numpy import random
-from random import randrange, uniform
+from random import randrange, randint
+from math import ceil
 import tempfile
 import numpy as np
 import os
@@ -37,6 +38,12 @@ class Customer:
                 print(f'Simulating customer {self.id}...')
 
         self.behavior_rates = behavior_rates
+        if 'nuser' in behavior_rates['behavior'].values:
+            bidx= self.behavior_rates['behavior'] == 'nuser'
+            self.nuser = int( round(self.behavior_rates.loc[bidx,'monthly_rate']))
+            self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
+        else:
+            self.nuser = None
         self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
 
@@ -88,22 +95,32 @@ class Customer:
         delta = end_date - start_date
 
         events=[]
-        counts=[0]*len(self.behavior_rates)
+        counts=[0]*(len(self.behavior_rates)+1) # Plus one for number of users
         limit_counts = {b : 0 for b in self.limits.keys()}
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
+            # Set a multiplier for this date
             if the_date in Customer.date_multipliers:
                 multiplier = Customer.date_multipliers[the_date]
             else:
+                # TODO : should be an option
                 if the_date.weekday() >= 4:
                     multiplier = random.uniform(1.00,1.2)
                 else:
                     multiplier = random.uniform(0.825,1.025)
                 Customer.date_multipliers[the_date]=multiplier
+
+            if self.nuser is None:
+                todays_users = 1
+            else:
+                todays_users = int(round(multiplier*random.poisson(self.nuser)))
+                if 'nuser' in self.limits:
+                    todays_users = min(todays_users,self.limits['nuser'])
+
             for row in  self.behavior_rates.iterrows():
                 rate = row[1]['daily_rate']
                 behavior_name = row[1]['behavior']
-                new_count= int(round(multiplier*random.poisson(rate)))
+                new_count= int(round(multiplier*random.poisson(rate) * todays_users))
                 if behavior_name in self.limits:
                     # print(new_count, self.limits, limit_counts)
                     new_count = min(new_count, self.limits[behavior_name]-limit_counts[behavior_name])
@@ -111,8 +128,11 @@ class Customer:
                 counts[row[0]] += new_count
                 for n in range(0,new_count):
                     event_time=datetime.combine(the_date,time(randrange(24),randrange(60),randrange(60)))
-                    new_event=(event_time,row[0])
+                    new_event=(event_time,row[0], 0 if self.nuser is None else randint(0,todays_users))
                     events.append(new_event )
+            counts[-1] += todays_users
+
+        counts[-1] = int(ceil( counts[-1]/delta.days)) # user count is returned as average, not total
 
         self.events.extend(events)
 

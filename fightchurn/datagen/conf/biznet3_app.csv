@@ -1,0 +1,10 @@
+﻿behavior,mean,search,close_opportunity,advance_stage,add_competition,revert_stage,lose_opportunity,meeting_held,schedule_meeting,nuser
+search,10,1,0.7,0.7,0.7,0.5,0.6,0.2,0.2,0
+close_opportunity,3,0.7,1,0.7,0.7,0.5,0.6,0.2,0.2,0.2
+advance_stage,20,0.7,0.7,1,0.7,0.5,0.6,0.2,0.2,0
+add_competition,20,0.7,0.7,0.7,1,0.5,0.6,0.2,0.2,0
+revert_stage,10,0.5,0.5,0.5,0.5,1,0.6,0.2,0.2,0
+lose_opportunity,1,0.6,0.6,0.6,0.6,0.6,1,0.2,0.2,0.1
+meeting_held,5,0.2,0.2,0.2,0.2,0.2,0.2,1,0.95,0
+schedule_meeting,8,0.2,0.2,0.2,0.2,0.2,0.2,0.95,1,0
+nuser,10,0,0.2,0,0,0,0.1,0,0,1

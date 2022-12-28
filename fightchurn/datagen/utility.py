@@ -33,6 +33,10 @@ class UtilityModel:
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
         util_df=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
+        if 'nuser' in util_df.index.values:
+            assert util_df.index.get_loc('nuser')==util_df.shape[0]-1, "nuser should be last in utility list (if included)"
+        else:
+            util_df = pd.concat(util_df,pd.DataFrame(0,index=['nuser']))
         self.utility_weights=util_df['util']
         self.mrr_utility_cost=self.utility_weights.loc['mrr']
         if self.mrr_utility_cost > 0:
@@ -45,6 +49,7 @@ class UtilityModel:
         # Setup in setExpectations,below
         self.behave_means = None
         self.expected_contributions = None
+        self.avg_n_user = 0
 
     def setExpectations(self,bemodDict,model_weights):
         assert sum(model_weights['pcnt'])==1.0, "Model weights should sum to 1.0"
@@ -54,18 +59,29 @@ class UtilityModel:
             assert n_behaviors == len(bemod.behave_names)
             assert all(self.behave_names == bemod.behave_names)
             weight = model_weights.loc[bemod.version,'pcnt']
-            self.behave_means = self.behave_means + weight * bemod.behave_means.values
+            if 'nuser' in bemod.behave_means.index.values:
+                model_means = np.array(bemod.behave_means.values)
+                # expected values of non-user behaviors are per-user, so multiply to get the expected total
+                model_means[0:-1] = model_means[0:-1]*bemod.behave_means['nuser']
+                self.behave_means = self.behave_means + weight * model_means
+                self.avg_n_user = self.avg_n_user + weight* bemod.behave_means['nuser']
+            else:
+                self.behave_means = self.behave_means + weight * bemod.behave_means.values
+                self.avg_n_user = self.avg_n_user + weight* 1
         self.expected_contributions = self.behave_means * self.utility_weights.values
 
     def checkTransitionRates(self, bemodDict, model_weights, plans):
         # Make a single weighted average covariance matrix
         n_behaviors = len(self.behave_names)
-        behave_var = np.zeros((1,n_behaviors))
+        behave_var = np.zeros((n_behaviors,n_behaviors))
         for bemod in bemodDict.values():
             weight = model_weights.loc[bemod.version,'pcnt']
-            behave_var = behave_var + weight * bemod.behave_var()
+            behave_var = behave_var + weight * bemod.behave_cov
         # Volatility of Utility
-        ex_util_vol = np.sqrt(np.dot(behave_var, self.utility_weights.values))[0]
+        ex_util_vol = np.matmul(np.transpose(self.utility_weights.values), np.matmul(behave_var,self.utility_weights.values))
+        # If users is specified, the covariance does not reflect it
+        ex_util_vol = ex_util_vol * self.avg_n_user
+        # ex_util_vol = np.sqrt(np.dot(behave_var, self.utility_weights.values))[0]
         # Temporary Customer
         temp_customer = Customer( pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': self.behave_means}), satisfaction=1.0)
         temp_customer.mrr = plans['mrr'].mean()
