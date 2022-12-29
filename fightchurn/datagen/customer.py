@@ -128,7 +128,7 @@ class Customer:
                 counts[row[0]] += new_count
                 for n in range(0,new_count):
                     event_time=datetime.combine(the_date,time(randrange(24),randrange(60),randrange(60)))
-                    new_event=(event_time,row[0], 0 if self.nuser is None else randint(0,todays_users))
+                    new_event=(event_time,row[0], 0 if self.nuser is None else randint(0,todays_users-1))
                     events.append(new_event )
             counts[-1] += todays_users
 
