@@ -33,10 +33,10 @@ class UtilityModel:
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
         util_df=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
-        if 'nuser' in util_df.index.values:
-            assert util_df.index.get_loc('nuser')==util_df.shape[0]-1, "nuser should be last in utility list (if included)"
+        if 'users' in util_df.index.values:
+            assert util_df.index.get_loc('users')==util_df.shape[0]-1, "users should be last in utility list (if included)"
         else:
-            util_df = pd.concat(util_df,pd.DataFrame(0,index=['nuser']))
+            util_df = pd.concat(util_df,pd.DataFrame(0,index=['users']))
         self.utility_weights=util_df['util']
         self.mrr_utility_cost=self.utility_weights.loc['mrr']
         if self.mrr_utility_cost > 0:
@@ -59,12 +59,12 @@ class UtilityModel:
             assert n_behaviors == len(bemod.behave_names)
             assert all(self.behave_names == bemod.behave_names)
             weight = model_weights.loc[bemod.version,'pcnt']
-            if 'nuser' in bemod.behave_means.index.values:
+            if 'users' in bemod.behave_means.index.values:
                 model_means = np.array(bemod.behave_means.values)
                 # expected values of non-user behaviors are per-user, so multiply to get the expected total
-                model_means[0:-1] = model_means[0:-1]*bemod.behave_means['nuser']
+                model_means[0:-1] = model_means[0:-1]*bemod.behave_means['users']
                 self.behave_means = self.behave_means + weight * model_means
-                self.avg_n_user = self.avg_n_user + weight* bemod.behave_means['nuser']
+                self.avg_n_user = self.avg_n_user + weight* bemod.behave_means['users']
             else:
                 self.behave_means = self.behave_means + weight * bemod.behave_means.values
                 self.avg_n_user = self.avg_n_user + weight* 1

@@ -134,7 +134,10 @@ class ChurnSimulation:
         churned = False
         while not churned:
             next_month=this_month+relativedelta(months=1)
-            new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.mrr) )
+            plan_units = next(iter(new_customer.limits))
+            plan_quantity = new_customer.limits[plan_units]
+            new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.mrr,
+                                                plan_quantity, plan_units ))
             month_count = new_customer.generate_events(this_month,next_month)
             churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
             if not churned:
@@ -172,8 +175,8 @@ class ChurnSimulation:
 
         with open(sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
-                tmp_file.write("%d,'%s','%s','%s',%f,\\null,\\null,1\n" % \
-                               (customer.id, s[0], s[1], s[2], s[3])) # plan name, start, end, mrr
+                # plan name, start, end, mrr, quantity, units, billing period
+                tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},{s[4]},{s[5]},1\n')
         with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]}\n') # event time, event type id, user id

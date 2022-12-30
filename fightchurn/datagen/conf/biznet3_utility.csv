@@ -8,4 +8,4 @@ lose_opportunity,-0.1
 meeting_held,0.1
 schedule_meeting,0.05
 mrr,-0.1
-nuser,0.0
+users,0.0

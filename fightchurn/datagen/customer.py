@@ -38,12 +38,12 @@ class Customer:
                 print(f'Simulating customer {self.id}...')
 
         self.behavior_rates = behavior_rates
-        if 'nuser' in behavior_rates['behavior'].values:
-            bidx= self.behavior_rates['behavior'] == 'nuser'
-            self.nuser = int( round(self.behavior_rates.loc[bidx,'monthly_rate']))
+        if 'users' in behavior_rates['behavior'].values:
+            bidx= self.behavior_rates['behavior'] == 'users'
+            self.users = int( round(self.behavior_rates.loc[bidx,'monthly_rate']))
             self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
         else:
-            self.nuser = None
+            self.users = None
         self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
 
@@ -110,12 +110,12 @@ class Customer:
                     multiplier = random.uniform(0.825,1.025)
                 Customer.date_multipliers[the_date]=multiplier
 
-            if self.nuser is None:
+            if self.users is None:
                 todays_users = 1
             else:
-                todays_users = int(round(multiplier*random.poisson(self.nuser)))
-                if 'nuser' in self.limits:
-                    todays_users = min(todays_users,self.limits['nuser'])
+                todays_users = int(round(multiplier*random.poisson(self.users)))
+                if 'users' in self.limits:
+                    todays_users = min(todays_users,self.limits['users'])
 
             for row in  self.behavior_rates.iterrows():
                 rate = row[1]['daily_rate']
@@ -128,7 +128,7 @@ class Customer:
                 counts[row[0]] += new_count
                 for n in range(0,new_count):
                     event_time=datetime.combine(the_date,time(randrange(24),randrange(60),randrange(60)))
-                    new_event=(event_time,row[0], 0 if self.nuser is None else randint(0,todays_users-1))
+                    new_event=(event_time,row[0], 0 if self.users is None else randint(0,todays_users-1))
                     events.append(new_event )
             counts[-1] += todays_users
 
