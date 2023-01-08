@@ -56,24 +56,33 @@ class UtilityModel:
         n_behaviors = len(self.behave_names)
         self.behave_means = np.zeros(n_behaviors)
         for bemod in bemodDict.values():
-            assert n_behaviors == len(bemod.behave_names)
-            assert all(self.behave_names == bemod.behave_names)
+            underlying_behaviors = Customer.get_underlying_behaviors(bemod.behave_names)
+            value_behaviors = {v: Customer.get_behavior_under_value(v,bemod.behave_names) for v in Customer.get_valued_behaviors(bemod.behave_names) }
+            assert n_behaviors == len(underlying_behaviors)
+            assert all(self.behave_names == underlying_behaviors)
             weight = model_weights.loc[bemod.version,'pcnt']
+
+            # behaviors with values multiply average number times average value
+            model_means = bemod.behave_means[underlying_behaviors]
+            for vb in value_behaviors.keys():
+                model_means.loc[value_behaviors[vb]]=model_means.loc[value_behaviors[vb]]*bemod.behave_means[vb]
+
+            # expected values of non-user behaviors are per-user, so multiply to get the expected total
             if 'users' in bemod.behave_means.index.values:
-                model_means = np.array(bemod.behave_means.values)
-                # expected values of non-user behaviors are per-user, so multiply to get the expected total
-                model_means[0:-1] = model_means[0:-1]*bemod.behave_means['users']
-                self.behave_means = self.behave_means + weight * model_means
+                model_means[model_means.index!='users'] = model_means[model_means.index!='users']*model_means[model_means.index=='users'].values[0]
                 self.avg_n_user = self.avg_n_user + weight* bemod.behave_means['users']
             else:
-                self.behave_means = self.behave_means + weight * bemod.behave_means.values
                 self.avg_n_user = self.avg_n_user + weight* 1
+
+            self.behave_means = self.behave_means + weight * np.array(model_means)
+
+
         self.expected_contributions = self.behave_means * self.utility_weights.values
 
     def checkTransitionRates(self, bemodDict, model_weights, plans):
         # Make a single weighted average covariance matrix
         n_behaviors = len(self.behave_names)
-        behave_var = np.zeros((n_behaviors,n_behaviors))
+        behave_var = np.zeros_like(bemodDict[next(iter(bemodDict))].behave_cov)
         for bemod in bemodDict.values():
             weight = model_weights.loc[bemod.version,'pcnt']
             behave_var = behave_var + weight * bemod.behave_cov

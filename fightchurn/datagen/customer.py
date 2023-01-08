@@ -44,6 +44,15 @@ class Customer:
             self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
         else:
             self.users = None
+
+        self.behavior_rates['mean_value'] = None
+
+        for valued_behavior in Customer.get_valued_behaviors(self.behavior_rates['behavior'].values):
+            underlying_behavior = Customer.get_behavior_under_value(valued_behavior)
+            bidx= self.behavior_rates['behavior']==underlying_behavior
+            self.behavior_rates[bidx]['mean_value']=self.behavior_rates[underlying_behavior]['monthly_rate']
+            self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
+
         self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
 
@@ -67,6 +76,33 @@ class Customer:
             self.satisfaction_propensity = satisfaction
         self.subscriptions=[]
         self.events=[]
+
+    @staticmethod
+    def get_valued_behaviors(behavior_list):
+        value_behaviors=[]
+        for behave in behavior_list:
+            if Customer.get_behavior_under_value(behave, behavior_list) is not None:
+                value_behaviors.append(behave)
+        return value_behaviors
+
+    @staticmethod
+    def get_underlying_behaviors(behavior_list):
+        underlying_behaviors=[]
+        for behave in behavior_list:
+            if Customer.get_behavior_under_value(behave, behavior_list) is None:
+                underlying_behaviors.append(behave)
+        return underlying_behaviors
+
+    @staticmethod
+    def get_behavior_under_value(one_behavior, behavior_list):
+        if not one_behavior.endswith('_value'):
+            return None
+        base_behave=str(one_behavior).replace('_value','')
+        if base_behave in behavior_list:
+            return base_behave
+        else:
+            return None
+
 
 
     def pick_plan(self,plans):
