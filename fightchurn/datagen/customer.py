@@ -38,6 +38,15 @@ class Customer:
                 print(f'Simulating customer {self.id}...')
 
         self.behavior_rates = behavior_rates
+        self.behavior_rates['mean_value'] = None
+
+        for valued_behavior in Customer.get_valued_behaviors(self.behavior_rates['behavior'].values):
+            underlying_behavior = Customer.get_behavior_under_value(valued_behavior, self.behavior_rates['behavior'].values)
+            uidx= self.behavior_rates['behavior']==underlying_behavior
+            vidx= self.behavior_rates['behavior']==valued_behavior
+            self.behavior_rates.loc[uidx,'mean_value']= self.behavior_rates.loc[vidx,'monthly_rate'].values[0]
+            self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[vidx].index,axis=0)
+
         if 'users' in behavior_rates['behavior'].values:
             bidx= self.behavior_rates['behavior'] == 'users'
             self.users = int( round(self.behavior_rates.loc[bidx,'monthly_rate']))
@@ -45,13 +54,6 @@ class Customer:
         else:
             self.users = None
 
-        self.behavior_rates['mean_value'] = None
-
-        for valued_behavior in Customer.get_valued_behaviors(self.behavior_rates['behavior'].values):
-            underlying_behavior = Customer.get_behavior_under_value(valued_behavior)
-            bidx= self.behavior_rates['behavior']==underlying_behavior
-            self.behavior_rates[bidx]['mean_value']=self.behavior_rates[underlying_behavior]['monthly_rate']
-            self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
 
         self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
@@ -161,10 +163,19 @@ class Customer:
                     # print(new_count, self.limits, limit_counts)
                     new_count = min(new_count, self.limits[behavior_name]-limit_counts[behavior_name])
                     limit_counts[behavior_name]=limit_counts[behavior_name]+new_count
-                counts[row[0]] += new_count
+
                 for n in range(0,new_count):
                     event_time=datetime.combine(the_date,time(randrange(24),randrange(60),randrange(60)))
-                    new_event=(event_time,row[0], 0 if self.users is None else randint(0,todays_users-1))
+                    user_id = 0
+                    if self.users is not None:
+                        user_id = randint(0, todays_users-1)
+                    event_value = 0
+                    if row[1]['mean_value'] is not None:
+                        event_value = random.poisson(row[1]['mean_value'])
+                        counts[row[0]] += event_value
+                    else:
+                        counts[row[0]] += 1
+                    new_event=(event_time,row[0], user_id, event_value)
                     events.append(new_event )
             counts[-1] += todays_users
 

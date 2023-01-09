@@ -179,7 +179,7 @@ class ChurnSimulation:
                 tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},{s[4]},{s[5]},1\n')
         with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
-                tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]}\n') # event time, event type id, user id
+                tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3]}\n') # event time, event type id, user id, value
 
         sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
                                                                 customer.date_of_birth.isoformat(),

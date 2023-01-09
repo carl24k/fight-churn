@@ -1,0 +1,4 @@
+plan,mrr,prob,users
+basic,10,0.34,3
+standard,50,0.33,10
+premier,100,0.33,1000
