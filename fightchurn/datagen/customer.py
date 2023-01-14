@@ -169,11 +169,11 @@ class Customer:
                     user_id = 0
                     if self.users is not None:
                         user_id = randint(0, todays_users-1)
-                    event_value = 0
                     if row[1]['mean_value'] is not None:
-                        event_value = random.poisson(row[1]['mean_value'])
+                        event_value = round(np.exp(np.random.normal(np.log(row[1]['mean_value']) )),2)
                         counts[row[0]] += event_value
                     else:
+                        event_value = 0
                         counts[row[0]] += 1
                     new_event=(event_time,row[0], user_id, event_value)
                     events.append(new_event )
