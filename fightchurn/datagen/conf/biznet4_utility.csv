@@ -1,6 +1,6 @@
 behavior,util
 search,0.1
-close_opportunity,0.000015
+close_opportunity,0.0001
 advance_stage,0.05
 add_competition,-0.15
 revert_stage,-0.1
