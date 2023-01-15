@@ -59,6 +59,13 @@
                 "%new_metric_id": 20
             }
         },
+        "list5": {
+            "name": "sum_metric",
+            "params": {
+                "%event2measure" : "close_opportunity",
+                "%field2sum" : "event_value"
+            }
+        },
         "list8": {
             "name": "metric_coverage",
             "params": {
@@ -81,6 +88,12 @@
             "params": {
                 "mode": "run",
                 "%new_metric_id": 20}
+        },
+        "list18": {
+            "name": "sum_metric_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 31}
         }
     },
     "chap4": {
@@ -110,7 +123,7 @@
             }
         },
         "list7": {
-            "name": "dataset_biznet2",
+            "name": "dataset_biznet4",
             "params": {
                 "mode": "save",
                 "%metric_interval": "7 day"
@@ -218,7 +231,7 @@
         "list9": {
             "name": "count_active_users",
             "params": {
-                "%obs_period": 30
+                "%obs_period": 28
             },
             "insert" : {
                 "params": {
