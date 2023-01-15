@@ -173,9 +173,9 @@ class Customer:
                         event_value = round(np.exp(np.random.normal(np.log(row[1]['mean_value']) )),2)
                         counts[row[0]] += event_value
                     else:
-                        event_value = 0
+                        event_value = None
                         counts[row[0]] += 1
-                    new_event=(event_time,row[0], user_id, event_value)
+                    new_event=(event_time, row[0], user_id, event_value)
                     events.append(new_event )
             counts[-1] += todays_users
 

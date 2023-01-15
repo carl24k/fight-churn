@@ -179,7 +179,7 @@ class ChurnSimulation:
                 tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},{s[4]},{s[5]},1\n')
         with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
-                tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3]}\n') # event time, event type id, user id, value
+                tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
         sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
                                                                 customer.date_of_birth.isoformat(),
@@ -199,7 +199,7 @@ class ChurnSimulation:
             cur.copy_expert(sql, f)
         con.commit()
 
-        sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
+        sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
         with open(event_file_name, 'r') as f:
             cur.copy_expert(sql, f)
         con.commit()

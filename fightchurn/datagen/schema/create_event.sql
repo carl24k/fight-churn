@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS  x.event
     event_time timestamp(6) without time zone NOT NULL,
     event_type_id integer NOT NULL,
     user_id integer NULL,
-    event_value real NULL
+    event_value numeric NULL
 )
 WITH (
     OIDS = FALSE
