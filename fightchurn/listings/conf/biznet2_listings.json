@@ -110,7 +110,7 @@
             }
         },
         "list7": {
-            "name": "dataset_biznet2",
+            "name": "dataset",
             "params": {
                 "mode": "save",
                 "%metric_interval": "7 day"

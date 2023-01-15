@@ -57,6 +57,10 @@
             "v2": {
                 "%new_metric_name": "mrr",
                 "%new_metric_id": 20
+            },
+            "v3": {
+                "%new_metric_name": "opp_value_per_month",
+                "%new_metric_id": 31
             }
         },
         "list5": {
@@ -93,6 +97,8 @@
             "name": "sum_metric_insert",
             "params": {
                 "mode": "run",
+                "%event2measure" : "close_opportunity",
+                "%field2sum" : "event_value",
                 "%new_metric_id": 31}
         }
     },
@@ -122,8 +128,8 @@
                 "%lead_time": "5 day"
             }
         },
-        "list7": {
-            "name": "dataset_biznet4",
+        "list8": {
+            "name": "dataset",
             "params": {
                 "mode": "save",
                 "%metric_interval": "7 day"
@@ -132,7 +138,7 @@
     },
     "chap5": {
         "defaults": {
-            "data_set_path": "biznet2/biznet2_dataset.csv",
+            "data_set_path": "biznet4/biznet4_dataset.csv",
             "type": "py"
         },
         "list1": {
@@ -140,6 +146,42 @@
             "params": {
                 "metric_to_plot": "mrr",
                 "ncohort" : 3
+            },
+            "v1": {
+                "metric_to_plot": "mrr",
+                "ncohort" : 3},
+            "v2": {
+                "metric_to_plot": "advance_stage"
+            },
+            "v3": {
+                "metric_to_plot": "close_opportunity"
+            },
+            "v4": {
+                "metric_to_plot": "search"
+            },
+            "v5": {
+                "metric_to_plot": "add_competition"
+            },
+            "v6": {
+                "metric_to_plot": "revert_stage"
+            },
+            "v7": {
+                "metric_to_plot": "lose_opportunity"
+            },
+            "v8": {
+                "metric_to_plot": "meeting_held"
+            },
+            "v9": {
+                "metric_to_plot": "schedule_meeting"
+            },
+            "v10": {
+                "metric_to_plot": "opp_close_per_dollar"
+            },
+            "v11": {
+                "metric_to_plot": "active_users_per_month"
+            },
+            "v12": {
+                "metric_to_plot": "opp_value_per_month"
             }
         },
         "list2": {
@@ -243,7 +285,7 @@
     },
     "chap9": {
         "defaults": {
-            "data_set_path": "biznet2/biznet2_dataset.csv",
+            "data_set_path": "biznet4/biznet4_dataset.csv",
             "type": "py"
         },
         "list6": {
