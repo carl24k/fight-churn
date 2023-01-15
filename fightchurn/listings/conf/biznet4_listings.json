@@ -28,8 +28,8 @@
     },
     "chap3": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-02",
-            "%to_yyyy-mm-dd": "2023-05-10",
+            "%from_yyyy-mm-dd": "2023-02-06",
+            "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "top",
             "type": "sql",
             "%event2measure": "advance_stage",
@@ -104,8 +104,8 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-09",
-            "%to_yyyy-mm-dd": "2023-05-10",
+            "%from_yyyy-mm-dd": "2023-02-06",
+            "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "run",
             "type": "sql"
         },
@@ -144,8 +144,7 @@
         "list1": {
             "name": "cohort_plot",
             "params": {
-                "metric_to_plot": "mrr",
-                "ncohort" : 3
+                "metric_to_plot": "close_opportunity"
             },
             "v1": {
                 "metric_to_plot": "mrr",
@@ -191,8 +190,8 @@
     },
     "chap7": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-01",
-            "%to_yyyy-mm-dd": "2023-05-10",
+            "%from_yyyy-mm-dd": "2023-02-06",
+            "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "top",
             "type": "sql"
         },
@@ -227,8 +226,8 @@
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
-                "%from_yyyy-mm-dd": "2023-03-01",
-                "%to_yyyy-mm-dd": "2023-05-10"
+                "%from_yyyy-mm-dd": "2023-02-06",
+                "%to_yyyy-mm-dd": "2023-05-29"
             },
             "insert": {
                 "params": {
