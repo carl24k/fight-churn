@@ -133,7 +133,11 @@ class Customer:
         delta = end_date - start_date
 
         events=[]
-        counts=[0]*(len(self.behavior_rates)+1) # Plus one for number of users
+
+        if self.users is None:
+            counts=[0]*len(self.behavior_rates)
+        else:
+            counts=[0]*(len(self.behavior_rates)+1) # Plus one for number of users
         limit_counts = {b : 0 for b in self.limits.keys()}
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
@@ -177,9 +181,12 @@ class Customer:
                         counts[row[0]] += 1
                     new_event=(event_time, row[0], user_id, event_value)
                     events.append(new_event )
-            counts[-1] += todays_users
 
-        counts[-1] = int(ceil( counts[-1]/delta.days)) # user count is returned as average, not total
+            if self.users is not None:
+                counts[-1] += todays_users
+
+        if self.users is not None:
+            counts[-1] = int(ceil( counts[-1]/delta.days)) # user count is returned as average, not total
 
         self.events.extend(events)
 

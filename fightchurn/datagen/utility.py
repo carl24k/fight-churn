@@ -35,8 +35,6 @@ class UtilityModel:
         util_df=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
         if 'users' in util_df.index.values:
             assert util_df.index.get_loc('users')==util_df.shape[0]-1, "users should be last in utility list (if included)"
-        else:
-            util_df = pd.concat(util_df,pd.DataFrame(0,index=['users']))
         self.utility_weights=util_df['util']
         self.mrr_utility_cost=self.utility_weights.loc['mrr']
         if self.mrr_utility_cost > 0:

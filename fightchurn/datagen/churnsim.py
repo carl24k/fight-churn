@@ -134,8 +134,12 @@ class ChurnSimulation:
         churned = False
         while not churned:
             next_month=this_month+relativedelta(months=1)
-            plan_units = next(iter(new_customer.limits))
-            plan_quantity = new_customer.limits[plan_units]
+            if len(new_customer.limits)>0:
+                plan_units = next(iter(new_customer.limits))
+                plan_quantity = new_customer.limits[plan_units]
+            else:
+                plan_units = None
+                plan_quantity = None
             new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.mrr,
                                                 plan_quantity, plan_units ))
             month_count = new_customer.generate_events(this_month,next_month)
@@ -176,7 +180,8 @@ class ChurnSimulation:
         with open(sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
                 # plan name, start, end, mrr, quantity, units, billing period
-                tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},{s[4]},{s[5]},1\n')
+                tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},'
+                               f'{s[4] if s[4] is not None else "NULL"},{s[5] if s[5] is not None else "NULL"},1\n')
         with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
@@ -194,7 +199,7 @@ class ChurnSimulation:
                                  host=os.environ.get('CHURN_DB_HOST','localhost'))
         cur = con.cursor()
 
-        sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS '\\null'" % (self.model_name)
+        sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
         with open(sub_file_name, 'r') as f:
             cur.copy_expert(sql, f)
         con.commit()
