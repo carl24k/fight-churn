@@ -361,7 +361,7 @@ def run_churn_listing_from_args(args : Namespace):
                 run_listing_from_args(vers_args)
 
 
-def run_standard_simulation(schema='socialnet7', init_customers=10000):
+def run_standard_simulation(schema='socialnet7', init_customers=10000, force=False):
     '''
     Wrapper function to call churnsim.run_churn_simulation
     :param schema: string name of schema and simulation configuration
@@ -372,7 +372,8 @@ def run_standard_simulation(schema='socialnet7', init_customers=10000):
     start_date = date(2020, 1, 1)
     end_date = date(2020, 6, 1)
     churnsim.run_churn_simulation(schema, start_date=start_date, end_date=end_date,
-                                                     init_customers=init_customers)
+                                                     init_customers=init_customers,
+                                                     growth=0.1, devmode=False, force=force)
 
 
 def run_everything(db, user,password,output_dir='../../../fight-churn-output/',init_customers=500,schema='socialnet7'):
@@ -389,7 +390,7 @@ def run_everything(db, user,password,output_dir='../../../fight-churn-output/',i
     :return:
     '''
     set_churn_environment(db, user,password,output_dir)
-    run_standard_simulation(schema=schema,init_customers=init_customers)
+    run_standard_simulation(schema=schema,init_customers=init_customers, force=True)
     run_churn_rates(schema)
     run_metrics(schema)
     run_dataset(schema)

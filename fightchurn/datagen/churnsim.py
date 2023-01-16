@@ -235,7 +235,7 @@ class ChurnSimulation:
             return True
 
 
-    def run_simulation(self):
+    def run_simulation(self, force=False):
         '''
         Simulation main function. First it prepares the database by truncating any old events and subscriptions, and
         inserting the event types into the database.  Next it creeates the initial customers by calling
@@ -246,7 +246,7 @@ class ChurnSimulation:
         '''
 
         # database setup
-        if not self.truncate_old_sim():
+        if not force and not self.truncate_old_sim():
             return
         self.remove_tmp_files()
 
@@ -272,11 +272,11 @@ class ChurnSimulation:
         self.remove_tmp_files()
         self.sim_rate_debug_query()
 
-def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, n_parallel=1):
+def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, n_parallel=1, force=False):
     if random_seed is not None:
         random.seed(random_seed) # for random
-    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth,devmode, random_seed,n_parallel)
-    churn_sim.run_simulation()
+    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed,n_parallel)
+    churn_sim.run_simulation(force=force)
 
 if __name__ == "__main__":
 
