@@ -7,6 +7,7 @@ from random import randrange, randint
 from math import ceil
 import tempfile
 import numpy as np
+import pandas as pd
 import os
 
 
@@ -68,7 +69,9 @@ class Customer:
 
         self.country=country
         self.mrr=None
+        self.base_mrr=None
         self.plan=None
+        self.add_ons = pd.DataFrame()
         self.limits= {}
 
         if satisfaction is None:
@@ -105,19 +108,41 @@ class Customer:
         else:
             return None
 
-
-
-    def pick_plan(self,plans):
+    def pick_initial_plan(self, plans, add_ons):
         choice_index = np.random.choice(range(len(plans)),p=plans['prob'])
         self.set_plan(plans,choice_index)
+        if len(add_ons)>0:
+            for add_on in add_ons.iterrows():
+                if random.uniform(0,1) <= add_on[1]['prob']:
+                    if len(self.add_ons)==0:
+                        self.add_ons=pd.DataFrame([add_on[1]])
+                    else:
+                        self.add_ons=self.add_ons.append(add_on[1])
+        self.add_add_ons(plans)
 
-    def set_plan(self,plans,plan_idx):
-        self.plan = plans.index.values[plan_idx]
+
+    def set_plan(self,plans,plan_idx=None, plan_name=None):
+        if plan_idx is not None:
+            self.plan = plans.index.values[plan_idx]
+        else:
+            self.plan = plan_name
         self.mrr = plans.loc[self.plan,'mrr']
+        self.base_mrr = self.mrr
         if plans.shape[1]>2:
             self.limits = {
                 behave : plans.loc[self.plan, behave] for behave in plans.columns[2:]
             }
+
+    def add_add_ons(self,plans):
+        # Reset to  base MRR
+        self.set_plan(plans,plan_name=self.plan)
+        for add_on in self.add_ons.iterrows():
+            self.mrr+=add_on[1]['mrr']
+            for limited in self.add_ons.columns[3:]:
+                if limited in self.limits:
+                    self.limits[limited]+= add_on[1][limited]
+                else:
+                    raise ValueError(f'Add on raises a limit {limited} that was not found')
 
     def generate_events(self,start_date,end_date):
         '''

@@ -48,7 +48,7 @@ class ChurnSimulation:
         self.model_list = []
         for b in behavior_versions:
             version = b[(b.find(self.model_name) + len(self.model_name)+1):-4]
-            if version in ('utility','population','country','plans','updownchurn'):
+            if version in ('utility','population','country','plans','updownchurn','addons'):
                 continue
             behave_mod=FatTailledBehaviorModel(self.model_name,seed,version)
             self.behavior_models[behave_mod.version]=behave_mod
@@ -59,6 +59,11 @@ class ChurnSimulation:
             self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
         self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv',index_col=0)
         self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR
+        add_on_file = local_dir +self.model_name + '_addons.csv'
+        if os.path.exists(add_on_file):
+            self.add_ons = pd.read_csv(add_on_file)
+        else:
+            self.add_ons = pd.DataFrame()
         self.util_mod.setExpectations(self.behavior_models,self.population_percents)
         if self.devmode:
             self.util_mod.checkTransitionRates(self.behavior_models, self.population_percents, self.plans)
@@ -125,7 +130,7 @@ class ChurnSimulation:
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
 
-        new_customer.pick_plan(self.plans)
+        new_customer.pick_initial_plan(self.plans, self.add_ons)
 
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
@@ -140,12 +145,15 @@ class ChurnSimulation:
             else:
                 plan_units = None
                 plan_quantity = None
-            new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.mrr,
+            new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.base_mrr,
                                                 plan_quantity, plan_units ))
+            for add_on in new_customer.add_ons.iterrows():
+                new_customer.subscriptions.append( (add_on[1]['plan'],this_month,next_month, add_on[1]['mrr'],None,None) )
+
             month_count = new_customer.generate_events(this_month,next_month)
             churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
             if not churned:
-                self.util_mod.simulate_upgrade_downgrade(month_count,new_customer,self.plans)
+                self.util_mod.simulate_upgrade_downgrade(month_count,new_customer,self.plans,self.add_ons)
                 this_month = next_month
         return new_customer
 
