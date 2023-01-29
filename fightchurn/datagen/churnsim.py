@@ -139,16 +139,12 @@ class ChurnSimulation:
         churned = False
         while not churned:
             next_month=this_month+relativedelta(months=1)
-            if len(new_customer.limits)>0:
-                plan_units = next(iter(new_customer.limits))
-                plan_quantity = new_customer.limits[plan_units]
-            else:
-                plan_units = None
-                plan_quantity = None
+            plan_units, plan_quantity = self.get_unit_quantity(new_customer.plan)
             new_customer.subscriptions.append( (new_customer.plan, this_month,next_month, new_customer.base_mrr,
                                                 plan_quantity, plan_units ))
             for add_on in new_customer.add_ons.iterrows():
-                new_customer.subscriptions.append( (add_on[1]['plan'],this_month,next_month, add_on[1]['mrr'],None,None) )
+                add_units, add_quantity = self.get_unit_quantity(add_on[1]['plan'])
+                new_customer.subscriptions.append( (add_on[1]['plan'],this_month,next_month, add_on[1]['mrr'],add_quantity,add_units) )
 
             month_count = new_customer.generate_events(this_month,next_month)
             churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
@@ -157,6 +153,20 @@ class ChurnSimulation:
                 this_month = next_month
         return new_customer
 
+    def get_unit_quantity(self,plan):
+        if plan in self.plans.index.values:
+            if self.plans.shape[1]>2:
+                limit_col = self.plans.columns.values[2]
+                return  limit_col,  self.plans.loc[plan,limit_col]
+
+        if plan in self.add_ons['plan'].values:
+            if self.add_ons.shape[1]>3:
+                add_on = self.add_ons[self.add_ons['plan']==plan]
+                for limit_col in self.add_ons.columns.values[3:]:
+                    if add_on[limit_col].values[0]>0:
+                        return limit_col, add_on[limit_col].values[0]
+
+        return None, None
 
     def create_customers_for_month(self,month_date,n_to_create):
         '''
