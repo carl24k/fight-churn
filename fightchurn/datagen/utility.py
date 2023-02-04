@@ -1,9 +1,10 @@
 
 import pandas as pd
 import numpy as np
+import os
 from math import log, exp
 from random import uniform
-import os
+from shutil import copyfile
 
 from fightchurn.datagen.customer import Customer
 
@@ -31,8 +32,8 @@ class UtilityModel:
         '''
         self.name=name
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
-
-        util_df=pd.read_csv(local_dir + name+'_utility.csv',index_col=0)
+        util_path = local_dir + name+'_utility.csv'
+        util_df=pd.read_csv(util_path,index_col=0)
         if 'users' in util_df.index.values:
             assert util_df.index.get_loc('users')==util_df.shape[0]-1, "users should be last in utility list (if included)"
         self.utility_weights=util_df['util']
@@ -41,13 +42,20 @@ class UtilityModel:
             print(f"*** WARNING: MRR Should have a non-positive utility impact, but found {self.mrr_utility_cost}")
         self.utility_weights = self.utility_weights.drop(['mrr'],axis=0)
         self.behave_names=self.utility_weights.index.values
-
-        self.transition_df = pd.read_csv(local_dir + name+'_updownchurn.csv',index_col=0)
+        transition_path = local_dir + name+'_updownchurn.csv'
+        self.transition_df = pd.read_csv(transition_path,index_col=0)
 
         # Setup in setExpectations,below
         self.behave_means = None
         self.expected_contributions = None
         self.avg_n_user = 0
+
+        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        os.makedirs(save_path, exist_ok=True)
+        copy_path = os.path.join(save_path,  f'{name}_utility.csv')
+        copyfile(util_path, copy_path)
+        copy_path = os.path.join(save_path,  f'{name}_updownchurn.csv')
+        copyfile(transition_path, copy_path)
 
     def setExpectations(self,bemodDict,model_weights):
         assert sum(model_weights['pcnt'])==1.0, "Model weights should sum to 1.0"

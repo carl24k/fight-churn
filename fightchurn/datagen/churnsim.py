@@ -5,6 +5,7 @@ from dateutil.relativedelta import *
 import random
 from postgres import Postgres
 from math import ceil
+from shutil import copyfile
 
 import argparse
 from filelock import FileLock
@@ -57,7 +58,8 @@ class ChurnSimulation:
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         if len(self.behavior_models)>=1:
             self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
-        self.plans = pd.read_csv(local_dir +self.model_name + '_plans.csv',index_col=0)
+        plans_path = local_dir +self.model_name + '_plans.csv'
+        self.plans = pd.read_csv(plans_path,index_col=0)
         self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR
         add_on_file = local_dir +self.model_name + '_addons.csv'
         if os.path.exists(add_on_file):
@@ -73,6 +75,14 @@ class ChurnSimulation:
 
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_sub.csv')
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
+
+        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        os.makedirs(save_path, exist_ok=True)
+        copy_path = os.path.join(save_path,  f'{self.model_name}_plans.csv')
+        copyfile(plans_path, copy_path)
+        copy_path = os.path.join(save_path,  f'{self.model_name}_addons.csv')
+        copyfile(add_on_file, copy_path)
+
 
     def con_string(self):
         return f"postgresql://{os.environ.get('CHURN_DB_HOST','localhost')}/{os.environ['CHURN_DB']}?user={os.environ['CHURN_DB_USER']}&password={os.environ['CHURN_DB_PASS']}"
