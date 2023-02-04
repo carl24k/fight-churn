@@ -76,7 +76,7 @@ class ChurnSimulation:
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_sub.csv')
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
 
-        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
         os.makedirs(save_path, exist_ok=True)
         copy_path = os.path.join(save_path,  f'{self.model_name}_plans.csv')
         copyfile(plans_path, copy_path)
