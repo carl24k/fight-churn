@@ -34,10 +34,10 @@ export CHURN_OUT_DIR
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
-#cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
-#../../venv/bin/python churndb.py $SCHEMA
-#../../venv/bin/python churnsim.py --model $SCHEMA  --init_customers 10000 --start_date 2023-01-01 --end_date 2023-06-01  --growth_rate 0.04  --n_parallel 5
-#cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
+cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
+../../venv/bin/python churndb.py $SCHEMA
+../../venv/bin/python churnsim.py --model $SCHEMA  --init_customers 10000 --start_date 2023-01-01 --end_date 2023-06-01  --growth_rate 0.04  --n_parallel 5
+cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 2 --listing 1 2 4 5
