@@ -73,6 +73,9 @@ class GaussianBehaviorModel(BehaviorModel):
         model=pd.read_csv(model_path)
         model.set_index(['behavior'],inplace=True)
         self.behave_means=model['mean']
+        self.behave_maxs = None
+        if 'max' in model.columns:
+            self.behave_maxs = model['max']
         self.behave_names=model.index.values
         self.behave_cov=model[self.behave_names]
         self.min_rate=0.01*self.behave_means.min()
@@ -157,7 +160,9 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)
         customer_rates = np.maximum(customer_rates-0.667,0.333)
-        new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}),
+        if self.behave_maxs is not None:
+            customer_rates = customer_rates.clip(max=self.behave_maxs)
+        new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates.values}),
                                channel_name=self.version,start_of_month=start_of_month)
         # print(customer_rates)
         return new_customer

@@ -7,5 +7,5 @@ revert_stage,-0.1
 lose_opportunity,-0.1
 meeting_held,0.1
 schedule_meeting,0.05
-mrr,-0.1
+mrr,-0.025
 users,0
