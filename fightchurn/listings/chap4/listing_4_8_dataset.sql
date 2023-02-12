@@ -14,9 +14,11 @@ sum(case when metric_name_id=16 then metric_value else 0 end) as lose_opportunit
 sum(case when metric_name_id=17 then metric_value else 0 end) as meeting_held,
 sum(case when metric_name_id=18 then metric_value else 0 end) as schedule_meeting,
 sum(case when metric_name_id=20 then metric_value else 0 end) as mrr,
+sum(case when metric_name_id=22 then metric_value else 0 end) as users_purchased,
 sum(case when metric_name_id=21 then metric_value else 0 end) as opp_close_per_dollar,
 sum(case when metric_name_id=30 then metric_value else 0 end) as active_users_per_month,
-sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_per_month
+sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_per_month,
+sum(case when metric_name_id=32 then metric_value else 0 end) as user_utilization
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id

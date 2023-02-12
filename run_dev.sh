@@ -47,14 +47,10 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 
 
-# Account tenure metric
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13
-# MRR metric
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 17
-# Total metric
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 18
+# Account tenure metric, MRR, Total, Users Quantity
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13 17 18 19
 # MRR, Tenure, Total names
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4
 
 # Scaled metrics
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 7
@@ -65,7 +61,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 9  --insert
 
 # ratios
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1  --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2  --insert
 
 # Metric QA
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 8
@@ -80,7 +76,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2
 
 # Cohorts
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13
 
 # XGB Fit
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6

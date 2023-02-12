@@ -61,6 +61,10 @@
             "v3": {
                 "%new_metric_name": "opp_value_per_month",
                 "%new_metric_id": 31
+            },
+            "v4": {
+                "%new_metric_name": "users_purchased",
+                "%new_metric_id": 22
             }
         },
         "list5": {
@@ -100,6 +104,13 @@
                 "%event2measure" : "close_opportunity",
                 "%field2sum" : "event_value",
                 "%new_metric_id": 31}
+        },
+        "list19": {
+            "name": "unit_quantity_insert",
+            "params": {
+                "mode": "run",
+                "%unit" : "users",
+                "%new_metric_id": 22}
         }
     },
     "chap4": {
@@ -181,6 +192,9 @@
             },
             "v12": {
                 "metric_to_plot": "opp_value_per_month"
+            },
+            "v13": {
+                "metric_to_plot": "user_utilization"
             }
         },
         "list2": {
@@ -208,7 +222,18 @@
                     "%new_metric_id": 21,
                     "%new_metric_name": "opp_close_per_dollar"
                 },
-                "v1": {}
+                "v1": {
+                    "%num_metric": "close_opportunity_28avg_84obs",
+                    "%den_metric": "mrr",
+                    "%new_metric_id": 21,
+                    "%new_metric_name": "opp_close_per_dollar"
+                },
+                "v2": {
+                    "%num_metric": "active_users",
+                    "%den_metric": "users_purchased",
+                    "%new_metric_id": 32,
+                    "%new_metric_name": "user_utilization"
+                }
             }
         },
         "list7": {
