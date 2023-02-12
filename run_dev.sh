@@ -79,11 +79,11 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 # Stats
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2
 
+# Cohorts
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12
+
 # XGB Fit
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6
 
 # SHAP
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 8
-
-# Cohorts
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12
