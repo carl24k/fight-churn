@@ -194,8 +194,20 @@ class UtilityModel:
         if current_plan < plans.shape[0]-1:
             if uniform(0, 1) < upgrade_probability:
                 new_plan = current_plan+1
-                customer.set_plan(plans,new_plan)
-                changed_plan=True
+                near_limit=True
+                if plans.shape[1]>2:
+                    near_limit=False
+                    for limited in plans.columns.values[2:]:
+                        current_limit=plans.iloc[current_plan][limited]
+                        new_limit=plans.iloc[new_plan][limited]
+                        customer_rate = customer.get_behavior_rate(limited)
+                        if customer_rate>= 0.8* current_limit and new_limit>current_limit:
+                            near_limit=True
+                            break
+
+                if near_limit:
+                    customer.set_plan(plans,new_plan)
+                    changed_plan=True
 
         if current_plan > 0 and not changed_plan:
             if uniform(0, 1) < downgrade_probability:
@@ -203,17 +215,25 @@ class UtilityModel:
                 customer.set_plan(plans,new_plan)
                 changed_plan=True
 
-        if not changed_plan:
-            for add_on in add_ons.iterrows():
+        if not changed_plan and uniform(0, 1) < upgrade_probability:
+            shuffled_add_ons = add_ons.sample(frac=1).reset_index(drop=True)
+            for add_on in shuffled_add_ons.iterrows():
                 if len(customer.add_ons)>0 and add_on[1]['plan'] in customer.add_ons['plan'].values:
                     continue
-                if uniform(0, 1) < upgrade_probability:
-                    if len(customer.add_ons)==0:
-                        customer.add_ons=pd.DataFrame([add_on[1]])
-                    else:
-                        customer.add_ons = customer.add_ons.append(add_on[1])
-                    changed_add_ons=True
-                    break
+                near_limit = False
+                for limited in add_on[1].index.values[3:]:
+                    customer_rate = customer.get_behavior_rate(limited)
+                    if customer_rate > 0.8*customer.limits[limited] and add_on[1].loc[limited]>0:
+                        near_limit = True
+                        break
+                if not near_limit:
+                    continue
+                if len(customer.add_ons)==0:
+                    customer.add_ons=pd.DataFrame([add_on[1]])
+                else:
+                    customer.add_ons = customer.add_ons.append(add_on[1])
+                changed_add_ons=True
+                break
 
         if not changed_plan and not changed_add_ons:
             for add_on in customer.add_ons.iterrows():

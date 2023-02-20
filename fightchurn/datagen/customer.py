@@ -82,6 +82,15 @@ class Customer:
         self.subscriptions=[]
         self.events=[]
 
+    def get_behavior_rate(self,behavior):
+        if behavior == 'users':
+            customer_rate = self.users
+        elif behavior in self.behavior_rates['behavior'].values:
+            customer_rate = self.behavior_rates[self.behavior_rates['behavior'] == behavior]['monthly_rate'].values[0]
+        else:
+            raise ValueError(f'get_behavior_rates UNKNOWN behavior {behavior}')
+        return customer_rate
+
     @staticmethod
     def get_valued_behaviors(behavior_list):
         value_behaviors=[]

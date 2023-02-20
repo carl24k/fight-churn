@@ -297,11 +297,11 @@
         "list9": {
             "name": "count_active_users",
             "params": {
-                "%obs_period": 28
+                "%obs_period": 1
             },
             "insert" : {
                 "params": {
-                    "%obs_period": 30,
+                    "%obs_period": 1,
                     "%new_metric_id": 30
                 }
             }
