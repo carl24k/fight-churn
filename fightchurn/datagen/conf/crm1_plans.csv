@@ -1,0 +1,4 @@
+plan,mrr,prob,users,schedule_meeting,meeting_held,search
+basic,10,0.34,5,0,0,10
+standard,100,0.33,25,0,0,20
+premier,500,0.33,150,0,0,50

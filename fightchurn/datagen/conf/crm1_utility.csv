@@ -1,0 +1,11 @@
+behavior,util
+search,0.1
+close_opportunity,0.0005
+advance_stage,0.05
+add_competition,-0.25
+revert_stage,-0.25
+lose_opportunity,-0.75
+meeting_held,0.1
+schedule_meeting,0.05
+mrr,-0.0002
+users,0

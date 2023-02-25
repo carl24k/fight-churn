@@ -1,0 +1,11 @@
+﻿behavior,mean,max,search,close_opportunity,advance_stage,add_competition,revert_stage,lose_opportunity,meeting_held,schedule_meeting,users,close_opportunity_value
+search,10,200,1,0.7,0.7,0.7,0.5,0.6,0.2,0.2,0,0.2
+close_opportunity,3,10,0.7,1,0.7,0.7,0.5,0.6,0.2,0.2,0.2,0.2
+advance_stage,20,100,0.7,0.7,1,0.7,0.5,0.6,0.2,0.2,0,0.2
+add_competition,20,100,0.7,0.7,0.7,1,0.5,0.6,0.2,0.2,0,0.5
+revert_stage,10,50,0.5,0.5,0.5,0.5,1,0.6,0.2,0.2,0,0.2
+lose_opportunity,1,10,0.6,0.6,0.6,0.6,0.6,1,0.2,0.2,0.1,0.2
+meeting_held,5,90,0.2,0.2,0.2,0.2,0.2,0.2,1,0.95,0,0.3
+schedule_meeting,8,120,0.2,0.2,0.2,0.2,0.2,0.2,0.95,1,0,0.3
+users,5,100,0,0.2,0,0,0,0.1,0,0,1,0.5
+close_opportunity_value,10000,50000,0.2,0.2,0.2,0.5,0.2,0.2,0.3,0.3,0.5,1
