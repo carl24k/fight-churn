@@ -77,6 +77,8 @@ class GaussianBehaviorModel(BehaviorModel):
         if 'max' in model.columns:
             self.behave_maxs = model['max']
         self.behave_names=model.index.values
+        if not all([b in model.columns.values for b in self.behave_names]):
+            raise ValueError(f'Covariance columns missing behaviors in rows: {list(set(self.behave_names)-set(model.columns))}')
         self.behave_cov=model[self.behave_names]
         self.min_rate=0.01*self.behave_means.min()
         corr_scale=(np.absolute(self.behave_cov.to_numpy()) <= 1.0).all()
