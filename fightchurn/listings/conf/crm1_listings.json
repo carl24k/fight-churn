@@ -158,42 +158,99 @@
                 "metric_to_plot": "win_opportunity"
             },
             "v1": {
-                "metric_to_plot": "mrr",
-                "ncohort" : 3},
+                "metric_to_plot": "add_contact"
+            },
             "v2": {
-                "metric_to_plot": "advance_stage"
+                "metric_to_plot": "edit_contact"
             },
             "v3": {
-                "metric_to_plot": "win_opportunity"
+                "metric_to_plot": "add_lead"
             },
             "v4": {
-                "metric_to_plot": "search"
+                "metric_to_plot": "edit_lead"
             },
             "v5": {
-                "metric_to_plot": "add_competitor"
+                "metric_to_plot": "email_lead"
             },
             "v6": {
-                "metric_to_plot": "revert_stage"
+                "metric_to_plot": "call_lead"
             },
             "v7": {
-                "metric_to_plot": "lose_opportunity"
+                "metric_to_plot": "unsub_lead"
             },
             "v8": {
-                "metric_to_plot": "meetings"
+                "metric_to_plot": "create_list"
             },
             "v9": {
-                "metric_to_plot": "schedule_meeting"
+                "metric_to_plot": "delete_list"
             },
             "v10": {
-                "metric_to_plot": "opp_close_per_dollar"
+                "metric_to_plot": "email_list"
             },
             "v11": {
-                "metric_to_plot": "active_users_per_month"
+                "metric_to_plot": "meetings"
             },
             "v12": {
-                "metric_to_plot": "opp_value_per_month"
+                "metric_to_plot": "schedule_meeting"
             },
             "v13": {
+                "metric_to_plot": "edit_meeting"
+            },
+            "v14": {
+                "metric_to_plot": "cancel_meeting"
+            },
+            "v15": {
+                "metric_to_plot": "quote"
+            },
+            "v16": {
+                "metric_to_plot": "create_opportunity"
+            },
+            "v17": {
+                "metric_to_plot": "advance_stage"
+            },
+            "v18": {
+                "metric_to_plot": "win_opportunity"
+            },
+            "v19": {
+                "metric_to_plot": "add_competitor"
+            },
+            "v20": {
+                "metric_to_plot": "revert_stage"
+            },
+            "v21": {
+                "metric_to_plot": "lose_opportunity"
+            },
+            "v22": {
+                "metric_to_plot": "login"
+            },
+            "v23": {
+                "metric_to_plot": "search"
+            },
+            "v24": {
+                "metric_to_plot": "create_search"
+            },
+            "v25": {
+                "metric_to_plot": "edit_search"
+            },
+            "v26": {
+                "metric_to_plot": "delete_search"
+            },
+            "v30": {
+                "metric_to_plot": "mrr",
+                "ncohort" : 3},
+            "v31": {
+                "metric_to_plot": "opp_value_per_month"
+            },
+            "v32": {
+                "metric_to_plot": "users_purchased"
+            },
+            "v33": {
+                "metric_to_plot": "opp_close_per_dollar"
+            },
+            "v34": {
+                "metric_to_plot": "active_users_per_month"
+            },
+            "v35": {
                 "metric_to_plot": "user_utilization"
             }
         },
