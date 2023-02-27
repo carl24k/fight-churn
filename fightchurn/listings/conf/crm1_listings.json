@@ -115,7 +115,7 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-06",
+            "%from_yyyy-mm-dd": "2023-02-27",
             "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "run",
             "type": "sql"
