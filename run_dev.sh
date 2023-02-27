@@ -4,7 +4,7 @@
 
 # run_churn_listing.py
 
-SCHEMA=biznet5
+SCHEMA=crm1
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
 CHURN_DB_USER=carl
@@ -55,7 +55,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 # Scaled metrics
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 7
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 3 4 5 6 7 8 --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 --insert
 
 # active users
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 9  --insert
@@ -70,7 +70,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
 
 # Extract the data
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 8
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 9
 
 # Stats
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2

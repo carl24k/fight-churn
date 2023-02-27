@@ -48,15 +48,15 @@
             "params": {
                 "mode": "run",
                 "%new_metric_name": "account_tenure",
-                "%new_metric_id": 10
+                "%new_metric_id": 0
             },
             "v1": {
                 "%new_metric_name": "account_tenure",
-                "%new_metric_id": 10
+                "%new_metric_id": 0
             },
             "v2": {
                 "%new_metric_name": "mrr",
-                "%new_metric_id": 20
+                "%new_metric_id": 30
             },
             "v3": {
                 "%new_metric_name": "opp_value_per_month",
@@ -64,13 +64,13 @@
             },
             "v4": {
                 "%new_metric_name": "users_purchased",
-                "%new_metric_id": 22
+                "%new_metric_id": 35
             }
         },
         "list5": {
             "name": "sum_metric",
             "params": {
-                "%event2measure" : "close_opportunity",
+                "%event2measure" : "win_opportunity",
                 "%field2sum" : "event_value"
             }
         },
@@ -88,20 +88,20 @@
             "name": "account_tenure_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 10
+                "%new_metric_id": 0
             }
         },
         "list17": {
             "name": "mrr_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 20}
+                "%new_metric_id": 30}
         },
         "list18": {
             "name": "sum_metric_insert",
             "params": {
                 "mode": "run",
-                "%event2measure" : "close_opportunity",
+                "%event2measure" : "win_opportunity",
                 "%field2sum" : "event_value",
                 "%new_metric_id": 31}
         },
@@ -110,7 +110,7 @@
             "params": {
                 "mode": "run",
                 "%unit" : "users",
-                "%new_metric_id": 22}
+                "%new_metric_id": 32}
         }
     },
     "chap4": {
@@ -139,7 +139,7 @@
                 "%lead_time": "5 day"
             }
         },
-        "list8": {
+        "list9": {
             "name": "dataset",
             "params": {
                 "mode": "save",
@@ -149,13 +149,13 @@
     },
     "chap5": {
         "defaults": {
-            "data_set_path": "biznet5/biznet5_dataset.csv",
+            "data_set_path": "crm1/crm1_dataset.csv",
             "type": "py"
         },
         "list1": {
             "name": "cohort_plot",
             "params": {
-                "metric_to_plot": "close_opportunity"
+                "metric_to_plot": "win_opportunity"
             },
             "v1": {
                 "metric_to_plot": "mrr",
@@ -164,13 +164,13 @@
                 "metric_to_plot": "advance_stage"
             },
             "v3": {
-                "metric_to_plot": "close_opportunity"
+                "metric_to_plot": "win_opportunity"
             },
             "v4": {
                 "metric_to_plot": "search"
             },
             "v5": {
-                "metric_to_plot": "add_competition"
+                "metric_to_plot": "add_competitor"
             },
             "v6": {
                 "metric_to_plot": "revert_stage"
@@ -179,7 +179,7 @@
                 "metric_to_plot": "lose_opportunity"
             },
             "v8": {
-                "metric_to_plot": "meeting_held"
+                "metric_to_plot": "meetings"
             },
             "v9": {
                 "metric_to_plot": "schedule_meeting"
@@ -212,26 +212,26 @@
         "list1": {
             "name": "ratio_metric",
             "params": {
-                    "%num_metric": "close_opportunity_28avg_84obs",
+                    "%num_metric": "win_opportunity_28avg_84obs",
                     "%den_metric": "mrr"
             },
             "insert": {
                 "params": {
-                    "%num_metric": "close_opportunity_28avg_84obs",
+                    "%num_metric": "win_opportunity_28avg_84obs",
                     "%den_metric": "mrr",
-                    "%new_metric_id": 21,
+                    "%new_metric_id": 33,
                     "%new_metric_name": "opp_close_per_dollar"
                 },
                 "v1": {
-                    "%num_metric": "close_opportunity_28avg_84obs",
+                    "%num_metric": "win_opportunity_28avg_84obs",
                     "%den_metric": "mrr",
-                    "%new_metric_id": 21,
+                    "%new_metric_id": 33,
                     "%new_metric_name": "opp_close_per_dollar"
                 },
                 "v2": {
                     "%num_metric": "active_users",
                     "%den_metric": "users_purchased",
-                    "%new_metric_id": 32,
+                    "%new_metric_id": 35,
                     "%new_metric_name": "user_utilization"
                 }
             }
@@ -241,7 +241,7 @@
             "params": {
                 "%event2measure": "lose_opportunity",
                 "%obs_period": 84,
-                "%desc_period": 32
+                "%desc_period": 28
             }
         },
         "list8": {
@@ -261,36 +261,108 @@
                     "%min_tenure": 14
                 },
                 "v1": {
-                    "%event2measure": "advance_stage",
-                    "%new_metric_id": 11
+                    "%event2measure": "add_contact",
+                    "%new_metric_id": 1
                 },
                 "v2": {
-                    "%event2measure": "close_opportunity",
-                    "%new_metric_id": 12
+                    "%event2measure": "edit_contact",
+                    "%new_metric_id": 2
                 },
                 "v3": {
-                    "%event2measure": "search",
-                    "%new_metric_id": 13
+                    "%event2measure": "add_lead",
+                    "%new_metric_id": 3
                 },
                 "v4": {
-                    "%event2measure": "add_competition",
-                    "%new_metric_id": 14
+                    "%event2measure": "edit_lead",
+                    "%new_metric_id": 4
                 },
                 "v5": {
-                    "%event2measure": "revert_stage",
-                    "%new_metric_id": 15
+                    "%event2measure": "email_lead",
+                    "%new_metric_id": 5
                 },
                 "v6": {
-                    "%event2measure": "lose_opportunity",
-                    "%new_metric_id": 16
+                    "%event2measure": "call_lead",
+                    "%new_metric_id": 6
                 },
                 "v7": {
-                    "%event2measure": "meeting_held",
-                    "%new_metric_id": 17
+                    "%event2measure": "unsub_lead",
+                    "%new_metric_id": 7
                 },
                 "v8": {
+                    "%event2measure": "create_list",
+                    "%new_metric_id": 8
+                },
+                "v9": {
+                    "%event2measure": "delete_list",
+                    "%new_metric_id": 9
+                },
+                "v10": {
+                    "%event2measure": "email_list",
+                    "%new_metric_id": 10
+                },
+                "v11": {
+                    "%event2measure": "meeting",
+                    "%new_metric_id": 11
+                },
+                "v12": {
                     "%event2measure": "schedule_meeting",
+                    "%new_metric_id": 12
+                },
+                "v13": {
+                    "%event2measure": "edit_meeting",
+                    "%new_metric_id": 13
+                },
+                "v14": {
+                    "%event2measure": "cancel_meeting",
+                    "%new_metric_id": 14
+                },
+                "v15": {
+                    "%event2measure": "quote",
+                    "%new_metric_id": 15
+                },
+                "v16": {
+                    "%event2measure": "create_opportunity",
+                    "%new_metric_id": 16
+                },
+                "v17": {
+                    "%event2measure": "advance_stage",
+                    "%new_metric_id": 17
+                },
+                "v18": {
+                    "%event2measure": "win_opportunity",
                     "%new_metric_id": 18
+                },
+                "v19": {
+                    "%event2measure": "add_competitor",
+                    "%new_metric_id": 19
+                },
+                "v20": {
+                    "%event2measure": "revert_stage",
+                    "%new_metric_id": 20
+                },
+                "v21": {
+                    "%event2measure": "lose_opportunity",
+                    "%new_metric_id": 21
+                },
+                "v22": {
+                    "%event2measure": "login",
+                    "%new_metric_id": 22
+                },
+                "v23": {
+                    "%event2measure": "search",
+                    "%new_metric_id": 23
+                },
+                "v24": {
+                    "%event2measure": "create_search",
+                    "%new_metric_id": 24
+                },
+                "v25": {
+                    "%event2measure": "edit_search",
+                    "%new_metric_id": 25
+                },
+                "v26": {
+                    "%event2measure": "delete_search",
+                    "%new_metric_id": 26
                 }
             }
         },
@@ -302,14 +374,14 @@
             "insert" : {
                 "params": {
                     "%obs_period": 1,
-                    "%new_metric_id": 30
+                    "%new_metric_id": 34
                 }
             }
         }
     },
     "chap9": {
         "defaults": {
-            "data_set_path": "biznet5/biznet5_dataset.csv",
+            "data_set_path": "crm1/crm1_dataset.csv",
             "type": "py"
         },
         "list6": {
@@ -325,7 +397,7 @@
         "list8": {
             "name": "shap_explain_xgb",
             "params": {
-                "plot_n" : [0,500,1000,1500,2000]
+                "plot_n" : [0,1,2,3,4]
             }
         }
     }
