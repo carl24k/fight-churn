@@ -80,6 +80,12 @@
                 "mode": "save"
             }
         },
+        "list11": {
+            "name": "events_per_account",
+            "params": {
+                "mode": "save"
+            }
+        },
         "list12": {
             "name": "account_tenure",
             "params": {}
