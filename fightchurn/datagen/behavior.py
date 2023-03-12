@@ -133,10 +133,15 @@ class GaussianBehaviorModel(BehaviorModel):
 
 class FatTailledBehaviorModel(GaussianBehaviorModel):
 
-    def __init__(self,name,random_seed=None,version=None):
+    def __init__(self,name,complex_sat,random_seed=None,version=None):
         self.exp_base = 1.6
         self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
         self.exp_fun = lambda x: np.power(self.exp_base,x)
+        self.complex_sat = complex_sat
+        if self.complex_sat:
+            print(f'Behavior Model with COMPLEX customer satisfaction propensity!')
+        else:
+            print(f'Behavior Model with simple customer satisfaction propensity.')
 
         super(FatTailledBehaviorModel,self).__init__(name,random_seed,version)
 
@@ -165,6 +170,6 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         if self.behave_maxs is not None:
             customer_rates = customer_rates.clip(max=self.behave_maxs)
         new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates.values}),
-                               channel_name=self.version,start_of_month=start_of_month)
+                               channel_name=self.version,start_of_month=start_of_month, complex_satisfaction=self.complex_sat)
         # print(customer_rates)
         return new_customer

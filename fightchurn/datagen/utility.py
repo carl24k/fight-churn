@@ -131,14 +131,22 @@ class UtilityModel:
         :return:
         '''
         contrib_ratios = event_counts / self.behave_means
+
+        if isinstance(customer.satisfaction_propensity, np.ndarray):
+            assert customer.satisfaction_propensity.shape == contrib_ratios.shape
+            contrib_ratios = contrib_ratios * customer.satisfaction_propensity
+
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
         utility = np.sum(utility_contribs)
-        utility = utility + customer.mrr* self.mrr_utility_cost
-        if customer.satisfaction_propensity != 1.0:
-            multiplier = customer.satisfaction_propensity if utility > 0.0  else (1.0/customer.satisfaction_propensity)
-        else:
-            multiplier = 1.0
-        utility *= multiplier
+        utility = utility + customer.mrr* self.mrr_utility_cost * customer.monetary_satisfaction
+
+        if isinstance(customer.satisfaction_propensity,float):
+            if customer.satisfaction_propensity != 1.0:
+                multiplier = customer.satisfaction_propensity if utility > 0.0  else (1.0/customer.satisfaction_propensity)
+            else:
+                multiplier = 1.0
+            utility *= multiplier
+
         return utility
 
     def transition_probility(self,u,trans):

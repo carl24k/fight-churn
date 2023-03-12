@@ -24,7 +24,7 @@ from fightchurn.datagen.customer import  Customer
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers,growth_rate, devmode, seed, n_parallel=1):
+    def __init__(self, model, start, end, init_customers, growth_rate, complex_sat, devmode, seed, n_parallel=1):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -51,7 +51,7 @@ class ChurnSimulation:
             version = b[(b.find(self.model_name) + len(self.model_name)+1):-4]
             if version in ('utility','population','country','plans','updownchurn','addons'):
                 continue
-            behave_mod=FatTailledBehaviorModel(self.model_name,seed,version)
+            behave_mod=FatTailledBehaviorModel(self.model_name, complex_sat=complex_sat, random_seed= seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
@@ -315,6 +315,7 @@ if __name__ == "__main__":
     arg_parse.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
     arg_parse.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
     arg_parse.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
+    arg_parse.add_argument("--complex", type=bool, help="Flag to use complex satisfaction", default=False)
     arg_parse.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
     arg_parse.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
 
@@ -323,4 +324,4 @@ if __name__ == "__main__":
     start_date = parser.parse(args.start_date).date()
     end_date = parser.parse(args.end_date).date()
 
-    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.dev, n_parallel=args.n_parallel)
+    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.complex, args.dev, n_parallel=args.n_parallel)

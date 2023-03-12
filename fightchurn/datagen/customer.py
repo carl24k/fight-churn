@@ -20,7 +20,7 @@ class Customer:
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
-    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None):
+    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None,complex_satisfaction=False):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -73,12 +73,23 @@ class Customer:
         self.plan=None
         self.add_ons = pd.DataFrame()
         self.limits= {}
+        age_contrib = 0.5* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
 
-        if satisfaction is None:
-            age_contrib = 0.5* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
-            self.satisfaction_propensity = np.power(2.0, random.uniform(-1.5, 1.5) + age_contrib)
+        if not complex_satisfaction:
+            if satisfaction is None:
+                self.satisfaction_propensity = np.power(2.0, random.uniform(-1.5, 1.5) + age_contrib)
+            else:
+                self.satisfaction_propensity = satisfaction
+            self.monetary_satisfaction=1.0
         else:
-            self.satisfaction_propensity = satisfaction
+            nrand = len(self.behavior_rates)
+            if self.users is not None:nrand = nrand+1
+            if satisfaction is None:
+                self.satisfaction_propensity = np.power(2.0, random.uniform(low=-3, high=3, size=nrand) + age_contrib)
+            else:
+                self.satisfaction_propensity = [satisfaction]*nrand
+            self.monetary_satisfaction = np.power(2.0, random.uniform(-3, 3) + age_contrib)
+
         self.subscriptions=[]
         self.events=[]
 
