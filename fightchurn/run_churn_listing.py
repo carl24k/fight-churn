@@ -8,10 +8,14 @@ import os
 import sys
 import argparse
 from argparse import Namespace
+from joblib import Parallel, delayed
 from fightchurn.datagen import churndb
 from fightchurn.datagen import churnsim
 from datetime import date
 from typing import List, Union
+from filelock import FileLock
+import tempfile
+
 
 """
 ####################################################################################################
@@ -24,6 +28,7 @@ parser.add_argument("--chapter", type=int, help="The chapter of the listing", de
 parser.add_argument("--listing", nargs='*', type=int, help="The number of the listing", default=[1])
 parser.add_argument("--insert", action="store_true", default=False,help="Use the insert version of a metric SQL, if available")
 parser.add_argument("--version", nargs='*', help="Alternative listing _parameter_ verions (optional)",default=[])
+parser.add_argument("--n_parallel", type=int, help="Number of parallel cpus for multi-version listings", default=1)
 
 """
 ####################################################################################################
@@ -43,6 +48,13 @@ reserved_param_keywords = ('listing', 'mode','type','schema','name','chapter','f
 ####################################################################################################
 Functions
 """
+
+CHURN_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_print_lock.txt')
+
+def thread_safe_print(*a, **b):
+    with FileLock(CHURN_LOCK_FILE):
+        print(*a, **b)
+
 
 def _full_listing_name(chapter, listing, name, insert=False):
     """
@@ -116,7 +128,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
             sql = sql.replace(p, str(param_dict[p]))
 
         # Print the sql (then remove the newlines)
-        print('SQL:\n----------\n'+sql+'\n----------\nRESULT:')
+        thread_safe_print('SQL:\n----------\n'+sql+'\n----------\nRESULT:')
         sql = sql.replace('\n', ' ')
 
         # Run in the manner indicated by the mode
@@ -124,7 +136,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
             db.run(sql)
         elif  mode  == 'one':
             res = db.one(sql)
-            print(res)
+            thread_safe_print(res)
         elif  mode  == 'top' or mode == 'save':
             res = db.all(sql)
             df = pd.DataFrame(res)
@@ -139,7 +151,7 @@ def sql_listing(chapter, listing, name, schema, mode, param_dict, insert=False, 
                 print('Saving: %s' % csv_path)
                 df.to_csv(csv_path, index=False)
             else:
-                print(df.head(print_num_rows))
+                thread_safe_print(df.head(print_num_rows))
         else:
             print('Unknown run mode for SQL example')
             exit(-4)
@@ -355,10 +367,18 @@ def run_churn_listing_from_args(args : Namespace):
             list_args.version=None
             run_listing_from_args(list_args)
         else:
-            for v in args.version:
-                vers_args = copy(list_args)
-                vers_args.version =v
-                run_listing_from_args(vers_args)
+            if args.n_parallel>1:
+                def run_one_version(v):
+                    vers_args = copy(list_args)
+                    vers_args.version =v
+                    run_listing_from_args(vers_args)
+
+                Parallel(n_jobs=args.n_parallel)(delayed(run_one_version)(v) for v in args.version)
+            else:
+                for v in args.version:
+                    vers_args = copy(list_args)
+                    vers_args.version =v
+                    run_listing_from_args(vers_args)
 
 
 def run_standard_simulation(schema='socialnet7', init_customers=10000, force=False):
