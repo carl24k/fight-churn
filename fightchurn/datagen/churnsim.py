@@ -24,7 +24,7 @@ from fightchurn.datagen.customer import  Customer
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers, growth_rate, complex_sat, devmode, seed, n_parallel=1):
+    def __init__(self, model, start, end, init_customers, growth_rate, complex_sat, devmode, seed, n_parallel):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -42,6 +42,7 @@ class ChurnSimulation:
         self.monthly_growth_rate = growth_rate
         self.devmode= devmode
         self.n_parallel = n_parallel
+        print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         behavior_versions = glob.glob(local_dir+self.model_name+'_*.csv')
@@ -300,10 +301,11 @@ class ChurnSimulation:
         self.remove_tmp_files()
         self.sim_rate_debug_query()
 
-def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, n_parallel=1, force=False):
+def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, complex=False, n_parallel=1, force=False):
     if random_seed is not None:
         random.seed(random_seed) # for random
-    churn_sim = ChurnSimulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed,n_parallel)
+    churn_sim = ChurnSimulation(model=model_name,start=start_date,end=end_date,init_customers=init_customers, growth_rate=growth, complex_sat=complex,
+                                devmode= devmode, seed= random_seed, n_parallel=n_parallel)
     churn_sim.run_simulation(force=force)
 
 if __name__ == "__main__":
@@ -324,4 +326,4 @@ if __name__ == "__main__":
     start_date = parser.parse(args.start_date).date()
     end_date = parser.parse(args.end_date).date()
 
-    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate, args.complex, args.dev, n_parallel=args.n_parallel)
+    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate,args.dev, complex=args.complex, n_parallel=args.n_parallel)

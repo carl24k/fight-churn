@@ -36,7 +36,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py --model $SCHEMA  --init_customers 10000 --start_date 2023-01-01 --end_date 2023-06-01  --growth_rate 0.04  --complex True --n_parallel 5
+../../venv/bin/python churnsim.py --model $SCHEMA  --n_parallel 5 --init_customers 10000 --start_date 2023-01-01 --end_date 2023-06-01  --growth_rate 0.04  --complex True
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
@@ -55,7 +55,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 # Scaled metrics
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 7
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 --insert --n_parallel 6
 
 # active users
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 9  --insert

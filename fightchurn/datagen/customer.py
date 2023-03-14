@@ -12,6 +12,8 @@ import os
 
 
 class Customer:
+    COMPLEX_PROPENSITY_SCALE=3.0
+    AGE_SATISFACTION_SCALE = 0.5
     MIN_AGE = 12.0
     MAX_AGE = 82.0
     AGE_RANGE = MAX_AGE - MIN_AGE
@@ -66,6 +68,7 @@ class Customer:
                                                                               days=-random.uniform(1,30))
         else:
             self.date_of_birth=None
+            self.age = Customer.AVG_AGE
 
         self.country=country
         self.mrr=None
@@ -73,7 +76,7 @@ class Customer:
         self.plan=None
         self.add_ons = pd.DataFrame()
         self.limits= {}
-        age_contrib = 0.5* (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
+        age_contrib = Customer.AGE_SATISFACTION_SCALE * (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
 
         if not complex_satisfaction:
             if satisfaction is None:
@@ -85,10 +88,11 @@ class Customer:
             nrand = len(self.behavior_rates)
             if self.users is not None:nrand = nrand+1
             if satisfaction is None:
-                self.satisfaction_propensity = np.power(2.0, random.uniform(low=-3, high=3, size=nrand) + age_contrib)
+                self.satisfaction_propensity = np.power(10.0, random.uniform(low=-Customer.COMPLEX_PROPENSITY_SCALE,
+                                                                            high=Customer.COMPLEX_PROPENSITY_SCALE, size=nrand) + age_contrib)
             else:
                 self.satisfaction_propensity = [satisfaction]*nrand
-            self.monetary_satisfaction = np.power(2.0, random.uniform(-3, 3) + age_contrib)
+            self.monetary_satisfaction = np.power(10.0, random.uniform(-Customer.COMPLEX_PROPENSITY_SCALE, Customer.COMPLEX_PROPENSITY_SCALE) + age_contrib)
 
         self.subscriptions=[]
         self.events=[]
