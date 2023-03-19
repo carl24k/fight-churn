@@ -64,7 +64,7 @@
             },
             "v4": {
                 "%new_metric_name": "users_purchased",
-                "%new_metric_id": 35
+                "%new_metric_id": 32
             }
         },
         "list5": {
@@ -286,16 +286,16 @@
                     "%new_metric_name": "opp_close_per_dollar"
                 },
                 "v1": {
+                    "%new_metric_name": "opp_close_per_dollar",
                     "%num_metric": "win_opportunity_28avg_84obs",
                     "%den_metric": "mrr",
-                    "%new_metric_id": 33,
-                    "%new_metric_name": "opp_close_per_dollar"
+                    "%new_metric_id": 33
                 },
                 "v2": {
+                    "%new_metric_name": "user_utilization",
                     "%num_metric": "active_users",
                     "%den_metric": "users_purchased",
-                    "%new_metric_id": 35,
-                    "%new_metric_name": "user_utilization"
+                    "%new_metric_id": 35
                 }
             }
         },
