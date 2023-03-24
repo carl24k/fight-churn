@@ -263,7 +263,7 @@
                 "metric_to_plot": "search_usage"
             },
             "v37": {
-                "metric_to_plot": "revert_per_advance"
+                "metric_to_plot": "revert_rate"
             },
             "v38": {
                 "metric_to_plot": "loss_rate"
@@ -347,15 +347,15 @@
                     "%new_metric_id": 36
                 },
                 "v4": {
-                    "%new_metric_name": "revert_per_advance",
+                    "%new_metric_name": "revert_rate",
                     "%num_metric": "revert_stage_28avg_84obs",
-                    "%den_metric": "advance_stage_28avg_84obs",
+                    "%den_metric": "stage_changes",
                     "%new_metric_id": 37
                 },
                 "v5": {
                     "%new_metric_name": "loss_rate",
                     "%num_metric": "lose_opportunity_28avg_84obs",
-                    "%den_metric": "create_opportunity_28avg_84obs",
+                    "%den_metric": "closed_opps",
                     "%new_metric_id": 38
                 },
                 "v6": {
@@ -369,6 +369,29 @@
                     "%num_metric": "delete_list_28avg_84obs",
                     "%den_metric": "email_list_28avg_84obs",
                     "%new_metric_id": 40
+                }
+            }
+        },
+        "list3": {
+            "name": "total_metric",
+            "params": {
+                "%metric_list": " 'lose_opportunity_28avg_84obs', 'win_opportunity_28avg_84obs' "
+            },
+            "insert": {
+                "params": {
+                    "%metric_list": " 'lose_opportunity_28avg_84obs', 'win_opportunity_28avg_84obs' ",
+                    "%new_metric_id": 41,
+                    "%new_metric_name": "closed_opps"
+                },
+                "v1": {
+                    "%metric_list": " 'lose_opportunity_28avg_84obs', 'win_opportunity_28avg_84obs' ",
+                    "%new_metric_id": 41,
+                    "%new_metric_name": "closed_opps"
+                },
+                "v2": {
+                    "%metric_list": " 'advance_stage_28avg_84obs', 'revert_stage_28avg_84obs' ",
+                    "%new_metric_id": 42,
+                    "%new_metric_name": "stage_changes"
                 }
             }
         },
