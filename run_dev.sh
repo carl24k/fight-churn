@@ -72,8 +72,12 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 # Extract the data
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 9
 
-# Stats
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2
+# Stats and scores
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 2 3
+
+
+# Correlation analysis
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 2 4 3 5
 
 # Cohorts
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 30 31 32 33 34 35

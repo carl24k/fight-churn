@@ -258,10 +258,53 @@
             },
             "v35": {
                 "metric_to_plot": "user_utilization"
+            },
+            "v36": {
+                "metric_to_plot": "search_usage"
+            },
+            "v37": {
+                "metric_to_plot": "revert_per_advance"
+            },
+            "v38": {
+                "metric_to_plot": "loss_rate"
+            },
+            "v39": {
+                "metric_to_plot": "cancel_meeting_rate"
+            },
+            "v40": {
+                "metric_to_plot": "deletes_per_email"
             }
         },
         "list2": {
             "name": "dataset_stats",
+            "params": {}
+        },
+        "list3": {
+            "name": "metric_scores",
+            "params": {}
+        }
+    },
+    "chap6": {
+        "defaults": {
+            "data_set_path": "crm1/crm1_dataset.csv",
+            "type": "py"
+        },
+        "list2": {
+            "name": "dataset_correlation_matrix",
+            "params": {}
+        },
+        "list3": {
+            "name": "apply_metric_groups",
+            "params": {}
+        },
+        "list4": {
+            "name": "find_metric_groups",
+            "params": {
+                "group_corr_thresh": 0.75
+            }
+        },
+        "list5": {
+            "name": "ordered_correlation_matrix",
             "params": {}
         }
     },
@@ -296,6 +339,36 @@
                     "%num_metric": "active_users",
                     "%den_metric": "users_purchased",
                     "%new_metric_id": 35
+                },
+                "v3": {
+                    "%new_metric_name": "search_usage",
+                    "%num_metric": "search_28avg_84obs",
+                    "%den_metric": "create_search_28avg_84obs",
+                    "%new_metric_id": 36
+                },
+                "v4": {
+                    "%new_metric_name": "revert_per_advance",
+                    "%num_metric": "revert_stage_28avg_84obs",
+                    "%den_metric": "advance_stage_28avg_84obs",
+                    "%new_metric_id": 37
+                },
+                "v5": {
+                    "%new_metric_name": "loss_rate",
+                    "%num_metric": "lose_opportunity_28avg_84obs",
+                    "%den_metric": "create_opportunity_28avg_84obs",
+                    "%new_metric_id": 38
+                },
+                "v6": {
+                    "%new_metric_name": "cancel_meeting_rate",
+                    "%num_metric": "cancel_meeting_28avg_84obs",
+                    "%den_metric": "schedule_meeting_28avg_84obs",
+                    "%new_metric_id": 39
+                },
+                "v7": {
+                    "%new_metric_name": "deletes_per_email",
+                    "%num_metric": "delete_list_28avg_84obs",
+                    "%den_metric": "email_list_28avg_84obs",
+                    "%new_metric_id": 40
                 }
             }
         },

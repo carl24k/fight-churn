@@ -37,7 +37,13 @@ sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_per_m
 sum(case when metric_name_id=32 then metric_value else 0 end) as users_purchased,
 sum(case when metric_name_id=33 then metric_value else 0 end) as opp_close_per_dollar,
 sum(case when metric_name_id=34 then metric_value else 0 end) as active_users_per_month,
-sum(case when metric_name_id=35 then metric_value else 0 end) as user_utilization
+sum(case when metric_name_id=35 then metric_value else 0 end) as user_utilization,
+sum(case when metric_name_id=36 then metric_value else 0 end) as search_usage,
+sum(case when metric_name_id=37 then metric_value else 0 end) as revert_per_advance,
+sum(case when metric_name_id=38 then metric_value else 0 end) as loss_rate,
+sum(case when metric_name_id=39 then metric_value else 0 end) as cancel_meeting_rate,
+sum(case when metric_name_id=40 then metric_value else 0 end) as deletes_per_email
+
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
 inner join observation o on m.account_id = o.account_id
