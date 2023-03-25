@@ -28,9 +28,7 @@ sum(case when metric_name_id=20 then metric_value else 0 end) as revert_stage,
 sum(case when metric_name_id=21 then metric_value else 0 end) as lose_opportunity,
 sum(case when metric_name_id=22 then metric_value else 0 end) as login,
 sum(case when metric_name_id=23 then metric_value else 0 end) as search,
-sum(case when metric_name_id=24 then metric_value else 0 end) as create_search,
-sum(case when metric_name_id=25 then metric_value else 0 end) as edit_search,
-sum(case when metric_name_id=26 then metric_value else 0 end) as delete_search,
+sum(case when metric_name_id=44 then metric_value else 0 end) as search_actions,
 
 sum(case when metric_name_id=30 then metric_value else 0 end) as mrr,
 sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_per_month,
@@ -38,11 +36,12 @@ sum(case when metric_name_id=32 then metric_value else 0 end) as users_purchased
 sum(case when metric_name_id=33 then metric_value else 0 end) as opp_close_per_dollar,
 sum(case when metric_name_id=34 then metric_value else 0 end) as active_users_per_month,
 sum(case when metric_name_id=35 then metric_value else 0 end) as user_utilization,
-sum(case when metric_name_id=36 then metric_value else 0 end) as search_usage,
+sum(case when metric_name_id=36 then metric_value else 0 end) as search_action_per_search,
 sum(case when metric_name_id=37 then metric_value else 0 end) as revert_rate,
 sum(case when metric_name_id=38 then metric_value else 0 end) as loss_rate,
 sum(case when metric_name_id=39 then metric_value else 0 end) as cancel_meeting_rate,
-sum(case when metric_name_id=40 then metric_value else 0 end) as deletes_per_email
+sum(case when metric_name_id=40 then metric_value else 0 end) as deletes_per_email,
+sum(case when metric_name_id=45 then metric_value else 0 end) as search_actions_per_dollar_closed
 
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    

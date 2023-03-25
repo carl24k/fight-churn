@@ -233,13 +233,13 @@
                 "metric_to_plot": "search"
             },
             "v24": {
-                "metric_to_plot": "create_search"
+                "metric_to_plot": "search_actions"
             },
             "v25": {
-                "metric_to_plot": "edit_search"
+                "metric_to_plot": "search_action_per_search"
             },
             "v26": {
-                "metric_to_plot": "delete_search"
+                "metric_to_plot": "search_actions_per_dollar_closed"
             },
             "v30": {
                 "metric_to_plot": "mrr",
@@ -341,9 +341,9 @@
                     "%new_metric_id": 35
                 },
                 "v3": {
-                    "%new_metric_name": "search_usage",
-                    "%num_metric": "search_28avg_84obs",
-                    "%den_metric": "create_search_28avg_84obs",
+                    "%new_metric_name": "search_action_per_search",
+                    "%num_metric": "search_actions",
+                    "%den_metric": "search_28avg_84obs",
                     "%new_metric_id": 36
                 },
                 "v4": {
@@ -361,7 +361,7 @@
                 "v6": {
                     "%new_metric_name": "cancel_meeting_rate",
                     "%num_metric": "cancel_meeting_28avg_84obs",
-                    "%den_metric": "schedule_meeting_28avg_84obs",
+                    "%den_metric": "meeting_outcomes",
                     "%new_metric_id": 39
                 },
                 "v7": {
@@ -369,6 +369,12 @@
                     "%num_metric": "delete_list_28avg_84obs",
                     "%den_metric": "email_list_28avg_84obs",
                     "%new_metric_id": 40
+                },
+                "v8": {
+                    "%new_metric_name": "search_actions_per_dollar_closed",
+                    "%num_metric": "search_actions",
+                    "%den_metric": "opp_value_per_month",
+                    "%new_metric_id": 45
                 }
             }
         },
@@ -392,6 +398,16 @@
                     "%metric_list": " 'advance_stage_28avg_84obs', 'revert_stage_28avg_84obs' ",
                     "%new_metric_id": 42,
                     "%new_metric_name": "stage_changes"
+                },
+                "v3": {
+                    "%metric_list": " 'cancel_meeting_28avg_84obs', 'meeting_28avg_84obs' ",
+                    "%new_metric_id": 43,
+                    "%new_metric_name": "meeting_outcomes"
+                },
+                "v4": {
+                    "%metric_list": " 'create_search_28avg_84obs', 'edit_search_28avg_84obs', 'delete_search_28avg_84obs'",
+                    "%new_metric_id": 44,
+                    "%new_metric_name": "search_actions"
                 }
             }
         },
