@@ -1,4 +1,5 @@
 
+from collections import deque
 from datetime import date, timedelta, datetime
 from dateutil import parser
 from dateutil.relativedelta import *
@@ -42,6 +43,7 @@ class ChurnSimulation:
         self.monthly_growth_rate = growth_rate
         self.devmode= devmode
         self.n_parallel = n_parallel
+        self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
@@ -158,6 +160,7 @@ class ChurnSimulation:
                 new_customer.subscriptions.append( (add_on[1]['plan'],this_month,next_month, add_on[1]['mrr'],add_quantity,add_units) )
 
             month_count = new_customer.generate_events(this_month,next_month)
+            u = self.util_mod.utility_function(month_count,new_customer)
             churned=self.util_mod.simulate_churn(month_count,new_customer) or next_month > self.end_date
             if not churned:
                 self.util_mod.simulate_upgrade_downgrade(month_count,new_customer,self.plans,self.add_ons)
@@ -192,9 +195,14 @@ class ChurnSimulation:
             self.copy_customer_to_database(customer)
             if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
                 self.sim_rate_debug_query()
+            return customer.current_utility
 
-        Parallel(n_jobs=self.n_parallel)(delayed(create_one_customer)() for i in range(n_to_create))
+        utils = Parallel(n_jobs=self.n_parallel)(delayed(create_one_customer)() for i in range(n_to_create))
 
+        if self.devmode:
+            self.utility_dist.extend(utils)
+            utility_obs = pd.DataFrame(self.utility_dist, columns=['utility'])
+            print('Utility Distribution:\n', utility_obs.describe())
 
     def copy_customer_to_database(self,customer):
         '''

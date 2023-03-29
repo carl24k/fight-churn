@@ -147,6 +147,7 @@ class UtilityModel:
                 multiplier = 1.0
             utility *= multiplier
 
+        customer.current_utility = utility
         return utility
 
     def transition_probility(self,u,trans):
@@ -179,8 +180,8 @@ class UtilityModel:
         :param event_counts:
         :return:
         '''
-        utility = self.utility_function(event_counts,customer)
-        return uniform(0, 1) < self.churn_probability(utility)
+        # utility = self.utility_function(event_counts,customer)
+        return uniform(0, 1) < self.churn_probability(customer.current_utility)
 
     def simulate_upgrade_downgrade(self,event_counts,customer,plans, add_ons):
         '''
@@ -191,9 +192,9 @@ class UtilityModel:
         :return:
         '''
         current_plan = np.where(plans.index.values==customer.plan)[0][0]
-        u=self.utility_function(event_counts,customer)
-        upgrade_probability = self.uprade_probability(u)
-        downgrade_probability = self.downgrade_probability(u)
+        # u=self.utility_function(event_counts,customer)
+        upgrade_probability = self.uprade_probability(customer.current_utility)
+        downgrade_probability = self.downgrade_probability(customer.current_utility)
         # churn_probability = self.churn_probability(u)
         # print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
 

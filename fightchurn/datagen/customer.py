@@ -96,6 +96,7 @@ class Customer:
 
         self.subscriptions=[]
         self.events=[]
+        self.current_utility = None
 
     def get_behavior_rate(self,behavior):
         if behavior == 'users':
