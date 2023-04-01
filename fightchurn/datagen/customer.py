@@ -134,7 +134,26 @@ class Customer:
             return None
 
     def pick_initial_plan(self, plans, add_ons):
-        choice_index = np.random.choice(range(len(plans)),p=plans['prob'])
+        if plans.shape[1] < 3:
+            choice_index = np.random.choice(range(len(plans)),p=plans['prob'])
+        else:
+            # pick up to the highest plan that the customer has at least 75% of the expected rate
+            # So it is random but not ridiculously more than a customer would use
+            max_index = 0
+            for plan_index in range(1,len(plans)+1):
+                eligible = True
+                for limited in plans.columns.values[2:]:
+                    plan_limit = plans.iloc[plan_index-1][limited]
+                    customer_rate = self.get_behavior_rate(limited)
+                    if customer_rate < 0.75 * plan_limit:
+                        eligible=False
+                        break
+                if  eligible:
+                    max_index = plan_index
+                else:
+                    break
+            choice_index = np.random.choice(max_index+1) if max_index > 0 else 0
+
         self.set_plan(plans,choice_index)
         if len(add_ons)>0:
             for add_on in add_ons.iterrows():
