@@ -8,15 +8,27 @@
         },
         "list1": {
             "name": "net_retention",
-            "params": {}
+            "params": {},
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
         },
         "list2": {
             "name": "churn_rate",
-            "params": {}
+            "params": {},
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
         },
         "list4": {
             "name": "mrr_churn",
-            "params": {}
+            "params": {},
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
         },
         "list5": {
             "name": "churn_rate_scaled",

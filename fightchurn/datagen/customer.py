@@ -137,8 +137,7 @@ class Customer:
         if plans.shape[1] < 3:
             choice_index = np.random.choice(range(len(plans)),p=plans['prob'])
         else:
-            # pick up to the highest plan that the customer has at least 75% of the expected rate
-            # So it is random but not ridiculously more than a customer would use
+            # pick up to the highest plan that the customer has at least 75% of the expected rates
             max_index = 0
             for plan_index in range(1,len(plans)+1):
                 eligible = True
@@ -152,7 +151,7 @@ class Customer:
                     max_index = plan_index
                 else:
                     break
-            choice_index = np.random.choice(max_index+1) if max_index > 0 else 0
+            choice_index = max_index
 
         self.set_plan(plans,choice_index)
         if len(add_ons)>0:
