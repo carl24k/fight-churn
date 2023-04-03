@@ -271,8 +271,8 @@
                 "metric_to_plot": "search_actions_per_dollar_closed"
             },
             "v30": {
-                "metric_to_plot": "mrr",
-                "ncohort" : 3},
+                "metric_to_plot": "mrr"
+            },
             "v31": {
                 "metric_to_plot": "opp_value_per_month"
             },
