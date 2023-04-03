@@ -272,7 +272,7 @@
                 "metric_to_plot": "user_utilization"
             },
             "v36": {
-                "metric_to_plot": "search_usage"
+                "metric_to_plot": "search_actions_per_dollar_closed"
             },
             "v37": {
                 "metric_to_plot": "revert_rate"
@@ -285,6 +285,15 @@
             },
             "v40": {
                 "metric_to_plot": "deletes_per_email"
+            },
+            "v41": {
+                "metric_to_plot": "mrr_per_active_user"
+            },
+            "v42": {
+                "metric_to_plot": "mrr_per_dollar_opp_close"
+            },
+            "v43": {
+                "metric_to_plot": "mrr_per_lead_added"
             }
         },
         "list2": {
@@ -387,6 +396,24 @@
                     "%num_metric": "search_actions",
                     "%den_metric": "opp_value_per_month",
                     "%new_metric_id": 45
+                },
+                "v9": {
+                    "%new_metric_name": "mrr_per_lead_added",
+                    "%num_metric": "mrr",
+                    "%den_metric": "add_lead_28avg_84obs",
+                    "%new_metric_id": 46
+                },
+                "v10": {
+                    "%new_metric_name": "mrr_per_dollar_opp_close",
+                    "%num_metric": "mrr",
+                    "%den_metric": "win_opportunity_28avg_84obs",
+                    "%new_metric_id": 47
+                },
+                "v11": {
+                    "%new_metric_name": "mrr_per_active_user",
+                    "%num_metric": "mrr",
+                    "%den_metric": "active_users",
+                    "%new_metric_id": 48
                 }
             }
         },

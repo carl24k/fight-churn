@@ -41,7 +41,10 @@ sum(case when metric_name_id=37 then metric_value else 0 end) as revert_rate,
 sum(case when metric_name_id=38 then metric_value else 0 end) as loss_rate,
 sum(case when metric_name_id=39 then metric_value else 0 end) as cancel_meeting_rate,
 sum(case when metric_name_id=40 then metric_value else 0 end) as deletes_per_email,
-sum(case when metric_name_id=45 then metric_value else 0 end) as search_actions_per_dollar_closed
+sum(case when metric_name_id=45 then metric_value else 0 end) as search_actions_per_dollar_closed,
+sum(case when metric_name_id=46 then metric_value else 0 end) as mrr_per_lead_added,
+sum(case when metric_name_id=47 then metric_value else 0 end) as mrr_per_dollar_opp_close,
+sum(case when metric_name_id=48 then metric_value else 0 end) as mrr_per_active_user
 
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
