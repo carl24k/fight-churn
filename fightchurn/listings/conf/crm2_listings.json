@@ -77,6 +77,10 @@
             "v4": {
                 "%new_metric_name": "users_purchased",
                 "%new_metric_id": 32
+            },
+            "v5": {
+                "%new_metric_name": "opp_value_lost_per_month",
+                "%new_metric_id": 49
             }
         },
         "list5": {
@@ -121,7 +125,20 @@
                 "mode": "run",
                 "%event2measure" : "win_opportunity",
                 "%field2sum" : "event_value",
-                "%new_metric_id": 31}
+                "%new_metric_id": 31
+            },
+            "v1": {
+                "mode": "run",
+                "%event2measure" : "win_opportunity",
+                "%field2sum" : "event_value",
+                "%new_metric_id": 31
+            },
+            "v2": {
+                "mode": "run",
+                "%event2measure" : "lose_opportunity",
+                "%field2sum" : "event_value",
+                "%new_metric_id": 49
+            }
         },
         "list19": {
             "name": "unit_quantity_insert",
@@ -294,6 +311,12 @@
             },
             "v43": {
                 "metric_to_plot": "mrr_per_lead_added"
+            },
+            "v44": {
+                "metric_to_plot": "opp_value_lost_per_month"
+            },
+            "v45": {
+                "metric_to_plot": "pcnt_opp_value_lost"
             }
         },
         "list2": {
@@ -406,7 +429,7 @@
                 "v10": {
                     "%new_metric_name": "mrr_per_dollar_opp_close",
                     "%num_metric": "mrr",
-                    "%den_metric": "win_opportunity_28avg_84obs",
+                    "%den_metric": "opp_value_per_month",
                     "%new_metric_id": 47
                 },
                 "v11": {
@@ -414,6 +437,12 @@
                     "%num_metric": "mrr",
                     "%den_metric": "active_users",
                     "%new_metric_id": 48
+                },
+                "v12": {
+                    "%new_metric_name": "pcnt_opp_value_lost",
+                    "%num_metric": "opp_value_lost_per_month",
+                    "%den_metric": "total_opp_value_closed",
+                    "%new_metric_id": 51
                 }
             }
         },
@@ -447,6 +476,11 @@
                     "%metric_list": " 'create_search_28avg_84obs', 'edit_search_28avg_84obs', 'delete_search_28avg_84obs'",
                     "%new_metric_id": 44,
                     "%new_metric_name": "search_actions"
+                },
+                "v5": {
+                    "%metric_list": " 'opp_value_lost_per_month', 'opp_value_per_month'",
+                    "%new_metric_id": 50,
+                    "%new_metric_name": "total_opp_value_closed"
                 }
             }
         },

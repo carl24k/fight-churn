@@ -48,9 +48,11 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 
 # Account tenure metric, MRR, Total, Users Quantity
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13 17 18 19
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 13 17 19
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 18 --version 1 2
+
 # MRR, Tenure, Total names
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 4 --version 1 2 3 4 5
 
 # Scaled metrics
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 7
@@ -61,10 +63,10 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 9  --insert
 
 # totals
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --version 1 2 3 4 --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 3 --version 1 2 3 4 5 --insert
 
 # ratios
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11  --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 --insert
 
 # Metric & Event QA
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 8 11
@@ -83,7 +85,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 2 4 3 5
 
 # Cohorts
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 30 31 32 33 34 35 36 37 38 39 40 41 42
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45
 
 # XGB Fit
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6
