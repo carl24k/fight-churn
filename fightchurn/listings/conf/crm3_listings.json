@@ -1,0 +1,652 @@
+{
+    "chap2": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2023-04-01",
+            "%to_yyyy-mm-dd": "2023-05-01",
+            "mode": "one",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "net_retention",
+            "params": {},
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
+        },
+        "list2": {
+            "name": "churn_rate",
+            "params": {},
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
+        },
+        "list4": {
+            "name": "mrr_churn",
+            "params": {},
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
+        },
+        "list5": {
+            "name": "churn_rate_scaled",
+            "params": {
+                "%from_yyyy-mm-dd": "2023-03-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
+        }
+    },
+    "chap3": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2023-02-06",
+            "%to_yyyy-mm-dd": "2023-05-29",
+            "mode": "top",
+            "type": "sql",
+            "%event2measure": "advance_stage",
+            "%field2sum": "0"
+        },
+        "list1": {
+            "name": "event_count",
+            "params": {}
+        },
+        "list2": {
+            "name": "multi_date_count",
+            "params": {}
+        },
+        "list4": {
+            "name": "metric_name_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_name": "account_tenure",
+                "%new_metric_id": 0
+            },
+            "v1": {
+                "%new_metric_name": "account_tenure",
+                "%new_metric_id": 0
+            },
+            "v2": {
+                "%new_metric_name": "mrr",
+                "%new_metric_id": 30
+            },
+            "v3": {
+                "%new_metric_name": "opp_value_per_month",
+                "%new_metric_id": 31
+            },
+            "v4": {
+                "%new_metric_name": "users_purchased",
+                "%new_metric_id": 32
+            },
+            "v5": {
+                "%new_metric_name": "opp_value_lost_per_month",
+                "%new_metric_id": 49
+            }
+        },
+        "list5": {
+            "name": "sum_metric",
+            "params": {
+                "%event2measure" : "win_opportunity",
+                "%field2sum" : "event_value"
+            }
+        },
+        "list8": {
+            "name": "metric_coverage",
+            "params": {
+                "mode": "save"
+            }
+        },
+        "list11": {
+            "name": "events_per_account",
+            "params": {
+                "mode": "save"
+            }
+        },
+        "list12": {
+            "name": "account_tenure",
+            "params": {}
+        },
+        "list13": {
+            "name": "account_tenure_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 0
+            }
+        },
+        "list17": {
+            "name": "mrr_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 30}
+        },
+        "list18": {
+            "name": "sum_metric_insert",
+            "params": {
+                "mode": "run",
+                "%event2measure" : "win_opportunity",
+                "%field2sum" : "event_value",
+                "%new_metric_id": 31
+            },
+            "v1": {
+                "mode": "run",
+                "%event2measure" : "win_opportunity",
+                "%field2sum" : "event_value",
+                "%new_metric_id": 31
+            },
+            "v2": {
+                "mode": "run",
+                "%event2measure" : "lose_opportunity",
+                "%field2sum" : "event_value",
+                "%new_metric_id": 49
+            }
+        },
+        "list19": {
+            "name": "unit_quantity_insert",
+            "params": {
+                "mode": "run",
+                "%unit" : "users",
+                "%new_metric_id": 32}
+        }
+    },
+    "chap4": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2023-02-27",
+            "%to_yyyy-mm-dd": "2023-05-29",
+            "mode": "run",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "ongoing_active_periods",
+            "params": {
+                "%gap_interval": "7 day"
+            }
+        },
+        "list2": {
+            "name": "churned_periods",
+            "params": {
+                "%gap_interval": "7 day"
+            }
+        },
+        "list4": {
+            "name": "observation_dates",
+            "params": {
+                "%obs_interval": "1 month",
+                "%lead_time": "5 day"
+            }
+        },
+        "list9": {
+            "name": "dataset",
+            "params": {
+                "mode": "save",
+                "%metric_interval": "7 day"
+            }
+        }
+    },
+    "chap5": {
+        "defaults": {
+            "data_set_path": "crm3/crm3_dataset.csv",
+            "type": "py"
+        },
+        "list1": {
+            "name": "cohort_plot",
+            "params": {
+                "metric_to_plot": "win_opportunity"
+            },
+            "v1": {
+                "metric_to_plot": "add_contact"
+            },
+            "v2": {
+                "metric_to_plot": "edit_contact"
+            },
+            "v3": {
+                "metric_to_plot": "add_lead"
+            },
+            "v4": {
+                "metric_to_plot": "edit_lead"
+            },
+            "v5": {
+                "metric_to_plot": "email_lead"
+            },
+            "v6": {
+                "metric_to_plot": "call_lead"
+            },
+            "v7": {
+                "metric_to_plot": "unsub_lead"
+            },
+            "v8": {
+                "metric_to_plot": "create_list"
+            },
+            "v9": {
+                "metric_to_plot": "delete_list"
+            },
+            "v10": {
+                "metric_to_plot": "email_list"
+            },
+            "v11": {
+                "metric_to_plot": "meetings"
+            },
+            "v12": {
+                "metric_to_plot": "schedule_meeting"
+            },
+            "v13": {
+                "metric_to_plot": "edit_meeting"
+            },
+            "v14": {
+                "metric_to_plot": "cancel_meeting"
+            },
+            "v15": {
+                "metric_to_plot": "quote"
+            },
+            "v16": {
+                "metric_to_plot": "create_opportunity"
+            },
+            "v17": {
+                "metric_to_plot": "advance_stage"
+            },
+            "v18": {
+                "metric_to_plot": "win_opportunity"
+            },
+            "v19": {
+                "metric_to_plot": "add_competitor"
+            },
+            "v20": {
+                "metric_to_plot": "revert_stage"
+            },
+            "v21": {
+                "metric_to_plot": "lose_opportunity"
+            },
+            "v22": {
+                "metric_to_plot": "login"
+            },
+            "v23": {
+                "metric_to_plot": "search"
+            },
+            "v24": {
+                "metric_to_plot": "search_actions"
+            },
+            "v25": {
+                "metric_to_plot": "search_action_per_search"
+            },
+            "v26": {
+                "metric_to_plot": "search_actions_per_dollar_closed"
+            },
+            "v30": {
+                "metric_to_plot": "mrr"
+            },
+            "v31": {
+                "metric_to_plot": "opp_value_per_month"
+            },
+            "v32": {
+                "metric_to_plot": "users_purchased"
+            },
+            "v33": {
+                "metric_to_plot": "opp_close_per_dollar"
+            },
+            "v34": {
+                "metric_to_plot": "active_users_per_month"
+            },
+            "v35": {
+                "metric_to_plot": "user_utilization"
+            },
+            "v36": {
+                "metric_to_plot": "search_actions_per_dollar_closed"
+            },
+            "v37": {
+                "metric_to_plot": "revert_rate"
+            },
+            "v38": {
+                "metric_to_plot": "loss_rate"
+            },
+            "v39": {
+                "metric_to_plot": "cancel_meeting_rate"
+            },
+            "v40": {
+                "metric_to_plot": "deletes_per_email"
+            },
+            "v41": {
+                "metric_to_plot": "mrr_per_active_user"
+            },
+            "v42": {
+                "metric_to_plot": "mrr_per_dollar_opp_close"
+            },
+            "v43": {
+                "metric_to_plot": "mrr_per_lead_added"
+            },
+            "v44": {
+                "metric_to_plot": "opp_value_lost_per_month"
+            },
+            "v45": {
+                "metric_to_plot": "pcnt_opp_value_lost"
+            }
+        },
+        "list2": {
+            "name": "dataset_stats",
+            "params": {}
+        },
+        "list3": {
+            "name": "metric_scores",
+            "params": {}
+        }
+    },
+    "chap6": {
+        "defaults": {
+            "data_set_path": "crm3/crm3_dataset.csv",
+            "type": "py"
+        },
+        "list2": {
+            "name": "dataset_correlation_matrix",
+            "params": {}
+        },
+        "list3": {
+            "name": "apply_metric_groups",
+            "params": {}
+        },
+        "list4": {
+            "name": "find_metric_groups",
+            "params": {
+                "group_corr_thresh": 0.75
+            }
+        },
+        "list5": {
+            "name": "ordered_correlation_matrix",
+            "params": {}
+        }
+    },
+    "chap7": {
+        "defaults": {
+            "%from_yyyy-mm-dd": "2023-02-06",
+            "%to_yyyy-mm-dd": "2023-05-29",
+            "mode": "top",
+            "type": "sql"
+        },
+        "list1": {
+            "name": "ratio_metric",
+            "params": {
+                    "%num_metric": "win_opportunity_28avg_84obs",
+                    "%den_metric": "mrr"
+            },
+            "insert": {
+                "params": {
+                    "%num_metric": "win_opportunity_28avg_84obs",
+                    "%den_metric": "mrr",
+                    "%new_metric_id": 33,
+                    "%new_metric_name": "opp_close_per_dollar"
+                },
+                "v1": {
+                    "%new_metric_name": "opp_close_per_dollar",
+                    "%num_metric": "win_opportunity_28avg_84obs",
+                    "%den_metric": "mrr",
+                    "%new_metric_id": 33
+                },
+                "v2": {
+                    "%new_metric_name": "user_utilization",
+                    "%num_metric": "active_users",
+                    "%den_metric": "users_purchased",
+                    "%new_metric_id": 35
+                },
+                "v3": {
+                    "%new_metric_name": "search_action_per_search",
+                    "%num_metric": "search_actions",
+                    "%den_metric": "search_28avg_84obs",
+                    "%new_metric_id": 36
+                },
+                "v4": {
+                    "%new_metric_name": "revert_rate",
+                    "%num_metric": "revert_stage_28avg_84obs",
+                    "%den_metric": "stage_changes",
+                    "%new_metric_id": 37
+                },
+                "v5": {
+                    "%new_metric_name": "loss_rate",
+                    "%num_metric": "lose_opportunity_28avg_84obs",
+                    "%den_metric": "closed_opps",
+                    "%new_metric_id": 38
+                },
+                "v6": {
+                    "%new_metric_name": "cancel_meeting_rate",
+                    "%num_metric": "cancel_meeting_28avg_84obs",
+                    "%den_metric": "meeting_outcomes",
+                    "%new_metric_id": 39
+                },
+                "v7": {
+                    "%new_metric_name": "deletes_per_email",
+                    "%num_metric": "delete_list_28avg_84obs",
+                    "%den_metric": "email_list_28avg_84obs",
+                    "%new_metric_id": 40
+                },
+                "v8": {
+                    "%new_metric_name": "search_actions_per_dollar_closed",
+                    "%num_metric": "search_actions",
+                    "%den_metric": "opp_value_per_month",
+                    "%new_metric_id": 45
+                },
+                "v9": {
+                    "%new_metric_name": "mrr_per_lead_added",
+                    "%num_metric": "mrr",
+                    "%den_metric": "add_lead_28avg_84obs",
+                    "%new_metric_id": 46
+                },
+                "v10": {
+                    "%new_metric_name": "mrr_per_dollar_opp_close",
+                    "%num_metric": "mrr",
+                    "%den_metric": "opp_value_per_month",
+                    "%new_metric_id": 47
+                },
+                "v11": {
+                    "%new_metric_name": "mrr_per_active_user",
+                    "%num_metric": "mrr",
+                    "%den_metric": "active_users",
+                    "%new_metric_id": 48
+                },
+                "v12": {
+                    "%new_metric_name": "pcnt_opp_value_lost",
+                    "%num_metric": "opp_value_lost_per_month",
+                    "%den_metric": "total_opp_value_closed",
+                    "%new_metric_id": 51
+                }
+            }
+        },
+        "list3": {
+            "name": "total_metric",
+            "params": {
+                "%metric_list": " 'lose_opportunity_28avg_84obs', 'win_opportunity_28avg_84obs' "
+            },
+            "insert": {
+                "params": {
+                    "%metric_list": " 'lose_opportunity_28avg_84obs', 'win_opportunity_28avg_84obs' ",
+                    "%new_metric_id": 41,
+                    "%new_metric_name": "closed_opps"
+                },
+                "v1": {
+                    "%metric_list": " 'lose_opportunity_28avg_84obs', 'win_opportunity_28avg_84obs' ",
+                    "%new_metric_id": 41,
+                    "%new_metric_name": "closed_opps"
+                },
+                "v2": {
+                    "%metric_list": " 'advance_stage_28avg_84obs', 'revert_stage_28avg_84obs' ",
+                    "%new_metric_id": 42,
+                    "%new_metric_name": "stage_changes"
+                },
+                "v3": {
+                    "%metric_list": " 'cancel_meeting_28avg_84obs', 'meeting_28avg_84obs' ",
+                    "%new_metric_id": 43,
+                    "%new_metric_name": "meeting_outcomes"
+                },
+                "v4": {
+                    "%metric_list": " 'create_search_28avg_84obs', 'edit_search_28avg_84obs', 'delete_search_28avg_84obs'",
+                    "%new_metric_id": 44,
+                    "%new_metric_name": "search_actions"
+                },
+                "v5": {
+                    "%metric_list": " 'opp_value_lost_per_month', 'opp_value_per_month'",
+                    "%new_metric_id": 50,
+                    "%new_metric_name": "total_opp_value_closed"
+                }
+            }
+        },
+        "list7": {
+            "name": "scaled_events_per_month",
+            "params": {
+                "%event2measure": "lose_opportunity",
+                "%obs_period": 84,
+                "%desc_period": 28
+            }
+        },
+        "list8": {
+            "name": "tenure_scaled_events_per_month",
+            "params": {
+                "%event2measure": "lose_opportunity",
+                "%obs_period": 84,
+                "%desc_period": 28,
+                "%min_tenure": 14,
+                "%from_yyyy-mm-dd": "2023-02-06",
+                "%to_yyyy-mm-dd": "2023-05-29"
+            },
+            "insert": {
+                "params": {
+                    "%obs_period": 84,
+                    "%desc_period": 28,
+                    "%min_tenure": 14
+                },
+                "v1": {
+                    "%event2measure": "add_contact",
+                    "%new_metric_id": 1
+                },
+                "v2": {
+                    "%event2measure": "edit_contact",
+                    "%new_metric_id": 2
+                },
+                "v3": {
+                    "%event2measure": "add_lead",
+                    "%new_metric_id": 3
+                },
+                "v4": {
+                    "%event2measure": "edit_lead",
+                    "%new_metric_id": 4
+                },
+                "v5": {
+                    "%event2measure": "email_lead",
+                    "%new_metric_id": 5
+                },
+                "v6": {
+                    "%event2measure": "call_lead",
+                    "%new_metric_id": 6
+                },
+                "v7": {
+                    "%event2measure": "unsub_lead",
+                    "%new_metric_id": 7
+                },
+                "v8": {
+                    "%event2measure": "create_list",
+                    "%new_metric_id": 8
+                },
+                "v9": {
+                    "%event2measure": "delete_list",
+                    "%new_metric_id": 9
+                },
+                "v10": {
+                    "%event2measure": "email_list",
+                    "%new_metric_id": 10
+                },
+                "v11": {
+                    "%event2measure": "meeting",
+                    "%new_metric_id": 11
+                },
+                "v12": {
+                    "%event2measure": "schedule_meeting",
+                    "%new_metric_id": 12
+                },
+                "v13": {
+                    "%event2measure": "edit_meeting",
+                    "%new_metric_id": 13
+                },
+                "v14": {
+                    "%event2measure": "cancel_meeting",
+                    "%new_metric_id": 14
+                },
+                "v15": {
+                    "%event2measure": "quote",
+                    "%new_metric_id": 15
+                },
+                "v16": {
+                    "%event2measure": "create_opportunity",
+                    "%new_metric_id": 16
+                },
+                "v17": {
+                    "%event2measure": "advance_stage",
+                    "%new_metric_id": 17
+                },
+                "v18": {
+                    "%event2measure": "win_opportunity",
+                    "%new_metric_id": 18
+                },
+                "v19": {
+                    "%event2measure": "add_competitor",
+                    "%new_metric_id": 19
+                },
+                "v20": {
+                    "%event2measure": "revert_stage",
+                    "%new_metric_id": 20
+                },
+                "v21": {
+                    "%event2measure": "lose_opportunity",
+                    "%new_metric_id": 21
+                },
+                "v22": {
+                    "%event2measure": "login",
+                    "%new_metric_id": 22
+                },
+                "v23": {
+                    "%event2measure": "search",
+                    "%new_metric_id": 23
+                },
+                "v24": {
+                    "%event2measure": "create_search",
+                    "%new_metric_id": 24
+                },
+                "v25": {
+                    "%event2measure": "edit_search",
+                    "%new_metric_id": 25
+                },
+                "v26": {
+                    "%event2measure": "delete_search",
+                    "%new_metric_id": 26
+                }
+            }
+        },
+        "list9": {
+            "name": "count_active_users",
+            "params": {
+                "%obs_period": 1
+            },
+            "insert" : {
+                "params": {
+                    "%obs_period": 1,
+                    "%new_metric_id": 34
+                }
+            }
+        }
+    },
+    "chap9": {
+        "defaults": {
+            "data_set_path": "crm3/crm3_dataset.csv",
+            "type": "py"
+        },
+        "list6": {
+            "name": "crossvalidate_xgb",
+            "params": {
+                "n_test_split": 2
+            }
+        },
+        "list7": {
+            "name": "churn_forecast_xgb",
+            "params": {}
+        },
+        "list8": {
+            "name": "shap_explain_xgb",
+            "params": {
+                "plot_n" : [0,1,2,3,4]
+            }
+        }
+    }
+}
