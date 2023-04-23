@@ -33,14 +33,14 @@
         "list5": {
             "name": "churn_rate_scaled",
             "params": {
-                "%from_yyyy-mm-dd": "2023-03-01",
+                "%from_yyyy-mm-dd": "2023-01-01",
                 "%to_yyyy-mm-dd": "2023-06-01"
             }
         }
     },
     "chap3": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-06",
+            "%from_yyyy-mm-dd": "2022-05-30",
             "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "top",
             "type": "sql",
@@ -150,7 +150,7 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-27",
+            "%from_yyyy-mm-dd": "2022-05-30",
             "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "run",
             "type": "sql"
@@ -255,9 +255,6 @@
             "v21": {
                 "metric_to_plot": "lose_opportunity"
             },
-            "v22": {
-                "metric_to_plot": "login"
-            },
             "v23": {
                 "metric_to_plot": "search"
             },
@@ -354,7 +351,7 @@
     },
     "chap7": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-02-06",
+            "%from_yyyy-mm-dd": "2022-05-30",
             "%to_yyyy-mm-dd": "2023-05-29",
             "mode": "top",
             "type": "sql"
@@ -499,7 +496,7 @@
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
-                "%from_yyyy-mm-dd": "2023-02-06",
+                "%from_yyyy-mm-dd": "2022-05-30",
                 "%to_yyyy-mm-dd": "2023-05-29"
             },
             "insert": {
@@ -591,10 +588,6 @@
                 "v21": {
                     "%event2measure": "lose_opportunity",
                     "%new_metric_id": 21
-                },
-                "v22": {
-                    "%event2measure": "login",
-                    "%new_metric_id": 22
                 },
                 "v23": {
                     "%event2measure": "search",
