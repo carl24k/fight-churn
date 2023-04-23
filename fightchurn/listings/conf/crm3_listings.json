@@ -36,6 +36,22 @@
                 "%from_yyyy-mm-dd": "2023-01-01",
                 "%to_yyyy-mm-dd": "2023-06-01"
             }
+        },
+        "list6": {
+            "name": "churn_rate_multi",
+            "params": {
+                "%from_yyyy-mm-dd": "2022-02-01",
+                "%to_yyyy-mm-dd": "2023-05-01",
+                "mode": "save"
+            }
+        },
+        "list7": {
+            "name": "mrr_churn_multi",
+            "params": {
+                "%from_yyyy-mm-dd": "2022-02-01",
+                "%to_yyyy-mm-dd": "2023-05-01",
+                "mode": "save"
+            }
         }
     },
     "chap3": {
