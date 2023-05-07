@@ -186,8 +186,7 @@ class ChurnSimulation:
                 if not churned:
                     churn_intent_count = 0
                     num_bill_periods += 1
-                    # TODO uncomment upgrade/downgrade
-                    # self.util_mod.simulate_upgrade_downgrade(month_event_count,new_customer,self.plans,self.add_ons)
+                    self.util_mod.simulate_upgrade_downgrade(month_event_count,new_customer,self.plans,self.add_ons)
                     next_renewal = customer_start + relativedelta(months=new_customer.bill_period * num_bill_periods)
                     add_customer_subscriptions(next_month,next_renewal)
 

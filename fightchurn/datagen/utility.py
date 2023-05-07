@@ -200,29 +200,61 @@ class UtilityModel:
 
         changed_plan=False
         changed_add_ons=False
-        if current_plan < plans.shape[0]-1:
-            if uniform(0, 1) < upgrade_probability:
-                new_plan = current_plan+1
-                near_limit=True
-                if plans.shape[1]>2:
-                    near_limit=False
-                    for limited in plans.columns.values[2:]:
-                        current_limit=plans.iloc[current_plan][limited]
-                        new_limit=plans.iloc[new_plan][limited]
-                        customer_rate = customer.get_behavior_rate(limited)
-                        if customer_rate>= 0.8* current_limit and new_limit>current_limit:
-                            near_limit=True
-                            break
+        if uniform(0, 1) < upgrade_probability:
+            near_limit=None
+            if plans.shape[1]>2:
+                for limited in plans.columns.values[2:]:
+                    current_limit=plans.iloc[current_plan][limited]
+                    max_limit=plans[limited].max()
+                    customer_rate = customer.get_behavior_rate(limited)
+                    if customer_rate>= 0.8* current_limit and max_limit>current_limit:
+                        near_limit = limited
+                        break
 
-                if near_limit:
-                    customer.set_plan(plans,new_plan)
+            if near_limit is not None:
+                # upgrade to a higher limit plan with the same billing period
+                same_period_plans = plans[plans['bill_period']==customer.bill_period]
+                # sorting so the customer takes the next higher limit plan
+                higher_limit_plans =  same_period_plans[same_period_plans[limited]>current_limit].sort_values(by=limited)
+                if len(higher_limit_plans)>0:
+                    new_plan_name = higher_limit_plans.index.values[0]
+                    customer.set_plan(plans,plan_name=new_plan_name)
+                    changed_plan=True
+            # if there was no suitable upgrade, try to increase the billing period
+            if not changed_plan and 'bill_period' in plans.columns.values:
+                # upgrade to a plan with same limits and a longer billing period
+                current_period = customer.bill_period
+                max_period = plans['bill_period'].max()
+                if current_period < max_period:
+                    first_limit = plans.columns.values[2]
+                    same_limit_plans = plans[plans[first_limit]==customer.limits[first_limit]]
+                    # not sorting, the order is random - so customer could go to any higher period plan
+                    higher_period_plans =  same_limit_plans[same_limit_plans['bill_period']>customer.bill_period]
+                    new_plan_name = higher_period_plans.index.values[0]
+                    customer.set_plan(plans,plan_name=new_plan_name)
                     changed_plan=True
 
-        if current_plan > 0 and not changed_plan:
-            if uniform(0, 1) < downgrade_probability:
-                new_plan = current_plan-1
-                customer.set_plan(plans,new_plan)
-                changed_plan=True
+        # if they didn't upgrade, check for downgrades
+        if not changed_plan and uniform(0, 1) < downgrade_probability:
+            # See if any downgrades are available
+            if plans.shape[1] > 2:
+                first_limit = plans.columns.values[2]
+                same_period_plans = plans[plans['bill_period']==customer.bill_period]
+                # sorting so the customer takes the next lower limit plan
+                lower_limit_plans =  same_period_plans[same_period_plans[first_limit]<customer.limits[first_limit]].sort_values(by=first_limit)
+                if len(lower_limit_plans)>0:
+                    new_plan_name = lower_limit_plans.index.values[len(lower_limit_plans)-1]
+                    customer.set_plan(plans,plan_name=new_plan_name)
+                    changed_plan=True
+            # If no suitable dowgrade, try to lower the billing period
+            if not changed_plan and 'bill_period' in plans.columns.values:
+                same_limit_plans = plans[plans[first_limit]==customer.limits[first_limit]]
+                # not sorting, the order is random - so customer could go to any lower period plan
+                lower_period_plans =  same_limit_plans[same_limit_plans['bill_period']<customer.bill_period]
+                if len(lower_period_plans)>0:
+                    new_plan_name = lower_period_plans.index.values[len(lower_period_plans)-1]
+                    customer.set_plan(plans,plan_name=new_plan_name)
+                    changed_plan=True
 
         if not changed_plan and uniform(0, 1) < upgrade_probability:
             shuffled_add_ons = add_ons.sample(frac=1).reset_index(drop=True)
