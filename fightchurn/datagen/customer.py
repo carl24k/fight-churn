@@ -176,7 +176,8 @@ class Customer:
             self.plan = plan_name
         self.mrr = plans.loc[self.plan,'mrr']
         self.base_mrr = self.mrr
-        self.bill_period = plans.loc[self.plan,'bill_period']
+        if 'bill_period' in plans.columns.values:
+            self.bill_period = plans.loc[self.plan,'bill_period']
         if plans.shape[1]>2:
             self.limits = {
                 behave : plans.loc[self.plan, behave] for behave in plans.columns[2:]
