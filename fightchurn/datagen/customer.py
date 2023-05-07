@@ -72,6 +72,7 @@ class Customer:
 
         self.country=country
         self.mrr=None
+        self.bill_period=1
         self.base_mrr=None
         self.plan=None
         self.add_ons = pd.DataFrame()
@@ -135,23 +136,27 @@ class Customer:
 
     def pick_initial_plan(self, plans, add_ons):
         if plans.shape[1] < 3:
-            choice_index = np.random.choice(range(len(plans)),p=plans['prob'])
+            choice_index = np.random.choice(range(len(plans)))
         else:
             # pick up to the highest plan that the customer has at least 75% of the expected rates
-            max_index = 0
-            for plan_index in range(1,len(plans)+1):
-                eligible = True
+            eligible_plans = []
+            for plan_index in range(0,len(plans)):
+                is_eligible = False
                 for limited in plans.columns.values[2:]:
-                    plan_limit = plans.iloc[plan_index-1][limited]
+                    plan_limit = plans.iloc[plan_index][limited]
                     customer_rate = self.get_behavior_rate(limited)
-                    if customer_rate < 0.75 * plan_limit:
-                        eligible=False
+                    min_rate = 0.33*plan_limit if plan_index >0 else 0 # make sure everyone is eligible_plans for first plan
+                    max_rate = 3.0  * plan_limit
+                    if min_rate <= customer_rate <= max_rate:
+                        is_eligible = True
                         break
-                if  eligible:
-                    max_index = plan_index
-                else:
-                    break
-            choice_index = max_index
+                if is_eligible:
+                    eligible_plans.append(plan_index)
+            assert len(eligible_plans)>0
+            if len(eligible_plans)==1:
+                choice_index = eligible_plans[0]
+            else:
+                choice_index = np.random.choice(eligible_plans)
 
         self.set_plan(plans,choice_index)
         if len(add_ons)>0:
@@ -171,6 +176,7 @@ class Customer:
             self.plan = plan_name
         self.mrr = plans.loc[self.plan,'mrr']
         self.base_mrr = self.mrr
+        self.bill_period = plans.loc[self.plan,'bill_period']
         if plans.shape[1]>2:
             self.limits = {
                 behave : plans.loc[self.plan, behave] for behave in plans.columns[2:]
