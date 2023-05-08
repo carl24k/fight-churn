@@ -97,13 +97,17 @@
             "v5": {
                 "%new_metric_name": "opp_value_lost_per_month",
                 "%new_metric_id": 49
+            },
+            "v6": {
+                "%new_metric_name": "billing_period_months",
+                "%new_metric_id": 29
             }
         },
         "list5": {
             "name": "sum_metric",
             "params": {
-                "%event2measure" : "win_opportunity",
-                "%field2sum" : "event_value"
+                "%event2measure": "win_opportunity",
+                "%field2sum": "event_value"
             }
         },
         "list8": {
@@ -133,26 +137,27 @@
             "name": "mrr_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 30}
+                "%new_metric_id": 30
+            }
         },
         "list18": {
             "name": "sum_metric_insert",
             "params": {
                 "mode": "run",
-                "%event2measure" : "win_opportunity",
-                "%field2sum" : "event_value",
+                "%event2measure": "win_opportunity",
+                "%field2sum": "event_value",
                 "%new_metric_id": 31
             },
             "v1": {
                 "mode": "run",
-                "%event2measure" : "win_opportunity",
-                "%field2sum" : "event_value",
+                "%event2measure": "win_opportunity",
+                "%field2sum": "event_value",
                 "%new_metric_id": 31
             },
             "v2": {
                 "mode": "run",
-                "%event2measure" : "lose_opportunity",
-                "%field2sum" : "event_value",
+                "%event2measure": "lose_opportunity",
+                "%field2sum": "event_value",
                 "%new_metric_id": 49
             }
         },
@@ -160,8 +165,16 @@
             "name": "unit_quantity_insert",
             "params": {
                 "mode": "run",
-                "%unit" : "users",
-                "%new_metric_id": 32}
+                "%unit": "users",
+                "%new_metric_id": 32
+            }
+        },
+        "list20": {
+            "name": "billing_period_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 29
+            }
         }
     },
     "chap4": {
@@ -282,6 +295,9 @@
             },
             "v26": {
                 "metric_to_plot": "search_actions_per_dollar_closed"
+            },
+            "v29": {
+                "metric_to_plot": "bill_period_months"
             },
             "v30": {
                 "metric_to_plot": "mrr"
