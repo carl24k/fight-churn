@@ -30,6 +30,7 @@ sum(case when metric_name_id=22 then metric_value else 0 end) as login,
 sum(case when metric_name_id=23 then metric_value else 0 end) as search,
 sum(case when metric_name_id=44 then metric_value else 0 end) as search_actions,
 
+sum(case when metric_name_id=29 then metric_value else 0 end) as bill_period_months,
 sum(case when metric_name_id=30 then metric_value else 0 end) as mrr,
 sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_per_month,
 sum(case when metric_name_id=32 then metric_value else 0 end) as users_purchased,
