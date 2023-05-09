@@ -143,7 +143,13 @@ class ChurnSimulation:
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
 
-        new_customer.pick_initial_plan(self.plans, self.add_ons)
+        if start_of_month==self.start_date and 'bill_period' in self.plans.columns.values:
+            min_period=self.plans['bill_period'].min()
+            plans_to_use =  self.plans[self.plans['bill_period']==min_period]
+        else:
+            plans_to_use = self.plans
+
+        new_customer.pick_initial_plan(plans_to_use, self.add_ons)
 
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
@@ -180,8 +186,8 @@ class ChurnSimulation:
                 churned = True
             # check for churn, upgrade/downgrade on renewal date, make new subscriptions if not churned
             elif next_month == next_renewal:
-                # churn if they wanted to churn MORE than half the time; tie leads to retention
-                if churn_intent > new_customer.bill_period/2.0:
+                # churn if they wanted to churn just once
+                if churn_intent > 0:
                     churned = True
                 if not churned:
                     churn_intent_count = 0
