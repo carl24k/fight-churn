@@ -5,6 +5,6 @@ premier_mthly,800,1,100,0,0,50
 basic_qtrly,90,3,5,0,0,0
 standard_qtrly,180,3,25,0,0,20
 premier_qtrly,700,3,100,0,0,50
-basic_annual,70,12,5,0,0,0
-standard_annual,150,12,25,0,0,20
+basic_annual,80,12,5,0,0,0
+standard_annual,160,12,25,0,0,20
 premier_annual,600,12,100,0,0,50
