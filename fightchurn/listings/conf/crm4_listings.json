@@ -40,24 +40,24 @@
         "list6": {
             "name": "churn_rate_multi",
             "params": {
-                "%from_yyyy-mm-dd": "2022-02-01",
-                "%to_yyyy-mm-dd": "2023-05-01",
+                "%from_yyyy-mm-dd": "2022-01-01",
+                "%to_yyyy-mm-dd": "2024-01-01",
                 "mode": "save"
             }
         },
         "list7": {
             "name": "mrr_churn_multi",
             "params": {
-                "%from_yyyy-mm-dd": "2022-02-01",
-                "%to_yyyy-mm-dd": "2023-05-01",
+                "%from_yyyy-mm-dd": "2022-01-01",
+                "%to_yyyy-mm-dd": "2024-01-01",
                 "mode": "save"
             }
         },
         "list8": {
             "name": "net_retention_multi",
             "params": {
-                "%from_yyyy-mm-dd": "2022-02-01",
-                "%to_yyyy-mm-dd": "2023-05-01",
+                "%from_yyyy-mm-dd": "2022-01-01",
+                "%to_yyyy-mm-dd": "2024-01-01",
                 "mode": "save"
             }
         }

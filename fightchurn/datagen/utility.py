@@ -207,7 +207,7 @@ class UtilityModel:
                     current_limit=plans.iloc[current_plan][limited]
                     max_limit=plans[limited].max()
                     customer_rate = customer.get_behavior_rate(limited)
-                    if customer_rate>= 0.8* current_limit and max_limit>current_limit:
+                    if customer_rate>= 0.66* current_limit and max_limit>current_limit:
                         near_limit = limited
                         break
 
@@ -256,7 +256,8 @@ class UtilityModel:
                     customer.set_plan(plans,plan_name=new_plan_name)
                     changed_plan=True
 
-        if not changed_plan and uniform(0, 1) < upgrade_probability:
+        # add ons check - same as upgrade probability
+        if uniform(0, 1) < upgrade_probability:
             shuffled_add_ons = add_ons.sample(frac=1).reset_index(drop=True)
             for add_on in shuffled_add_ons.iterrows():
                 if len(customer.add_ons)>0 and add_on[1]['plan'] in customer.add_ons['plan'].values:
@@ -264,7 +265,7 @@ class UtilityModel:
                 near_limit = False
                 for limited in add_on[1].index.values[3:]:
                     customer_rate = customer.get_behavior_rate(limited)
-                    if customer_rate > 0.8*customer.limits[limited] and add_on[1].loc[limited]>0:
+                    if customer_rate > 0.66*customer.limits[limited] and add_on[1].loc[limited]>0:
                         near_limit = True
                         break
                 if not near_limit:
