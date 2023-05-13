@@ -64,8 +64,8 @@
     },
     "chap3": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-05-30",
-            "%to_yyyy-mm-dd": "2023-05-29",
+            "%from_yyyy-mm-dd": "2023-01-02",
+            "%to_yyyy-mm-dd": "2023-12-25",
             "mode": "top",
             "type": "sql",
             "%event2measure": "advance_stage",
@@ -187,8 +187,8 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-05-30",
-            "%to_yyyy-mm-dd": "2023-05-29",
+            "%from_yyyy-mm-dd": "2023-01-02",
+            "%to_yyyy-mm-dd": "2023-12-25",
             "mode": "run",
             "type": "sql"
         },
@@ -391,8 +391,8 @@
     },
     "chap7": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2022-05-30",
-            "%to_yyyy-mm-dd": "2023-05-29",
+            "%from_yyyy-mm-dd": "2023-01-02",
+            "%to_yyyy-mm-dd": "2023-12-25",
             "mode": "top",
             "type": "sql"
         },
@@ -536,8 +536,8 @@
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
-                "%from_yyyy-mm-dd": "2022-05-30",
-                "%to_yyyy-mm-dd": "2023-05-29"
+                "%from_yyyy-mm-dd": "2023-01-02",
+                "%to_yyyy-mm-dd": "2023-12-25"
             },
             "insert": {
                 "params": {

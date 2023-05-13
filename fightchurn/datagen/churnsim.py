@@ -1,4 +1,4 @@
-
+import math
 from collections import deque
 from datetime import date, timedelta, datetime
 from dateutil import parser
@@ -185,23 +185,31 @@ class ChurnSimulation:
                 churn_intent_count += 1
             # exit if the simulation is over
             if next_month > self.end_date:
-                churned = True
+                break
             # check for churn, upgrade/downgrade on renewal date, make new subscriptions if not churned
-            elif next_month == next_renewal:
+            elif next_month >= next_renewal:
                 # churn at the end of the term if they wanted to churn just once
                 if churn_intent > 0:
                     churned = True
                 if not churned:
                     churn_intent_count = 0
                     num_months_this_bill_period = 0
-                    num_bill_periods += 1
-                    self.util_mod.simulate_upgrade_downgrade(month_event_count,new_customer,self.plans,self.add_ons)
+                    bill_period_change = self.util_mod.simulate_upgrade_downgrade(month_event_count,new_customer,self.plans,self.add_ons)
+                    if bill_period_change:
+                        customer_start = next_month
+                        num_months=0
+                        num_bill_periods=1
+                    else:
+                        num_bill_periods += 1
                     next_renewal = customer_start + relativedelta(months=new_customer.bill_period * num_bill_periods)
                     add_customer_subscriptions(next_month,next_renewal)
-            elif num_months_this_bill_period>=2 and churn_intent > 0.5* num_months_this_bill_period:
-                # churn mid term if they wanted to churn more than half the time
+            elif (churn_intent_count > 1 and 2 <= new_customer.bill_period < 6) or \
+                (churn_intent_count > 2 and 6 <= new_customer.bill_period):
+                # churn mid term on 2 churns for quarterly, 3 for annual
                 churned=True
-                new_customer.subscriptions[-1][2]=next_month
+                old_last = new_customer.subscriptions[-1]
+                new_last = (old_last[0],old_last[1],next_month,old_last[3],old_last[4],old_last[5], old_last[6])
+                new_customer.subscriptions[-1]= new_last
 
         return new_customer
 

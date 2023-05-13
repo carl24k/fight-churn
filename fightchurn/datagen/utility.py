@@ -200,6 +200,7 @@ class UtilityModel:
 
         changed_plan=False
         changed_add_ons=False
+        changed_bill_period=False
         if uniform(0, 1) < upgrade_probability:
             near_limit=None
             if plans.shape[1]>2:
@@ -228,11 +229,11 @@ class UtilityModel:
                 if current_period < max_period:
                     first_limit = plans.columns.values[2]
                     same_limit_plans = plans[plans[first_limit]==customer.limits[first_limit]]
-                    # not sorting, the order is random - so customer could go to any higher period plan
-                    higher_period_plans =  same_limit_plans[same_limit_plans['bill_period']>customer.bill_period]
+                    # the order is random - so customer could go to any higher period plan
+                    higher_period_plans =  same_limit_plans[same_limit_plans['bill_period']>customer.bill_period].sample(frac=1)
                     new_plan_name = higher_period_plans.index.values[0]
                     customer.set_plan(plans,plan_name=new_plan_name)
-                    changed_plan=True
+                    changed_bill_period=True
 
         # if they didn't upgrade, check for downgrades
         if not changed_plan and uniform(0, 1) < downgrade_probability:
@@ -249,12 +250,12 @@ class UtilityModel:
             # If no suitable dowgrade, try to lower the billing period
             if not changed_plan and 'bill_period' in plans.columns.values:
                 same_limit_plans = plans[plans[first_limit]==customer.limits[first_limit]]
-                # not sorting, the order is random - so customer could go to any lower period plan
-                lower_period_plans =  same_limit_plans[same_limit_plans['bill_period']<customer.bill_period]
+                # the order is random - so customer could go to any lower period plan
+                lower_period_plans =  same_limit_plans[same_limit_plans['bill_period']<customer.bill_period].sample(frac=1)
                 if len(lower_period_plans)>0:
                     new_plan_name = lower_period_plans.index.values[len(lower_period_plans)-1]
                     customer.set_plan(plans,plan_name=new_plan_name)
-                    changed_plan=True
+                    changed_bill_period=True
 
         # add ons check - same as upgrade probability
         if uniform(0, 1) < upgrade_probability:
@@ -277,12 +278,13 @@ class UtilityModel:
                 changed_add_ons=True
                 break
 
-        if not changed_plan and not changed_add_ons:
+        if not changed_add_ons and uniform(0, 1) < downgrade_probability:
             for add_on in customer.add_ons.iterrows():
-                if uniform(0, 1) < downgrade_probability:
-                    customer.add_ons = customer.add_ons.drop(customer.add_ons[customer.add_ons['plan']==add_on[1]['plan']].index)
-                    changed_add_ons=True
-                    break
+                customer.add_ons = customer.add_ons.drop(customer.add_ons[customer.add_ons['plan']==add_on[1]['plan']].index)
+                changed_add_ons=True
+                break
 
         if changed_plan or changed_add_ons:
             customer.add_add_ons(plans)
+
+        return changed_bill_period
