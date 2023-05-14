@@ -40,7 +40,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 2 --listing 1 2 4 5 6 7
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 2 --listing 6 7 8
 
 # simple counts
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 1 2
