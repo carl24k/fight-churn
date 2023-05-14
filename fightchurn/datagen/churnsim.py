@@ -188,7 +188,7 @@ class ChurnSimulation:
                 break
             # check for churn, upgrade/downgrade on renewal date, make new subscriptions if not churned
             elif next_month >= next_renewal:
-                # churn at the end of the term if they wanted to churn just once
+                # churn at the end of the term if they wanted to churn just once (every month for monthly)
                 if churn_intent > 0:
                     churned = True
                 if not churned:
@@ -203,9 +203,9 @@ class ChurnSimulation:
                         num_bill_periods += 1
                     next_renewal = customer_start + relativedelta(months=new_customer.bill_period * num_bill_periods)
                     add_customer_subscriptions(next_month,next_renewal)
-            elif (churn_intent_count > 1 and 2 <= new_customer.bill_period < 6) or \
-                (churn_intent_count > 2 and 6 <= new_customer.bill_period):
-                # churn mid term on 2 churns for quarterly, 3 for annual
+            elif (churn_intent_count > 1 and 2 <= new_customer.bill_period <= 6) or \
+                (churn_intent_count > 2 and 6 < new_customer.bill_period):
+                # churn mid term on 2 churns for quarterly/bi-annual, 3 churns for annual
                 churned=True
                 old_last = new_customer.subscriptions[-1]
                 new_last = (old_last[0],old_last[1],next_month,old_last[3],old_last[4],old_last[5], old_last[6])
