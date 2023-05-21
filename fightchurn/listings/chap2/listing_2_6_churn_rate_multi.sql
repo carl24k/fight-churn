@@ -38,7 +38,7 @@ churn_count AS (
     group by start_date
 )
 SELECT s.start_date,(s.start_date+interval '1 month')::date as end_date,
-n_churn/n_start AS churn_rate,
+ n_start, n_churn, n_churn/n_start AS churn_rate,
 1.0-(1-(n_churn/n_start ))^12 as annual_churn_rate
 FROM start_count s
 inner join churn_count c

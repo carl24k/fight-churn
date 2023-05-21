@@ -40,27 +40,27 @@ downsell_accounts as
 ),
 
 start_mrr as (
-	select start_date, sum (start_accounts.total_mrr) as start_mrr
+	select start_date, sum (start_accounts.total_mrr) as start_sum
 	from start_accounts
 	group by start_date
 ),
 churn_mrr as (
-	select start_date,	sum(churned_accounts.total_mrr) as churn_mrr
+	select start_date,	sum(churned_accounts.total_mrr) as churn_sum
 	from churned_accounts
 	group by start_date
 ),
 downsell_mrr as (
-	select start_date, coalesce(sum(downsell_accounts.downsell_amount),0.0) as downsell_mrr
+	select start_date, coalesce(sum(downsell_accounts.downsell_amount),0.0) as downsell_sum
     from downsell_accounts
     group by start_date
 )
 SELECT s.start_date,(s.start_date+interval '1 month')::date as end_date,
-	(churn_mrr+downsell_mrr) /start_mrr as mrr_churn_rate,
-    start_mrr, churn_mrr, downsell_mrr,
-    1.0-(1-((churn_mrr+downsell_mrr) /start_mrr))^12 as annual_mrr_churn_rate
+	( coalesce(churn_sum,0)+coalesce(downsell_sum,0)) /start_sum as mrr_churn_rate,
+    start_sum as start_mrr,  coalesce(churn_sum,0) as churn_mrr, coalesce(downsell_sum,0) as downsell_mrr,
+    1.0-(1-(( coalesce(churn_sum,0)+coalesce(downsell_sum,0)) /start_sum ))^12 as annual_mrr_churn_rate
 FROM start_mrr s
-inner join churn_mrr c
+full outer join churn_mrr c
 on s.start_date=c.start_date
-inner join downsell_mrr d
+full outer join downsell_mrr d
 on d.start_date = s.start_date
 order by s.start_date;
