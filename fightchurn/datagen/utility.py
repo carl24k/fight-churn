@@ -153,7 +153,8 @@ class UtilityModel:
     def transition_probility(self,u,trans):
         offset = self.transition_df.loc[trans,'offset']
         scale = self.transition_df.loc[trans,'scale']
-        prob=1.0/(1.0 + exp(-1.*scale * u + offset))
+        # Clip exponent to prevent overflow errors in extreme cases
+        prob=1.0/(1.0 + exp( np.clip(-1.*scale * u + offset, -40.0, 40.0)))
         if trans in ['downsell','churn']:
             prob = 1.0 - prob
         return prob
