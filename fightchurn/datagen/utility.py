@@ -137,8 +137,9 @@ class UtilityModel:
             contrib_ratios = contrib_ratios * customer.satisfaction_propensity
 
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
+        mrr_utility = customer.mrr* self.mrr_utility_cost * customer.monetary_satisfaction
+        utility_contribs =  np.append(utility_contribs,mrr_utility)
         utility = np.sum(utility_contribs)
-        utility = utility + customer.mrr* self.mrr_utility_cost * customer.monetary_satisfaction
 
         if isinstance(customer.satisfaction_propensity,float):
             if customer.satisfaction_propensity != 1.0:
@@ -148,6 +149,7 @@ class UtilityModel:
             utility *= multiplier
 
         customer.current_utility = utility
+        customer.utility_contribs = utility_contribs
         return utility
 
     def transition_probility(self,u,trans):

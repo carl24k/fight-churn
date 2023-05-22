@@ -79,11 +79,11 @@ class ChurnSimulation:
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_sub.csv')
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
 
-        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
-        os.makedirs(save_path, exist_ok=True)
-        copy_path = os.path.join(save_path,  f'{self.model_name}_plans.csv')
+        self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
+        os.makedirs(self.save_path, exist_ok=True)
+        copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
         copyfile(plans_path, copy_path)
-        copy_path = os.path.join(save_path,  f'{self.model_name}_addons.csv')
+        copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
         copyfile(add_on_file, copy_path)
 
 
@@ -239,16 +239,21 @@ class ChurnSimulation:
         def create_one_customer():
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
-            if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
-                self.sim_rate_debug_query()
-            return customer.current_utility
+            # if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
+            #     self.sim_rate_debug_query()
+            res = np.append(customer.utility_contribs, customer.current_utility)
+            return res
 
-        utils = Parallel(n_jobs=self.n_parallel)(delayed(create_one_customer)() for i in range(n_to_create))
+        contribs = Parallel(n_jobs=self.n_parallel)(delayed(create_one_customer)() for i in range(n_to_create))
 
         if self.devmode:
-            self.utility_dist.extend(utils)
-            utility_obs = pd.DataFrame(self.utility_dist, columns=['utility'])
-            print('Utility Distribution:\n', utility_obs.describe())
+            self.utility_dist.extend(contribs)
+            util_names = list(self.util_mod.behave_names)
+            util_names.extend(['mrr','utility'])
+            utility_obs = pd.DataFrame(self.utility_dist, columns=util_names)
+            utility_obs.to_csv( os.path.join(self.save_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}.csv'))
+            utility_desc=pd.DataFrame(utility_obs.describe())
+            utility_desc.to_csv( os.path.join(self.save_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}_summary.csv'))
 
     def copy_customer_to_database(self,customer):
         '''
