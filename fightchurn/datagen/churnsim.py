@@ -239,8 +239,8 @@ class ChurnSimulation:
         def create_one_customer():
             customer = self.simulate_customer(month_date)
             self.copy_customer_to_database(customer)
-            # if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
-            #     self.sim_rate_debug_query()
+            if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
+                self.sim_rate_debug_query()
             res = np.append(customer.utility_contribs, customer.current_utility)
             return res
 

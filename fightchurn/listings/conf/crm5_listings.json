@@ -64,7 +64,7 @@
     },
     "chap3": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-01-02",
+            "%from_yyyy-mm-dd": "2022-01-31",
             "%to_yyyy-mm-dd": "2023-12-25",
             "mode": "top",
             "type": "sql",
@@ -187,7 +187,7 @@
     },
     "chap4": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-01-02",
+            "%from_yyyy-mm-dd": "2022-01-31",
             "%to_yyyy-mm-dd": "2023-12-25",
             "mode": "run",
             "type": "sql"
@@ -286,9 +286,6 @@
             "v19": {
                 "metric_to_plot": "add_competitor"
             },
-            "v20": {
-                "metric_to_plot": "revert_stage"
-            },
             "v21": {
                 "metric_to_plot": "lose_opportunity"
             },
@@ -327,9 +324,6 @@
             },
             "v36": {
                 "metric_to_plot": "search_actions_per_dollar_closed"
-            },
-            "v37": {
-                "metric_to_plot": "revert_rate"
             },
             "v38": {
                 "metric_to_plot": "loss_rate"
@@ -391,7 +385,7 @@
     },
     "chap7": {
         "defaults": {
-            "%from_yyyy-mm-dd": "2023-01-02",
+            "%from_yyyy-mm-dd": "2022-01-31",
             "%to_yyyy-mm-dd": "2023-12-25",
             "mode": "top",
             "type": "sql"
@@ -426,12 +420,6 @@
                     "%num_metric": "search_actions",
                     "%den_metric": "search_28avg_84obs",
                     "%new_metric_id": 36
-                },
-                "v4": {
-                    "%new_metric_name": "revert_rate",
-                    "%num_metric": "revert_stage_28avg_84obs",
-                    "%den_metric": "stage_changes",
-                    "%new_metric_id": 37
                 },
                 "v5": {
                     "%new_metric_name": "loss_rate",
@@ -499,11 +487,6 @@
                     "%new_metric_id": 41,
                     "%new_metric_name": "closed_opps"
                 },
-                "v2": {
-                    "%metric_list": " 'advance_stage_28avg_84obs', 'revert_stage_28avg_84obs' ",
-                    "%new_metric_id": 42,
-                    "%new_metric_name": "stage_changes"
-                },
                 "v3": {
                     "%metric_list": " 'cancel_meeting_28avg_84obs', 'meeting_28avg_84obs' ",
                     "%new_metric_id": 43,
@@ -536,7 +519,7 @@
                 "%obs_period": 84,
                 "%desc_period": 28,
                 "%min_tenure": 14,
-                "%from_yyyy-mm-dd": "2023-01-02",
+                "%from_yyyy-mm-dd": "2022-01-31",
                 "%to_yyyy-mm-dd": "2023-12-25"
             },
             "insert": {
@@ -620,10 +603,6 @@
                 "v19": {
                     "%event2measure": "add_competitor",
                     "%new_metric_id": 19
-                },
-                "v20": {
-                    "%event2measure": "revert_stage",
-                    "%new_metric_id": 20
                 },
                 "v21": {
                     "%event2measure": "lose_opportunity",

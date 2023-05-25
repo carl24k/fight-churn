@@ -24,9 +24,9 @@ sum(case when metric_name_id=16 then metric_value else 0 end) as create_opportun
 sum(case when metric_name_id=17 then metric_value else 0 end) as advance_stage,
 sum(case when metric_name_id=18 then metric_value else 0 end) as win_opportunity,
 sum(case when metric_name_id=19 then metric_value else 0 end) as add_competitor,
-sum(case when metric_name_id=20 then metric_value else 0 end) as revert_stage,
+
 sum(case when metric_name_id=21 then metric_value else 0 end) as lose_opportunity,
-sum(case when metric_name_id=22 then metric_value else 0 end) as login,
+
 sum(case when metric_name_id=23 then metric_value else 0 end) as search,
 sum(case when metric_name_id=44 then metric_value else 0 end) as search_actions,
 
@@ -38,7 +38,7 @@ sum(case when metric_name_id=33 then metric_value else 0 end) as opp_close_per_d
 sum(case when metric_name_id=34 then metric_value else 0 end) as active_users_per_month,
 sum(case when metric_name_id=35 then metric_value else 0 end) as user_utilization,
 sum(case when metric_name_id=36 then metric_value else 0 end) as search_action_per_search,
-sum(case when metric_name_id=37 then metric_value else 0 end) as revert_rate,
+
 sum(case when metric_name_id=38 then metric_value else 0 end) as loss_rate,
 sum(case when metric_name_id=39 then metric_value else 0 end) as cancel_meeting_rate,
 sum(case when metric_name_id=40 then metric_value else 0 end) as deletes_per_email,
