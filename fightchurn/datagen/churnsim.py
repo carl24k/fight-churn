@@ -160,11 +160,11 @@ class ChurnSimulation:
             plan_units, plan_quantity = self.get_unit_quantity(new_customer.plan)
             new_customer.subscriptions.append( (new_customer.plan, this_month,
                                                 next_renewal,
-                                                new_customer.base_mrr, plan_quantity, plan_units, new_customer.bill_period ))
+                                                new_customer.base_mrr, plan_quantity, plan_units, new_customer.bill_period, new_customer.discount ))
             for add_on in new_customer.add_ons.iterrows():
                 add_units, add_quantity = self.get_unit_quantity(add_on[1]['plan'])
                 new_customer.subscriptions.append( (add_on[1]['plan'],this_month,next_renewal, add_on[1]['mrr'],
-                                                    add_quantity,add_units, new_customer.bill_period) )
+                                                    add_quantity,add_units, new_customer.bill_period, new_customer.discount) )
 
         add_customer_subscriptions(customer_start, next_renewal)
 
@@ -208,7 +208,7 @@ class ChurnSimulation:
                 # churn mid term on 2 churns for quarterly/bi-annual, 3 churns for annual
                 churned=True
                 old_last = new_customer.subscriptions[-1]
-                new_last = (old_last[0],old_last[1],next_month,old_last[3],old_last[4],old_last[5], old_last[6])
+                new_last = (old_last[0],old_last[1],next_month,old_last[3],old_last[4],old_last[5], old_last[6], old_last[7])
                 new_customer.subscriptions[-1]= new_last
 
         return new_customer
@@ -267,10 +267,10 @@ class ChurnSimulation:
 
         with open(sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
-                # plan name, start, end, mrr, quantity, units, billing period
+                # plan name, start, end, mrr, quantity, units, billing period, discount
                 tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},'
                                f'{s[4] if s[4] is not None else "NULL"},{s[5] if s[5] is not None else "NULL"},'
-                               f'{s[6]}\n')
+                               f'{s[6]},{s[7]}\n')
         with open(event_file_name, 'w') as tmp_file:
             for e in customer.events:
                 tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value

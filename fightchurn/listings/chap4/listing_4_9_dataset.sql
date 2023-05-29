@@ -30,6 +30,7 @@ sum(case when metric_name_id=21 then metric_value else 0 end) as lose_opportunit
 sum(case when metric_name_id=23 then metric_value else 0 end) as search,
 sum(case when metric_name_id=44 then metric_value else 0 end) as search_actions,
 
+sum(case when metric_name_id=27 then metric_value else 0 end) as discount,
 sum(case when metric_name_id=29 then metric_value else 0 end) as bill_period_months,
 sum(case when metric_name_id=30 then metric_value else 0 end) as mrr,
 sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_per_month,
@@ -48,7 +49,8 @@ sum(case when metric_name_id=47 then metric_value else 0 end) as mrr_per_dollar_
 sum(case when metric_name_id=48 then metric_value else 0 end) as mrr_per_active_user,
 sum(case when metric_name_id=49 then metric_value else 0 end) as opp_value_lost_per_month,
 sum(case when metric_name_id=50 then metric_value else 0 end) as total_opp_value_closed,
-sum(case when metric_name_id=51 then metric_value else 0 end) as pcnt_opp_value_lost
+sum(case when metric_name_id=51 then metric_value else 0 end) as pcnt_opp_value_lost,
+sum(case when metric_name_id=52 then metric_value else 0 end) as opp_value_closed_per_active_user
 
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    

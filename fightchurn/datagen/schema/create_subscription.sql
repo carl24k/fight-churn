@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS  x.subscription
     mrr double precision NOT NULL,
     quantity double precision NULL,
     units  text COLLATE pg_catalog."default" NULL,
-    bill_period_months integer NOT NULL
+    bill_period_months integer NOT NULL,
+    discount double precision NULL
 )
 WITH (
     OIDS = FALSE

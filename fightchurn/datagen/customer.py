@@ -18,6 +18,9 @@ class Customer:
     MAX_AGE = 82.0
     AGE_RANGE = MAX_AGE - MIN_AGE
     AVG_AGE = (MAX_AGE + MIN_AGE) / 2.0
+    DISCOUNT_PROBABILITY = 0.5
+    MIN_DISCOUNT = 0.05
+    MAX_DISCOUNT = 0.5
     date_multipliers = {}
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
@@ -72,6 +75,7 @@ class Customer:
 
         self.country=country
         self.mrr=None
+        self.discount=0.0
         self.bill_period=1
         self.base_mrr=None
         self.plan=None
@@ -139,14 +143,15 @@ class Customer:
         if plans.shape[1] < 3:
             choice_index = np.random.choice(range(len(plans)))
         else:
-            # pick up to the highest plan that the customer has at least 75% of the expected rates
+            # Customer can pick between plans for which its expected number of users
+            # is at least 1/3 the plan limit and at most 3x the plan limit
             eligible_plans = []
             for plan_index in range(0,len(plans)):
                 is_eligible = False
                 for limited in plans.columns.values[2:]:
                     plan_limit = plans.iloc[plan_index][limited]
                     customer_rate = self.get_behavior_rate(limited)
-                    min_rate = 0.33*plan_limit if plan_index >0 else 0 # make sure everyone is eligible_plans for first plan
+                    min_rate = 0.33*plan_limit if plan_index >0 else 0 # everyone is eligible_plans for first plan
                     max_rate = 3.0  * plan_limit
                     if min_rate <= customer_rate <= max_rate:
                         is_eligible = True
@@ -175,7 +180,12 @@ class Customer:
             self.plan = plans.index.values[plan_idx]
         else:
             self.plan = plan_name
-        self.mrr = plans.loc[self.plan,'mrr']
+        # 50% chance of a discount as low as 50%
+        if np.random.uniform(0, 1) <= Customer.DISCOUNT_PROBABILITY:
+            self.discount = 0.05 * np.round(np.random.uniform(Customer.MIN_DISCOUNT,Customer.MAX_DISCOUNT)/0.05)
+        else:
+            self.discount=0.0
+        self.mrr = np.round(plans.loc[self.plan,'mrr']* (1.0-self.discount))
         self.base_mrr = self.mrr
         if 'bill_period' in plans.columns.values:
             self.bill_period = plans.loc[self.plan,'bill_period']

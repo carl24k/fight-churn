@@ -109,6 +109,10 @@
             "v6": {
                 "%new_metric_name": "billing_period_months",
                 "%new_metric_id": 29
+            },
+            "v7": {
+                "%new_metric_name": "discount",
+                "%new_metric_id": 27
             }
         },
         "list5": {
@@ -182,6 +186,13 @@
             "params": {
                 "mode": "run",
                 "%new_metric_id": 29
+            }
+        },
+        "list21": {
+            "name": "discount_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 27
             }
         }
     },
@@ -301,6 +312,9 @@
             "v26": {
                 "metric_to_plot": "search_actions_per_dollar_closed"
             },
+            "v28": {
+                "metric_to_plot": "discount"
+            },
             "v29": {
                 "metric_to_plot": "bill_period_months"
             },
@@ -348,6 +362,9 @@
             },
             "v45": {
                 "metric_to_plot": "pcnt_opp_value_lost"
+            },
+            "v46": {
+                "metric_to_plot": "opp_value_closed_per_active_user"
             }
         },
         "list2": {
@@ -393,18 +410,18 @@
         "list1": {
             "name": "ratio_metric",
             "params": {
-                    "%num_metric": "win_opportunity_28avg_84obs",
+                    "%num_metric": "total_opp_value_closed",
                     "%den_metric": "mrr"
             },
             "insert": {
                 "params": {
-                    "%num_metric": "win_opportunity_28avg_84obs",
+                    "%num_metric": "total_opp_value_closed",
                     "%den_metric": "mrr",
                     "%new_metric_id": 33,
                     "%new_metric_name": "opp_close_per_dollar"
                 },
                 "v1": {
-                    "%new_metric_name": "opp_close_per_dollar",
+                    "%new_metric_name": "total_opp_value_closed",
                     "%num_metric": "win_opportunity_28avg_84obs",
                     "%den_metric": "mrr",
                     "%new_metric_id": 33
@@ -468,6 +485,12 @@
                     "%num_metric": "opp_value_lost_per_month",
                     "%den_metric": "total_opp_value_closed",
                     "%new_metric_id": 51
+                },
+                "v13": {
+                    "%new_metric_name": "opp_close_per_active_user",
+                    "%num_metric": "total_opp_value_closed",
+                    "%den_metric": "active_users",
+                    "%new_metric_id": 52
                 }
             }
         },
@@ -629,11 +652,11 @@
         "list9": {
             "name": "count_active_users",
             "params": {
-                "%obs_period": 1
+                "%obs_period": 28
             },
             "insert" : {
                 "params": {
-                    "%obs_period": 1,
+                    "%obs_period": 28,
                     "%new_metric_id": 34
                 }
             }
