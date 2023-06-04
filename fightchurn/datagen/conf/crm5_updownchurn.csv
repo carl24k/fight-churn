@@ -1,4 +1,4 @@
 transition,scale,offset
-upsell,0.01,5
-downsell,0.01,-15
-churn,0.01,-12
+upsell,0.001,16
+downsell,0.001,-3
+churn,0.001,-1
