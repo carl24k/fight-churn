@@ -93,4 +93,4 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # Demographic data
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 10 --listing 8 2
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 1 --version 47
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 47
