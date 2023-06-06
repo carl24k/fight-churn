@@ -365,6 +365,10 @@
             },
             "v46": {
                 "metric_to_plot": "opp_value_closed_per_active_user"
+            },
+            "v47": {
+                "data_set_path": "crm5/crm5_dataset3.csv",
+                "metric_to_plot": "customer_age"
             }
         },
         "list2": {
@@ -681,6 +685,32 @@
             "name": "shap_explain_xgb",
             "params": {
                 "plot_n" : [0,1,2,3,4]
+            }
+        }
+    },
+    "chap10": {
+        "defaults": {
+            "type": "py",
+            "data_set_path": "crm5/crm5_dataset3.csv"
+        },
+        "list8": {
+            "name": "dataset3",
+            "params": {
+                "%from_yyyy-mm-dd": "2022-01-31",
+                "%to_yyyy-mm-dd": "2023-12-25",
+                "%metric_interval": "7 day",
+                "mode": "save",
+                "type": "sql"
+            }
+        },
+        "list2": {
+            "name": "category_churn_cohorts",
+            "params": {
+                "cat_col": "channel"
+            },
+            "v1": {},
+            "v2": {
+                "cat_col": "country"
             }
         }
     }

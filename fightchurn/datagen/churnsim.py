@@ -47,20 +47,19 @@ class ChurnSimulation:
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
-        behavior_versions = glob.glob(local_dir+self.model_name+'_*.csv')
+
         self.behavior_models = {}
         self.model_list = []
-        for b in behavior_versions:
-            version = b[(b.find(self.model_name) + len(self.model_name)+1):-4]
-            if version in ('utility','population','country','plans','updownchurn','addons'):
-                continue
+        pop_file = os.path.join(local_dir, f"{self.model_name}_population.csv")
+        self.population_percents = pd.read_csv(pop_file, index_col=0)
+
+        for version in self.population_percents.index.values:
             behave_mod=FatTailledBehaviorModel(self.model_name, complex_sat=complex_sat, random_seed= seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
-        if len(self.behavior_models)>=1:
-            self.population_percents = pd.read_csv(local_dir +self.model_name + '_population.csv',index_col=0)
+
         plans_path = local_dir +self.model_name + '_plans.csv'
         self.plans = pd.read_csv(plans_path,index_col=0)
         self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR

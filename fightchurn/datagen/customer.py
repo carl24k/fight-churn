@@ -13,6 +13,7 @@ import os
 
 class Customer:
     COMPLEX_PROPENSITY_SCALE=3.0
+    COMPLEX_PROPENSITY_BASE=2.0
     AGE_SATISFACTION_SCALE = 0.5
     MIN_AGE = 12.0
     MAX_AGE = 82.0
@@ -93,11 +94,11 @@ class Customer:
             nrand = len(self.behavior_rates)
             if self.users is not None:nrand = nrand+1
             if satisfaction is None:
-                self.satisfaction_propensity = np.power(10.0, random.uniform(low=-Customer.COMPLEX_PROPENSITY_SCALE,
+                self.satisfaction_propensity = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(low=-Customer.COMPLEX_PROPENSITY_SCALE,
                                                                             high=Customer.COMPLEX_PROPENSITY_SCALE, size=nrand) + age_contrib)
             else:
                 self.satisfaction_propensity = [satisfaction]*nrand
-            self.monetary_satisfaction = np.power(10.0, random.uniform(-Customer.COMPLEX_PROPENSITY_SCALE, Customer.COMPLEX_PROPENSITY_SCALE) + age_contrib)
+            self.monetary_satisfaction = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(-Customer.COMPLEX_PROPENSITY_SCALE, Customer.COMPLEX_PROPENSITY_SCALE) + age_contrib)
 
         self.subscriptions=[]
         self.events=[]
