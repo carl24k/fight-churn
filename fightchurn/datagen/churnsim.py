@@ -25,7 +25,7 @@ from fightchurn.datagen.customer import  Customer
 
 class ChurnSimulation:
 
-    def __init__(self, model, start, end, init_customers, growth_rate, complex_sat, devmode, seed, n_parallel):
+    def __init__(self, args):
         '''
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
@@ -35,18 +35,25 @@ class ChurnSimulation:
         :param end: end date for simulation
         :param init_customers: how many customers to create at start date
         '''
-
-        self.model_name=model
-        self.start_date = start
-        self.end_date = end
-        self.init_customers=init_customers
-        self.monthly_growth_rate = growth_rate
-        self.devmode= devmode
-        self.n_parallel = n_parallel
+        self.args = args
+        self.model_name=args.model
+        self.start_date = parser.parse(args.start_date).date()
+        self.end_date = parser.parse(args.end_date).date()
+        self.init_customers=args.init_customers
+        self.monthly_growth_rate = args.growth_rate
+        self.devmode= args.dev
+        self.n_parallel = args.n_parallel
+        self.complex_sat = args.complex
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
+
+        self.min_age = args.min_age
+        self.max_age = args.max_age
+        self.age_satisfaction_scale = args.age_satisfy
+        # self.age_range = self.max_age-self.min_age
+        # self.avg_age = (self.max_age+self.min_age)/20
 
         self.behavior_models = {}
         self.model_list = []
@@ -54,7 +61,7 @@ class ChurnSimulation:
         self.population_percents = pd.read_csv(pop_file, index_col=0)
 
         for version in self.population_percents.index.values:
-            behave_mod=FatTailledBehaviorModel(self.model_name, complex_sat=complex_sat, random_seed= seed, version= version)
+            behave_mod=FatTailledBehaviorModel(self.model_name, complex_sat=self.complex_sat, random_seed= args.random_seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
@@ -137,7 +144,8 @@ class ChurnSimulation:
         '''
         # customer_model = self.pick_customer_model()
         customer_model = np.random.choice(self.model_list,p=self.population_percents['pcnt'])
-        new_customer=customer_model.generate_customer(start_of_month)
+        new_customer=customer_model.generate_customer(start_of_month,min_age=self.min_age,
+                                                      max_age=self.max_age,age_satisfy_coef=self.age_satisfaction_scale)
 
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
@@ -360,29 +368,39 @@ class ChurnSimulation:
         self.remove_tmp_files()
         self.sim_rate_debug_query()
 
-def run_churn_simulation(model_name, start_date, end_date, init_customers, growth, devmode, random_seed=None, complex=False, n_parallel=1, force=False):
-    if random_seed is not None:
-        random.seed(random_seed) # for random
-    churn_sim = ChurnSimulation(model=model_name,start=start_date,end=end_date,init_customers=init_customers, growth_rate=growth, complex_sat=complex,
-                                devmode= devmode, seed= random_seed, n_parallel=n_parallel)
-    churn_sim.run_simulation(force=force)
+def run_churn_simulation(args):
+    if args.random_seed is not None:
+        random.seed(args.random_seed) # for random
+    churn_sim = ChurnSimulation(args)
+    churn_sim.run_simulation(force=args.force)
+
+def churn_args(parse_command_line=True):
+    parser = argparse.ArgumentParser()
+    # Default arguments
+    parser.add_argument("--model", type=str, help="The name of the schema", default='socialnet7')
+    parser.add_argument("--start_date", type=str, help="The name of the schema", default='2020-01-01')
+    parser.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
+    parser.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
+    parser.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
+    parser.add_argument("--complex", type=bool, help="Flag to use complex satisfaction", default=False)
+    parser.add_argument("--force", type=bool, help="Flag to force over-write old data", default=False)
+    parser.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
+    parser.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
+    parser.add_argument("--min_age", type=int, help="Minimum customer age", default=12)
+    parser.add_argument("--max_age", type=int, help="Maximum customer age", default=82)
+    parser.add_argument("--age_satisfy", type=float, help="Age satisfaction scacling coefficient", default=0.5)
+    parser.add_argument("--random_seed", type=int, help="Seed for random")
+
+    if parse_command_line:
+        # actually parse command line
+        the_args, _ = parser.parse_known_args()
+    else:
+        # Just return defaults
+        the_args = parser.parse_args([])
+
+    return the_args
 
 if __name__ == "__main__":
 
-    arg_parse = argparse.ArgumentParser()
-    # Run control arguments
-    arg_parse.add_argument("--model", type=str, help="The name of the schema", default='socialnet7')
-    arg_parse.add_argument("--start_date", type=str, help="The name of the schema", default='2020-01-01')
-    arg_parse.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
-    arg_parse.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
-    arg_parse.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
-    arg_parse.add_argument("--complex", type=bool, help="Flag to use complex satisfaction", default=False)
-    arg_parse.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
-    arg_parse.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
-
-    args, _ = arg_parse.parse_known_args()
-
-    start_date = parser.parse(args.start_date).date()
-    end_date = parser.parse(args.end_date).date()
-
-    run_churn_simulation(args.model, start_date, end_date, args.init_customers, args.growth_rate,args.dev, complex=args.complex, n_parallel=args.n_parallel)
+    args = churn_args()
+    run_churn_simulation(args)

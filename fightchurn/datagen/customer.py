@@ -14,11 +14,6 @@ import os
 class Customer:
     COMPLEX_PROPENSITY_SCALE=3.0
     COMPLEX_PROPENSITY_BASE=2.0
-    AGE_SATISFACTION_SCALE = 0.5
-    MIN_AGE = 12.0
-    MAX_AGE = 82.0
-    AGE_RANGE = MAX_AGE - MIN_AGE
-    AVG_AGE = (MAX_AGE + MIN_AGE) / 2.0
     DISCOUNT_PROBABILITY = 0.5
     MIN_DISCOUNT = 0.05
     MAX_DISCOUNT = 0.5
@@ -26,7 +21,8 @@ class Customer:
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
-    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None,complex_satisfaction=False):
+    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None,complex_satisfaction=False,
+                 min_age=12, max_age=82, age_satisfy_coef=0.5):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -47,6 +43,7 @@ class Customer:
         self.behavior_rates = behavior_rates
         self.behavior_rates['mean_value'] = None
 
+
         for valued_behavior in Customer.get_valued_behaviors(self.behavior_rates['behavior'].values):
             underlying_behavior = Customer.get_behavior_under_value(valued_behavior, self.behavior_rates['behavior'].values)
             uidx= self.behavior_rates['behavior']==underlying_behavior
@@ -65,15 +62,18 @@ class Customer:
         self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
 
+        age_range = max_age - min_age
+        avg_age = age_range/2.0
         if start_of_month:
-            self.age=random.uniform(Customer.MIN_AGE,Customer.MAX_AGE)
+            self.age=random.uniform(min_age,max_age)
             self.date_of_birth = start_of_month + relativedelta.relativedelta(years=-int(self.age),
                                                                               months=-int( (self.age % 1)*12 ),
                                                                               days=-random.uniform(1,30))
         else:
             self.date_of_birth=None
-            self.age = Customer.AVG_AGE
+            self.age = avg_age
 
+        self.age_satisfaction_coef = age_satisfy_coef * (avg_age - self.age)/age_range
         self.country=country
         self.mrr=None
         self.discount=0.0
@@ -82,11 +82,10 @@ class Customer:
         self.plan=None
         self.add_ons = pd.DataFrame()
         self.limits= {}
-        age_contrib = Customer.AGE_SATISFACTION_SCALE * (Customer.AVG_AGE - self.age)/Customer.AGE_RANGE
 
         if not complex_satisfaction:
             if satisfaction is None:
-                self.satisfaction_propensity = np.power(2.0, random.uniform(-1.5, 1.5) + age_contrib)
+                self.satisfaction_propensity = np.power(2.0, random.uniform(-1.5, 1.5) + self.age_satisfaction_coef )
             else:
                 self.satisfaction_propensity = satisfaction
             self.monetary_satisfaction=1.0
@@ -95,10 +94,10 @@ class Customer:
             if self.users is not None:nrand = nrand+1
             if satisfaction is None:
                 self.satisfaction_propensity = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(low=-Customer.COMPLEX_PROPENSITY_SCALE,
-                                                                            high=Customer.COMPLEX_PROPENSITY_SCALE, size=nrand) + age_contrib)
+                                                                            high=Customer.COMPLEX_PROPENSITY_SCALE, size=nrand) + self.age_satisfaction_coef )
             else:
                 self.satisfaction_propensity = [satisfaction]*nrand
-            self.monetary_satisfaction = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(-Customer.COMPLEX_PROPENSITY_SCALE, Customer.COMPLEX_PROPENSITY_SCALE) + age_contrib)
+            self.monetary_satisfaction = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(-Customer.COMPLEX_PROPENSITY_SCALE, Customer.COMPLEX_PROPENSITY_SCALE) + self.age_satisfaction_coef )
 
         self.subscriptions=[]
         self.events=[]

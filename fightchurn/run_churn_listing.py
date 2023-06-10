@@ -389,11 +389,13 @@ def run_standard_simulation(schema='socialnet7', init_customers=10000, force=Fal
     :return:
     '''
     churndb.setup_churn_db(schema)
-    start_date = date(2020, 1, 1)
-    end_date = date(2020, 6, 1)
-    churnsim.run_churn_simulation(schema, start_date=start_date, end_date=end_date,
-                                                     init_customers=init_customers,
-                                                     growth=0.1, devmode=False, force=force)
+    args = churnsim.churn_args(parse_command_line=False)
+    argd = vars(args)
+    argd['model']=schema
+    argd['init_customers']=init_customers
+    argd['force']=force
+
+    churnsim.run_churn_simulation(args)
 
 
 def run_everything(db, user,password,output_dir='../../../fight-churn-output/',init_customers=500,schema='socialnet7'):
