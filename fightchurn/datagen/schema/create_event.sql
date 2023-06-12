@@ -33,3 +33,8 @@ CREATE INDEX  IF NOT EXISTS  idx_event_type
     ON x.event USING btree
     (event_type_id)
     TABLESPACE pg_default;
+
+CREATE INDEX  IF NOT EXISTS  idx_event_user_account_time
+    ON x.event USING btree
+    (account_id, user_id, event_time)
+    TABLESPACE pg_default;

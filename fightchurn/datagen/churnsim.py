@@ -11,7 +11,9 @@ from shutil import copyfile
 import argparse
 from filelock import FileLock
 import os
+
 from joblib import Parallel, delayed
+import json
 import glob
 import pandas as pd
 import numpy as np
@@ -91,6 +93,9 @@ class ChurnSimulation:
         copyfile(plans_path, copy_path)
         copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
         copyfile(add_on_file, copy_path)
+        arg_path = os.path.join(self.save_path, f'{self.model_name}_args.json')
+        with open(arg_path, 'w') as f:
+            json.dump(args.__dict__, f, indent=2)
 
 
     def con_string(self):
@@ -187,7 +192,12 @@ class ChurnSimulation:
             next_month=customer_start+relativedelta(months=num_months)
             month_event_count = new_customer.generate_events(this_month,next_month)
             _ = self.util_mod.utility_function(month_event_count,new_customer)
-            churn_intent =self.util_mod.simulate_churn(month_event_count,new_customer)
+            churn_intent = False
+            if args.acausal_churn > 0:
+                if random.uniform(0,1) < args.acausal_churn:
+                    churn_intent = True
+            if not churn_intent:
+                churn_intent =self.util_mod.simulate_churn(month_event_count,new_customer)
             if churn_intent:
                 churn_intent_count += 1
             # exit if the simulation is over
@@ -390,6 +400,7 @@ def churn_args(parse_command_line=True):
     parser.add_argument("--max_age", type=int, help="Maximum customer age", default=82)
     parser.add_argument("--age_satisfy", type=float, help="Age satisfaction scacling coefficient", default=0.5)
     parser.add_argument("--random_seed", type=int, help="Seed for random")
+    parser.add_argument("--acausal_churn", type=float, help="Churn rate for no reason", default=0.0)
 
     if parse_command_line:
         # actually parse command line
