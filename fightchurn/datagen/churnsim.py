@@ -155,13 +155,17 @@ class ChurnSimulation:
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
 
-        if start_of_month==self.start_date and 'bill_period' in self.plans.columns.values:
-            min_period=self.plans['bill_period'].min()
-            plans_to_use =  self.plans[self.plans['bill_period']==min_period]
-        else:
-            plans_to_use = self.plans
+        plans_to_use = self.plans
+        available_periods = None
+        if 'bill_period' in self.plans.columns.values:
+            available_periods = sorted(self.plans['bill_period'].unique())
+            # For the first month in a simulation, only allow 1 month bill periods
+            #  - otherwise there are artificial cycles of lots of people re-newing on the 3,6,12 months
+            if start_of_month==self.start_date:
+                min_period=self.plans['bill_period'].min()
+                plans_to_use =  self.plans[self.plans['bill_period']==min_period]
 
-        new_customer.pick_initial_plan(plans_to_use, self.add_ons)
+        new_customer.pick_initial_plan(plans_to_use, self.add_ons, available_periods)
 
         # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)

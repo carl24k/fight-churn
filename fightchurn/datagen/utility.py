@@ -211,7 +211,7 @@ class UtilityModel:
                     current_limit=plans.iloc[current_plan][limited]
                     max_limit=plans[limited].max()
                     customer_rate = customer.get_behavior_rate(limited)
-                    if customer_rate>= 0.66* current_limit and max_limit>current_limit:
+                    if customer_rate>= 0.5* current_limit and max_limit>current_limit:
                         near_limit = limited
                         break
 
@@ -228,8 +228,8 @@ class UtilityModel:
             if not changed_plan and 'bill_period' in plans.columns.values:
                 # upgrade to a plan with same limits and a longer billing period
                 current_period = customer.bill_period
-                max_period = plans['bill_period'].max()
-                if current_period < max_period:
+                max_period_avail = plans['bill_period'].max()
+                if current_period < max_period_avail and current_period < customer.max_bill_period:
                     first_limit = plans.columns.values[2]
                     same_limit_plans = plans[plans[first_limit]==customer.limits[first_limit]]
                     # the order is random - so customer could go to any higher period plan
@@ -269,7 +269,7 @@ class UtilityModel:
                 near_limit = False
                 for limited in add_on[1].index.values[3:]:
                     customer_rate = customer.get_behavior_rate(limited)
-                    if customer_rate > 0.66*customer.limits[limited] and add_on[1].loc[limited]>0:
+                    if customer_rate > 0.5*customer.limits[limited] and add_on[1].loc[limited]>0:
                         near_limit = True
                         break
                 if not near_limit:

@@ -78,6 +78,7 @@ class Customer:
         self.mrr=None
         self.discount=0.0
         self.bill_period=1
+        self.max_bill_period=None
         self.base_mrr=None
         self.plan=None
         self.add_ons = pd.DataFrame()
@@ -139,17 +140,24 @@ class Customer:
         else:
             return None
 
-    def pick_initial_plan(self, plans, add_ons):
+    def pick_initial_plan(self, plans, add_ons, bill_periods=None):
+
+        if bill_periods is not None:
+            self.max_bill_period=np.random.choice(bill_periods)
+            plans_to_use = plans[plans['bill_period'] <= self.max_bill_period]
+        else:
+            plans_to_use = plans
+
         if plans.shape[1] < 3:
-            choice_index = np.random.choice(range(len(plans)))
+            choice_index = np.random.choice(range(len(plans_to_use)))
         else:
             # Customer can pick between plans for which its expected number of users
             # is at least 1/3 the plan limit and at most 3x the plan limit
             eligible_plans = []
-            for plan_index in range(0,len(plans)):
+            for plan_index in range(0,len(plans_to_use)):
                 is_eligible = False
-                for limited in plans.columns.values[2:]:
-                    plan_limit = plans.iloc[plan_index][limited]
+                for limited in plans_to_use.columns.values[2:]:
+                    plan_limit = plans_to_use.iloc[plan_index][limited]
                     customer_rate = self.get_behavior_rate(limited)
                     min_rate = 0.33*plan_limit if plan_index >0 else 0 # everyone is eligible_plans for first plan
                     max_rate = 3.0  * plan_limit
@@ -164,7 +172,8 @@ class Customer:
             else:
                 choice_index = np.random.choice(eligible_plans)
 
-        self.set_plan(plans,choice_index)
+
+        self.set_plan(plans_to_use,choice_index)
         if len(add_ons)>0:
             for add_on in add_ons.iterrows():
                 if random.uniform(0,1) <= add_on[1]['prob']:
@@ -172,7 +181,7 @@ class Customer:
                         self.add_ons=pd.DataFrame([add_on[1]])
                     else:
                         self.add_ons=self.add_ons.append(add_on[1])
-        self.add_add_ons(plans)
+        self.add_add_ons(plans_to_use)
 
 
     def set_plan(self,plans,plan_idx=None, plan_name=None):
