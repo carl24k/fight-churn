@@ -131,22 +131,16 @@ class UtilityModel:
         :return:
         '''
         contrib_ratios = event_counts / self.behave_means
-
-        if isinstance(customer.satisfaction_propensity, np.ndarray):
-            assert customer.satisfaction_propensity.shape == contrib_ratios.shape
-            contrib_ratios = contrib_ratios * customer.satisfaction_propensity
-
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
-        mrr_utility = customer.mrr* self.mrr_utility_cost * customer.monetary_satisfaction
+        mrr_utility = customer.mrr* self.mrr_utility_cost
         utility_contribs =  np.append(utility_contribs,mrr_utility)
         utility = np.sum(utility_contribs)
 
-        if isinstance(customer.satisfaction_propensity,float):
-            if customer.satisfaction_propensity != 1.0:
-                multiplier = customer.satisfaction_propensity if utility > 0.0  else (1.0/customer.satisfaction_propensity)
-            else:
-                multiplier = 1.0
-            utility *= multiplier
+        if customer.satisfaction_propensity != 1.0:
+            multiplier = customer.satisfaction_propensity if utility > 0.0  else (1.0/customer.satisfaction_propensity)
+        else:
+            multiplier = 1.0
+        utility *= multiplier
 
         customer.current_utility = utility
         customer.utility_contribs = utility_contribs

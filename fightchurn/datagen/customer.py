@@ -12,8 +12,8 @@ import os
 
 
 class Customer:
-    COMPLEX_PROPENSITY_SCALE=3.0
-    COMPLEX_PROPENSITY_BASE=2.0
+    SATISFACTION_PROPENSITY_SCALE=1.5
+    SATISFACTION_PROPENSITY_BASE=2.0
     DISCOUNT_PROBABILITY = 0.5
     MIN_DISCOUNT = 0.05
     MAX_DISCOUNT = 0.5
@@ -21,7 +21,7 @@ class Customer:
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
-    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None,complex_satisfaction=False,
+    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None,
                  min_age=12, max_age=82, age_satisfy_coef=0.5):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
@@ -84,22 +84,12 @@ class Customer:
         self.add_ons = pd.DataFrame()
         self.limits= {}
 
-        if not complex_satisfaction:
-            if satisfaction is None:
-                self.satisfaction_propensity = np.power(2.0, random.uniform(-1.5, 1.5) + self.age_satisfaction_coef )
-            else:
-                self.satisfaction_propensity = satisfaction
-            self.monetary_satisfaction=1.0
+        if satisfaction is None:
+            self.satisfaction_propensity = np.power(Customer.SATISFACTION_PROPENSITY_BASE,
+                                                    random.uniform(-Customer.SATISFACTION_PROPENSITY_SCALE, Customer.SATISFACTION_PROPENSITY_SCALE) \
+                                                    + self.age_satisfaction_coef )
         else:
-            nrand = len(self.behavior_rates)
-            if self.users is not None:nrand = nrand+1
-            if satisfaction is None:
-                self.satisfaction_propensity = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(low=-Customer.COMPLEX_PROPENSITY_SCALE,
-                                                                            high=Customer.COMPLEX_PROPENSITY_SCALE, size=nrand) + self.age_satisfaction_coef )
-            else:
-                self.satisfaction_propensity = [satisfaction]*nrand
-            self.monetary_satisfaction = np.power(Customer.COMPLEX_PROPENSITY_BASE, random.uniform(-Customer.COMPLEX_PROPENSITY_SCALE, Customer.COMPLEX_PROPENSITY_SCALE) + self.age_satisfaction_coef )
-
+            self.satisfaction_propensity = satisfaction
         self.subscriptions=[]
         self.events=[]
         self.current_utility = None

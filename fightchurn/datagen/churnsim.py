@@ -45,7 +45,6 @@ class ChurnSimulation:
         self.monthly_growth_rate = args.growth_rate
         self.devmode= args.dev
         self.n_parallel = args.n_parallel
-        self.complex_sat = args.complex
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name)
@@ -63,7 +62,7 @@ class ChurnSimulation:
         self.population_percents = pd.read_csv(pop_file, index_col=0)
 
         for version in self.population_percents.index.values:
-            behave_mod=FatTailledBehaviorModel(self.model_name, complex_sat=self.complex_sat, random_seed= args.random_seed, version= version)
+            behave_mod=FatTailledBehaviorModel(self.model_name, random_seed= args.random_seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
@@ -396,7 +395,6 @@ def churn_args(parse_command_line=True):
     parser.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
     parser.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
     parser.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
-    parser.add_argument("--complex", type=bool, help="Flag to use complex satisfaction", default=False)
     parser.add_argument("--force", type=bool, help="Flag to force over-write old data", default=False)
     parser.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
     parser.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
