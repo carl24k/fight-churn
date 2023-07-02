@@ -1,0 +1,16 @@
+plan,mrr,bill_period,users,schedule_meeting,meeting,search
+starter_mthly,100,1,5,0,0,0
+basic_mthly,200,1,10,0,0,10
+standard_mthly,500,1,25,0,0,20
+advanced_mthly,1000,1,50,0,0,30
+premier_mthly,2000,1,100,0,0,50
+starter_biann,95,6,5,0,0,0
+basic_biann,190,6,10,0,0,10
+standard_biann,475,6,25,0,0,20
+advanced_biann,950,6,50,0,0,30
+premier_biann,1900,6,100,0,0,50
+starter_annual,90,12,5,0,0,0
+basic_annual,180,12,10,0,0,10
+standard_annual,450,12,25,0,0,20
+advanced_annual,900,12,50,0,0,30
+premier_annual,1800,12,100,0,0,50
