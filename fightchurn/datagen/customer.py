@@ -12,17 +12,11 @@ import os
 
 
 class Customer:
-    SATISFACTION_PROPENSITY_SCALE=1.5
-    SATISFACTION_PROPENSITY_BASE=2.0
-    DISCOUNT_PROBABILITY = 0.5
-    MIN_DISCOUNT = 0.05
-    MAX_DISCOUNT = 0.5
     date_multipliers = {}
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
-    def __init__(self,behavior_rates,satisfaction=None,channel_name='NA',start_of_month=None,country=None,
-                 min_age=12, max_age=82, age_satisfy_coef=0.5):
+    def __init__(self,behavior_rates,start_of_month,args,channel_name='NA'):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -42,6 +36,7 @@ class Customer:
 
         self.behavior_rates = behavior_rates
         self.behavior_rates['mean_value'] = None
+        self.args=args
 
 
         for valued_behavior in Customer.get_valued_behaviors(self.behavior_rates['behavior'].values):
@@ -62,10 +57,10 @@ class Customer:
         self.behavior_rates['daily_rate'] = (1.0/30.0)*self.behavior_rates['monthly_rate']
         self.channel=channel_name
 
-        age_range = max_age - min_age
+        age_range =self.args.max_age - self.args.min_age
         avg_age = age_range/2.0
         if start_of_month:
-            self.age=random.uniform(min_age,max_age)
+            self.age=random.uniform(self.args.min_age,self.args.max_age)
             self.date_of_birth = start_of_month + relativedelta.relativedelta(years=-int(self.age),
                                                                               months=-int( (self.age % 1)*12 ),
                                                                               days=-random.uniform(1,30))
@@ -73,8 +68,8 @@ class Customer:
             self.date_of_birth=None
             self.age = avg_age
 
-        self.age_satisfaction_coef = age_satisfy_coef * (avg_age - self.age)/age_range
-        self.country=country
+        self.age_satisfaction_coef = self.args.age_satisfy * (avg_age - self.age)/age_range
+        self.country="NA"
         self.mrr=None
         self.discount=0.0
         self.bill_period=1
@@ -84,12 +79,10 @@ class Customer:
         self.add_ons = pd.DataFrame()
         self.limits= {}
 
-        if satisfaction is None:
-            self.satisfaction_propensity = np.power(Customer.SATISFACTION_PROPENSITY_BASE,
-                                                    random.uniform(-Customer.SATISFACTION_PROPENSITY_SCALE, Customer.SATISFACTION_PROPENSITY_SCALE) \
-                                                    + self.age_satisfaction_coef )
-        else:
-            self.satisfaction_propensity = satisfaction
+        self.satisfaction_propensity = np.power(self.args.satisfy_base,
+                                                random.uniform(-self.args.satisfy_scale, self.args.satisfy_scale) \
+                                                + self.age_satisfaction_coef )
+
         self.subscriptions=[]
         self.events=[]
         self.current_utility = None
@@ -180,8 +173,9 @@ class Customer:
         else:
             self.plan = plan_name
         # 50% chance of a discount as low as 50%
-        if np.random.uniform(0, 1) <= Customer.DISCOUNT_PROBABILITY:
-            self.discount = 0.05 * np.round(np.random.uniform(Customer.MIN_DISCOUNT,Customer.MAX_DISCOUNT)/0.05)
+        if np.random.uniform(0, 1) <= self.args.discount_prob:
+            # discounts come in multiples of the min, e.g. 1%, 2%, 5% - not any old value
+            self.discount = self.args.min_discount * np.round(np.random.uniform(self.args.min_discount,self.args.max_discount)/0.05)
         else:
             self.discount=0.0
         self.mrr = np.round(plans.loc[self.plan,'mrr']* (1.0-self.discount))

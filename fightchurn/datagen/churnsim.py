@@ -77,8 +77,6 @@ class ChurnSimulation:
         else:
             self.add_ons = pd.DataFrame()
         self.util_mod.setExpectations(self.behavior_models,self.population_percents)
-        if self.devmode:
-            self.util_mod.checkTransitionRates(self.behavior_models, self.population_percents, self.plans)
         self.population_picker = np.cumsum(self.population_percents)
 
         self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
@@ -148,8 +146,7 @@ class ChurnSimulation:
         '''
         # customer_model = self.pick_customer_model()
         customer_model = np.random.choice(self.model_list,p=self.population_percents['pcnt'])
-        new_customer=customer_model.generate_customer(start_of_month,min_age=self.min_age,
-                                                      max_age=self.max_age,age_satisfy_coef=self.age_satisfaction_scale)
+        new_customer=customer_model.generate_customer(start_of_month,args=args)
 
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
@@ -390,19 +387,34 @@ def run_churn_simulation(args):
 def churn_args(parse_command_line=True):
     parser = argparse.ArgumentParser()
     # Default arguments
+    parser.add_argument("--random_seed", type=int, help="Seed for random")
     parser.add_argument("--model", type=str, help="The name of the schema", default='socialnet7')
     parser.add_argument("--start_date", type=str, help="The name of the schema", default='2020-01-01')
     parser.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
-    parser.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
-    parser.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
+
     parser.add_argument("--force", type=bool, help="Flag to force over-write old data", default=False)
     parser.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
     parser.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
+
+    parser.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
+    parser.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
+    parser.add_argument("--acausal_churn", type=float, help="Churn rate for no reason", default=0.0)
+
+    parser.add_argument("--satisfy_scale", type=float, help="Random satisfaction scaling factor", default=1.5)
+    parser.add_argument("--satisfy_base", type=float, help="Random satisfaction scaling base", default=2.0)
+
     parser.add_argument("--min_age", type=int, help="Minimum customer age", default=12)
     parser.add_argument("--max_age", type=int, help="Maximum customer age", default=82)
     parser.add_argument("--age_satisfy", type=float, help="Age satisfaction scacling coefficient", default=0.5)
-    parser.add_argument("--random_seed", type=int, help="Seed for random")
-    parser.add_argument("--acausal_churn", type=float, help="Churn rate for no reason", default=0.0)
+
+
+    parser.add_argument("--min_discount", type=float, help="Minimum discount", default=0.05)
+    parser.add_argument("--max_discount", type=float, help="Maximum discount", default=0.5)
+    parser.add_argument("--discount_prob", type=float, help="Discount Probability", default=0.5)
+
+    parser.add_argument("--weekday_scale", type=float, help="Action rate scaling for weekedays", default=0.8)
+    parser.add_argument("--weekend_scale", type=float, help="Action rate scaling for weekends", default=1.2)
+
 
     if parse_command_line:
         # actually parse command line

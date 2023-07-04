@@ -21,7 +21,7 @@ def is_pos_def(x):
 
 class BehaviorModel:
 
-    def generate_customer(self):
+    def generate_customer(self,start_of_month, args):
         '''
         This is the main result expected of the behaviora model: produce customers that can be simulated.
         Implemented by sub-classes, so this definition serves as an interface definition.
@@ -118,17 +118,18 @@ class GaussianBehaviorModel(BehaviorModel):
     def behave_var(self):
         return np.diagonal(self.behave_cov)
 
-    # def generate_customer(self):
-    #     '''
-    #     Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
-    #     gaussian distribution.
-    #     :return: a Custoemr object
-    #     '''
-    #     customer_rates=np.random.multivariate_normal(mean=self.behave_means,cov=self.behave_cov)
-    #     customer_rates=customer_rates.clip(min=self.min_rate) # clip : no negative rates!
-    #     new_customer= Customer( pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}))
-    #     # print(customer_rates)
-    #     return new_customer
+    def generate_customer(self,start_of_month, args):
+        '''
+        Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
+        gaussian distribution.
+        :return: a Custoemr object
+        '''
+        customer_rates=np.random.multivariate_normal(mean=self.behave_means,cov=self.behave_cov)
+        customer_rates=customer_rates.clip(min=self.min_rate) # clip : no negative rates!
+        new_customer= Customer( pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}),
+                                start_of_month, args)
+        # print(customer_rates)
+        return new_customer
 
 
 class FatTailledBehaviorModel(GaussianBehaviorModel):
@@ -152,7 +153,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
     def behave_var(self):
         return self.exp_fun( np.diagonal(self.behave_cov))
 
-    def generate_customer(self,start_of_month,**kwargs):
+    def generate_customer(self,start_of_month,args):
         '''
         Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
         gaussian distribution.
@@ -165,6 +166,6 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         if self.behave_maxs is not None:
             customer_rates = customer_rates.clip(max=self.behave_maxs)
         new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates.values}),
-                               channel_name=self.version,start_of_month=start_of_month,**kwargs)
+                               start_of_month=start_of_month,args=args,channel_name=self.version)
         # print(customer_rates)
         return new_customer

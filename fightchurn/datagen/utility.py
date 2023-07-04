@@ -85,42 +85,6 @@ class UtilityModel:
 
         self.expected_contributions = self.behave_means * self.utility_weights.values
 
-    def checkTransitionRates(self, bemodDict, model_weights, plans):
-        # Make a single weighted average covariance matrix
-        # behave_model_one = bemodDict[next(iter(bemodDict))]
-        # behave_var = np.zeros_like(behave_model_one.behave_cov)
-        # for bemod in bemodDict.values():
-        #     weight = model_weights.loc[bemod.version,'pcnt']
-        #     behave_var = behave_var + weight * bemod.behave_cov
-        #
-        # valued_behaviors = Customer.get_valued_behaviors(behave_model_one.behave_names)
-        # if len(valued_behaviors)>0:
-        #     # https://www.johndcook.com/blog/2012/10/29/product-of-normal-pdfs/
-        #
-        # # Volatility of Utility
-        # ex_util_vol = np.matmul(np.transpose(self.utility_weights.values), np.matmul(behave_var,self.utility_weights.values))
-        # # If users is specified, the covariance does not reflect it
-        # ex_util_vol = ex_util_vol * self.avg_n_user
-        # ex_util_vol = np.sqrt(np.dot(behave_var, self.utility_weights.values))[0]
-        # Temporary Customer
-        temp_customer = Customer( pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': self.behave_means}), satisfaction=1.0)
-        temp_customer.mrr = plans['mrr'].mean()
-        expected_utility = self.utility_function(self.behave_means, temp_customer)
-        print(f'Utility model expected utility={expected_utility}')
-        print(self.transition_df)
-        print(f'\tExpected churn/down/up prob:')
-        util_series = np.linspace(np.round(expected_utility-5*abs(expected_utility)),np.round(expected_utility+5*abs(expected_utility)),20)
-        expected_df=pd.DataFrame({'utility':util_series,
-                                    'churn' : [self.churn_probability(u) for u in util_series],
-                                    'down' : [self.downgrade_probability(u) for u in util_series],
-                                    'up' : [self.uprade_probability(u) for u in util_series]})
-        print(expected_df)
-        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
-        os.makedirs(save_path, exist_ok=True)
-        expected_df.to_csv(os.path.join(save_path, f'{self.name}_expected_probabilities.csv'))
-
-        if input("okay? (enter y to proceed) ") != 'y':
-            exit(0)
 
     def utility_function(self,event_counts,customer):
         '''
