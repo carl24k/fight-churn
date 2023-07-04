@@ -134,8 +134,8 @@ class GaussianBehaviorModel(BehaviorModel):
 
 class FatTailledBehaviorModel(GaussianBehaviorModel):
 
-    def __init__(self,name,random_seed=None,version=None):
-        self.exp_base = 1.6
+    def __init__(self,name,exp_base, random_seed=None,version=None):
+        self.exp_base = exp_base
         self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
         self.exp_fun = lambda x: np.power(self.exp_base,x)
 

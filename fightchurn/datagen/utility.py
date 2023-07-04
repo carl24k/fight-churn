@@ -10,7 +10,7 @@ from fightchurn.datagen.customer import Customer
 
 class UtilityModel:
 
-    def __init__(self,name):
+    def __init__(self,name, contrib_scale):
         '''
         This class calculates the churn probability for a customer based on their event counts.  Its called a "Utility
         Model" to mean utility in the economic sense: How much a good or service to satisfies one or more needs or
@@ -31,6 +31,7 @@ class UtilityModel:
         :param behavior_model: The behavior model that this utility function works withy
         '''
         self.name=name
+        self.contrib_scale = contrib_scale
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
         util_path = local_dir + name+'_utility.csv'
         util_df=pd.read_csv(util_path,index_col=0)
@@ -95,7 +96,7 @@ class UtilityModel:
         :return:
         '''
         contrib_ratios = event_counts / self.behave_means
-        utility_contribs = self.expected_contributions * (1.0 - np.exp(-2.0*contrib_ratios))
+        utility_contribs = self.expected_contributions * (1.0 - np.exp(-self.contrib_scale*contrib_ratios))
         mrr_utility = customer.mrr* self.mrr_utility_cost
         utility_contribs =  np.append(utility_contribs,mrr_utility)
         utility = np.sum(utility_contribs)

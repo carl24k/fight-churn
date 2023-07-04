@@ -47,7 +47,7 @@ class ChurnSimulation:
         self.n_parallel = args.n_parallel
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
-        self.util_mod=UtilityModel(self.model_name)
+        self.util_mod=UtilityModel(self.model_name,contrib_scale=self.args.util_contrib_scale)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
         self.min_age = args.min_age
@@ -62,7 +62,8 @@ class ChurnSimulation:
         self.population_percents = pd.read_csv(pop_file, index_col=0)
 
         for version in self.population_percents.index.values:
-            behave_mod=FatTailledBehaviorModel(self.model_name, random_seed= args.random_seed, version= version)
+            behave_mod=FatTailledBehaviorModel(self.model_name, exp_base=self.args.behave_exp_base,
+                                               random_seed= args.random_seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
@@ -414,6 +415,9 @@ def churn_args(parse_command_line=True):
 
     parser.add_argument("--weekday_scale", type=float, help="Action rate scaling for weekedays", default=0.8)
     parser.add_argument("--weekend_scale", type=float, help="Action rate scaling for weekends", default=1.2)
+
+    parser.add_argument("--behave_exp_base", type=float, help="Base of exponent used in behavior model", default=1.6)
+    parser.add_argument("--util_contrib_scale", type=float, help="Scaling factor for utility contributions", default=2.0)
 
 
     if parse_command_line:
