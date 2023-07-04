@@ -219,7 +219,6 @@ class Customer:
                 min_scale, max_scale = Customer.get_min_max_dow_scale(args.weekend_scale)
             else:
                 min_scale, max_scale = Customer.get_min_max_dow_scale(args.weekday_scale)
-                # multiplier = random.uniform(0.825,1.0+self.args.weekday_scale)
             multiplier = random.uniform(min_scale, max_scale)
             Customer.date_multipliers[the_date] = multiplier
         return Customer.date_multipliers[the_date]
