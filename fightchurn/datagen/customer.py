@@ -217,7 +217,7 @@ class Customer:
         if the_date not in Customer.date_multipliers:
             if the_date.weekday() >= 4:  # Friday - Sun
                 min_scale, max_scale = Customer.get_min_max_dow_scale(args.weekend_scale)
-            else:
+            else:  # Monday-Thursday
                 min_scale, max_scale = Customer.get_min_max_dow_scale(args.weekday_scale)
             multiplier = random.uniform(min_scale, max_scale)
             Customer.date_multipliers[the_date] = multiplier
