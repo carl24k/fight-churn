@@ -198,6 +198,33 @@ class Customer:
                 else:
                     raise ValueError(f'Add on raises a limit {limited} that was not found')
 
+
+    @staticmethod
+    def get_min_max_dow_scale(scale_param):
+        assert -1.0 <= scale_param < 1.0
+        if scale_param > 0:
+            min_scale = 1 - 0.1 * scale_param
+            max_scale = 1 + scale_param
+        else:
+            min_scale = 1 + scale_param
+            max_scale = 1  - 0.1 * scale_param
+        return min_scale, max_scale
+
+
+    @staticmethod
+    def get_day_multiplier(the_date,args):
+        # Set a multiplier for this date
+        if the_date not in Customer.date_multipliers:
+            if the_date.weekday() >= 4:  # Friday - Sun
+                min_scale, max_scale = Customer.get_min_max_dow_scale(args.weekend_scale)
+            else:
+                min_scale, max_scale = Customer.get_min_max_dow_scale(args.weekday_scale)
+                # multiplier = random.uniform(0.825,1.0+self.args.weekday_scale)
+            multiplier = random.uniform(min_scale, max_scale)
+            Customer.date_multipliers[the_date] = multiplier
+        return Customer.date_multipliers[the_date]
+
+
     def generate_events(self,start_date,end_date):
         '''
         Generate a sequence of events at the customers daily rates.  Each count for an event on a day is droing from
@@ -220,28 +247,18 @@ class Customer:
         limit_counts = {b : 0 for b in self.limits.keys()}
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
-            # Set a multiplier for this date
-            if the_date in Customer.date_multipliers:
-                multiplier = Customer.date_multipliers[the_date]
-            else:
-                # TODO : should be an option
-                if the_date.weekday() >= 4:
-                    multiplier = random.uniform(1.00,1.2)
-                else:
-                    multiplier = random.uniform(0.825,1.025)
-                Customer.date_multipliers[the_date]=multiplier
-
+            dow_multiplier = Customer.get_day_multiplier(the_date,self.args)
             if self.users is None:
                 todays_users = 1
             else:
-                todays_users = int(round(multiplier*random.poisson(self.users)))
+                todays_users = int(round(dow_multiplier*random.poisson(self.users)))
                 if 'users' in self.limits:
                     todays_users = min(todays_users,self.limits['users'])
 
             for row in  self.behavior_rates.iterrows():
                 rate = row[1]['daily_rate']
                 behavior_name = row[1]['behavior']
-                new_count= int(round(multiplier*random.poisson(rate) * todays_users))
+                new_count= int(round(dow_multiplier*random.poisson(rate) * todays_users))
                 if behavior_name in self.limits:
                     # print(new_count, self.limits, limit_counts)
                     new_count = min(new_count, self.limits[behavior_name]-limit_counts[behavior_name])
