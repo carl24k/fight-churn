@@ -165,7 +165,7 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         customer_rates = np.maximum(customer_rates-0.667,0.333)
         if self.behave_maxs is not None:
             customer_rates = customer_rates.clip(max=self.behave_maxs)
-        new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates.values}),
+        new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}),
                                start_of_month=start_of_month,args=args,channel_name=self.version)
         # print(customer_rates)
         return new_customer

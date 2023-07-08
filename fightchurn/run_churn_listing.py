@@ -349,7 +349,8 @@ def run_listing(chapter : int = 2, listing : Union[int,List[int]] = 1, version :
                      listing=listing,
                      version=version,
                      schema=schema,
-                     insert=insert)
+                     insert=insert,
+                     n_parallel=1)
     run_churn_listing_from_args(args)
 
 

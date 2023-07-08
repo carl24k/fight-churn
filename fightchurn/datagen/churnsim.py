@@ -69,12 +69,19 @@ class ChurnSimulation:
 
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
+        self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
+
         plans_path = local_dir +self.model_name + '_plans.csv'
         self.plans = pd.read_csv(plans_path,index_col=0)
-        self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR
+        os.makedirs(self.save_path, exist_ok=True)
+        copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
+
+        # self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR - wait, why?
         add_on_file = local_dir +self.model_name + '_addons.csv'
         if os.path.exists(add_on_file):
             self.add_ons = pd.read_csv(add_on_file)
+            copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
+            copyfile(add_on_file, copy_path)
         else:
             self.add_ons = pd.DataFrame()
         self.util_mod.setExpectations(self.behavior_models,self.population_percents)
@@ -85,12 +92,7 @@ class ChurnSimulation:
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_sub.csv')
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
 
-        self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
-        os.makedirs(self.save_path, exist_ok=True)
-        copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
         copyfile(plans_path, copy_path)
-        copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
-        copyfile(add_on_file, copy_path)
         arg_path = os.path.join(self.save_path, f'{self.model_name}_args.json')
         with open(arg_path, 'w') as f:
             json.dump(args.__dict__, f, indent=2)
@@ -147,7 +149,7 @@ class ChurnSimulation:
         '''
         # customer_model = self.pick_customer_model()
         customer_model = np.random.choice(self.model_list,p=self.population_percents['pcnt'])
-        new_customer=customer_model.generate_customer(start_of_month,args=args)
+        new_customer=customer_model.generate_customer(start_of_month,args=self.args)
 
         customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
         new_customer.country = customer_country
@@ -194,8 +196,8 @@ class ChurnSimulation:
             month_event_count = new_customer.generate_events(this_month,next_month)
             _ = self.util_mod.utility_function(month_event_count,new_customer)
             churn_intent = False
-            if args.acausal_churn > 0:
-                if random.uniform(0,1) < args.acausal_churn:
+            if self.args.acausal_churn > 0:
+                if random.uniform(0,1) < self.args.acausal_churn:
                     churn_intent = True
             if not churn_intent:
                 churn_intent =self.util_mod.simulate_churn(month_event_count,new_customer)
@@ -237,7 +239,7 @@ class ChurnSimulation:
                 limit_col = self.plans.columns.values[2]
                 return  limit_col,  self.plans.loc[plan,limit_col]
 
-        if plan in self.add_ons['plan'].values:
+        if len(self.add_ons)> 0 and plan in self.add_ons['plan'].values:
             if self.add_ons.shape[1]>3:
                 add_on = self.add_ons[self.add_ons['plan']==plan]
                 for limit_col in self.add_ons.columns.values[3:]:
