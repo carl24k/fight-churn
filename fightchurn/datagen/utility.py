@@ -59,7 +59,7 @@ class UtilityModel:
         copyfile(transition_path, copy_path)
 
     def setExpectations(self,bemodDict,model_weights):
-        assert sum(model_weights['pcnt'])==1.0, "Model weights should sum to 1.0"
+        assert sum(model_weights.values())==1.0, "Model weights should sum to 1.0"
         n_behaviors = len(self.behave_names)
         self.behave_means = np.zeros(n_behaviors)
         for bemod in bemodDict.values():
@@ -67,7 +67,7 @@ class UtilityModel:
             value_behaviors = {v: Customer.get_behavior_under_value(v,bemod.behave_names) for v in Customer.get_valued_behaviors(bemod.behave_names) }
             assert n_behaviors == len(underlying_behaviors)
             assert all(self.behave_names == underlying_behaviors)
-            weight = model_weights.loc[bemod.version,'pcnt']
+            weight = model_weights[bemod.version]
 
             # behaviors with values multiply average number times average value
             model_means = bemod.behave_means[underlying_behaviors]

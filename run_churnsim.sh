@@ -36,7 +36,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py --model $SCHEMA --n_parallel 5
+../../venv/bin/python churnsim.py model=$SCHEMA n_parallel=5
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate

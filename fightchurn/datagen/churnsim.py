@@ -55,15 +55,12 @@ class ChurnSimulation:
         self.min_age = args.min_age
         self.max_age = args.max_age
         self.age_satisfaction_scale = args.age_satisfy
-        # self.age_range = self.max_age-self.min_age
-        # self.avg_age = (self.max_age+self.min_age)/20
 
         self.behavior_models = {}
         self.model_list = []
-        pop_file = os.path.join(local_dir, f"{self.model_name}_population.csv")
-        self.population_percents = pd.read_csv(pop_file, index_col=0)
+        self.population_percents = self.args.population
 
-        for version in self.population_percents.index.values:
+        for version in self.population_percents.keys():
             behave_mod=FatTailledBehaviorModel(self.model_name, exp_base=self.args.behave_exp_base,
                                                random_seed= args.random_seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
@@ -87,9 +84,8 @@ class ChurnSimulation:
         else:
             self.add_ons = pd.DataFrame()
         self.util_mod.setExpectations(self.behavior_models,self.population_percents)
-        self.population_picker = np.cumsum(self.population_percents)
 
-        self.country_lookup = pd.read_csv(local_dir +self.model_name + '_country.csv')
+        self.country_lookup=self.args.country
 
         self.tmp_sub_file_name = os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_sub.csv')
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
@@ -129,13 +125,6 @@ class ChurnSimulation:
         except OSError:
             pass
 
-    def pick_customer_model(self):
-        choice = random.uniform(0,1)
-        for m in range(0,self.population_picker.shape[0]):
-            if choice <= self.population_picker['percent'][m]:
-                version_name=self.population_picker.index.values[m]
-                return self.behavior_models[version_name]
-
 
     def simulate_customer(self, start_of_month):
         '''
@@ -148,11 +137,11 @@ class ChurnSimulation:
         :param start_of_month:
         :return: the new customer object it contains the events and subscriptions
         '''
-        # customer_model = self.pick_customer_model()
-        customer_model = np.random.choice(self.model_list,p=self.population_percents['pcnt'])
+        customer_model = self.behavior_models[np.random.choice(list(self.population_percents.keys()),
+                                          p= list(self.population_percents.values()))]
         new_customer=customer_model.generate_customer(start_of_month,args=self.args)
 
-        customer_country = np.random.choice(self.country_lookup['country'],p=self.country_lookup['pcnt'])
+        customer_country = np.random.choice(list(self.country_lookup.keys()),p=list(self.country_lookup.values()))
         new_customer.country = customer_country
 
         plans_to_use = self.plans
