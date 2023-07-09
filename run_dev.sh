@@ -34,13 +34,13 @@ export CHURN_OUT_DIR
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
-#cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
-#../../venv/bin/python churndb.py $SCHEMA
-#../../venv/bin/python churnsim.py --model $SCHEMA  --n_parallel 5 --init_customers 2000 --start_date 2022-01-01 --end_date 2024-01-01  --growth_rate 0.04 --acausal_churn 0.02  --min_age 0 --max_age 10 --age_satisfy 3 --weekday_scale 0.15 --weekend_scale -0.2
-#cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
-#
-## churn rate
-#../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 2 --listing 6 7 8
+cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
+../../venv/bin/python churndb.py $SCHEMA
+../../venv/bin/python churnsim.py --model $SCHEMA  --n_parallel 5 --init_customers 2000 --start_date 2022-01-01 --end_date 2024-01-01  --growth_rate 0.04 --acausal_churn 0.02  --min_age 0 --max_age 10 --age_satisfy 3 --weekday_scale 0.15 --weekend_scale -0.2 --discount_prob 0.5
+cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
+
+# churn rate
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 2 --listing 6 7 8
 
 # simple counts
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 1 2

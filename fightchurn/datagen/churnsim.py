@@ -413,7 +413,7 @@ def churn_args(parse_command_line=True):
 
     parser.add_argument("--min_discount", type=float, help="Minimum discount", default=0.05)
     parser.add_argument("--max_discount", type=float, help="Maximum discount", default=0.5)
-    parser.add_argument("--discount_prob", type=float, help="Discount Probability", default=0.5)
+    parser.add_argument("--discount_prob", type=float, help="Discount Probability", default=0.0)
 
     parser.add_argument("--weekday_scale", type=float, help="Action rate scaling for weekedays", default=-0.2)
     parser.add_argument("--weekend_scale", type=float, help="Action rate scaling for weekends", default=0.2)
