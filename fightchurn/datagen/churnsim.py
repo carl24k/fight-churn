@@ -3,17 +3,19 @@ from collections import deque
 from datetime import date, timedelta, datetime
 from dateutil import parser
 from dateutil.relativedelta import *
+import hydra
+from omegaconf import DictConfig, OmegaConf
 import random
 from postgres import Postgres
 from math import ceil
 from shutil import copyfile
+import yaml
 
 import argparse
 from filelock import FileLock
 import os
 
 from joblib import Parallel, delayed
-import json
 import glob
 import pandas as pd
 import numpy as np
@@ -93,9 +95,8 @@ class ChurnSimulation:
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
 
         copyfile(plans_path, copy_path)
-        arg_path = os.path.join(self.save_path, f'{self.model_name}_args.json')
-        with open(arg_path, 'w') as f:
-            json.dump(args.__dict__, f, indent=2)
+        arg_path = os.path.join(self.save_path, f'{self.model_name}_conf.yaml')
+        OmegaConf.save(self.args,arg_path)
 
 
     def con_string(self):
@@ -381,11 +382,15 @@ class ChurnSimulation:
         self.remove_tmp_files()
         self.sim_rate_debug_query()
 
-def run_churn_simulation(args):
-    if args.random_seed is not None:
-        random.seed(args.random_seed) # for random
-    churn_sim = ChurnSimulation(args)
-    churn_sim.run_simulation(force=args.force)
+
+@hydra.main(version_base=None, config_path="conf", config_name="socialnet7")
+def run_churn_simulation(cfg : DictConfig):
+    print(OmegaConf.to_yaml(cfg))
+    if cfg.random_seed is not None:
+        random.seed(cfg.random_seed) # for random
+    churn_sim = ChurnSimulation(cfg)
+    churn_sim.run_simulation(force=cfg.force)
+
 
 def churn_args(parse_command_line=True):
     parser = argparse.ArgumentParser()
@@ -433,5 +438,5 @@ def churn_args(parse_command_line=True):
 
 if __name__ == "__main__":
 
-    args = churn_args()
-    run_churn_simulation(args)
+    # args = churn_args()
+    run_churn_simulation()

@@ -1,0 +1,36 @@
+model: 'socialnet7'
+start_date: '2020-01-01'
+end_date: '2020-06-01'
+
+# Params controlling the simulation
+force: False
+dev: False
+n_parallel: 1
+random_seed: null
+
+# Number of customers, growth and churn
+init_customers: 10000
+growth_rate: 0.1
+acausal_churn: 0.0
+
+# Customer satisfaction scaling
+satisfy_scale: 1.5
+satisfy_base: 2.0
+
+# Custome age parameters
+min_age: 12
+max_age: 82
+age_satisfy: 0.5
+
+# Discounts
+discount_prob: 0.0
+min_discount: 0.05
+max_discount: 0.5
+
+# Day of week event scaling
+weekday_scale: -0.2
+weekend_scale: 0.2
+
+# Behavioral & Utility model
+behave_exp_base: 1.6
+util_contrib_scale: 2.0
