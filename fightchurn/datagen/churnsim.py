@@ -49,7 +49,7 @@ class ChurnSimulation:
         self.n_parallel = args.n_parallel
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
-        self.util_mod=UtilityModel(self.model_name,contrib_scale=self.args.util_contrib_scale)
+        self.util_mod=UtilityModel(self.model_name,args)
         local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
         self.min_age = args.min_age

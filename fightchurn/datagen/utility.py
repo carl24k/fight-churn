@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import os
+from omegaconf import OmegaConf
 from math import log, exp
 from random import uniform
 from shutil import copyfile
@@ -10,7 +11,7 @@ from fightchurn.datagen.customer import Customer
 
 class UtilityModel:
 
-    def __init__(self,name, contrib_scale):
+    def __init__(self,name, args):
         '''
         This class calculates the churn probability for a customer based on their event counts.  Its called a "Utility
         Model" to mean utility in the economic sense: How much a good or service to satisfies one or more needs or
@@ -31,20 +32,22 @@ class UtilityModel:
         :param behavior_model: The behavior model that this utility function works withy
         '''
         self.name=name
-        self.contrib_scale = contrib_scale
-        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
-        util_path = local_dir + name+'_utility.csv'
-        util_df=pd.read_csv(util_path,index_col=0)
-        if 'users' in util_df.index.values:
-            assert util_df.index.get_loc('users')==util_df.shape[0]-1, "users should be last in utility list (if included)"
-        self.utility_weights=util_df['util']
+        self.args = args
+        self.contrib_scale =self.args.util_contrib_scale
+        self.util_df = pd.DataFrame([list(args.utility.keys()),list(args.utility.values())]).transpose().set_index(0)
+        self.util_df.columns=['util']
+        self.util_df=self.util_df.astype({'util':float})
+        if 'users' in self.util_df.index.values:
+            assert self.util_df.index.get_loc('users')==self.util_df.shape[0]-1, "users should be last in utility list (if included)"
+
+        self.utility_weights=self.util_df['util']
         self.mrr_utility_cost=self.utility_weights.loc['mrr']
         if self.mrr_utility_cost > 0:
             print(f"*** WARNING: MRR Should have a non-positive utility impact, but found {self.mrr_utility_cost}")
         self.utility_weights = self.utility_weights.drop(['mrr'],axis=0)
         self.behave_names=self.utility_weights.index.values
-        transition_path = local_dir + name+'_updownchurn.csv'
-        self.transition_df = pd.read_csv(transition_path,index_col=0)
+        self.transition_df = pd.json_normalize(OmegaConf.to_container(self.args.transition).values(),max_level=1)
+        self.transition_df.index = list(self.args.transition.keys())
 
         # Setup in setExpectations,below
         self.behave_means = None
@@ -54,9 +57,9 @@ class UtilityModel:
         save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
         os.makedirs(save_path, exist_ok=True)
         copy_path = os.path.join(save_path,  f'{name}_utility.csv')
-        copyfile(util_path, copy_path)
+        self.util_df.to_csv(copy_path)
         copy_path = os.path.join(save_path,  f'{name}_updownchurn.csv')
-        copyfile(transition_path, copy_path)
+        self.transition_df.to_csv(copy_path)
 
     def setExpectations(self,bemodDict,model_weights):
         assert sum(model_weights.values())==1.0, "Model weights should sum to 1.0"

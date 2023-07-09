@@ -35,6 +35,30 @@ weekend_scale: 0.2
 behave_exp_base: 1.6
 util_contrib_scale: 2.0
 
+# Utility of actions in this simulation
+utility:
+  post: 1
+  newfriend: 6
+  like: 0.5
+  adview: -1.5
+  dislike: -1
+  unfriend: -10
+  message: 1
+  reply: 1
+  mrr: 0
+
+transition:
+  churn:
+    scale: 0.135
+    offset: 0.5
+  upsell:
+    scale: 0.0
+    offset: 0.0
+  downsell:
+    scale: 0.0
+    offset: 0.0
+
+
 # Product channel population percents
 population:
   web: 0.15
