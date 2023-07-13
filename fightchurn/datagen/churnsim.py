@@ -427,5 +427,4 @@ def churn_args(parse_command_line=True):
 
 if __name__ == "__main__":
 
-    # args = churn_args()
     run_churn_simulation()
