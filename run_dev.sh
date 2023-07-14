@@ -83,7 +83,8 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 6 --listing 2 4 3 5
 
 # Cohorts
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19  21 23 24 25 26 28 29 30 31 32 33 34 35 36  38 39 40 41 42 43 44 45 46
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 1 --version 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19  21 23 24 25 26 28   30 31 32 33 34 35 36  38 39 40 41 42 43 44 45 46
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 5 --listing 5
 
 # XGB Fit
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6

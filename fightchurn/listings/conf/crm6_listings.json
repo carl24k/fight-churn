@@ -315,9 +315,6 @@
             "v28": {
                 "metric_to_plot": "discount"
             },
-            "v29": {
-                "metric_to_plot": "bill_period_months"
-            },
             "v30": {
                 "metric_to_plot": "mrr"
             },
@@ -378,6 +375,13 @@
         "list3": {
             "name": "metric_scores",
             "params": {}
+        },
+        "list5": {
+            "name": "fixed_cohort_plot",
+            "params": {
+                "metric_to_plot": "bill_period_months",
+                "bins" : [0, 3, 9, 15]
+            }
         }
     },
     "chap6": {
