@@ -101,6 +101,9 @@ class UtilityModel:
         contrib_ratios = event_counts / self.behave_means
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-self.contrib_scale*contrib_ratios))
         mrr_utility = customer.mrr* self.mrr_utility_cost
+        if customer.discount > 0:
+            # utility due to getting a discount: -1 so that with mrr_utility_cost this is a positive contribution
+            mrr_utility += -1* customer.mrr* self.mrr_utility_cost * customer.discount * self.args.discount_satisfy
         utility_contribs =  np.append(utility_contribs,mrr_utility)
         utility = np.sum(utility_contribs)
 

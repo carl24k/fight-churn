@@ -16,8 +16,8 @@ max_age: 10
 age_satisfy: 2
 
 # Discounts
-discount_prob: 0.5
-discount_satisfy: 2.0
+discount_prob: 0.33
+discount_satisfy: 4.0
 
 # Day of week event scaling
 weekday_scale: 0.15
