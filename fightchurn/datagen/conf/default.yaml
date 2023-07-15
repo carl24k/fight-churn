@@ -30,3 +30,9 @@ weekend_scale: 0.2
 # Behavioral & Utility model
 behave_exp_base: 1.6
 util_contrib_scale: 2.0
+
+# Stop hydra from changing dir and saving stuff
+hydra:
+  run:
+    dir: .
+  output_subdir: null

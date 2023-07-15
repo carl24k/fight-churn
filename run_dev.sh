@@ -4,7 +4,7 @@
 
 # run_churn_listing.py
 
-SCHEMA=crm5
+SCHEMA=crm6
 PYTHONUNBUFFERED=1
 CHURN_DB=churn
 CHURN_DB_USER=carl

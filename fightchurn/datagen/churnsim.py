@@ -74,6 +74,7 @@ class ChurnSimulation:
         self.plans = pd.read_csv(plans_path,index_col=0)
         os.makedirs(self.save_path, exist_ok=True)
         copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
+        copyfile(plans_path, copy_path)
 
         # self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR - wait, why?
         add_on_file = local_dir +self.model_name + '_addons.csv'
