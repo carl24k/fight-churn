@@ -349,7 +349,9 @@
                 "metric_to_plot": "mrr_per_active_user"
             },
             "v42": {
-                "metric_to_plot": "mrr_per_dollar_opp_close"
+                "metric_to_plot": "mrr_per_dollar_opp_close",
+                "exclude_zeros" : true,
+                "log_scale" : true
             },
             "v43": {
                 "metric_to_plot": "mrr_per_lead_added"
