@@ -8,7 +8,7 @@ end_date: '2024-01-01'
 # Number of customers, growth and churn
 init_customers: 2000
 growth_rate: 0.04
-acausal_churn: 0.02
+acausal_churn: 0.015
 
 # Customer age parameters
 min_age: 0
@@ -16,7 +16,8 @@ max_age: 10
 age_satisfy: 3
 
 # Discounts
-discount_prob: 0.5
+discount_prob: 0.33
+discount_satisfy: 3.0
 
 # Day of week event scaling
 weekday_scale: 0.15
@@ -28,11 +29,11 @@ utility:
   create_search: -1
   edit_search: -1
   delete_search: -1
-  win_opportunity: 0.04
+  win_opportunity: 0.4
   advance_stage: 2.0
   add_competitor: -5
   disqualify_opportunity: -5
-  lose_opportunity: -0.007
+  lose_opportunity: -0.07
   quote: 2.0
   create_opportunity: 1.0
   add_contact: 20.0
