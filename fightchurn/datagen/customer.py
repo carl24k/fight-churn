@@ -1,14 +1,14 @@
+import numpy as np
+import os
+import pandas as pd
+import tempfile
 
-from filelock import FileLock
-from datetime import date, datetime, timedelta,time
+from datetime import  datetime, timedelta,time
 from dateutil import relativedelta
+from filelock import FileLock
+from math import ceil
 from numpy import random
 from random import randrange, randint
-from math import ceil
-import tempfile
-import numpy as np
-import pandas as pd
-import os
 
 
 class Customer:

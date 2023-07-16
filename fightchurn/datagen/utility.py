@@ -1,11 +1,10 @@
-
-import pandas as pd
 import numpy as np
 import os
+import pandas as pd
+
+from math import  exp
 from omegaconf import OmegaConf
-from math import log, exp
 from random import uniform
-from shutil import copyfile
 
 from fightchurn.datagen.customer import Customer
 

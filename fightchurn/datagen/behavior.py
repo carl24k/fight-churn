@@ -1,8 +1,9 @@
 
 
-import pandas as pd
 import numpy as np
 import os
+import pandas as pd
+
 from shutil import copyfile
 
 from fightchurn.datagen.customer import Customer
