@@ -314,7 +314,7 @@ class ChurnSimulation:
         os.remove(sub_file_name)
 
 
-    def truncate_old_sim(self):
+    def truncate_old_sim(self,force):
         '''
         Removes an old simulation from the database, if it already exists for this model
         :return: True if is safe to proceed (no data or data removed); False means old data not removed
@@ -323,13 +323,13 @@ class ChurnSimulation:
 
         exists = db.one(f"SELECT exists(select schema_name FROM information_schema.schemata WHERE schema_name = '{self.model_name}')")
         if exists:
-            print('TRUNCATING *Events/Metrics & Subscriptions/Observations* in schema -> %s <-  ...' % self.model_name)
-            if input("are you sure? (enter %s to proceed) " % self.model_name) == self.model_name:
-                drop_schema(self.model_name)
-                setup_churn_db(self.model_name)
-                return True
-            else:
-                return False
+            if not force:
+                print('TRUNCATING *Events/Metrics & Subscriptions/Observations* in schema -> %s <-  ...' % self.model_name)
+                if input("are you sure? (enter %s to proceed) " % self.model_name) != self.model_name:
+                    return False
+            drop_schema(self.model_name)
+            setup_churn_db(self.model_name)
+            return True
         else:
             setup_churn_db(self.model_name)
             return True
@@ -346,7 +346,7 @@ class ChurnSimulation:
         '''
 
         # database setup
-        if not force and not self.truncate_old_sim():
+        if not self.truncate_old_sim(force):
             return
         self.remove_tmp_files()
 
@@ -382,50 +382,5 @@ def run_churn_simulation(cfg : DictConfig):
     churn_sim.run_simulation(force=cfg.force)
 
 
-def churn_args(parse_command_line=True):
-    parser = argparse.ArgumentParser()
-    # Default arguments
-    parser.add_argument("--random_seed", type=int, help="Seed for random")
-    parser.add_argument("--model", type=str, help="The name of the schema", default='socialnet7')
-    parser.add_argument("--start_date", type=str, help="The name of the schema", default='2020-01-01')
-    parser.add_argument("--end_date", type=str, help="The name of the schema", default='2020-06-01')
-
-    parser.add_argument("--force", type=bool, help="Flag to force over-write old data", default=False)
-    parser.add_argument("--dev", action="store_true", default=False,help="Dev mode: Extra debug info/options")
-    parser.add_argument("--n_parallel", type=int, help="Number of parallel cpus for simulation", default=1)
-
-    parser.add_argument("--init_customers", type=int, help="Starting customers", default=10000)
-    parser.add_argument("--growth_rate", type=float, help="New customer growth rate", default=0.1)
-    parser.add_argument("--acausal_churn", type=float, help="Churn rate for no reason", default=0.0)
-
-    parser.add_argument("--satisfy_scale", type=float, help="Random satisfaction scaling factor", default=1.5)
-    parser.add_argument("--satisfy_base", type=float, help="Random satisfaction scaling base", default=2.0)
-
-    parser.add_argument("--min_age", type=int, help="Minimum customer age", default=12)
-    parser.add_argument("--max_age", type=int, help="Maximum customer age", default=82)
-    parser.add_argument("--age_satisfy", type=float, help="Age satisfaction scacling coefficient", default=0.5)
-
-
-    parser.add_argument("--min_discount", type=float, help="Minimum discount", default=0.05)
-    parser.add_argument("--max_discount", type=float, help="Maximum discount", default=0.5)
-    parser.add_argument("--discount_prob", type=float, help="Discount Probability", default=0.0)
-
-    parser.add_argument("--weekday_scale", type=float, help="Action rate scaling for weekedays", default=-0.2)
-    parser.add_argument("--weekend_scale", type=float, help="Action rate scaling for weekends", default=0.2)
-
-    parser.add_argument("--behave_exp_base", type=float, help="Base of exponent used in behavior model", default=1.6)
-    parser.add_argument("--util_contrib_scale", type=float, help="Scaling factor for utility contributions", default=2.0)
-
-
-    if parse_command_line:
-        # actually parse command line
-        the_args, _ = parser.parse_known_args()
-    else:
-        # Just return defaults
-        the_args = parser.parse_args([])
-
-    return the_args
-
 if __name__ == "__main__":
-
     run_churn_simulation()

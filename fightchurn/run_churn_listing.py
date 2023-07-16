@@ -14,6 +14,7 @@ from fightchurn.datagen import churnsim
 from datetime import date
 from typing import List, Union
 from filelock import FileLock
+from hydra import initialize, compose
 import tempfile
 
 
@@ -382,7 +383,7 @@ def run_churn_listing_from_args(args : Namespace):
                     run_listing_from_args(vers_args)
 
 
-def run_standard_simulation(schema='socialnet7', init_customers=10000, force=False):
+def run_standard_simulation(schema='socialnet7'):
     '''
     Wrapper function to call churnsim.run_churn_simulation
     :param schema: string name of schema and simulation configuration
@@ -390,13 +391,10 @@ def run_standard_simulation(schema='socialnet7', init_customers=10000, force=Fal
     :return:
     '''
     churndb.setup_churn_db(schema)
-    args = churnsim.churn_args(parse_command_line=False)
-    argd = vars(args)
-    argd['model']=schema
-    argd['init_customers']=init_customers
-    argd['force']=force
-
-    churnsim.run_churn_simulation(args)
+    with initialize(version_base=None, config_path="datagen/conf"):
+        # config is relative to a module
+        cfg = compose(config_name=schema)
+        churnsim.run_churn_simulation(cfg)
 
 
 def run_everything(db, user,password,output_dir='../../../fight-churn-output/',init_customers=500,schema='socialnet7'):
@@ -413,7 +411,7 @@ def run_everything(db, user,password,output_dir='../../../fight-churn-output/',i
     :return:
     '''
     set_churn_environment(db, user,password,output_dir)
-    run_standard_simulation(schema=schema,init_customers=init_customers, force=True)
+    run_standard_simulation(schema=schema)
     run_churn_rates(schema)
     run_metrics(schema)
     run_dataset(schema)
