@@ -1,7 +1,6 @@
 defaults:
   - default
 
-model: 'test'
 start_date: '2020-01-01'
 end_date: '2020-06-01'
 
@@ -9,6 +8,7 @@ end_date: '2020-06-01'
 # Params to make it a quick test
 force: True
 init_customers: 500
+growth_rate: 0.01
 
 # Utility of actions in this simulation
 utility:
