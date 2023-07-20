@@ -234,7 +234,7 @@ realistic simulation of subscription, churn and event data for you to run the bo
 Code for generating artificial data to run the code is in the directory `data-generation`.  
 
 **New in 2023**: There is now a full report describing the inner workings of the churn simulation:
-* ![ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
 * It is not necessary to read the report to learn the churn fighting techniques from the book - 
   this is intended for advanced data scientists who want to create their own simulations.
 
