@@ -17,6 +17,14 @@ This page contains the most up to date setup instructions.
 
 Before you can load data or run the code you have to do some setup on your system. If you never have done this before it may seem like a lot of work, and it kind of is, but this amount of setup is routine when you begin to work with a new technology. These  setup instructions should work for most people using either shell Python, Jupyter Notebook, or an IDE, on either Mac or Windows.  That said, I must apologize because I am neither an expert in PostgreSQL nor an expert in Python, but I am about to give a lot of advice on how to setup and use these technologies - if you find I am not doing things the best way, or just not how you would have done it, please be patient.   If you want to make things better please help help out! :)
 
+## **_What's New_ : ChurnSim Report**
+
+**New in 2023**: There is now a full report describing the inner workings of the Fighting Churn 
+WIth Data churn simulation program:
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* It is not necessary to read the report to learn the churn fighting techniques from the book - 
+  the report is intended for advanced data scientists who want to create their own simulations.
+
 ## **Setup Instructions**  
 
 *WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*

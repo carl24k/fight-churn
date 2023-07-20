@@ -182,7 +182,14 @@ Setting Environment Variables user=your_user_name for db=churn, output path =`/p
 
 ### 2.7 Run the data simulation
 
-Next, you need to write some data to the database in order to run the code against - no data is provided with the code distribution. Use the following command:
+Next, you need to write some data to the database in order to run the code against - no data is provided with the code distribution. 
+
+**New in 2023**: There is now a full report describing the inner workings of the churn simulation:
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* It is not necessary to read the report to learn the churn fighting techniques from the book - 
+  this is intended for advanced data scientists who want to create their own simulations.
+
+Use the following command to run the basic simulation described in the book:
 
 
 ```python
