@@ -230,19 +230,22 @@ If you made it this far then congratulations!  You just ran your first bit of th
 #### 1.3.2 Generating Simulated Data
 
 If you don't have your own data to analyze then you should use the simulator program to create a 
-realistic (enough) simulation of subscription, churn and event data for you to run the book code examples on.
-Code for generating artificial data to run the code is in the directory `data-generation`.  In
-the near future there will be a blog post explaining how the simulation works, and the instructions
-here are limited to simply running the simulation.
+realistic simulation of subscription, churn and event data for you to run the book code examples on.
+Code for generating artificial data to run the code is in the directory `data-generation`.  
 
-*  For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `fightchurn/datagen/churndb.py` (which you ran above) to make a *new* run configuration  for the script `fightchurn/datagen/churnsim.py` (which you are about to run.)  
-*  For *JupyterNotebooks* you should have already run the first 3 cells of the notebook `churn_db_sim.ipynb`. The simulation command is in the 4th cell of the notebook: `run churnsim.py`
+**New in 2023**: There is now a full report describing the inner workings of the churn simulation:
+* ![ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* It is not necessary to read the report to learn the churn fighting techniques from the book - 
+  this is intended for advanced data scientists who want to create their own simulations.
+
+To run the basic simulation described in the book:
+* For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `fightchurn/datagen/churndb.py` (which you ran above) to make a *new* run configuration  for the script `fightchurn/datagen/churnsim.py` (which you are about to run.)  
+* For *JupyterNotebooks* you should have already run the first 3 cells of the notebook `churn_db_sim.ipynb`. The simulation command is in the 4th cell of the notebook: `run churnsim.py`
 
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
 ```
 /Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/datagen/churnsim.py
-Matrix is not positive semi-definite: Multiplying by transpose
 
 Creating 10000 initial customers for 2019-01-01 start date
 Simulated customer 0: 5 subscription, 10243 events @ 2019-05-21 06:00:01.611085
