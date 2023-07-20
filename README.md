@@ -21,7 +21,8 @@ Before you can load data or run the code you have to do some setup on your syste
 
 **New in 2023**: There is now a full report describing the inner workings of the Fighting Churn 
 WIth Data churn simulation program:
-* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis]
+  (readme_files/churnsim_gold_2023.pdf)
 * It is not necessary to read the report to learn the churn fighting techniques from the book - 
   the report is intended for advanced data scientists who want to create their own simulations.
 
