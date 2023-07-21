@@ -60,20 +60,22 @@ class UtilityModel:
         copy_path = os.path.join(save_path,  f'{name}_updownchurn.csv')
         self.transition_df.to_csv(copy_path)
 
-    def setExpectations(self,bemodDict,model_weights):
+    def setExpectations(self, chan_mod_dict, model_weights):
         """
         Calculates the average utility contribution from each behavior, for use in the utility function.
-        For a detailed explanation see Section 3.2.2, Utility Model, of the ChurnSim report:
+        For a detailed explanation see  the ChurnSim report:
         https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.2.2, Utility Model
+        - Section 3.4.2, Product Channels
 
-        :param bemodDict: dictionary from channel name to the associated behavior model
+        :param chan_mod_dict: dictionary from channel name to the associated behavior model
         :param model_weights: probability for each channel to be chosen
         :return:
         """
         assert sum(model_weights.values())==1.0, "Model weights should sum to 1.0"
         n_behaviors = len(self.behave_names)
         self.behave_means = np.zeros(n_behaviors)
-        for bemod in bemodDict.values():
+        for bemod in chan_mod_dict.values():
             underlying_behaviors = Customer.get_underlying_behaviors(bemod.behave_names)
             value_behaviors = {v: Customer.get_behavior_under_value(v,bemod.behave_names) for v in Customer.get_valued_behaviors(bemod.behave_names) }
             assert n_behaviors == len(underlying_behaviors)
