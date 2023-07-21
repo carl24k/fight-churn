@@ -53,7 +53,7 @@ class BehaviorModel:
         '''
         return "select event_type_id from %s.event_type where event_type_name='%s'" % (schema, event_name)
 
-class GaussianBehaviorModel(BehaviorModel):
+class NormalBehaviorModel(BehaviorModel):
 
     def __init__(self,name,random_seed=None,version='model'):
         '''
@@ -61,10 +61,16 @@ class GaussianBehaviorModel(BehaviorModel):
         The parameters are passed on a csv file that should be located in a `conf` directory adjacent to the code.
         The format of the data file is:
             first column of the data file should be the names and must have the heading 'behavior'
-            second colum is the mean rates and must have the heading 'mean'
+            second column is the mean rates and must have the heading 'mean'
+            third column - optional - maximum behavior rates
             the remaining columns should be a pseudo-covariance matrix for the behaviors, so it must be real valued and
             have the right number of columns with column names the same as the rows
         These are loaded using pandas.
+
+        For a detailed explanation see the ChurnSim report, section 3.2.1, "Behavior Model"
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+
+        Note that the Gaussian base class is currently deprecated and the Log-Normal version is used instead.
         :param name:
         '''
         self.name=name
@@ -133,14 +139,27 @@ class GaussianBehaviorModel(BehaviorModel):
         return new_customer
 
 
-class FatTailledBehaviorModel(GaussianBehaviorModel):
+class LogNormalBehaviorModel(NormalBehaviorModel):
 
     def __init__(self,name,exp_base, random_seed=None,version=None):
+        """
+        This is the Log-Normal version of the behavior model
+
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - section 3.2.1, "Behavior Model"
+        - Section 3.4.2, Product Channels
+
+        :param name:
+        :param exp_base:
+        :param random_seed:
+        :param version:
+        """
         self.exp_base = exp_base
         self.log_fun = lambda x: np.log(x) / np.log(self.exp_base)
         self.exp_fun = lambda x: np.power(self.exp_base,x)
 
-        super(FatTailledBehaviorModel,self).__init__(name,random_seed,version)
+        super(LogNormalBehaviorModel, self).__init__(name, random_seed, version)
 
     def scale_correlation_to_covariance(self):
         self.log_means=self.log_fun(self.behave_means)
@@ -158,8 +177,13 @@ class FatTailledBehaviorModel(GaussianBehaviorModel):
         '''
         Given a mean and covariance matrix, the event rates for the customer are drawn from the multi-variate
         gaussian distribution.
-        subtract 0.5 and set min at 0.5 per month, so there can be very low rates despite 0 (1) min in log normal sim
-        :return: a Custoemr object
+
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - section 3.2.1, "Behavior Model"
+
+        Also ,subtract 0.5 and set min at 0.5 per month, so there can be very low rates despite 0 (1) min in log normal sim
+        :return: a Customer object
         '''
         customer_rates=np.random.multivariate_normal(mean=self.log_means,cov=self.behave_cov)
         customer_rates=self.exp_fun(customer_rates)

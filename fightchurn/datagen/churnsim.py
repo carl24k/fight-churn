@@ -16,7 +16,7 @@ from omegaconf import DictConfig, OmegaConf
 from postgres import Postgres
 from shutil import copyfile
 
-from fightchurn.datagen.behavior import FatTailledBehaviorModel
+from fightchurn.datagen.behavior import LogNormalBehaviorModel
 from fightchurn.datagen.churndb import drop_schema, setup_churn_db
 from fightchurn.datagen.utility import UtilityModel
 from fightchurn.datagen.customer import  Customer
@@ -56,8 +56,8 @@ class ChurnSimulation:
         self.population_percents = self.args.population
 
         for version in self.population_percents.keys():
-            behave_mod=FatTailledBehaviorModel(self.model_name, exp_base=self.args.behave_exp_base,
-                                               random_seed= args.random_seed, version= version)
+            behave_mod=LogNormalBehaviorModel(self.model_name, exp_base=self.args.behave_exp_base,
+                                              random_seed= args.random_seed, version= version)
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
@@ -124,7 +124,10 @@ class ChurnSimulation:
 
     def simulate_customer(self, start_of_month):
         '''
-        Simulate one customer collecting its events and subscriptions.
+        Simulate one customer collecting its events and subscriptions. This is  core inner loop of the simulation.
+        For a detailed explanation see Section 3.3, Simulation Algorithm, of the churnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Also see section 3.4.5 Customer Location regarding the country
 
         This function has the core interaction between the simulation objects.  Customer is created from the behavior
         model, and picking a random start date within the month.  Then the customer objects simulates the events for
@@ -337,6 +340,9 @@ class ChurnSimulation:
         create_customers_for_month, and then it advances month by month adding new customers (also using
         create_customers_for_month.)  The number of new customers for each month is determined from the growth rate.
         Note that churn is not handled at this level, but is modeled at the customer level.
+
+        For a detailed explanation see Section 3.3, Simulation Algorithm, of the churnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
         :return:
         '''
 

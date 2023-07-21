@@ -21,7 +21,24 @@ class Customer:
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
         own subscriptions and events.
+
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.2.1, Behavior Model - basics of the behavior model
+        - Section 3.3, Simulation Algorithm - use of the daily rates
+        - Section 3.4.1, Day of Week Behavioral Fluctuation
+        - Section 3.4.2, Product Channels
+        - Section 3.4.3, Customer Satisfiability Coefficient
+        - Section 3.4.4, Customer Age
+        - Section 3.5.1, Multi-User Accounts
+        - Section 3.5.2, Action Values
+        - Section 3.5.6, Billing Period
+        - Section 3.5.7. Discounts
+
         :param behavior_rates: ndarray of behavior rates, which are assumed to be PER MONTH
+        :param start_of_month: The date of the month the customer starts
+        :param args: OmegaConf with the program args
+        :param channel_name: string name of the channel this customers behavior was drawn from
         '''
         with FileLock(Customer.ID_LOCK_FILE):
             next_id = 0
@@ -124,6 +141,17 @@ class Customer:
             return None
 
     def pick_initial_plan(self, plans, add_ons, bill_periods=None):
+        """
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.5.3 Product Plans, MRR and Limits
+        - Section 3.5.6 Billing Periods
+
+        :param plans: Data frame of plans
+        :param add_ons: Data frame of add-ons
+        :param bill_periods: List of all the possible billing periods
+        :return:
+        """
 
         if bill_periods is not None:
             self.max_bill_period=np.random.choice(bill_periods)
@@ -168,6 +196,18 @@ class Customer:
 
 
     def set_plan(self,plans,plan_idx=None, plan_name=None):
+        """
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.5.3, Product PLans, MRR and Limits
+        - Section 3.5.5, Add-on Products
+        - Section 3.5.6, Billing Periods
+
+        :param plans: data frame of plans
+        :param plan_idx: the plan index to set the plan to
+        :param plan_name: a name of the plane to set to
+        :return:
+        """
         if plan_idx is not None:
             self.plan = plans.index.values[plan_idx]
         else:
@@ -188,6 +228,15 @@ class Customer:
             }
 
     def add_add_ons(self,plans):
+        """
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.5.3, Product PLans, MRR and Limits
+        - Section 3.5.5, Add-on Products
+
+        :param plans: data frame of the plans
+        :return:
+        """
         # Reset to  base MRR
         self.set_plan(plans,plan_name=self.plan)
         for add_on in self.add_ons.iterrows():
@@ -201,6 +250,14 @@ class Customer:
 
     @staticmethod
     def get_min_max_dow_scale(scale_param):
+        """
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.4.1, Day of Week Behavioral Fluctuation and equation 6
+
+        :param scale_param: Scaling parameter for the day
+        :return:
+        """
         assert -1.0 <= scale_param < 1.0
         if scale_param > 0:
             min_scale = 1 - 0.1 * scale_param
@@ -213,6 +270,18 @@ class Customer:
 
     @staticmethod
     def get_day_multiplier(the_date,args):
+        """
+        Increasing/Decreasing behavior based on the day of the week. Stores one multiplier to be
+        used by all customers, the first time a day is encountered.
+
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.4.1, Day of Week Behavioral Fluctuation
+
+        :param the_date:
+        :param args:
+        :return:
+        """
         # Set a multiplier for this date
         if the_date not in Customer.date_multipliers:
             if the_date.weekday() >= 4:  # Friday - Sun
@@ -230,6 +299,14 @@ class Customer:
         a poisson distribution with the customers average rate.  If the number is greater than zero, that number of events
         are created as tuples of time stamps and the event index (which is the database type id).  The time of the
         event is randomly set to anything on the 24 hour range.
+
+        For a detailed explanation see the ChurnSim report
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.2.1, Behavior Model
+        - Section 3.4.1, Day of Week Behavioral Fluctuation
+        - Section 3.5.1, Multi-User Accounts
+        - Section 3.5.2, Action Values
+
         :param start_date: datetime.date for start of simulation
         :param end_date: datetime.date for end of simulation
         :return: The total count of each event, the list of all of the event tuples

@@ -61,6 +61,15 @@ class UtilityModel:
         self.transition_df.to_csv(copy_path)
 
     def setExpectations(self,bemodDict,model_weights):
+        """
+        Calculates the average utility contribution from each behavior, for use in the utility function.
+        For a detailed explanation see Section 3.2.2, Utility Model, of the churnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+
+        :param bemodDict: dictionary from channel name to the associated behavior model
+        :param model_weights: probability for each channel to be chosen
+        :return:
+        """
         assert sum(model_weights.values())==1.0, "Model weights should sum to 1.0"
         n_behaviors = len(self.behave_names)
         self.behave_means = np.zeros(n_behaviors)
@@ -93,6 +102,16 @@ class UtilityModel:
         '''
         Utility calculation for a customer:
         1. Take the ratios of the customer's event counts to the mean event counts
+        2. Apply an exponential growth function modeling hedonic adaptation
+        3. Add the term for MRR
+        4. Apply customer satisfaction propensity
+
+
+        For a detailed explanation see the ChurnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.2.2, Utility Model
+        - Section 3.4.3, Customer Satisfiability Coefficient
+        - Section 3.5.3, Product Plans, MRR
         
         :param event_counts:
         :return:
@@ -117,6 +136,17 @@ class UtilityModel:
         return utility
 
     def transition_probility(self,u,trans):
+        '''
+        Transition probability function for upsell, downsell and churn.
+        For a detailed explanation see the ChurnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.2.3, Churn Model
+        - Section 3.5.4, Upgrade & Downgrade
+
+        :param u: The utility value
+        :param trans: Which transition (string)
+        :return: The probability
+        '''
         offset = self.transition_df.loc[trans,'offset']
         scale = self.transition_df.loc[trans,'scale']
         # Clip exponent to prevent overflow errors in extreme cases
@@ -147,23 +177,25 @@ class UtilityModel:
         :param event_counts:
         :return:
         '''
-        # utility = self.utility_function(event_counts,customer)
         return uniform(0, 1) < self.churn_probability(customer.current_utility)
 
     def simulate_upgrade_downgrade(self,event_counts,customer,plans, add_ons):
         '''
-        Assuming plans are sorted by MRR, an upgrade means higher index
+        Determine one customer's upgrade, downgrade, changes in add-ons and changes in billing period.
+        For a detailed explanation see the ChurnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.5.4, Upgrade & Downgrade
+        - Section 3.5.5, Add-on Products
+        - Section 3.5.6, Billing Periods
+
         :param event_counts:
         :param customer:
         :param plans:
         :return:
         '''
         current_plan = np.where(plans.index.values==customer.plan)[0][0]
-        # u=self.utility_function(event_counts,customer)
         upgrade_probability = self.uprade_probability(customer.current_utility)
         downgrade_probability = self.downgrade_probability(customer.current_utility)
-        # churn_probability = self.churn_probability(u)
-        # print(f'u={u}, c={churn_probability}, up={upgrade_probability}, down={downgrade_probability}')
 
         changed_plan=False
         changed_add_ons=False
