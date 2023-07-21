@@ -28,6 +28,13 @@ class ChurnSimulation:
         Creates the behavior/utility model objects, sets internal variables to prepare for simulation, and creates
         the database connection
 
+        For a detailed explanation the ChurnSim report:
+        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        - Section 3.2.1 Behavior Model
+        - Section 3.3 Simulation Algorithm
+        - Section 3.4.2 Product Channels
+        - Section 3.4.5 Customer Location
+
         :param model: name of the behavior/utility model parameters
         :param start: start date for simulation
         :param end: end date for simulation
@@ -125,7 +132,7 @@ class ChurnSimulation:
     def simulate_customer(self, start_of_month):
         '''
         Simulate one customer collecting its events and subscriptions. This is  core inner loop of the simulation.
-        For a detailed explanation see Section 3.3, Simulation Algorithm, of the churnSim report:
+        For a detailed explanation see Section 3.3, Simulation Algorithm, of the ChurnSim report:
         https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
         - Also see section 3.4.5 Customer Location regarding the country
 
@@ -341,7 +348,7 @@ class ChurnSimulation:
         create_customers_for_month.)  The number of new customers for each month is determined from the growth rate.
         Note that churn is not handled at this level, but is modeled at the customer level.
 
-        For a detailed explanation see Section 3.3, Simulation Algorithm, of the churnSim report:
+        For a detailed explanation see Section 3.3, Simulation Algorithm, of the ChurnSim report:
         https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
         :return:
         '''

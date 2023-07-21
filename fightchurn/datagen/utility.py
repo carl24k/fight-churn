@@ -63,7 +63,7 @@ class UtilityModel:
     def setExpectations(self,bemodDict,model_weights):
         """
         Calculates the average utility contribution from each behavior, for use in the utility function.
-        For a detailed explanation see Section 3.2.2, Utility Model, of the churnSim report:
+        For a detailed explanation see Section 3.2.2, Utility Model, of the ChurnSim report:
         https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
 
         :param bemodDict: dictionary from channel name to the associated behavior model
