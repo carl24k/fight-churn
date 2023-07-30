@@ -41,8 +41,11 @@ class ChurnSimulation:
         :param init_customers: how many customers to create at start date
         '''
         self.args = args
-        # pull model name from hydra so it doesn't have to be a repetitive line in the config
-        self.model_name=hydra.core.hydra_config.HydraConfig().get().job.config_name
+        if 'model' in self.args:
+            self.model_name = args.model
+        else:
+            # pull model name from hydra so it doesn't have to be a repetitive line in the config
+            self.model_name=hydra.core.hydra_config.HydraConfig().get().job.config_name
         self.start_date = parser.parse(args.start_date).date()
         self.end_date = parser.parse(args.end_date).date()
         self.init_customers=args.init_customers
