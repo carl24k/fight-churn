@@ -544,7 +544,7 @@
         "list4": {
             "name": "find_metric_groups",
             "params": {
-                "group_corr_thresh": 0.65
+                "group_corr_thresh": 0.5
             }
         },
         "list5": {
