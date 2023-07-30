@@ -708,7 +708,7 @@
         "list8": {
             "name": "shap_explain_xgb",
             "params": {
-                "plot_n" : [0,1,2,3,4]
+                "save_values" : true
             }
         }
     },

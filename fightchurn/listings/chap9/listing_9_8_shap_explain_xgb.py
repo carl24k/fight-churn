@@ -1,11 +1,12 @@
 import os
+import pandas as pd
 import pickle
 import shap
 import matplotlib.pyplot as plt
 from fightchurn.listings.chap8.listing_8_2_logistic_regression import prepare_data
 from fightchurn.listings.chap8.listing_8_4_rescore_metrics import reload_churn_data
 
-def shap_explain_xgb(data_set_path, plot_n=None):
+def shap_explain_xgb(data_set_path, plot_n=None, save_values=False):
 
     pickle_path = data_set_path.replace('.csv', '_xgb_model.pkl')
     assert os.path.isfile(pickle_path), 'You must run listing 9.6 to save an XGB regression model first'
@@ -22,6 +23,15 @@ def shap_explain_xgb(data_set_path, plot_n=None):
     plt.tight_layout()
     plt.savefig(save_file, format='png')
     plt.close()
+
+    if save_values:
+        shap_data = pd.DataFrame(shap_values.values,columns=X.columns)
+        save_path = data_set_path.replace('.csv', '_shapvals.csv')
+        shap_data.to_csv(save_path,header=True)
+        print('Saved shap values data to ' + save_path)
+        shap_summary = pd.DataFrame(shap_data.describe()).transpose()
+        save_path = data_set_path.replace('.csv', '_shapsummary.csv')
+        shap_summary.to_csv(save_path,header=True)
 
     if plot_n is not None:
         for n in plot_n:
