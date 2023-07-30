@@ -16,10 +16,10 @@ from omegaconf import DictConfig, OmegaConf
 from postgres import Postgres
 from shutil import copyfile
 
-from fightchurn.datagen.behavior import LogNormalBehaviorModel
-from fightchurn.datagen.churndb import drop_schema, setup_churn_db
-from fightchurn.datagen.utility import UtilityModel
-from fightchurn.datagen.customer import  Customer
+from fightchurn.churnsim.behavior import LogNormalBehaviorModel
+from fightchurn.churnsim.churndb import drop_schema, setup_churn_db
+from fightchurn.churnsim.utility import UtilityModel
+from fightchurn.churnsim.customer import  Customer
 
 class ChurnSimulation:
 

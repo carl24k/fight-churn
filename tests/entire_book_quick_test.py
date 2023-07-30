@@ -4,9 +4,9 @@ import sys
 import tempfile
 
 sys.path.append('../fightchurn')
-sys.path.append('../datagen')
+sys.path.append('../churnsim')
 from fightchurn import run_churn_listing
-from fightchurn.datagen import churndb
+from fightchurn.churnsim import churndb
 
 
 class TestFightChurnWIthData(unittest.TestCase):

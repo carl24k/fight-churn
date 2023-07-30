@@ -9,8 +9,8 @@ import sys
 import argparse
 from argparse import Namespace
 from joblib import Parallel, delayed
-from fightchurn.datagen import churndb
-from fightchurn.datagen import churnsim
+from fightchurn.churnsim import churndb
+from fightchurn.churnsim import churnsim
 from datetime import date
 from typing import List, Union
 from filelock import FileLock
@@ -391,7 +391,7 @@ def run_standard_simulation(schema='socialnet7'):
     :return:
     '''
     churndb.setup_churn_db(schema)
-    with initialize(version_base=None, config_path="datagen/conf"):
+    with initialize(version_base=None, config_path="churnsim/conf"):
         # config is relative to a module
         cfg = compose(config_name=schema)
         churnsim.run_churn_simulation(cfg)

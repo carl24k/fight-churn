@@ -6,7 +6,7 @@ from math import  exp
 from omegaconf import OmegaConf
 from random import uniform
 
-from fightchurn.datagen.customer import Customer
+from fightchurn.churnsim.customer import Customer
 
 class UtilityModel:
 

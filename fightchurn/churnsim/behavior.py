@@ -6,7 +6,7 @@ import pandas as pd
 
 from shutil import copyfile
 
-from fightchurn.datagen.customer import Customer
+from fightchurn.churnsim.customer import Customer
 
 def is_pos_def(x):
     '''

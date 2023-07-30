@@ -34,9 +34,9 @@ export CHURN_OUT_DIR
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
-cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
+cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/churnsim/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py --config-name=$SCHEMA n_parallel=5 force=True acausal_churn=0.0
+../../venv/bin/python churnsim.py --config-name=$SCHEMA n_parallel=5 force=True acausal_churn=0.005
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
@@ -71,5 +71,6 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # XGB Fit
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 6
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 9 --listing 8
 
 mv $CHURN_OUT_DIR/$SCHEMA $CHURN_OUT_DIR/$SCHEMA-$(date +'%Y%m%d%H%M')

@@ -34,7 +34,7 @@ export CHURN_OUT_DIR
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
-cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/datagen/
+cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/churnsim/
 ../../venv/bin/python churndb.py $SCHEMA
 ../../venv/bin/python churnsim.py model=$SCHEMA n_parallel=5
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
