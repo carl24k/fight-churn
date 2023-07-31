@@ -56,6 +56,7 @@ You will add more packages in a minute, but first finish with the project setup 
 Then select the root folder of the downloaded code. You should see some like this (at your own source code location):
 
 ![pycharm5A_project_structure](pycharm5A_project_structure.png)
+**TODO**: Update image to `churnsim` (instead of `datagen`)
 
 Select the `fightchurn` folder that contains python source code, and click on the button *Sources*
 (with the blue folder next to it):
@@ -204,7 +205,7 @@ PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just on
 If everything works as planned you should see something like the following output:
 
 ```
-/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/churnsim/churndb.py
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/fightchurn/churnsim/churndb.py
 Creating schema test (if not exists)...
 Creating table event (if not exists)
 Creating table subscription (if not exists)
@@ -245,7 +246,7 @@ To run the basic simulation described in the book:
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
 ```
-/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/churnsim/churnsim.py
+/Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/fightchurn/churnsim/churnsim.py
 
 Creating 10000 initial customers for 2019-01-01 start date
 Simulated customer 0: 5 subscription, 10243 events @ 2019-05-21 06:00:01.611085
