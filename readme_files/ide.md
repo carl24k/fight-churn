@@ -73,7 +73,7 @@ When you are done your project preferences should look like this:
 Now that you have created a Python project you can easily install the
 required packages.  
 
-1. Start by opening the Python file *fightchurn/datagen/churndb.py* . At this point you are not going to use it, but PyCharm might not do the requirements for you if you don't have a Python file open. (Thats actually a weird PyCharm gotcha.) At this point it should give you a bunch of message about Installing requirements at the top. 
+1. Start by opening the Python file *fightchurn/churnsim/churndb.py* . At this point you are not going to use it, but PyCharm might not do the requirements for you if you don't have a Python file open. (Thats actually a weird PyCharm gotcha.) At this point it should give you a bunch of message about Installing requirements at the top. 
 2. Now, go ahead and opena the file *requirements.txt* in the root project folder - these are the packages you will install.
 3. ![PyCharm Requirements](pycharm8_requirements.png)
 4. Notice that at the top it says: *Install requirements* - click on that and the click
@@ -103,7 +103,7 @@ In the Run/Debug Configuration dialog click the **+**  then **Python** to make a
 
 You will get an empty configuration, and the first thing to do is click on the Folder icon in the 
 script path text box and pick the script path.  The first script everyone will need to run is 
-*fightchurn/datagen/churndb.py*, which creates a schema for an analysis.  After selecting this script, your
+*fightchurn/churnsim/churndb.py*, which creates a schema for an analysis.  After selecting this script, your
 configuration should look like this, with both the script path and the working directory set to 
 wherever the script is on your system:
 
@@ -195,7 +195,7 @@ to hold it.  There is a python script in the folder *data-generation* for this. 
 following the instructions above then you have already made a Run Configuration for the script in
 PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just one more thing to do: name the schema that you will create.
 
-1. Open the file *fightchurn/datagen/churndb.py*
+1. Open the file *fightchurn/churnsim/churndb.py*
 1. Edit the schema name in the file to the name you want
    1. If you are loading your own data, name it whatever you want
    1. If you are generating simulated data, leave it set to the name **socialnet7** which is the default model for simulation
@@ -204,7 +204,7 @@ PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just on
 If everything works as planned you should see something like the following output:
 
 ```
-/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/datagen/churndb.py
+/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/churnsim/churndb.py
 Creating schema test (if not exists)...
 Creating table event (if not exists)
 Creating table subscription (if not exists)
@@ -239,13 +239,13 @@ Code for generating artificial data to run the code is in the directory `data-ge
   this is intended for advanced data scientists who want to create their own simulations.
 
 To run the basic simulation described in the book:
-* For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `fightchurn/datagen/churndb.py` (which you ran above) to make a *new* run configuration  for the script `fightchurn/datagen/churnsim.py` (which you are about to run.)  
+* For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `fightchurn/churnsim/churndb.py` (which you ran above) to make a *new* run configuration  for the script `fightchurn/churnsim/churnsim.py` (which you are about to run.)  
 * For *JupyterNotebooks* you should have already run the first 3 cells of the notebook `churn_db_sim.ipynb`. The simulation command is in the 4th cell of the notebook: `run churnsim.py`
 
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
 ```
-/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/datagen/churnsim.py
+/Users/user_name/fight-churn-master/venv/bin/python /Users/user_name/fight-churn-master/fightchurn/churnsim/churnsim.py
 
 Creating 10000 initial customers for 2019-01-01 start date
 Simulated customer 0: 5 subscription, 10243 events @ 2019-05-21 06:00:01.611085
@@ -326,7 +326,7 @@ someone else in your oganization.  That said, for those of you have your own dat
     1. event_type_id : integer
 * You can and should also export whatever additional data fields you have for your events that you think
   are important (amounts viewed or consumed, prices, content categories, etc.) Start by updating the the event table
-  schema in `fightchurn/datagen/schema/create_event.sql` and recreate the table including your fields (You will have to 
+  schema in `fightchurn/churnsim/schema/create_event.sql` and recreate the table including your fields (You will have to 
   drop the existing table that you created in step 1.3.1.)
 
 If you know how to import and export PostgreSQL data using the command line then have it.  Personally I did 
