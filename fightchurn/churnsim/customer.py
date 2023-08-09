@@ -306,6 +306,7 @@ class Customer:
         - Section 3.4.1, Day of Week Behavioral Fluctuation
         - Section 3.5.1, Multi-User Accounts
         - Section 3.5.2, Action Values
+        - Section 3.5.3, Product Plans, MRR and Limits (specifically the explanation of action limits)
 
         :param start_date: datetime.date for start of simulation
         :param end_date: datetime.date for end of simulation
