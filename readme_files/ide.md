@@ -299,8 +299,8 @@ Great!  Now you have the data you need to run the code and learn the techniques 
 Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
 the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
 instructions and add the parameters `--config-name crm5` to the `churnsim.py` run configuration. 
-The  simulation will take an hour or so on a typical computer and produce around 30GB of data in 
-your PostgreSQL database. 
+The CRM  simulation will take an hour or so on a typical computer and produce around 30GB of 
+data in your PostgreSQL database. 
 
 ![Running the CRM Simulation](pycharm17_crm_sim.png)
 

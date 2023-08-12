@@ -1,4 +1,4 @@
 include *.py
 recursive-include fightchurn/listings *.py *.json *.sql
-recursive-include fightchurn/datagen *.py *.csv *.sql
+recursive-include fightchurn/churnsim *.py *.csv *.sql *.yaml
 include README.md

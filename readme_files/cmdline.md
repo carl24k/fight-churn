@@ -182,18 +182,23 @@ Setting Environment Variables user=your_user_name for db=churn, output path =`/p
 
 ### 2.7 Run the data simulation
 
-Next, you need to write some data to the database in order to run the code against - no data is provided with the code distribution. 
+Next, you need to write some data to the database in order to run the code against - no data is 
+provided with the code distribution. 
 
-**New in 2023**: There is now a full report describing the inner workings of the churn simulation:
+**New in 2023**: There is now a white paper describing the inner workings of the churn simulation:
 * [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
-* It is not necessary to read the report to learn the churn fighting techniques from the book - 
+* It is not necessary to read the white paper to learn the churn fighting techniques from the 
+  book - 
   this is intended for advanced data scientists who want to create their own simulations.
+* See section 2.7.2 below for information on running the simulation described in the white paper.
+
+#### 2.7.1 Run the social network simulation from the book
 
 Use the following command to run the basic simulation described in the book:
 
 
 ```python
-run_churn_listing.run_standard_simulation(init_customers=10000)
+run_churn_listing.run_standard_simulation()
 ```
 
 The example is for a standard simulation of 10,000 customers. If you want to speed things up you can run it for 1000 customers and things will still work okay - the results will just be a bit more noisy and random.
@@ -224,6 +229,21 @@ Simulated customer 400/2000: 1,767 subscriptions & 557,543 events
 This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 customer simulation.
 
 <a name="run"/>
+
+#### 2.7.2 Running the Advanced Data Simulation of a CRM Product
+
+Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
+the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
+instructions and add the parameter `'crm5'` to the `run_standard_simulation` function call: 
+
+
+```python
+run_churn_listing.run_standard_simulation('crm5')
+```
+
+The CRM  simulation will take an hour or so on a typical computer and produce around 30GB of 
+data in your PostgreSQL database. 
+
 
 ### 2.8 Run code listings
 
