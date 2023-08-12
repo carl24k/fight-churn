@@ -56,7 +56,6 @@ You will add more packages in a minute, but first finish with the project setup 
 Then select the root folder of the downloaded code. You should see some like this (at your own source code location):
 
 ![pycharm5A_project_structure](pycharm5A_project_structure.png)
-**TODO**: Update image to `churnsim` (instead of `datagen`)
 
 Select the `fightchurn` folder that contains python source code, and click on the button *Sources*
 (with the blue folder next to it):
@@ -192,7 +191,7 @@ such data that you would be willing to make publicly available please contact th
 #### 1.3.1 Schema Creation
 
 Regardless of where you get your data from, you need to create the database schema and tables that it
-to hold it.  There is a python script in the folder *data-generation* for this.  If you have been
+to hold it.  There is a python script in the folder *churnsim* for this.  If you have been
 following the instructions above then you have already made a Run Configuration for the script in
 PyCharm, or prepared the Jupyter notebook `churn_db_sim.ipnyb`.  There's just one more thing to do: name the schema that you will create.
 
@@ -232,16 +231,18 @@ If you made it this far then congratulations!  You just ran your first bit of th
 
 If you don't have your own data to analyze then you should use the simulator program to create a 
 realistic simulation of subscription, churn and event data for you to run the book code examples on.
-Code for generating artificial data to run the code is in the directory `data-generation`.  
+Code for generating artificial data to run the code is in the directory `churnsim`.  
 
-**New in 2023**: There is now a full report describing the inner workings of the churn simulation:
+**New in 2023**: There is now a white paper describing the inner workings of the churn simulation:
 * [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
 * It is not necessary to read the report to learn the churn fighting techniques from the book - 
   this is intended for advanced data scientists who want to create their own simulations.
+* See section 1.3.3 below for information on running the simulation described in the white paper.
 
 To run the basic simulation described in the book:
-* For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run configuration for `fightchurn/churnsim/churndb.py` (which you ran above) to make a *new* run configuration  for the script `fightchurn/churnsim/churnsim.py` (which you are about to run.)  
-* For *JupyterNotebooks* you should have already run the first 3 cells of the notebook `churn_db_sim.ipynb`. The simulation command is in the 4th cell of the notebook: `run churnsim.py`
+* For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run 
+  configuration for `fightchurn/churnsim/churndb.py` (which you ran above) to make a *new* run  
+  configuration  for the script `fightchurn/churnsim/churnsim.py` (which you are about to run.)  
 
 If this is your first time following these instructions, just run it.  You should start to see output like this:
 
@@ -293,7 +294,19 @@ Great!  Now you have the data you need to run the code and learn the techniques 
 
 ---
 
-#### 1.3.3 Loading Your Own Data (If you have it)
+#### 1.3.3 Running the Advanced Data Simulation of a CRM Product
+
+Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
+the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
+instructions and add the parameters `--config-name crm5` to the `churnsim.py` run configuration. 
+The  simulation will take an hour or so on a typical computer and produce around 30GB of data in 
+your PostgreSQL database. 
+
+![Running the CRM Simulation](pycharm17_crm_sim.png)
+
+---
+
+#### 1.3.4 Loading Your Own Data (If you have it)
 
 If you have your own data that you want to analyze then you need to load it into the `subscription` and 
 `event` tables of the churn analysis schema. I will outline the basic steps here, but I'm going to assume
