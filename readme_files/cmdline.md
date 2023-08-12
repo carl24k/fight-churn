@@ -194,14 +194,16 @@ provided with the code distribution.
 
 #### 2.7.1 Run the social network simulation from the book
 
-Use the following command to run the basic simulation described in the book:
+Use the function `run_churn_listing.run_standard_simulation` to run the basic simulation 
+described in the book.
 
+* You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
+  appropriate number of parallel workers for your machine. 
 
 ```python
-run_churn_listing.run_standard_simulation()
+run_churn_listing.run_standard_simulation(n_parallel=5)
 ```
 
-The example is for a standard simulation of 10,000 customers. If you want to speed things up you can run it for 1000 customers and things will still work okay - the results will just be a bit more noisy and random.
 
 You will see output as follows...
 
@@ -226,7 +228,7 @@ Simulated customer 400/2000: 1,767 subscriptions & 557,543 events
 ...
 ```
 
-This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 customer simulation.
+This will continue for a while - maybe 15-30 minutes if you are running with a single core.
 
 <a name="run"/>
 
@@ -234,15 +236,17 @@ This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 
 
 Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
 the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
-instructions and add the parameter `'crm5'` to the `run_standard_simulation` function call: 
-
+instructions and add the parameter `'crm5'` to the `run_standard_simulation` function call. 
+* You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
+  appropriate number of parallel workers for your machine.
 
 ```python
-run_churn_listing.run_standard_simulation('crm5')
+run_churn_listing.run_standard_simulation('crm5', n_parallel=5)
 ```
 
 The CRM  simulation will take an hour or so on a typical computer and produce around 30GB of 
-data in your PostgreSQL database. 
+data in your PostgreSQL database. The runtime depends on the degree of parallelism - for a 
+single core it can take 4+ hours.
 
 
 ### 2.8 Run code listings

@@ -242,9 +242,13 @@ Code for generating artificial data to run the code is in the directory `churnsi
 To run the basic simulation described in the book:
 * For *PyCharm*, follow the instructions in section 1.2.2.4 and duplicate and modify the run 
   configuration for `fightchurn/churnsim/churndb.py` (which you ran above) to make a *new* run  
-  configuration  for the script `fightchurn/churnsim/churnsim.py` (which you are about to run.)  
+  configuration  for the script `fightchurn/churnsim/churnsim.py` (which you are about to run.)
+* You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
+  appropriate number of parallel workers for your machine. 
 
-If this is your first time following these instructions, just run it.  You should start to see output like this:
+![Running the standard Simulation](pycharm18_sim.png)
+
+When upi run it you should start to see output like this:
 
 ```
 /Users/user_name/fight-churn/venv/bin/python /Users/user_name/fight-churn/fightchurn/churnsim/churnsim.py
@@ -259,9 +263,14 @@ Simulated customer 4: 5 subscription, 9869 events @ 2019-05-21 06:00:02.433102
 
 ```
 
-There will be more like this and the whole process will take from around 10-30 minutes depending on the speed of your
-system (**so this may be a good time to go for a coffee break, lunch, nap, etc.**.) Please pardon the delay,
- but the program is simulating the subscriptions, behavior and churn of more than 10,000 customers over 6 months time. The results of the simulation are  all inserted into the  database tables `subscription` and `event`. (There is no data for churns yet : you will derive that as part of the  analysis process described in the book chapters 2 and 4.)  You can (and should) confirm the results of the data  simulation by querying the database directly, and you don't have to wait for the simulation to complete (so this is  actually a good next step to take while you are waiting...)
+There will be more like this and the whole process will take around 30 minutes running on a 
+single core, depending on the speed of your system.
+
+The results of the simulation are  all inserted into the  database tables `subscription` and 
+`event`. There is no data for churns yet : you will derive that as part of the  analysis process 
+described in the book chapters 2 and 4.  You can (and should) confirm the results of the data 
+simulation by querying the database directly, and you don't have to wait for the simulation to 
+complete (so this is  actually a good next step to take while you are waiting...)
 
 ```
 churn=# select count(*) from socialnet7.subscription;
@@ -299,8 +308,11 @@ Great!  Now you have the data you need to run the code and learn the techniques 
 Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
 the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
 instructions and add the parameters `--config-name crm5` to the `churnsim.py` run configuration. 
-The CRM  simulation will take an hour or so on a typical computer and produce around 30GB of 
-data in your PostgreSQL database. 
+The CRM  simulation will produce around 30GB of data in your PostgreSQL database. The runtime 
+depends on the degree of parallelism - for a single core it can take 4+ hours.
+
+* You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
+  appropriate number of parallel workers for your machine.
 
 ![Running the CRM Simulation](pycharm17_crm_sim.png)
 

@@ -383,17 +383,20 @@ def run_churn_listing_from_args(args : Namespace):
                     run_listing_from_args(vers_args)
 
 
-def run_standard_simulation(schema='socialnet7'):
+def run_standard_simulation(schema='socialnet7', **kwargs):
     '''
     Wrapper function to call churnsim.run_churn_simulation
     :param schema: string name of schema and simulation configuration
-    :param init_customers: number of initial customers to generate
+    :param kwargs: params to override in config
     :return:
     '''
     churndb.setup_churn_db(schema)
     with initialize(version_base=None, config_path="churnsim/conf"):
         # config is relative to a module
         cfg = compose(config_name=schema)
+        # Add anything passed in kwargs
+        for key, value in kwargs.items():
+            cfg[key]=value
         churnsim.run_churn_simulation(cfg)
 
 
