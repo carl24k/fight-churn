@@ -2,12 +2,14 @@
 
 ### **In Chapter 2, pages 42-43, sidebar Code for fighting churn with data:**
 
-*If you are using the code from github after September 2021, or the fightchurn pip package, the paths have changed from those described in the first printing.* 
+*If you are using the code from github after September 2023, or the fightchurn pip package after 
+version 1.1, the paths have changed from those described in the first printing.* 
 
 In the first numbered list in the sidebar it should now read:
 
-	2. Create a database schema with `fightchurn/datagen/churndb.py`.
- 	3. Generate simulation data and save it into the Postgres schema with `fightchurn/datagen/churnsim.py`.
+	2. Create a database schema with `fightchurn/churnsim/churndb.py`.
+ 	3. Generate simulation data and save it into the Postgres schema with 
+       `fightchurn/churnsim/churnsim.py`.
 
 In the command line example after the third paragraph it should now read:
 
@@ -15,9 +17,11 @@ In the command line example after the third paragraph it should now read:
 
 In the second numbered listed in the sidebar it should now read:
 
-	1. Create a schema with `fightchurn/datagen/churndb.py`
+	1. Create a schema with `fightchurn/churnsim/churndb.py`
  	2. ...
  	3. The listing wrapper program works from parameters stored in a JSON file, `fightchurn/listings/conf/churnsim_listings.json`.
+
+---
 
 ### **In command line examples throughout the book:**
 
@@ -75,3 +79,21 @@ The correction above applies in the following places:
 | 10      | 10.5.4  | 444  |
 | 10      | 10.6    | 447  |
 | 10      | 10.6    | 450  |
+
+--- 
+*If you are using the code from github after August 2023, or the fightchurn pip package after 
+version 1.1, the paths have changed from those described in the first printing.* 
+
+In the command line program examples it should read:
+
+​	`fightchurn/churnsim/churndb.py`
+
+and 
+
+​	`fightchurn/churnsim/churnsim.py`
+
+
+| Chapter | Section | Page |
+| ------- | ------- | ---- |
+| 3       | Intro   | 81   |
+| 6      | 6.1.1  | 222   |
