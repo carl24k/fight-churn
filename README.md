@@ -67,16 +67,19 @@ After the pre-requesisites, you have a choice on how to run the Fighting Churn W
 
 ## Errata for the 1st Printing
 
-This version of the README if for the the code released with the fightchurn pip package in September 2021. In this version there have been some modifications to the paths described in the first printing of *Fighting Churn With Data* to enable packaging the Python code. The following two differences summarize the changes: 
+This version of the README is for the the code released with the fightchurn pip package in 
+September 2021. In this version there have been some modifications to the paths described in the 
+first printing of *Fighting Churn With Data* to enable packaging the Python code. The following 
+two differences summarize the changes: 
 
-- To run the code listings, the first printing of the book refers  to the script `fight-churn/listings/py/run_churn_list.py` : the path in the *current* code is `fight-churn/fightchurn/run_churn_listing.py`
-- To generate the data, the first printing of the book refers to scripts under `fight-churn/data-generation/` : the path in the current code is `fight-churn/fightchurn/datagen`
+- To run the code listings, the first printing of the book refers  to the script  
+  `fight-churn/listings/py/run_churn_list.py` : the path in the *current* code  is 
+  `fight-churn/fightchurn/run_churn_listing.py`
+- To generate the data, the first printing of the book refers to scripts under 
+  `fight-churn/data-generation/` : the path in the current code is `fight-churn/fightchurn/churnsim`
 
 [Complete details of the errata are described here](readme_files/errata.md).
 
-## Extras
-
-There is also some extra code from the development phase of the book, which are partially documented on [this page.](readme_files/extras.md)
 
 ## Authors
 
