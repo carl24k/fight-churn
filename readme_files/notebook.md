@@ -72,20 +72,43 @@ Next, you need to write some data to the database in order to run the code again
 * It is not necessary to read the report to learn the churn fighting techniques from the book - 
   this is intended for advanced data scientists who want to create their own simulations.
 
-Use the following command to run the basic simulation described in the book:
 
+#### 3.1 Run the social network simulation from the book
+
+Use the function `run_churn_listing.run_standard_simulation` to run the basic simulation 
+described in the book.
+
+* You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
+  appropriate number of parallel workers for your machine. 
 
 ```python
-run_churn_listing.run_standard_simulation(init_customers=10000)
+run_churn_listing.run_standard_simulation(n_parallel=5)
 ```
-
-The example is for a standard simulation of 10,000 customers. If you want to speed things up you can run it for 1000 customers and things will still work okay - the results will just be a bit more noisy and random.
 
 You will see output as follows...
 
 ![Setup environment and Run Simulation](note3_sim.png)
 
-This will continue for a while - maybe 15-30 minutes if you ran the full 10,000 customer simulation.
+This will continue for a while - maybe 15-30 minutes if you are running with a single core.
+
+#### 3.2 Running the Advanced Data Simulation of a CRM Product
+
+Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
+the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
+instructions and add the parameter `'crm5'` to the `run_standard_simulation` function call. 
+* You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
+  appropriate number of parallel workers for your machine.
+
+```python
+run_churn_listing.run_standard_simulation('crm5', n_parallel=5)
+```
+
+The CRM  simulation will take an hour or so on a typical computer and produce around 30GB of 
+data in your PostgreSQL database. The runtime depends on the degree of parallelism - for a 
+single core it can take 4+ hours.
+
+See section 4.5 below for information on how to run the book listings against the simulated CRM 
+dataset.
 
 <a name="run"/>
 
@@ -144,3 +167,18 @@ For more information about what the code listings do, see the book Fighting Chur
 
 ------
 
+
+#### 4.5 Running listings from other models
+
+To run a listing from a model other than the social network simulation, add the schema argument 
+to `run_listing`. For example, to run chapter 2, listing 2 on the CRM simulation described in 
+ChurnSim White Paper run:
+
+```
+run_churn_listing.run_listing(2,2,schema='crm5')
+```
+
+_Note: At the time of this update, not all listings for the CRM simulation are configured in 
+the package._ If you are interested in the advanced simulation you should run the IDE 
+install, and review and edit the listing config described there. Or check back here for updates 
+on running the CRM simulation from the package in future versions.

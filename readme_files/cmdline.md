@@ -8,7 +8,11 @@
 [2.5 Import the run_churn_listing_module](#import)  
 [2.6 Set the churn environment variables](#envvar)  
 [2.7 Run the data simulation](#simulate)  
-[2.8 Run code listings](#run)  
+[3.0 Run code listings](#run)  
+[3.1 Run one listing](#one)  
+[3.2 Run multiple listings](#multi)  
+[3.3 Run listing versions](#versions)  
+[3.4 Run listings on the CRM simulation and other models](#other)  
 
 
 ---
@@ -249,9 +253,13 @@ data in your PostgreSQL database. The runtime depends on the degree of paralleli
 single core it can take 4+ hours.
 
 
-### 2.8 Run code listings
+See section 3.4 below for information on how to run the book listings against the simulated CRM 
+dataset.
 
-#### 2.8.1 Running one listing
+### 3 Run code listings
+
+<a name="one"/>
+### 3.1 Running one listing
 
 Now you are ready to run some code from the book! To do that you use the `run_listing` function that you previously imported. For examle, the following is chapter 2, listing 2:
 
@@ -287,7 +295,8 @@ Record(churn_rate=0.0570875665215288, retention_rate=0.942912433478471, n_start=
 Explaining what you ares seeing there is beyond the scope of this README, thats what the book is about! But if you have gotten this far, then you have completed all the setup and you are ready to follow along with the book (or videos, however you are learning the code...)
 
 
-#### 2.8.2 Running multiple listings
+<a name="multi"/>
+### 3.2 Running multiple listings
 
 In some parts of the book you might want to run more than one listing at once. To do this, 
 pass as a list for the listing argument. For example, to run all four chapter 2 churn 
@@ -299,7 +308,8 @@ run_churn_listing.run_listing(2,[1,2,3,4])
 ```
 
 
-#### 2.8.3 Running listing versions
+<a name="versions"/>
+### 3.3 Running listing versions
 
 Later in the book, some of the listings have multiple versions with different arguments. The 
 `run_listing` function also takes a version argument. For example, to run a query and plot the 
@@ -324,7 +334,8 @@ run_churn_listing.run_listing(chapter=3,listing=[9,10],version=[2,3])
 For more information about what the code listings do, see the book Fighting Churn With Data.
 
 
-#### 2.8.4 Running listings from other models
+<a name="other"/>
+#### 3.4 Running listings from the CRM simulation and other models
 
 To run a listing from a model other than the social network simulation, add the schema argument 
 to `run_listing`. For example, to run chapter 2, listing 2 on the CRM simulation described in 
