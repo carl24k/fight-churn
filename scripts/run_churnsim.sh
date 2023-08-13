@@ -36,7 +36,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/churnsim/
 ../../venv/bin/python churndb.py $SCHEMA
-../../venv/bin/python churnsim.py model=$SCHEMA n_parallel=5
+../../venv/bin/python churnsim.py  --config-name=$SCHEMA n_parallel=5
 cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # churn rate
@@ -46,7 +46,7 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 1 2
 
 # event QA
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 9 --version 1 2 3 4 5 6 7 8
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 9 --version 1 2 3 4 5 6 7 8 --n_parallel 5
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 10 --version 1 2 3 4 5 6 7 8
 
 # standard metric names
@@ -60,10 +60,10 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # standard metric
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 2 3 4 5 6 7 8
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 3 --version 2 3 4 5 6 7 8 --n_parallel 5
 
 # metric QA
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 6 --version 1 2 3 4 5 6 7 8
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 6 --version 1 2 3 4 5 6 7 8 --n_parallel 5
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 3 --listing 7 --version 1 2 3 4 5 6 7 8
 
 # Metric coverage test
@@ -77,10 +77,10 @@ cd $HOME/$CHURN_ROOT/fight-churn/fightchurn/
 
 # Scaled metrics
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 7 --insert
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 8 --version 1 2 --insert  --n_parallel 2
 
 ## ratios
-../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 7 --insert
+../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 7 --listing 1 --version 1 2 3 4 5 6 7 --insert  --n_parallel 5
 
 # Calculate active periods and observation dates
 ../venv/bin/python run_churn_listing.py --schema $SCHEMA --chap 4 --listing 1 2 4
