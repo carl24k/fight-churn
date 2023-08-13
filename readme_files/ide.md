@@ -316,6 +316,9 @@ depends on the degree of parallelism - for a single core it can take 4+ hours.
 
 ![Running the CRM Simulation](pycharm17_crm_sim.png)
 
+To run the book code listings on the resuld of the CRM simulation see the section below in this 
+README:  *2.1.2 Running listings for the CRM simulation and others*.
+
 ---
 
 #### 1.3.4 Loading Your Own Data (If you have it)
@@ -395,6 +398,7 @@ from any listing on your local database, this is the easiest way to do it.
 * For *PyCharm*, start by making a Run Configuration for the script `fightchurn/listings/run_churn_listing.py`, 
   following the instructions in Section 1.2.2.4 (duplicate and modify one of your old configurations.)
 
+#### 2.1.1 Running listings for the standard simulation
 
 The script is preset to run the first code listing, listing 2.1 from chapter 2, for the
 simulated data set `socialnet7`.  If you have created a simulated dataset named `socialnet7` as described
@@ -458,39 +462,35 @@ The first line shows you what chapter and listing are being run.  Next it shows 
 listing).  The final line prints out the result - the net retention rate, calculated with the SQL.  Because the data
 was randomly simulated your result on the last line won't be exactly the same as that one, but it should be similar.
 
-One way you  can change what the script will run for by simply editing the constants in the "main" portion 
-**at the bottom of the file**.  Note these variables:
+These are the main arguments for the script:
 
-* `schema` : the name of the churn data schema to run on
-* `chapter` : the chapter to run a listing from
-* `listing` : the number of the listing to run
+* `--chapter` : the chapter to run a listing from
+* `--listing` : the number of the listing to run
+* `--schema` : the name of the churn data schema to run on : this is defaulted to the social 
+  network simulation described in the book
 
-The most common thing you will do is run a different listing on the same schema and chapter, so you would edit this line:
+You can set command line arguments in PyCharm, in the Run Configurations setup dialog. You can 
+also run multiple listings at once, for example the following configuration will run the chapter 
+2 listsings 1, 2 4 and 5 in one command:
 
-`--listing=1`
+![Running Listings for the standard dataset with Params](pycharm19_listing_params.png)
 
-to whatever listing you want. So for example, to run listing 2.2 you can change the variable to:
 
-`--listing=2`
 
-Alternatively, the script accepts command line parameters.  To run this way, provide the following three parameters 
-(all required) and it will use those instead of the hard coded constants:
+#### 2.1.2 Running listings for the CRM simulation and others
 
-1. The first command line parameter is the schema
-1. The second command line parameter is the chapter number
-1. The third command line parameter is the listing number 
+To run listings for a dataset other than than the social network simulation you must use the 
+`--schema` argument. For example, to run the chapter 2 listings for the CRM simulation described 
+in the ChurnSim white paper use the argument `--schema crm5`:
 
-**Note:**
-If you want to run listings from the command line, you also need to setup your Python virtual environment
-and add the listing code paths to your PYTHONPATH (meaning, set them up the old fashioned way - not using PyCharm.)  Command line setup is not covered in this README at this time (but if you want to add such instructions please contribute!)
+![Running Listings for the CRM dataset](pycharm20_crm_listing.png)
 
-You can also set command line arguments in PyCharm, in the Run Configurations setup dialog. (But IMHO changing the command line arguments in the configuration dialog is more tedious than simply editing them script for this type of use...)
 
 To see what listings are available to run, peruse the code in the chapter folders below `listing`.  But note that your
 schema must be *configured* to run each listing, as described in the next  section.  The `socialnet7` (default) schema
 has entries created for it already, but if you want to run the code on your own data you will need to enter your own 
-configuration.
-
+configuration. The CRM simulation currently has configurations for listings in chapters 2, 4, 5, 
+6, 7, 8, 9 an 10 with more to come.
 [(top)](#top)  
 
 ---

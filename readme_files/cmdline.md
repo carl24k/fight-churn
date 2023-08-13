@@ -322,3 +322,19 @@ run_churn_listing.run_listing(chapter=3,listing=[9,10],version=[2,3])
 ```
 
 For more information about what the code listings do, see the book Fighting Churn With Data.
+
+
+#### 2.8.4 Running listings from other models
+
+To run a listing from a model other than the social network simulation, add the schema argument 
+to `run_listing`. For example, to run chapter 2, listing 2 on the CRM simulation described in 
+ChurnSim White Paper run:
+
+```
+run_churn_listing.run_listing(2,2,schema='crm5')
+```
+
+_Note: At the time of this update, not all listings for the CRM simulation are configured in 
+the package._ If you are interested in the advanced simulation you should run the IDE 
+install, and review and edit the listing config described there. Or check back here for updates 
+on running the CRM simulation from the package in future versions.
