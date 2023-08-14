@@ -2,21 +2,10 @@
 
 # fight-churn
 
+
 <a name="top"/>
 
-This is code for the book "***Fighting Churn With Data: Science and strategy for keeping your customers***"; the book serves as a detailed guide to the code.  You can get more information at:
-
-- https://www.manning.com/books/fighting-churn-with-data, the publisher (Manning Publications)'s page for the book
-- http://www.fightchurnwithdata.com, the author's blog site
-- https://www.twitch.tv/carl24k_datascience, the author's live stream
-- [The author's You Tube Channel, Fighting Churn With Data Science](https://www.youtube.com/channel/UCGVh5vcL4AAxErNdqJrr_Sw/featured)
-
-This page contains the most up to date setup instructions.
-
-*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
-
-
-## **_What's New_ : ChurnSim White Paper & Advanced Simulation**
+## **_What's New_ : ChurnSim White Paper & Advanced Simulation (August 2023)**
 
 ### New ChurnSim White Paper
 There is now a white paper describing the inner workings of the Fighting Churn 
@@ -40,6 +29,20 @@ crm5` to the `churnsim.py` command line, or  set the argument `schema='crm5'` to
 `run_standard_simulation` if you are running the simulation from a package 
 installation. The simulation will take an hour or so on a typical computer and produce around 
 30GB of data in your PostgreSQL database. See the Setup Instructions for more details.
+
+## What's This
+
+This is code for the book "***Fighting Churn With Data: Science and strategy for keeping your customers***"; the book serves as a detailed guide to the code.  You can get more information at:
+
+- https://www.manning.com/books/fighting-churn-with-data, the publisher (Manning Publications)'s page for the book
+- http://www.fightchurnwithdata.com, the author's blog site
+- https://www.twitch.tv/carl24k_datascience, the author's live stream
+- [The author's You Tube Channel, Fighting Churn With Data Science](https://www.youtube.com/channel/UCGVh5vcL4AAxErNdqJrr_Sw/featured)
+
+This page contains the most up to date setup instructions.
+
+*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
+
 
 ## **Setup Instructions**  
 
