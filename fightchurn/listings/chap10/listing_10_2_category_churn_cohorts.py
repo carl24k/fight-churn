@@ -21,8 +21,8 @@ def category_churn_summary(churn_data, cat_col,data_set_path):
     summary[cat_col + '_percent'] = (1.0/churn_data.shape[0]) * summary[(cat_col,'count')]
     summary['lo_conf'] = intervals[0]
     summary['hi_conf'] = intervals[1]
-    summary['lo_int'] = summary[('is_churn','mean')]-summary['lo_conf']
-    summary['hi_int'] = summary['hi_conf'] - summary[('is_churn','mean')]
+    summary['lo_int'] = abs(summary[('is_churn','mean')]-summary['lo_conf'])
+    summary['hi_int'] = abs(summary['hi_conf'] - summary[('is_churn','mean')])
     save_path = data_set_path.replace('.csv', '_' + cat_col + '_churn_category.csv')
     summary.to_csv(save_path)
     return summary
