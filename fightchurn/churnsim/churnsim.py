@@ -51,7 +51,6 @@ class ChurnSimulation:
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name,args)
-        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
         self.min_age = args.min_age
         self.max_age = args.max_age
@@ -67,18 +66,18 @@ class ChurnSimulation:
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
-        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
+        local_dir = os.path.join(f'{os.path.abspath(os.path.dirname(__file__))}','conf')
 
         self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
 
-        plans_path = local_dir +self.model_name + '_plans.csv'
+        plans_path =  os.path.join(local_dir, self.model_name + '_plans.csv')
         self.plans = pd.read_csv(plans_path,index_col=0)
         os.makedirs(self.save_path, exist_ok=True)
         copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
         copyfile(plans_path, copy_path)
 
         # self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR - wait, why?
-        add_on_file = local_dir +self.model_name + '_addons.csv'
+        add_on_file = os.path.join(local_dir, self.model_name + '_addons.csv')
         if os.path.exists(add_on_file):
             self.add_ons = pd.read_csv(add_on_file)
             copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
@@ -104,7 +103,7 @@ class ChurnSimulation:
     def sim_rate_debug_query(self):
 
         file_root = os.path.abspath(os.path.dirname(__file__))
-        with open(f'{file_root}/schema/churn_by_plan.sql', 'r') as sqlfile:
+        with open(os.path.join(file_root,'schema','churn_by_plan.sql'), 'r') as sqlfile:
             sql = sqlfile.read().replace('\n', ' ')
         sql = sql.replace('%schema',self.model_name)
         with FileLock(Customer.ID_LOCK_FILE):
