@@ -41,11 +41,11 @@ This is code for the book "***Fighting Churn With Data: Science and strategy for
 
 This page contains the most up to date setup instructions.
 
-*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
 
 
 ## **Setup Instructions**  
 
+*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
 
 ### Note from the Author
 
