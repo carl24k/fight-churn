@@ -64,7 +64,7 @@ class UtilityModel:
         """
         Calculates the average utility contribution from each behavior, for use in the utility function.
         For a detailed explanation see  the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.2, Utility Model
         - Section 3.4.2, Product Channels
 
@@ -110,7 +110,7 @@ class UtilityModel:
 
 
         For a detailed explanation see the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.2, Utility Model
         - Section 3.4.3, Customer Satisfiability Coefficient
         - Section 3.5.3, Product Plans, MRR
@@ -141,7 +141,7 @@ class UtilityModel:
         '''
         Transition probability function for upsell, downsell and churn.
         For a detailed explanation see the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.3, Churn Model
         - Section 3.5.4, Upgrade & Downgrade
 
@@ -185,7 +185,7 @@ class UtilityModel:
         '''
         Determine one customer's upgrade, downgrade, changes in add-ons and changes in billing period.
         For a detailed explanation see the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.5.4, Upgrade & Downgrade
         - Section 3.5.5, Add-on Products
         - Section 3.5.6, Billing Periods

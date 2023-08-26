@@ -29,7 +29,7 @@ class ChurnSimulation:
         the database connection
 
         For a detailed explanation the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.1 Behavior Model
         - Section 3.3 Simulation Algorithm
         - Section 3.4.2 Product Channels
@@ -131,7 +131,7 @@ class ChurnSimulation:
         '''
         Simulate one customer collecting its events and subscriptions. This is  core inner loop of the simulation.
         For a detailed explanation see Section 3.3, Simulation Algorithm, of the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Also see section 3.4.5 Customer Location regarding the country
 
         This function has the core interaction between the simulation objects.  Customer is created from the behavior
@@ -347,7 +347,7 @@ class ChurnSimulation:
         Note that churn is not handled at this level, but is modeled at the customer level.
 
         For a detailed explanation see Section 3.3, Simulation Algorithm, of the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         :return:
         '''
 

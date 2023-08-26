@@ -68,7 +68,7 @@ class NormalBehaviorModel(BehaviorModel):
         These are loaded using pandas.
 
         For a detailed explanation see the ChurnSim report, section 3.2.1, "Behavior Model"
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
 
         Note that the Gaussian base class is currently deprecated and the Log-Normal version is used instead.
         :param name:
@@ -146,7 +146,7 @@ class LogNormalBehaviorModel(NormalBehaviorModel):
         This is the Log-Normal version of the behavior model
 
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - section 3.2.1, "Behavior Model"
         - Section 3.4.2, Product Channels
 
@@ -179,7 +179,7 @@ class LogNormalBehaviorModel(NormalBehaviorModel):
         gaussian distribution.
 
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - section 3.2.1, "Behavior Model"
 
         Also ,subtract 0.5 and set min at 0.5 per month, so there can be very low rates despite 0 (1) min in log normal sim

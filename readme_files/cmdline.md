@@ -190,7 +190,7 @@ Next, you need to write some data to the database in order to run the code again
 provided with the code distribution. 
 
 **New in 2023**: There is now a white paper describing the inner workings of the churn simulation:
-* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160)
 * It is not necessary to read the white paper to learn the churn fighting techniques from the 
   book - 
   this is intended for advanced data scientists who want to create their own simulations.
@@ -239,7 +239,7 @@ This will continue for a while - maybe 15-30 minutes if you are running with a s
 #### 2.7.2 Running the Advanced Data Simulation of a CRM Product
 
 Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
-the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
+the [ChurnSim White Paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160)! To try the new simulation follow the setup 
 instructions and add the parameter `'crm5'` to the `run_standard_simulation` function call. 
 * You can speed up the simulation by adding the parameter `n_parallel=<X>` where `<X>` is an 
   appropriate number of parallel workers for your machine.

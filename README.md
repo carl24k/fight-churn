@@ -10,7 +10,7 @@
 ### New ChurnSim White Paper
 There is now a white paper describing the inner workings of the Fighting Churn 
 WIth Data churn simulation program:
-* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](./readme_files/churnsim_gold_2023.pdf)
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160)
 * Note: It is not necessary to read the white paper to learn the churn fighting techniques from the 
   book - the white paper is intended for advanced data scientists who want to create their own 
   simulations.
