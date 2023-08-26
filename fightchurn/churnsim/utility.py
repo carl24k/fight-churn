@@ -275,7 +275,8 @@ class UtilityModel:
                 if len(customer.add_ons)==0:
                     customer.add_ons=pd.DataFrame([add_on[1]])
                 else:
-                    customer.add_ons = customer.add_ons.append(add_on[1])
+                    add_on_df = pd.DataFrame([add_on[1]])
+                    customer.add_ons = pd.concat([customer.add_ons,add_on_df])
                 changed_add_ons=True
                 break
 

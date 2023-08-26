@@ -191,7 +191,8 @@ class Customer:
                     if len(self.add_ons)==0:
                         self.add_ons=pd.DataFrame([add_on[1]])
                     else:
-                        self.add_ons=self.add_ons.append(add_on[1])
+                        new_add_on_df = pd.DataFrame([add_on[1]])
+                        self.add_ons=pd.concat([self.add_ons,new_add_on_df])
         self.add_add_ons(plans_to_use)
 
 
