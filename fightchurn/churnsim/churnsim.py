@@ -361,17 +361,17 @@ class ChurnSimulation:
         self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
 
         # Initial customer count
-        print('\nCreating %d initial customers for month of %s' % (self.init_customers,self.start_date))
+        print('\nCreating %d initial customers for month of %s @ %s' % (self.init_customers,self.start_date,datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         self.create_customers_for_month(self.start_date,self.init_customers)
-        print('Created %d initial customers for start date %s' % (self.init_customers,str(self.start_date)))
+        print('Created %d initial customers for start date %s @ %s' % (self.init_customers,str(self.start_date),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
         # Advance to additional months
         next_month=self.start_date+relativedelta(months=+1)
         n_to_add = int(ceil( self.init_customers* self.monthly_growth_rate))  # number of new customers in first month
         while next_month < self.end_date:
-            print('\nCreating %d new customers for month of %s:' % (n_to_add,next_month))
+            print('\nCreating %d new customers for month of %s @ %s:' % (n_to_add,next_month,datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
             self.create_customers_for_month(next_month,n_to_add)
-            print('Created %d new customers for month %s\n' % (n_to_add,str(next_month)))
+            print('Created %d new customers for month %s @ %s\n' % (n_to_add,str(next_month),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
             next_month=next_month+relativedelta(months=+1)
             n_to_add = int(ceil( n_to_add * (1.0+self.monthly_growth_rate))) # increase the new customers by growth
 
