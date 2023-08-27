@@ -23,7 +23,7 @@ class Customer:
         own subscriptions and events.
 
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.1, Behavior Model - basics of the behavior model
         - Section 3.3, Simulation Algorithm - use of the daily rates
         - Section 3.4.1, Day of Week Behavioral Fluctuation
@@ -143,7 +143,7 @@ class Customer:
     def pick_initial_plan(self, plans, add_ons, bill_periods=None):
         """
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.5.3 Product Plans, MRR and Limits
         - Section 3.5.6 Billing Periods
 
@@ -191,14 +191,15 @@ class Customer:
                     if len(self.add_ons)==0:
                         self.add_ons=pd.DataFrame([add_on[1]])
                     else:
-                        self.add_ons=self.add_ons.append(add_on[1])
+                        new_add_on_df = pd.DataFrame([add_on[1]])
+                        self.add_ons=pd.concat([self.add_ons,new_add_on_df])
         self.add_add_ons(plans_to_use)
 
 
     def set_plan(self,plans,plan_idx=None, plan_name=None):
         """
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.5.3, Product PLans, MRR and Limits
         - Section 3.5.5, Add-on Products
         - Section 3.5.6, Billing Periods
@@ -230,7 +231,7 @@ class Customer:
     def add_add_ons(self,plans):
         """
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.5.3, Product PLans, MRR and Limits
         - Section 3.5.5, Add-on Products
 
@@ -252,7 +253,7 @@ class Customer:
     def get_min_max_dow_scale(scale_param):
         """
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.4.1, Day of Week Behavioral Fluctuation and equation 6
 
         :param scale_param: Scaling parameter for the day
@@ -275,7 +276,7 @@ class Customer:
         used by all customers, the first time a day is encountered.
 
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.4.1, Day of Week Behavioral Fluctuation
 
         :param the_date:
@@ -301,7 +302,7 @@ class Customer:
         event is randomly set to anything on the 24 hour range.
 
         For a detailed explanation see the ChurnSim report
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.1, Behavior Model
         - Section 3.4.1, Day of Week Behavioral Fluctuation
         - Section 3.5.1, Multi-User Accounts

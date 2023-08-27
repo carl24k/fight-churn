@@ -234,7 +234,7 @@ realistic simulation of subscription, churn and event data for you to run the bo
 Code for generating artificial data to run the code is in the directory `churnsim`.  
 
 **New in 2023**: There is now a white paper describing the inner workings of the churn simulation:
-* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](churnsim_gold_2023.pdf)
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160)
 * It is not necessary to read the report to learn the churn fighting techniques from the book - 
   this is intended for advanced data scientists who want to create their own simulations.
 * See section 1.3.3 below for information on running the simulation described in the white paper.
@@ -306,7 +306,7 @@ Great!  Now you have the data you need to run the code and learn the techniques 
 #### 1.3.3 Running the Advanced Data Simulation of a CRM Product
 
 Looking for an extra challenge? Try running and analyzing the advanced simulation described in 
-the [ChurnSim White Paper](churnsim_gold_2023.pdf)! To try the new simulation follow the setup 
+the [ChurnSim White Paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160)! To try the new simulation follow the setup 
 instructions and add the parameters `--config-name crm5` to the `churnsim.py` run configuration. 
 The CRM  simulation will produce around 30GB of data in your PostgreSQL database. The runtime 
 depends on the degree of parallelism - for a single core it can take 4+ hours.

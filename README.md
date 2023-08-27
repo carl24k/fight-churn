@@ -10,7 +10,7 @@
 ### New ChurnSim White Paper
 There is now a white paper describing the inner workings of the Fighting Churn 
 WIth Data churn simulation program:
-* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](./readme_files/churnsim_gold_2023.pdf)
+* [ChurnSim: A Customer Churn Behavioral Simulation System For Education and Analysis](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160)
 * Note: It is not necessary to read the white paper to learn the churn fighting techniques from the 
   book - the white paper is intended for advanced data scientists who want to create their own 
   simulations.
@@ -41,11 +41,11 @@ This is code for the book "***Fighting Churn With Data: Science and strategy for
 
 This page contains the most up to date setup instructions.
 
-*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
 
 
 ## **Setup Instructions**  
 
+*WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
 
 ### Note from the Author
 

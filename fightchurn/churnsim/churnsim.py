@@ -29,7 +29,7 @@ class ChurnSimulation:
         the database connection
 
         For a detailed explanation the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Section 3.2.1 Behavior Model
         - Section 3.3 Simulation Algorithm
         - Section 3.4.2 Product Channels
@@ -51,7 +51,6 @@ class ChurnSimulation:
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name,args)
-        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
 
         self.min_age = args.min_age
         self.max_age = args.max_age
@@ -67,18 +66,18 @@ class ChurnSimulation:
             self.behavior_models[behave_mod.version]=behave_mod
             self.model_list.append(behave_mod)
 
-        local_dir = f'{os.path.abspath(os.path.dirname(__file__))}/conf/'
+        local_dir = os.path.join(f'{os.path.abspath(os.path.dirname(__file__))}','conf')
 
         self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
 
-        plans_path = local_dir +self.model_name + '_plans.csv'
+        plans_path =  os.path.join(local_dir, self.model_name + '_plans.csv')
         self.plans = pd.read_csv(plans_path,index_col=0)
         os.makedirs(self.save_path, exist_ok=True)
         copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
         copyfile(plans_path, copy_path)
 
         # self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR - wait, why?
-        add_on_file = local_dir +self.model_name + '_addons.csv'
+        add_on_file = os.path.join(local_dir, self.model_name + '_addons.csv')
         if os.path.exists(add_on_file):
             self.add_ons = pd.read_csv(add_on_file)
             copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
@@ -104,7 +103,7 @@ class ChurnSimulation:
     def sim_rate_debug_query(self):
 
         file_root = os.path.abspath(os.path.dirname(__file__))
-        with open(f'{file_root}/schema/churn_by_plan.sql', 'r') as sqlfile:
+        with open(os.path.join(file_root,'schema','churn_by_plan.sql'), 'r') as sqlfile:
             sql = sqlfile.read().replace('\n', ' ')
         sql = sql.replace('%schema',self.model_name)
         with FileLock(Customer.ID_LOCK_FILE):
@@ -132,7 +131,7 @@ class ChurnSimulation:
         '''
         Simulate one customer collecting its events and subscriptions. This is  core inner loop of the simulation.
         For a detailed explanation see Section 3.3, Simulation Algorithm, of the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         - Also see section 3.4.5 Customer Location regarding the country
 
         This function has the core interaction between the simulation objects.  Customer is created from the behavior
@@ -348,7 +347,7 @@ class ChurnSimulation:
         Note that churn is not handled at this level, but is modeled at the customer level.
 
         For a detailed explanation see Section 3.3, Simulation Algorithm, of the ChurnSim report:
-        https://github.com/carl24k/fight-churn/blob/master/readme_files/churnsim_gold_2023.pdf
+        https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4540160
         :return:
         '''
 
@@ -362,17 +361,17 @@ class ChurnSimulation:
         self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
 
         # Initial customer count
-        print('\nCreating %d initial customers for month of %s' % (self.init_customers,self.start_date))
+        print('\nCreating %d initial customers for month of %s @ %s' % (self.init_customers,self.start_date,datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         self.create_customers_for_month(self.start_date,self.init_customers)
-        print('Created %d initial customers for start date %s' % (self.init_customers,str(self.start_date)))
+        print('Created %d initial customers for start date %s @ %s' % (self.init_customers,str(self.start_date),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
         # Advance to additional months
         next_month=self.start_date+relativedelta(months=+1)
         n_to_add = int(ceil( self.init_customers* self.monthly_growth_rate))  # number of new customers in first month
         while next_month < self.end_date:
-            print('\nCreating %d new customers for month of %s:' % (n_to_add,next_month))
+            print('\nCreating %d new customers for month of %s @ %s:' % (n_to_add,next_month,datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
             self.create_customers_for_month(next_month,n_to_add)
-            print('Created %d new customers for month %s\n' % (n_to_add,str(next_month)))
+            print('Created %d new customers for month %s @ %s\n' % (n_to_add,str(next_month),datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
             next_month=next_month+relativedelta(months=+1)
             n_to_add = int(ceil( n_to_add * (1.0+self.monthly_growth_rate))) # increase the new customers by growth
 

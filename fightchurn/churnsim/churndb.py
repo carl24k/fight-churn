@@ -34,7 +34,7 @@ def setup_churn_db(schema_name):
 
     for t in tables:
         file_root = os.path.abspath(os.path.dirname(__file__))
-        with open('%s/schema/create_%s.sql' % (file_root,t), 'r') as sqlfile:
+        with open(os.path.join(file_root,'schema',f'create_{t}.sql')) as sqlfile:
             sql = sqlfile.read().replace('\n', ' ')
         sql=sql.replace('x.','%s.' % schema_name)
         print('Creating table %s' % t)
