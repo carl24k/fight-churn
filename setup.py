@@ -65,7 +65,7 @@ setuptools.setup(
                         "packaging==23.1",
                         "pandas==1.5.3",
                         "patsy==0.5.3",
-                        "Pillow==10.0.0",
+                        "Pillow==10.0.1",
                         "filelock==3.12.2",
                         "omegaconf==2.3.0",
                         "pkginfo==1.9.6",
