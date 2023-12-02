@@ -22,6 +22,16 @@
                 "%to_yyyy-mm-dd": "2023-06-01"
             }
         },
+        "list3": {
+            "name": "activity_churn",
+            "params": {
+                "%max_inactive": "1 month"
+            },
+            "v2" : {
+                "%from_yyyy-mm-dd": "2023-05-01",
+                "%to_yyyy-mm-dd": "2023-06-01"
+            }
+        },
         "list4": {
             "name": "mrr_churn",
             "params": {},
