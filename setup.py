@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="fightchurn",
-    version="1.1.3",
+    version="1.1.4",
     author="Carl Gold",
     author_email="carl@fightchurnwithdata.com",
     description="Code from the book Fighting Churn With Data",
@@ -65,7 +65,7 @@ setuptools.setup(
                         "packaging==23.1",
                         "pandas==1.5.3",
                         "patsy==0.5.3",
-                        "Pillow==10.0.0",
+                        "Pillow==10.0.1",
                         "filelock==3.12.2",
                         "omegaconf==2.3.0",
                         "pkginfo==1.9.6",
@@ -91,7 +91,7 @@ setuptools.setup(
                         "toml==0.10.2",
                         "tqdm==4.66.1",
                         "twine==4.0.2",
-                        "urllib3==2.0.4",
+                        "urllib3==2.0.7",
                         "webencodings==0.5.1",
                         "xgboost==1.7.6",
                         "zipp==3.16.2"]
