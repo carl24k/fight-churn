@@ -332,7 +332,7 @@ def set_churn_environment(db : str, user : str,password : str,output_dir : str =
 
 
 def run_listing(chapter : int = 2, listing : Union[int,List[int]] = 1, version : Union[int,List[int]] = [],
-                schema:str = 'socialnet7', insert: bool =False):
+                schema:str = 'socialnet7', insert: bool =False, n_parallel: int=1):
     '''
     Run one or more listings from the book
     :param chapter: integer chapter rnumber
@@ -340,6 +340,7 @@ def run_listing(chapter : int = 2, listing : Union[int,List[int]] = 1, version :
     :param version: integer or list of integers version number, for pre-configured parameters described in the book
     :param schema: string name of the database schema from which data originates
     :param insert: boolean flag to run the version of SQLs that inserts to the database in chapter 7
+    :param n_parallel: number of parallel processes to run, default=1
     :return: None
     '''
     if isinstance(listing,int):
@@ -351,7 +352,7 @@ def run_listing(chapter : int = 2, listing : Union[int,List[int]] = 1, version :
                      version=version,
                      schema=schema,
                      insert=insert,
-                     n_parallel=1)
+                     n_parallel=n_parallel)
     run_churn_listing_from_args(args)
 
 
