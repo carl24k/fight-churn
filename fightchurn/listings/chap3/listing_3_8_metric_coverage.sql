@@ -8,7 +8,7 @@ date_range as (
 	 s.start_date <= d.end_date
 	and (s.end_date >= d.start_date or s.end_date is null)
 )
-select metric_name, 
+select metric_name, m.metric_name_id,
 	count(distinct m.account_id) as count_with_metric,
 	n_account as n_account,    
 	(count(distinct m.account_id))::float/n_account::float as pcnt_with_metric    ,
@@ -25,5 +25,5 @@ inner join metric_name  n on m.metric_name_id = n.metric_name_id
 inner join subscription s on s.account_id = m.account_id
     and s.start_date <= m.metric_time
     and (s.end_date >= m.metric_time or s.end_date is null)
-group by metric_name,n_account
+group by metric_name,m.metric_name_id,n_account
 order by metric_name;
