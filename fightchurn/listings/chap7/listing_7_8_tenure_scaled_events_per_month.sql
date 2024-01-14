@@ -11,5 +11,6 @@ inner join metric_name  n on m.metric_name_id = n.metric_name_id
 where t.event_type_name='%event2measure'
     and n.metric_name='account_tenure'
     and metric_value >= %min_tenure
+    and m.account_id = 0
 group by m.account_id, metric_time, metric_value    
 order by m.account_id, metric_time, metric_value
