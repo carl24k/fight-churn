@@ -7,4 +7,5 @@ from event e inner join calc_date d on
   and e.event_time > d.the_date - interval '28 day'
 inner join event_type t on t.event_type_id=e.event_type_id
 where t.event_type_name='%event2measure'
+and account_id < 20
 group by account_id; 

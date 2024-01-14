@@ -8,5 +8,6 @@ on e.event_time < metric_date
 and e.event_time >= metric_date - interval '28 day'
 inner join event_type t on t.event_type_id=e.event_type_id
 where t.event_type_name='%event2measure'
+and account_id=0
 group by account_id, metric_date
 order by account_id, metric_date;
