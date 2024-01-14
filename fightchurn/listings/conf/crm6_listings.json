@@ -596,7 +596,7 @@
                 "metric_to_plot": "mrr_per_active_user"
             },
             "v42": {
-                "metric_to_plot": "mrr_per_dollar_closed",
+                "metric_to_plot": "mrr_per_dollar_won",
                 "exclude_zeros" : false,
                 "log_scale" : true
             },
@@ -668,15 +668,15 @@
             "name": "filled_ratio",
             "params": {
                 "%num_metric": "mrr",
-                "%den_metric": "opp_value_per_month",
+                "%den_metric": "sum_win_opportunity_value",
                 "%fill_val": 1
             },
             "insert": {
                 "params": {
                     "%num_metric": "mrr",
-                    "%den_metric": "opp_value_per_month",
+                    "%den_metric": "sum_win_opportunity_value",
                     "%new_metric_id": 47,
-                    "%new_metric_name": "mrr_per_dollar_closed",
+                    "%new_metric_name": "mrr_per_dollar_won",
                     "%fill_val": 1
                 }
             }
@@ -684,7 +684,7 @@
         "list1": {
             "name": "ratio_metric",
             "params": {
-                    "%num_metric": "opp_value_per_month",
+                    "%num_metric": "sum_win_opportunity_value",
                     "%den_metric": "mrr"
             },
             "insert": {
@@ -696,7 +696,7 @@
                 },
                 "v1": {
                     "%new_metric_name": "opp_value_per_dollar",
-                    "%num_metric": "opp_value_per_month",
+                    "%num_metric": "sum_win_opportunity_value",
                     "%den_metric": "mrr",
                     "%new_metric_id": 33
                 },
@@ -733,7 +733,7 @@
                 "v8": {
                     "%new_metric_name": "search_actions_per_dollar_closed",
                     "%num_metric": "search_actions",
-                    "%den_metric": "opp_value_per_month",
+                    "%den_metric": "sum_win_opportunity_value",
                     "%new_metric_id": 45
                 },
                 "v9": {
@@ -789,7 +789,7 @@
                     "%new_metric_name": "search_actions"
                 },
                 "v5": {
-                    "%metric_list": " 'opp_value_lost_per_month', 'opp_value_per_month'",
+                    "%metric_list": " 'opp_value_lost_per_month', 'sum_win_opportunity_value'",
                     "%new_metric_id": 50,
                     "%new_metric_name": "total_opp_value_closed"
                 }

@@ -33,7 +33,7 @@ sum(case when metric_name_id=124 then metric_value else 0 end) as cancel_meeting
 sum(case when metric_name_id=25 then metric_value else 0 end) as mrr,
 sum(case when metric_name_id=31 then metric_value else 0 end) as opp_value_won,
 sum(case when metric_name_id=32 then metric_value else 0 end) as opp_value_lost,
-sum(case when metric_name_id=47 then metric_value else 0 end) as mrr_per_dollar_closed
+sum(case when metric_name_id=47 then metric_value else 0 end) as mrr_per_dollar_won
 
 from metric m inner join observation_params
 on metric_time between obs_start and obs_end    
