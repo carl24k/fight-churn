@@ -41,7 +41,8 @@ retained_mrr as (
 SELECT s.start_date,(s.start_date+interval '1 month')::date as end_date,
 	retained_mrr /start_mrr as net_retention_rate,
     start_mrr, retained_mrr,
-    (retained_mrr /start_mrr )^12 as annual_net_retention_rate
+    (retained_mrr /start_mrr )^12 as annual_net_retention_rate,
+    1.0-(retained_mrr /start_mrr )^12 as annual_net_retention_churn
 FROM start_mrr s
 inner join retained_mrr r
 on s.start_date=r.start_date
