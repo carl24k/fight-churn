@@ -25,3 +25,7 @@ FROM earlier_starts
 group by account_id, metric_date
 order by account_id, metric_date
 ON CONFLICT DO NOTHING;
+
+
+INSERT into metric_name values (%new_metric_id,concat('account_tenure'))
+ON CONFLICT DO NOTHING;
