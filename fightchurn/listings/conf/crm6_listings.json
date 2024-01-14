@@ -808,102 +808,106 @@
                     "%desc_period": 28,
                     "%min_tenure": 14
                 },
-                "v1": {
-                    "%event2measure": "add_contact",
-                    "%new_metric_id": 1
-                },
-                "v2": {
-                    "%event2measure": "edit_contact",
-                    "%new_metric_id": 2
-                },
-                "v3": {
-                    "%event2measure": "add_lead",
-                    "%new_metric_id": 3
-                },
-                "v4": {
-                    "%event2measure": "edit_lead",
-                    "%new_metric_id": 4
-                },
-                "v5": {
-                    "%event2measure": "email_lead",
-                    "%new_metric_id": 5
-                },
-                "v6": {
-                    "%event2measure": "call_lead",
-                    "%new_metric_id": 6
-                },
-                "v7": {
-                    "%event2measure": "unsub_lead",
-                    "%new_metric_id": 7
-                },
-                "v8": {
-                    "%event2measure": "create_list",
-                    "%new_metric_id": 8
-                },
-                "v9": {
-                    "%event2measure": "delete_list",
-                    "%new_metric_id": 9
-                },
-                "v10": {
-                    "%event2measure": "email_list",
-                    "%new_metric_id": 10
-                },
-                "v11": {
-                    "%event2measure": "meeting",
-                    "%new_metric_id": 11
-                },
-                "v12": {
-                    "%event2measure": "schedule_meeting",
-                    "%new_metric_id": 12
-                },
-                "v13": {
-                    "%event2measure": "edit_meeting",
-                    "%new_metric_id": 13
-                },
-                "v14": {
-                    "%event2measure": "cancel_meeting",
-                    "%new_metric_id": 14
-                },
-                "v15": {
-                    "%event2measure": "quote",
-                    "%new_metric_id": 15
-                },
-                "v16": {
-                    "%event2measure": "create_opportunity",
-                    "%new_metric_id": 16
-                },
-                "v17": {
-                    "%event2measure": "advance_stage",
-                    "%new_metric_id": 17
-                },
-                "v18": {
-                    "%event2measure": "win_opportunity",
-                    "%new_metric_id": 18
-                },
-                "v19": {
-                    "%event2measure": "add_competitor",
-                    "%new_metric_id": 19
-                },
-                "v21": {
-                    "%event2measure": "lose_opportunity",
-                    "%new_metric_id": 21
-                },
-                "v23": {
-                    "%event2measure": "search",
-                    "%new_metric_id": 23
-                },
-                "v24": {
-                    "%event2measure": "create_search",
-                    "%new_metric_id": 24
-                },
-                "v25": {
-                    "%event2measure": "edit_search",
-                    "%new_metric_id": 25
-                },
-                "v26": {
-                    "%event2measure": "delete_search",
-                    "%new_metric_id": 26
-                }
+            "v0": {
+                "%new_metric_id": 100,
+                "%event2measure": "search"
+            },
+            "v1": {
+                "%new_metric_id" :101,
+                "%event2measure": "create_search"
+            },
+            "v2": {
+                "%new_metric_id" :102,
+                "%event2measure": "edit_search"
+            },
+            "v3": {
+                "%new_metric_id" :103,
+                "%event2measure": "delete_search"
+            },
+            "v4": {
+                "%new_metric_id" :104,
+                "%event2measure": "win_opportunity"
+            },
+            "v5": {
+                "%new_metric_id" :105,
+                "%event2measure": "advance_stage"
+            },
+            "v6": {
+                "%new_metric_id" :106,
+                "%event2measure": "add_competitor"
+            },
+            "v7": {
+                "%new_metric_id" :107,
+                "%event2measure": "disqualify_opportunity"
+            },
+            "v8": {
+                "%new_metric_id": 108,
+                "%event2measure": "lose_opportunity"
+            },
+            "v9": {
+                "%new_metric_id" :109,
+                "%event2measure": "quote"
+            },
+            "v10": {
+                "%new_metric_id" :110,
+                "%event2measure": "create_opportunity"
+            },
+            "v11": {
+                "%new_metric_id" :111,
+                "%event2measure": "add_contact"
+            },
+            "v12": {
+                "%new_metric_id" :112,
+                "%event2measure": "edit_contact"
+            },
+            "v13": {
+                "%new_metric_id" :113,
+                "%event2measure": "add_lead"
+            },
+            "v14": {
+                "%new_metric_id" :114,
+                "%event2measure": "unsub_lead"
+            },
+            "v15": {
+                "%new_metric_id" :115,
+                "%event2measure": "edit_lead"
+            },
+            "v16": {
+                "%new_metric_id" :116,
+                "%event2measure": "email_lead"
+            },
+            "v17": {
+                "%new_metric_id" :117,
+                "%event2measure": "call_lead"
+            },
+            "v18": {
+                "%new_metric_id" :118,
+                "%event2measure": "create_list"
+            },
+            "v19": {
+                "%new_metric_id" :119,
+                "%event2measure": "delete_list"
+            },
+            "v20": {
+                "%new_metric_id" :120,
+                "%event2measure": "email_list"
+            },
+            "v21": {
+                "%new_metric_id" :121,
+                "%event2measure": "meeting"
+            },
+            "v22": {
+                "%new_metric_id" :122,
+                "%event2measure": "schedule_meeting"
+            },
+            "v23": {
+                "%new_metric_id" :123,
+                "%event2measure": "edit_meeting"
+            },
+            "v24": {
+                "%new_metric_id" :124,
+                "%event2measure": "cancel_meeting"
+            }
             }
         },
         "list9": {
