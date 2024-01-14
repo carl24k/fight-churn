@@ -304,34 +304,37 @@
                 "%new_metric_name": "cancel_meeting_per_month"
             },
 
+            "v25": {
+                "%new_metric_name": "mrr",
+                "%new_metric_id": 25
+            },
+            "v26": {
+                "%new_metric_name": "billing_period_months",
+                "%new_metric_id": 26
+            },
+            "v27": {
+                "%new_metric_name": "discount",
+                "%new_metric_id": 27
+            },
+            "v28": {
+                "%new_metric_name": "users_purchased",
+                "%new_metric_id": 28
+            },
+
             "v30": {
                 "%new_metric_name": "account_tenure",
                 "%new_metric_id": 30
             },
+
             "v31": {
-                "%new_metric_name": "mrr",
+                "%new_metric_name": "opp_value_per_month",
                 "%new_metric_id": 31
             },
             "v32": {
-                "%new_metric_name": "opp_value_per_month",
-                "%new_metric_id": 32
-            },
-            "v33": {
-                "%new_metric_name": "users_purchased",
-                "%new_metric_id": 32
-            },
-            "v34": {
                 "%new_metric_name": "opp_value_lost_per_month",
-                "%new_metric_id": 49
-            },
-            "v35": {
-                "%new_metric_name": "billing_period_months",
-                "%new_metric_id": 29
-            },
-            "v36": {
-                "%new_metric_name": "discount",
-                "%new_metric_id": 27
+                "%new_metric_id": 32
             }
+
         },
         "list5": {
             "name": "sum_metric",
@@ -379,14 +382,14 @@
             "name": "account_tenure_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 0
+                "%new_metric_id": 30
             }
         },
         "list17": {
             "name": "mrr_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 30
+                "%new_metric_id": 25
             }
         },
         "list18": {
@@ -407,7 +410,7 @@
                 "mode": "run",
                 "%event2measure": "lose_opportunity",
                 "%field2sum": "event_value",
-                "%new_metric_id": 49
+                "%new_metric_id": 32
             }
         },
         "list19": {
@@ -415,14 +418,14 @@
             "params": {
                 "mode": "run",
                 "%unit": "users",
-                "%new_metric_id": 32
+                "%new_metric_id": 28
             }
         },
         "list20": {
             "name": "billing_period_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 29
+                "%new_metric_id": 26
             }
         },
         "list21": {
@@ -657,19 +660,19 @@
         "list1": {
             "name": "ratio_metric",
             "params": {
-                    "%num_metric": "total_opp_value_closed",
+                    "%num_metric": "opp_value_per_month",
                     "%den_metric": "mrr"
             },
             "insert": {
                 "params": {
-                    "%num_metric": "total_opp_value_closed",
+                    "%num_metric": "opp_value_per_dollar",
                     "%den_metric": "mrr",
                     "%new_metric_id": 33,
                     "%new_metric_name": "opp_close_per_dollar"
                 },
                 "v1": {
-                    "%new_metric_name": "total_opp_value_closed",
-                    "%num_metric": "win_opportunity_28avg_84obs",
+                    "%new_metric_name": "opp_value_per_dollar",
+                    "%num_metric": "opp_value_per_month",
                     "%den_metric": "mrr",
                     "%new_metric_id": 33
                 },
