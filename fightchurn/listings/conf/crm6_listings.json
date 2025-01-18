@@ -79,6 +79,16 @@
             "name": "multi_date_count",
             "params": {}
         },
+        "list3": {
+            "name": "count_metric_insert",
+            "params": {
+                "mode": "run",
+                "%new_metric_id": 0
+            },
+            "v10": {
+                "%event2measure": ""
+            }
+        },
         "list4": {
             "name": "metric_name_insert",
             "params": {
