@@ -191,6 +191,6 @@ class LogNormalBehaviorModel(NormalBehaviorModel):
         if self.behave_maxs is not None:
             customer_rates = customer_rates.clip(max=self.behave_maxs).to_numpy()
         new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}),
-                               start_of_month=start_of_month,args=args,channel_name=self.version)
+                               start_date=start_of_month, args=args, channel_name=self.version)
         # print(customer_rates)
         return new_customer

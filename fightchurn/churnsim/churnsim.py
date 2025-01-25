@@ -1,4 +1,5 @@
 import hydra
+import joblib
 import random
 import numpy as np
 import os
@@ -43,7 +44,12 @@ class ChurnSimulation:
         self.args = args
         self.model_name = args.model
         self.start_date = parser.parse(args.start_date).date()
-        self.end_date = parser.parse(args.end_date).date()
+        if args.end_date != 'today':
+            self.end_date = parser.parse(args.end_date).date()
+            self.mode='batch'
+        else:
+            self.end_date = datetime.today().date()
+            self.mode='live'
         self.init_customers=args.init_customers
         self.monthly_growth_rate = args.growth_rate
         self.devmode= args.dev
@@ -127,6 +133,30 @@ class ChurnSimulation:
             pass
 
 
+    def create_customer(self, start_date):
+        customer_model = self.behavior_models[np.random.choice(list(self.population_percents.keys()),
+                                          p= list(self.population_percents.values()))]
+        new_customer=customer_model.generate_customer(start_date,args=self.args)
+
+        customer_country = np.random.choice(list(self.country_lookup.keys()),p=list(self.country_lookup.values()))
+        new_customer.country = customer_country
+
+        plans_to_use = self.plans
+        available_periods = None
+        if 'bill_period' in self.plans.columns.values:
+            available_periods = sorted(self.plans['bill_period'].unique())
+            # For the first month in a simulation, only allow 1 month bill periods
+            #  - otherwise there are artificial cycles of lots of people re-newing on the 3,6,12 months
+            if start_date <= self.start_date+ relativedelta(months=1):
+                min_period=self.plans['bill_period'].min()
+                plans_to_use =  self.plans[self.plans['bill_period']==min_period]
+
+        new_customer.pick_initial_plan(plans_to_use, self.add_ons, available_periods)
+        new_customer.next_renewal = new_customer.start_date + relativedelta(months=new_customer.bill_period)
+        new_customer.add_subscriptions(new_customer.start_date, self.plans, self.add_ons)
+
+        return new_customer
+
     def simulate_customer(self, start_of_month):
         '''
         Simulate one customer collecting its events and subscriptions. This is  core inner loop of the simulation.
@@ -141,41 +171,10 @@ class ChurnSimulation:
         :param start_of_month:
         :return: the new customer object it contains the events and subscriptions
         '''
-        customer_model = self.behavior_models[np.random.choice(list(self.population_percents.keys()),
-                                          p= list(self.population_percents.values()))]
-        new_customer=customer_model.generate_customer(start_of_month,args=self.args)
-
-        customer_country = np.random.choice(list(self.country_lookup.keys()),p=list(self.country_lookup.values()))
-        new_customer.country = customer_country
-
-        plans_to_use = self.plans
-        available_periods = None
-        if 'bill_period' in self.plans.columns.values:
-            available_periods = sorted(self.plans['bill_period'].unique())
-            # For the first month in a simulation, only allow 1 month bill periods
-            #  - otherwise there are artificial cycles of lots of people re-newing on the 3,6,12 months
-            if start_of_month==self.start_date:
-                min_period=self.plans['bill_period'].min()
-                plans_to_use =  self.plans[self.plans['bill_period']==min_period]
-
-        new_customer.pick_initial_plan(plans_to_use, self.add_ons, available_periods)
-
-        # Pick a random start date for the subscription within the month
         end_range = start_of_month + relativedelta(months=+1)
+        # Pick a random start date for the subscription within the month
         customer_start = start_of_month + timedelta(days=random.randrange((end_range-start_of_month).days))
-        next_renewal = customer_start + relativedelta(months=new_customer.bill_period)
-
-        def add_customer_subscriptions(this_month, next_renewal):
-            plan_units, plan_quantity = self.get_unit_quantity(new_customer.plan)
-            new_customer.subscriptions.append( (new_customer.plan, this_month,
-                                                next_renewal,
-                                                new_customer.base_mrr, plan_quantity, plan_units, new_customer.bill_period, new_customer.discount ))
-            for add_on in new_customer.add_ons.iterrows():
-                add_units, add_quantity = self.get_unit_quantity(add_on[1]['plan'])
-                new_customer.subscriptions.append( (add_on[1]['plan'],this_month,next_renewal, add_on[1]['mrr'],
-                                                    add_quantity,add_units, new_customer.bill_period, new_customer.discount) )
-
-        add_customer_subscriptions(customer_start, next_renewal)
+        new_customer = self.create_customer(customer_start)
 
         churned = False
         churn_intent_count = 0
@@ -379,13 +378,35 @@ class ChurnSimulation:
         self.sim_rate_debug_query()
 
 
+    def live_simulation(self):
+        live_sim_file = os.path.join(self.save_path,'live_sim_customers.joblib')
+        if os.path.exists(live_sim_file):
+            sim_data = joblib.load(live_sim_file)
+            customers= sim_data.customers
+            n_to_add = int(ceil(len(customers)* self.monthly_growth_rate))/30
+        else:
+            sim_date = {}
+            customers = []
+            n_to_add = self.init_customers
+
+        new_customers = [None]*n_to_add
+        for cidx in range(n_to_add):
+            new_customers[cidx]=self.create_customer(self.start_date)
+
+        customers.extend(new_customers)
+
+
+
 @hydra.main(version_base=None, config_path="conf", config_name="socialnet7")
 def run_churn_simulation(cfg : DictConfig):
     print(OmegaConf.to_yaml(cfg))
     if cfg.random_seed is not None:
         random.seed(cfg.random_seed) # for random
     churn_sim = ChurnSimulation(cfg)
-    churn_sim.run_simulation(force=cfg.force)
+    if not cfg.end_date=='today':
+        churn_sim.run_simulation(force=cfg.force)
+    else:
+        churn_sim.live_simulation()
 
 
 if __name__ == "__main__":

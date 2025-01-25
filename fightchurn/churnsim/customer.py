@@ -16,7 +16,7 @@ class Customer:
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
-    def __init__(self,behavior_rates,start_of_month,args,channel_name='NA'):
+    def __init__(self, behavior_rates, start_date, args, channel_name='NA'):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -36,7 +36,7 @@ class Customer:
         - Section 3.5.7. Discounts
 
         :param behavior_rates: ndarray of behavior rates, which are assumed to be PER MONTH
-        :param start_of_month: The date of the month the customer starts
+        :param start_date: The date of the month the customer starts
         :param args: OmegaConf with the program args
         :param channel_name: string name of the channel this customers behavior was drawn from
         '''
@@ -76,11 +76,12 @@ class Customer:
 
         age_range =self.args.max_age - self.args.min_age
         avg_age = age_range/2.0
-        if start_of_month:
+        if start_date:
+            self.start_date = start_date
             self.age=random.uniform(self.args.min_age,self.args.max_age)
-            self.date_of_birth = start_of_month + relativedelta.relativedelta(years=-int(self.age),
-                                                                              months=-int( (self.age % 1)*12 ),
-                                                                              days=-random.uniform(1,30))
+            self.date_of_birth = start_date + relativedelta.relativedelta(years=-int(self.age),
+                                                                          months=-int( (self.age % 1)*12 ),
+                                                                          days=-random.uniform(1,30))
         else:
             self.date_of_birth=None
             self.age = avg_age
@@ -104,6 +105,8 @@ class Customer:
         self.events=[]
         self.current_utility = None
         self.utility_contribs = None
+
+        self.next_renewal = None
 
     def get_behavior_rate(self,behavior):
         if behavior == 'users':
@@ -365,3 +368,29 @@ class Customer:
         self.events.extend(events)
 
         return counts
+
+    @staticmethod
+    def get_unit_quantity(plan, plans, add_ons):
+        if plan in plans.index.values:
+            if plans.shape[1] > 2:
+                limit_col = plans.columns.values[2]
+                return limit_col, plans.loc[plan, limit_col]
+
+        if len(add_ons) > 0 and plan in add_ons['plan'].values:
+            if add_ons.shape[1] > 3:
+                add_on = add_ons[add_ons['plan'] == plan]
+                for limit_col in add_ons.columns.values[3:]:
+                    if add_on[limit_col].values[0] > 0:
+                        return limit_col, add_on[limit_col].values[0]
+
+        return None, None
+
+    def add_subscriptions(self, start_date, plans, add_ons):
+        plan_units, plan_quantity = Customer.get_unit_quantity(self.plan , plans, add_ons)
+        self.subscriptions.append( (self.plan, start_date,
+                                            self.next_renewal,
+                                            self.base_mrr, plan_quantity, plan_units, self.bill_period, self.discount ))
+        for add_on in add_ons.iterrows():
+            add_units, add_quantity = Customer.get_unit_quantity(add_on[1]['plan'], plans, add_ons)
+            self.subscriptions.append( (add_on[1]['plan'],start_date, self.next_renewal, add_on[1]['mrr'],
+                                                add_quantity,add_units, self.bill_period, self.discount) )
