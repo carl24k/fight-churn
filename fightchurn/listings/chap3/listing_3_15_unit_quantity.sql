@@ -6,5 +6,5 @@ select account_id, metric_date, sum(quantity) as total_UNIT
 from subscription inner join date_vals
 on start_date <= metric_date
 and (end_date > metric_date or end_date is null)
-where units = 'UNIT'
+where units = '%unit'
 group by account_id, metric_date

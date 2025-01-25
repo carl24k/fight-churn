@@ -379,8 +379,22 @@
             "name": "account_tenure_insert",
             "params": {
                 "mode": "run",
-                "%new_metric_id": 0
+                "%new_metric_id": 31
             }
+        },
+        "list14": {
+            "name": "mrr",
+            "params": {}
+        },
+        "list15": {
+            "name": "unit_quantity",
+            "params": {
+                "%unit": "users"
+            }
+        },
+        "list16": {
+            "name": "billing_period",
+            "params": {}
         },
         "list17": {
             "name": "mrr_insert",
@@ -395,13 +409,13 @@
                 "mode": "run",
                 "%event2measure": "win_opportunity",
                 "%field2sum": "event_value",
-                "%new_metric_id": 31
+                "%new_metric_id": 32
             },
             "v1": {
                 "mode": "run",
                 "%event2measure": "win_opportunity",
                 "%field2sum": "event_value",
-                "%new_metric_id": 31
+                "%new_metric_id": 32
             },
             "v2": {
                 "mode": "run",
@@ -415,7 +429,22 @@
             "params": {
                 "mode": "run",
                 "%unit": "users",
-                "%new_metric_id": 32
+                "%new_metric_id": 35
+            },
+            "v1": {
+                "mode": "run",
+                "%unit": "users",
+                "%new_metric_id": 35
+            },
+            "v2": {
+                "mode": "run",
+                "%unit": "schedule_meeting",
+                "%new_metric_id":33
+            },
+            "v3": {
+                "mode": "run",
+                "%unit": "search",
+                "%new_metric_id": 34
             }
         },
         "list20": {

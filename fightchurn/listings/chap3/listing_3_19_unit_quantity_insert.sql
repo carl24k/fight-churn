@@ -8,4 +8,7 @@ from subscription inner join date_vals
 on start_date <= metric_date
 and (end_date > metric_date or end_date is null)
 where units = '%unit'
-group by account_id, metric_date
+group by account_id, metric_date;
+
+INSERT into metric_name values (%new_metric_id,concat('qty_%unit'))
+ON CONFLICT DO NOTHING;

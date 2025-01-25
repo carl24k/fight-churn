@@ -9,3 +9,7 @@ on start_date <= metric_date
 and (end_date > metric_date or end_date is null)
 group by account_id, metric_date
 ON CONFLICT DO NOTHING;
+
+
+INSERT into metric_name values (%new_metric_id,concat('mrr'))
+ON CONFLICT DO NOTHING;
