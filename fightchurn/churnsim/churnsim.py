@@ -134,6 +134,18 @@ class ChurnSimulation:
 
 
     def create_customer(self, start_date):
+        """
+        All the steps for creating a customer:
+        1. Pick a behavior model, if there are more than one
+        2. Generate a customer from the model, which includes their behavioral propensities
+        3. Assign the country
+        4. Possibly limit availalble billing periods, if its the start of the simulation
+        5. Pick the customers plan
+        6. Calculate the next renewal
+        7. Add the new subscriptions for the plans
+        :param start_date:
+        :return:
+        """
         customer_model = self.behavior_models[np.random.choice(list(self.population_percents.keys()),
                                           p= list(self.population_percents.values()))]
         new_customer=customer_model.generate_customer(start_date,args=self.args)
@@ -190,6 +202,17 @@ class ChurnSimulation:
         return new_customer
 
     def customer_month_end(self, customer, next_month):
+        """
+        All the updates for a customer as they have completed each month.
+        1. Chance of a-causal churn
+        2. Calculate the customers utility, and determine churn that way
+        3. Check if the customer is up for renewal - if so, determine if they churn
+        4. If past renewal and not churning, check if they change their plans / bill period
+        5. Logic for mid term churn on longer billing periods
+        :param customer:
+        :param next_month:
+        :return:
+        """
         churned = False
         churn_intent = False
         # First check for acausal churn
@@ -260,6 +283,11 @@ class ChurnSimulation:
             utility_desc.to_csv( os.path.join(self.save_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}_summary.csv'))
 
     def add_customer_to_database(self,customer):
+        """
+        Add a single customer to the database
+        :param customer:
+        :return:
+        """
         db = Postgres(self.con_string())
         sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
                                                                 customer.date_of_birth.isoformat(),
@@ -383,7 +411,8 @@ class ChurnSimulation:
         Function to run one day of live simulation, for a given date. If there is a saved file, the existing customers
         are loaded - it must be the file from yesterday or an error is raised. If no file, a new file will be created.
         Customers are created and added to the database one by one, and new events for the customers are generated
-        for today's date, added to the customer's monthly count variable, and saved to the database.
+        for today's date, added to the customer's monthly count variable, and saved to the database. If a customer
+        passes their month end date, it does the month end routine on that customer.
 
         :param todays_date:
         :return:
@@ -396,10 +425,12 @@ class ChurnSimulation:
             sim_data = joblib.load(live_sim_file)
             customers= sim_data['customers']
             last_date = sim_data['last_date']
+            self.start_date = sim_data['start_date']  #  Reset class start_date, overriding the config
             todays_date = last_date + timedelta(days=1)
             print(f"Loaded {len(customers)} with last date {last_date}, running for {todays_date}")
         else:
-            todays_date = datetime.today().date()
+            # Set the simulation start date to today
+            self.start_date = todays_date = datetime.today().date()
             # Starting a simulation from scratch - first wipe the database
             self.first_sim_setup(force=True)
             customers = [None]*self.init_customers
@@ -416,7 +447,7 @@ class ChurnSimulation:
         n_to_add = int(ceil(len(customers)* self.monthly_growth_rate/30))
         new_customers = [None]*n_to_add
         for cidx in range(n_to_add):
-            new_customers[cidx]=self.create_customer(self.start_date)
+            new_customers[cidx]=self.create_customer(todays_date)
             self.add_customer_to_database(new_customers[cidx])
         customers.extend(new_customers)
 
@@ -441,6 +472,7 @@ class ChurnSimulation:
 
 
         sim_data = {
+            'start_date': self.start_date,
             'last_date' : todays_date,
             'customers' : retained_customers
         }
@@ -454,7 +486,6 @@ def run_churn_simulation(cfg : DictConfig):
     """
     Two types of simulations are supported: Regular (original) runs an entire multi-month simulation in one go.
     Live simulation (new) does a single day, and saves customers in a file to continue the simulation the next day.
-    Setting the "end_date" in a cfg file tell the simulator to use "live" simulation mode. For live simulation,
     :param cfg:
     :return:
     """
