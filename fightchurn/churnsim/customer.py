@@ -404,3 +404,8 @@ class Customer:
             add_units, add_quantity = Customer.get_unit_quantity(add_on[1]['plan'], plans, add_ons)
             self.subscriptions.append( (add_on[1]['plan'],start_date, self.next_renewal, add_on[1]['mrr'],
                                                 add_quantity,add_units, self.bill_period, self.discount) )
+
+
+    def clear_history(self):
+        self.subscriptions=[]
+        self.events=[]

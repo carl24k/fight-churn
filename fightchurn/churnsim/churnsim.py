@@ -241,7 +241,8 @@ class ChurnSimulation:
 
         def create_one_customer():
             customer = self.simulate_customer(month_date)
-            self.copy_customer_to_database(customer)
+            self.add_customer_to_database(customer)
+            self.customer_events_subs_to_database(customer)
             if self.devmode and customer.id> 0 and (customer.id % round(self.init_customers / 10)) == 0:
                 self.sim_rate_debug_query()
             res = np.append(customer.utility_contribs, customer.current_utility)
@@ -258,7 +259,16 @@ class ChurnSimulation:
             utility_desc=pd.DataFrame(utility_obs.describe())
             utility_desc.to_csv( os.path.join(self.save_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}_summary.csv'))
 
-    def copy_customer_to_database(self,customer):
+    def add_customer_to_database(self,customer):
+        db = Postgres(self.con_string())
+        sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
+                                                                customer.date_of_birth.isoformat(),
+                                                                'NULL' if customer.country == 'None' else "'{}'".format(
+                                                                    customer.country))
+
+        db.run(sql)
+
+    def customer_events_subs_to_database(self, customer):
         '''
         Copy one customers data to the database, by first writing it to temp files and then using the sql COPY command
         :param customer: a Customer object that has already had its simulation run
@@ -266,7 +276,6 @@ class ChurnSimulation:
         '''
         sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
         event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
-        db = Postgres(self.con_string())
 
         with open(sub_file_name, 'w') as tmp_file:
             for s in customer.subscriptions:
@@ -278,12 +287,6 @@ class ChurnSimulation:
             for e in customer.events:
                 tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
-        sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
-                                                                customer.date_of_birth.isoformat(),
-                                                                'NULL' if customer.country == 'None' else "'{}'".format(
-                                                                    customer.country))
-
-        db.run(sql)
 
         con = post.connect( database= os.environ['CHURN_DB'],
                                  user= os.environ['CHURN_DB_USER'],
@@ -327,6 +330,16 @@ class ChurnSimulation:
             return True
 
 
+    def first_sim_setup(self,force):
+        # database setup
+        if not self.truncate_old_sim(force):
+            return
+        self.remove_tmp_files()
+
+        # Any model can insert the event types
+        db = Postgres(self.con_string())
+        self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
+
     def run_simulation(self, force=False):
         '''
         Simulation main function. First it prepares the database by truncating any old events and subscriptions, and
@@ -340,14 +353,7 @@ class ChurnSimulation:
         :return:
         '''
 
-        # database setup
-        if not self.truncate_old_sim(force):
-            return
-        self.remove_tmp_files()
-
-        # Any model can insert the event types
-        db = Postgres(self.con_string())
-        self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
+        self.first_sim_setup(force)
 
         # Initial customer count
         print('\nCreating %d initial customers for month of %s @ %s' % (self.init_customers,self.start_date,datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
@@ -380,17 +386,22 @@ class ChurnSimulation:
                                  f"{live_sim_file} is {last_date}")
             print(f"Loaded {len(customers)} with last date {last_date}")
         else:
+            self.first_sim_setup(force=True)
             customers = [None]*self.init_customers
             # Make some initial customers that started within the last month, but not today
             for cidx in range(self.init_customers):
                 customer_start = todays_date - timedelta(days=random.randrange(1,31))
                 customers[cidx]=self.create_customer(customer_start)
                 customers[cidx].generate_events(customer_start,todays_date)
+                self.add_customer_to_database(customers[cidx])
+                self.customer_events_subs_to_database(customers[cidx]) # save the latest event, sub list
+                customers[cidx].clear_history() # removed saved event, sub list - not actually used
 
         n_to_add = int(ceil(len(customers)* self.monthly_growth_rate/30))
         new_customers = [None]*n_to_add
         for cidx in range(n_to_add):
             new_customers[cidx]=self.create_customer(self.start_date)
+            self.add_customer_to_database(new_customers[cidx])
         customers.extend(new_customers)
 
         retained_customers = []
@@ -398,6 +409,8 @@ class ChurnSimulation:
         for customer in customers:
             # Generate events for today
             customer.generate_events(todays_date, todays_date+timedelta(days=1))
+            self.customer_events_subs_to_database(customer) # save the latest event, sub list
+            customer.clear_history() # removed saved event, sub list - not actually used
             if todays_date >= customer.start_date+relativedelta(months=customer.num_months+1):
                 customer.num_months+=1
                 churned = self.customer_month_end(customer,todays_date)
