@@ -49,6 +49,7 @@ class ChurnSimulation:
         self.monthly_growth_rate = args.growth_rate
         self.devmode= args.dev
         self.n_parallel = args.n_parallel
+        self.save_files = args.save_files
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name,args)
@@ -283,57 +284,73 @@ class ChurnSimulation:
         :param customer:
         :return:
         """
-        db = Postgres(self.con_string())
-        sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
-                                                                customer.date_of_birth.isoformat(),
-                                                                'NULL' if customer.country == 'None' else "'{}'".format(
-                                                                    customer.country))
+        if not self.save_files:
+            db = Postgres(self.con_string())
+            sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
+                                                                    customer.date_of_birth.isoformat(),
+                                                                    'NULL' if customer.country == 'None' else "'{}'".format(
+                                                                        customer.country))
 
-        db.run(sql)
+            db.run(sql)
+        else:
+            account_master_file = os.path.join(self.save_path,f'{self.model_name}_account.csv')
+            with open(account_master_file, "a") as amf:
+                amf.write(f"{customer.id},{customer.channel},{customer.date_of_birth.isoformat()},{customer.country}\n")
 
-    def customer_events_subs_to_database(self, customer):
+
+    def customer_events_subs_to_database(self, customer, file_date=None):
         '''
         Copy one customers data to the database, by first writing it to temp files and then using the sql COPY command
         :param customer: a Customer object that has already had its simulation run
         :return:
         '''
-        sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
-        event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
+
+        if not self.save_files:
+            sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
+            event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
+            file_access_mode = 'w'
+        else:
+            if file_date is None:
+                raise ValueError(f"Must call customer_events_subs_to_database with a date to write files")
+            sub_file_name = os.path.join(self.save_path,f'{self.model_name}_subscriptions_{file_date}.csv')
+            event_file_name = os.path.join(self.save_path,f'{self.model_name}_events_{file_date}.csv')
+            file_access_mode = 'a'
 
         if len(customer.subscriptions)>0:
-            with open(sub_file_name, 'w') as tmp_file:
+            with open(sub_file_name, file_access_mode) as tmp_file:
                 for s in customer.subscriptions:
                     # plan name, start, end, mrr, quantity, units, billing period, discount
                     tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},'
                                    f'{s[4] if s[4] is not None else "NULL"},{s[5] if s[5] is not None else "NULL"},'
                                    f'{s[6]},{s[7]}\n')
         if len(customer.events) > 0:
-            with open(event_file_name, 'w') as tmp_file:
+            with open(event_file_name, file_access_mode) as tmp_file:
                 for e in customer.events:
                     tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
 
-        con = post.connect( database= os.environ['CHURN_DB'],
-                                 user= os.environ['CHURN_DB_USER'],
-                                 password=os.environ['CHURN_DB_PASS'],
-                                 host=os.environ.get('CHURN_DB_HOST','localhost'))
-        cur = con.cursor()
+        if not self.save_files:
+            con = post.connect( database= os.environ['CHURN_DB'],
+                                     user= os.environ['CHURN_DB_USER'],
+                                     password=os.environ['CHURN_DB_PASS'],
+                                     host=os.environ.get('CHURN_DB_HOST','localhost'))
+            cur = con.cursor()
 
-        if len(customer.subscriptions)>0:
-            sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
-            with open(sub_file_name, 'r') as f:
-                cur.copy_expert(sql, f)
-            con.commit()
-            os.remove(sub_file_name)
+            if len(customer.subscriptions)>0:
+                sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
+                with open(sub_file_name, 'r') as f:
+                    cur.copy_expert(sql, f)
+                con.commit()
+                os.remove(sub_file_name)
 
-        if len(customer.events)>0:
-            sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
-            with open(event_file_name, 'r') as f:
-                cur.copy_expert(sql, f)
-            con.commit()
-            os.remove(event_file_name)
+            if len(customer.events)>0:
+                sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
+                with open(event_file_name, 'r') as f:
+                    cur.copy_expert(sql, f)
+                con.commit()
+                os.remove(event_file_name)
 
-        con.close()
+            con.close()
 
 
     def truncate_old_sim(self,force):
@@ -358,14 +375,18 @@ class ChurnSimulation:
 
 
     def first_sim_setup(self,force):
-        # database setup
-        if not self.truncate_old_sim(force):
-            return
-        self.remove_tmp_files()
+        if not self.save_files:
+            # database setup
+            if not self.truncate_old_sim(force):
+                return
+            self.remove_tmp_files()
 
-        # Any model can insert the event types
-        db = Postgres(self.con_string())
-        self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
+            # Any model can insert the event types
+            db = Postgres(self.con_string())
+            self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
+        else:
+            # TODO: Wipe out any existing files from a previous simulation
+            pass
 
     def run_simulation(self, force=False):
         '''
@@ -435,7 +456,7 @@ class ChurnSimulation:
                 customers[cidx]=self.create_customer(customer_start)
                 customers[cidx].generate_events(customer_start,todays_date)
                 self.add_customer_to_database(customers[cidx])
-                self.customer_events_subs_to_database(customers[cidx]) # save the latest event, sub list
+                self.customer_events_subs_to_database(customers[cidx], todays_date) # save the latest event, sub list
                 customers[cidx].clear_history() # removed saved event, sub list - not actually used
 
         # Today's customer growth, create blank new customers
@@ -451,7 +472,7 @@ class ChurnSimulation:
         for customer in customers:
             # Generate events for today
             customer.generate_events(todays_date, todays_date+timedelta(days=1))
-            self.customer_events_subs_to_database(customer) # save the latest event, sub list
+            self.customer_events_subs_to_database(customer, todays_date) # save the latest event, sub list
             customer.clear_history() # removed saved event, sub list - not actually used
             # If this customer finished a month, do the month end routine.
             if todays_date >= customer.start_date+relativedelta(months=customer.num_months+1):
