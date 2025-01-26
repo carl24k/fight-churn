@@ -5,7 +5,7 @@ n_parallel: 1
 random_seed: null
 
 # For live simulation dev override
-todays_date: null
+live_sim: False
 
 # Number of customers, growth and churn
 init_customers: 10000

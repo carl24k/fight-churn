@@ -378,18 +378,29 @@ class ChurnSimulation:
         self.sim_rate_debug_query()
 
 
-    def live_simulation(self, todays_date):
+    def live_simulation(self):
+        """
+        Function to run one day of live simulation, for a given date. If there is a saved file, the existing customers
+        are loaded - it must be the file from yesterday or an error is raised. If no file, a new file will be created.
+        Customers are created and added to the database one by one, and new events for the customers are generated
+        for today's date, added to the customer's monthly count variable, and saved to the database.
+
+        :param todays_date:
+        :return:
+        """
         live_sim_file = os.path.join(self.save_path,'live_sim_customers.joblib')
+
+        # Load an existing simulation
         if os.path.exists(live_sim_file):
             print(f"Loading saved live sim customer file {live_sim_file}")
             sim_data = joblib.load(live_sim_file)
             customers= sim_data['customers']
             last_date = sim_data['last_date']
-            if todays_date - last_date != timedelta(days=1):
-                raise ValueError(f"Trying to simulate {todays_date} but last date in file" 
-                                 f"{live_sim_file} is {last_date}")
-            print(f"Loaded {len(customers)} with last date {last_date}")
+            todays_date = last_date + timedelta(days=1)
+            print(f"Loaded {len(customers)} with last date {last_date}, running for {todays_date}")
         else:
+            todays_date = datetime.today().date()
+            # Starting a simulation from scratch - first wipe the database
             self.first_sim_setup(force=True)
             customers = [None]*self.init_customers
             # Make some initial customers that started within the last month, but not today
@@ -401,6 +412,7 @@ class ChurnSimulation:
                 self.customer_events_subs_to_database(customers[cidx]) # save the latest event, sub list
                 customers[cidx].clear_history() # removed saved event, sub list - not actually used
 
+        # Today's customer growth, create blank new customers
         n_to_add = int(ceil(len(customers)* self.monthly_growth_rate/30))
         new_customers = [None]*n_to_add
         for cidx in range(n_to_add):
@@ -415,6 +427,7 @@ class ChurnSimulation:
             customer.generate_events(todays_date, todays_date+timedelta(days=1))
             self.customer_events_subs_to_database(customer) # save the latest event, sub list
             customer.clear_history() # removed saved event, sub list - not actually used
+            # If this customer finished a month, do the month end routine.
             if todays_date >= customer.start_date+relativedelta(months=customer.num_months+1):
                 customer.num_months+=1
                 churned = self.customer_month_end(customer,todays_date)
@@ -438,18 +451,21 @@ class ChurnSimulation:
 
 @hydra.main(version_base=None, config_path="conf", config_name="socialnet7")
 def run_churn_simulation(cfg : DictConfig):
+    """
+    Two types of simulations are supported: Regular (original) runs an entire multi-month simulation in one go.
+    Live simulation (new) does a single day, and saves customers in a file to continue the simulation the next day.
+    Setting the "end_date" in a cfg file tell the simulator to use "live" simulation mode. For live simulation,
+    :param cfg:
+    :return:
+    """
     print(OmegaConf.to_yaml(cfg))
     if cfg.random_seed is not None:
         random.seed(cfg.random_seed) # for random
     churn_sim = ChurnSimulation(cfg)
-    if not cfg.end_date=='today':
+    if not cfg.live_sim:
         churn_sim.run_simulation(force=cfg.force)
     else:
-        if cfg.todays_date==None:
-            todays_date = datetime.today().date()
-        else:
-            todays_date = parser.parse(cfg.todays_date).date()
-        churn_sim.live_simulation(todays_date)
+        churn_sim.live_simulation()
 
 
 if __name__ == "__main__":
