@@ -44,12 +44,7 @@ class ChurnSimulation:
         self.args = args
         self.model_name = args.model
         self.start_date = parser.parse(args.start_date).date()
-        if args.end_date != 'today':
-            self.end_date = parser.parse(args.end_date).date()
-            self.mode='batch'
-        else:
-            self.end_date = datetime.today().date()
-            self.mode='live'
+        self.end_date = parser.parse(args.end_date).date()
         self.init_customers=args.init_customers
         self.monthly_growth_rate = args.growth_rate
         self.devmode= args.dev
