@@ -100,7 +100,7 @@ class UtilityModel:
         self.expected_contributions = self.behave_means * self.utility_weights.values
 
 
-    def utility_function(self,event_counts,customer):
+    def utility_function(self,customer):
         '''
         Utility calculation for a customer:
         1. Take the ratios of the customer's event counts to the mean event counts
@@ -118,7 +118,7 @@ class UtilityModel:
         :param event_counts:
         :return:
         '''
-        contrib_ratios = event_counts / self.behave_means
+        contrib_ratios = customer.event_counts / self.behave_means
         utility_contribs = self.expected_contributions * (1.0 - np.exp(-self.contrib_scale*contrib_ratios))
         mrr_utility = customer.mrr* self.mrr_utility_cost
         if customer.discount > 0:
@@ -171,17 +171,16 @@ class UtilityModel:
         up_prob = self.transition_probility(u,'upsell')
         return up_prob
 
-    def simulate_churn(self,event_counts,customer):
+    def simulate_churn(self,customer):
         '''
         Simulates one customer churn, given a set of event counts.  The retention probability is a sigmoidal function
         in the utility, and the churn probability is 100% minus retention. The return value is a binary indicating
         churn or no churn, by comparing a uniform random variable on [0,1] to the churn probability.
-        :param event_counts:
         :return:
         '''
         return uniform(0, 1) < self.churn_probability(customer.current_utility)
 
-    def simulate_upgrade_downgrade(self,event_counts,customer,plans, add_ons):
+    def simulate_upgrade_downgrade(self,customer,plans, add_ons):
         '''
         Determine one customer's upgrade, downgrade, changes in add-ons and changes in billing period.
         For a detailed explanation see the ChurnSim report:
@@ -190,7 +189,6 @@ class UtilityModel:
         - Section 3.5.5, Add-on Products
         - Section 3.5.6, Billing Periods
 
-        :param event_counts:
         :param customer:
         :param plans:
         :return:

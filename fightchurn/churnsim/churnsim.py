@@ -177,69 +177,59 @@ class ChurnSimulation:
         new_customer = self.create_customer(customer_start)
 
         churned = False
-        churn_intent_count = 0
-        num_bill_periods = 1
-        num_months = 0
-        num_months_this_bill_period = 0
         while not churned:
-            this_month = customer_start if num_months == 0 else next_month
-            num_months += 1
-            num_months_this_bill_period += 1
-            next_month=customer_start+relativedelta(months=num_months)
-            month_event_count = new_customer.generate_events(this_month,next_month)
-            _ = self.util_mod.utility_function(month_event_count,new_customer)
-            churn_intent = False
-            if self.args.acausal_churn > 0:
-                if random.uniform(0,1) < self.args.acausal_churn:
-                    churn_intent = True
-            if not churn_intent:
-                churn_intent =self.util_mod.simulate_churn(month_event_count,new_customer)
-            if churn_intent:
-                churn_intent_count += 1
+            this_month = customer_start if new_customer.num_months == 0 else next_month
+            new_customer.num_months += 1
+            new_customer.num_months_this_bill_period += 1
+            next_month=customer_start+relativedelta(months=new_customer.num_months)
+            new_customer.generate_events(this_month,next_month)
             # exit if the simulation is over
             if next_month > self.end_date:
                 break
-            # check for churn, upgrade/downgrade on renewal date, make new subscriptions if not churned
-            elif next_month >= next_renewal:
-                # churn at the end of the term if they wanted to churn just once (every month for monthly)
-                if churn_intent > 0:
-                    churned = True
-                if not churned:
-                    churn_intent_count = 0
-                    num_months_this_bill_period = 0
-                    bill_period_change = self.util_mod.simulate_upgrade_downgrade(month_event_count,new_customer,self.plans,self.add_ons)
-                    if bill_period_change:
-                        customer_start = next_month
-                        num_months=0
-                        num_bill_periods=1
-                    else:
-                        num_bill_periods += 1
-                    next_renewal = customer_start + relativedelta(months=new_customer.bill_period * num_bill_periods)
-                    add_customer_subscriptions(next_month,next_renewal)
-            elif (churn_intent_count > 1 and 2 <= new_customer.bill_period <= 6) or \
-                (churn_intent_count > 2 and 6 < new_customer.bill_period):
-                # churn mid term on 2 churns for quarterly/bi-annual, 3 churns for annual
-                churned=True
-                old_last = new_customer.subscriptions[-1]
-                new_last = (old_last[0],old_last[1],next_month,old_last[3],old_last[4],old_last[5], old_last[6], old_last[7])
-                new_customer.subscriptions[-1]= new_last
+            churned = self.customer_month_end(new_customer, next_month)
 
         return new_customer
 
-    def get_unit_quantity(self,plan):
-        if plan in self.plans.index.values:
-            if self.plans.shape[1]>2:
-                limit_col = self.plans.columns.values[2]
-                return  limit_col,  self.plans.loc[plan,limit_col]
+    def customer_month_end(self, customer, next_month):
+        churned = False
+        # Month end routine
+        _ = self.util_mod.utility_function(customer)
+        churn_intent = False
+        if self.args.acausal_churn > 0:
+            if random.uniform(0,1) < self.args.acausal_churn:
+                churn_intent = True
+        if not churn_intent:
+            churn_intent =self.util_mod.simulate_churn(customer)
+        if churn_intent:
+            customer.churn_intent_count += 1
+        # check for churn, upgrade/downgrade on renewal date, make new subscriptions if not churned
+        elif next_month >= customer.next_renewal:
+            # churn at the end of the term if they wanted to churn just once (every month for monthly)
+            if churn_intent > 0:
+                churned = True
+            if not churned:
+                customer.churn_intent_count = 0
+                customer.num_months_this_bill_period = 0
+                bill_period_change = self.util_mod.simulate_upgrade_downgrade(customer,self.plans,self.add_ons)
+                if bill_period_change:
+                    # Resets the start date if billing period changes
+                    customer.start_date = next_month
+                    customer.num_months=0
+                    customer.num_bill_periods=1
+                else:
+                    customer.num_bill_periods += 1
+                customer.next_renewal = customer.start_date + relativedelta(months=customer.bill_period * customer.num_bill_periods)
+                customer.add_subscriptions(next_month, self.plans, self.add_ons)
 
-        if len(self.add_ons)> 0 and plan in self.add_ons['plan'].values:
-            if self.add_ons.shape[1]>3:
-                add_on = self.add_ons[self.add_ons['plan']==plan]
-                for limit_col in self.add_ons.columns.values[3:]:
-                    if add_on[limit_col].values[0]>0:
-                        return limit_col, add_on[limit_col].values[0]
+        elif (customer.churn_intent_count > 1 and 2 <= customer.bill_period <= 6) or \
+            (customer.churn_intent_count > 2 and 6 < customer.bill_period):
+            # churn mid term on 2 churns for quarterly/bi-annual, 3 churns for annual
+            churned=True
+            old_last = customer.subscriptions[-1]
+            new_last = (old_last[0],old_last[1],next_month,old_last[3],old_last[4],old_last[5], old_last[6], old_last[7])
+            customer.subscriptions[-1]= new_last
 
-        return None, None
+        return churned
 
     def create_customers_for_month(self,month_date,n_to_create):
         '''
@@ -380,20 +370,33 @@ class ChurnSimulation:
 
     def live_simulation(self):
         live_sim_file = os.path.join(self.save_path,'live_sim_customers.joblib')
+        todays_date = datetime.today().date()
         if os.path.exists(live_sim_file):
             sim_data = joblib.load(live_sim_file)
             customers= sim_data.customers
-            n_to_add = int(ceil(len(customers)* self.monthly_growth_rate))/30
         else:
-            sim_date = {}
-            customers = []
-            n_to_add = self.init_customers
+            sim_data = {}
+            customers = [None]*self.init_customers
+            # Make some initial customers that started within the last month, but not today
+            for cidx in range(self.init_customers):
+                customer_start = todays_date - timedelta(days=random.randrange(1,30))
+                customers[cidx]=self.create_customer(customer_start)
+                customers[cidx].generate_events(customer_start,todays_date-timedelta(days=1))
 
+        n_to_add = int(ceil(len(customers)* self.monthly_growth_rate))/30
         new_customers = [None]*n_to_add
         for cidx in range(n_to_add):
             new_customers[cidx]=self.create_customer(self.start_date)
-
         customers.extend(new_customers)
+
+        for customer in customers:
+            customer.generate_events(todays_date,todays_date)
+            if todays_date == customer.next_renewal:
+                _ = self.util_mod.utility_function(customer)
+                 # TODO: Month end simulation
+                customer.reset_event_counts()
+
+
 
 
 

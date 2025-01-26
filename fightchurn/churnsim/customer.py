@@ -107,6 +107,11 @@ class Customer:
         self.utility_contribs = None
 
         self.next_renewal = None
+        self.event_counts = None
+        self.churn_intent_count = 0
+        self.num_months = 0
+        self.num_bill_periods = 1
+        self.num_months_this_bill_period = 0
 
     def get_behavior_rate(self,behavior):
         if behavior == 'users':
@@ -297,6 +302,12 @@ class Customer:
         return Customer.date_multipliers[the_date]
 
 
+    def reset_event_counts(self):
+        if self.users is None:
+            self.event_counts = [0] * len(self.behavior_rates)
+        else:
+            self.event_counts = [0] * (len(self.behavior_rates) + 1)  # Plus one for number of users
+
     def generate_events(self,start_date,end_date):
         '''
         Generate a sequence of events at the customers daily rates.  Each count for an event on a day is droing from
@@ -320,11 +331,9 @@ class Customer:
         delta = end_date - start_date
 
         events=[]
+        if self.event_counts is None:
+            self.reset_event_counts()
 
-        if self.users is None:
-            counts=[0]*len(self.behavior_rates)
-        else:
-            counts=[0]*(len(self.behavior_rates)+1) # Plus one for number of users
         limit_counts = {b : 0 for b in self.limits.keys()}
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
@@ -352,22 +361,22 @@ class Customer:
                         user_id = randint(0, todays_users-1)
                     if row[1]['mean_value'] is not None:
                         event_value = round(np.exp(np.random.normal(np.log(row[1]['mean_value']) )),2)
-                        counts[row[0]] += event_value
+                        self.event_counts[row[0]] += event_value
                     else:
                         event_value = None
-                        counts[row[0]] += 1
+                        self.event_counts[row[0]] += 1
                     new_event=(event_time, row[0], user_id, event_value)
                     events.append(new_event )
 
             if self.users is not None:
-                counts[-1] += todays_users
+                self.event_counts[-1] += todays_users
 
         if self.users is not None:
-            counts[-1] = int(ceil( counts[-1]/delta.days)) # user count is returned as average, not total
+            self.event_counts[-1] = int(ceil( self.event_counts[-1]/delta.days)) # user count is returned as average, not total
 
         self.events.extend(events)
 
-        return counts
+        return self.event_counts
 
     @staticmethod
     def get_unit_quantity(plan, plans, add_ons):
