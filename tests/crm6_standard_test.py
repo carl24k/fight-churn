@@ -11,7 +11,7 @@ from fightchurn.churnsim import churndb
 
 class TestFightChurnWithDataCRM(unittest.TestCase):
     @unittest.skip("TestFightChurnWithDataCRM Slow test - comment line 13 to run")
-    def test_run_entire_book(self):
+    def test_crm_run_entire_book(self):
         database=username=password='churn'
         test_ouput_dir = os.path.join(tempfile.gettempdir(),'fightchurn_test_output')
         print(f'TestFightChurnWIthData writing to temporary output directory {test_ouput_dir}')
