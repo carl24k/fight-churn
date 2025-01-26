@@ -9,7 +9,7 @@ from fightchurn import run_churn_listing
 from fightchurn.churnsim import churndb
 
 
-class TestFightChurnWIthData(unittest.TestCase):
+class TestFightChurnWithData(unittest.TestCase):
     def test_run_entire_book(self):
         database=username=password='churn'
         test_ouput_dir = os.path.join(tempfile.gettempdir(),'fightchurn_test_output')

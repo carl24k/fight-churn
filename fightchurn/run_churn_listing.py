@@ -391,7 +391,7 @@ def run_standard_simulation(schema='socialnet7', **kwargs):
     :param kwargs: params to override in config
     :return:
     '''
-    churndb.setup_churn_db(schema)
+
     with initialize(version_base=None, config_path="churnsim/conf"):
         # config is relative to a module
         cfg = compose(config_name=schema)
@@ -401,7 +401,7 @@ def run_standard_simulation(schema='socialnet7', **kwargs):
         churnsim.run_churn_simulation(cfg)
 
 
-def run_everything(db, user,password,output_dir='../../../fight-churn-output/',init_customers=500,schema='socialnet7'):
+def run_everything(db, user,password,output_dir='../../../fight-churn-output/',schema='socialnet7',n_parallel=1):
     '''
     Run a new simulation in the database and then run all the listings in the book, writing output to the indicated
     directory. Mainly for debugging purposes, it can be a convenient way to refresh all the results.
@@ -415,7 +415,7 @@ def run_everything(db, user,password,output_dir='../../../fight-churn-output/',i
     :return:
     '''
     set_churn_environment(db, user,password,output_dir)
-    run_standard_simulation(schema=schema)
+    run_standard_simulation(schema=schema, n_parallel=n_parallel)
     run_churn_rates(schema)
     run_metrics(schema)
     run_dataset(schema)
