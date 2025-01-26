@@ -101,17 +101,18 @@ class Customer:
                                                 random.uniform(-self.args.satisfy_scale, self.args.satisfy_scale) \
                                                 + self.age_satisfaction_coef )
 
+        # Member variables set by the simulation
         self.subscriptions=[]
         self.events=[]
         self.current_utility = None
         self.utility_contribs = None
+        self.event_counts = None # monthly event counts
 
-        self.next_renewal = None
-        self.event_counts = None
-        self.churn_intent_count = 0
-        self.num_months = 0
-        self.num_bill_periods = 1
-        self.num_months_this_bill_period = 0
+        self.next_renewal = None # next renewal date
+        self.churn_intent_count = 0  # churn intent count for multi-month billing churn
+        self.num_months = 0  # how many months this customer has been a customer
+        self.num_bill_periods = 1  # how many bill cycles the customer has been on this billing period
+        self.bill_period_start = self.start_date
 
     def get_behavior_rate(self,behavior):
         if behavior == 'users':
