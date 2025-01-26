@@ -277,15 +277,17 @@ class ChurnSimulation:
         sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
         event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
 
-        with open(sub_file_name, 'w') as tmp_file:
-            for s in customer.subscriptions:
-                # plan name, start, end, mrr, quantity, units, billing period, discount
-                tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},'
-                               f'{s[4] if s[4] is not None else "NULL"},{s[5] if s[5] is not None else "NULL"},'
-                               f'{s[6]},{s[7]}\n')
-        with open(event_file_name, 'w') as tmp_file:
-            for e in customer.events:
-                tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
+        if len(customer.subscriptions)>0:
+            with open(sub_file_name, 'w') as tmp_file:
+                for s in customer.subscriptions:
+                    # plan name, start, end, mrr, quantity, units, billing period, discount
+                    tmp_file.write(f'{customer.id},{s[0]},{s[1]},{s[2]},{s[3]},'
+                                   f'{s[4] if s[4] is not None else "NULL"},{s[5] if s[5] is not None else "NULL"},'
+                                   f'{s[6]},{s[7]}\n')
+        if len(customer.events) > 0:
+            with open(event_file_name, 'w') as tmp_file:
+                for e in customer.events:
+                    tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
 
         con = post.connect( database= os.environ['CHURN_DB'],
@@ -294,19 +296,21 @@ class ChurnSimulation:
                                  host=os.environ.get('CHURN_DB_HOST','localhost'))
         cur = con.cursor()
 
-        sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
-        with open(sub_file_name, 'r') as f:
-            cur.copy_expert(sql, f)
-        con.commit()
+        if len(customer.subscriptions)>0:
+            sql = "COPY %s.subscription FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
+            with open(sub_file_name, 'r') as f:
+                cur.copy_expert(sql, f)
+            con.commit()
+            os.remove(sub_file_name)
 
-        sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
-        with open(event_file_name, 'r') as f:
-            cur.copy_expert(sql, f)
-        con.commit()
+        if len(customer.events)>0:
+            sql = "COPY %s.event FROM STDIN USING DELIMITERS ',' WITH NULL AS 'NULL'" % (self.model_name)
+            with open(event_file_name, 'r') as f:
+                cur.copy_expert(sql, f)
+            con.commit()
+            os.remove(event_file_name)
+
         con.close()
-
-        os.remove(event_file_name)
-        os.remove(sub_file_name)
 
 
     def truncate_old_sim(self,force):
