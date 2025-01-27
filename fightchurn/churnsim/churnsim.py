@@ -1,4 +1,5 @@
 import hydra
+import glob
 import joblib
 import random
 import numpy as np
@@ -385,8 +386,15 @@ class ChurnSimulation:
             db = Postgres(self.con_string())
             self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
         else:
-            # TODO: Wipe out any existing files from a previous simulation
-            pass
+            files_to_delete = glob.glob(os.path.join(self.save_path,f'{self.model_name}_account.csv'))
+            for file in files_to_delete:
+                os.remove(file)
+            files_to_delete = glob.glob(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'))
+            for file in files_to_delete:
+                os.remove(file)
+            files_to_delete = glob.glob(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'))
+            for file in files_to_delete:
+                os.remove(file)
 
     def run_simulation(self, force=False):
         '''
