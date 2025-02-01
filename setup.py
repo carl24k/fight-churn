@@ -78,7 +78,7 @@ setuptools.setup(
                         "pytz==2023.3",
                         "pytest",
                         "readme-renderer==41.0",
-                        "requests==2.31.0",
+                        "requests==2.32.2",
                         "requests-toolbelt==1.0.0",
                         "rfc3986==1.5.0",
                         "scikit-learn==1.3.0",
