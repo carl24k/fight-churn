@@ -94,5 +94,5 @@ setuptools.setup(
                         "urllib3==2.0.7",
                         "webencodings==0.5.1",
                         "xgboost==1.7.6",
-                        "zipp==3.16.2"]
+                        "zipp==3.19.1"]
 )
