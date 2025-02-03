@@ -91,7 +91,7 @@ setuptools.setup(
                         "toml==0.10.2",
                         "tqdm==4.66.1",
                         "twine==4.0.2",
-                        "urllib3==2.0.7",
+                        "urllib3==2.2.2",
                         "webencodings==0.5.1",
                         "xgboost==1.7.6",
                         "zipp==3.16.2"]
