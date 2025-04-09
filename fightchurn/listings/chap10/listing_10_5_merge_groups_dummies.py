@@ -17,5 +17,5 @@ def merge_groups_dummies(data_set_path):
 
     standard_group_metrics = pd.read_csv(data_set_path.replace('.csv', '_nocat_groupmets.csv'),index_col=0)
     dummies_group_metrics = pd.read_csv(data_set_path.replace('.csv', '_dummies_groupmets.csv'),index_col=0)
-    merged_col_df = standard_group_metrics.append(dummies_group_metrics)
+    merged_col_df = pd.concat([standard_group_metrics, dummies_group_metrics])
     merged_col_df.to_csv(data_set_path.replace('.csv', '_groupmets.csv'))
