@@ -42,7 +42,7 @@ setuptools.setup(
     scripts=['fightchurn/run_churn_listing.py',
              'fightchurn/churnsim/churndb.py',
              'fightchurn/churnsim/churnsim.py'],
-    python_requires=">=3.9,<3.10",
+    python_requires=">=3.9,<3.13",
     install_requires=["antlr4-python3-runtime~=4.9",
                         "bleach~=6.0",
                         "build~=0.10",
