@@ -8,23 +8,24 @@ This guide walks you through setting up a full Google Cloud environment to gener
 
 1. **Go to [Google Cloud Platform](https://cloud.google.com)**
    
-   ![](./images/gcp-home.png)
+   ![](./readme_files/advanced-data-generation/image1.png)
 
 2. Click the project selector next to the search bar and **create a new project** (e.g. `fighting-churn`).
 
 ### ⚖️ Set Up Cloud SQL (PostgreSQL)
 
-1. In the GCP search bar, type `SQL` and go to **Cloud SQL**.
+1. In the GCP search bar, type `SQL` and go to **SQL**.
 
-   ![](./images/sql-menu.png)
+   ![](./readme_files/advanced-data-generation/image5.png)
 
 2. Click **Create instance** > Choose **PostgreSQL** > Click **Enable API** when prompted.
 
 3. Choose **Enterprise Plus**.
-4. Select a region (e.g. `southamerica-east1`) and choose a machine type (e.g. `Standard`) with good resources for faster setup.
+4. Select a region (e.g. `southamerica-east1`) and choose a machine type (e.g. `N2 16 vCPU, 128gb`) with good resources for faster setup.
 5. Name your instance (e.g. `churn-db`) and click **Create Instance**.
 
-   ![](./images/sql-create-instance.png)
+   ![](./readme_files/advanced-data-generation/image29.png)
+   ![](./readme_files/advanced-data-generation/image31.png)
 
 ### 📁 Set Up a VM Instance
 
@@ -33,15 +34,18 @@ This guide walks you through setting up a full Google Cloud environment to gener
 3. Machine type: `e2-highcpu-16 (16 vCPU, 16 GB)`.
 4. Name your VM, then click **Create**.
 
-   ![](./images/vm-instance-create.png)
-
+   ![](./readme_files/advanced-data-generation/image15.png)
+   
 Wait for the VM to be ready. Once the green check appears under **status**, click **SSH** to open a terminal.
 
 ---
 
 ## ⚒️ Set Up Environment on the VM
 
-Create and run a shell script to install Python 3.9, dependencies, and the `fightchurn` package:
+   ![](./readme_files/advanced-data-generation/image10.png)
+
+
+Create and run a shell script to install Python 3.9, dependencies, and the `fightchurn` package. Follow the commands:
 
 ```bash
 nano setup_churn_vm.sh
@@ -92,26 +96,37 @@ chmod +x setup_churn_vm.sh
 ./setup_churn_vm.sh
 ```
 
-To activate the environment later:
+If sucessful, your terminal will look like this:
+   ![](./readme_files/advanced-data-generation/image28.png)
+
+Use 
+```bash
+pwd
+```
+to find you username on GCP activate the environment like this:
 
 ```bash
 cd /home/YOUR_USERNAME
 source venv/bin/activate
 ```
+You will see a “(venv)” beforte the directory. Do not close this window.
 
 ---
 
 ## 🔗 Connect VM to Cloud SQL
 
-1. Copy your **Cloud SQL instance's public IP**.
-2. In Cloud SQL > Instance > Connections, add a new authorized network with your VM's **external IP**.
+1. Copy your **VM external IP**.
+   ![](./readme_files/advanced-data-generation/image18.png)
+2. In SQL > Instance (churn-db) > Connections, add a new authorized network with your VM's **external IP**.
 
-   ![](./images/sql-authorize-vm.png)
+   ![](./readme_files/advanced-data-generation/image21.png)
+3. Copy the database instance Public IP
+   ![](./readme_files/advanced-data-generation/image30.png)
 
 Then back in the VM terminal:
 
 ```bash
-psql "dbname=postgres user=postgres hostaddr=YOUR_CLOUD_SQL_IP"
+psql "dbname=postgres user=postgres hostaddr=YOUR_DB-INSTANCE_PUBLIC_IP"
 ```
 
 Enter your password (e.g. `churn`) and create your database:
@@ -137,25 +152,34 @@ python
 ```python
 from fightchurn import run_churn_listing
 
-run_churn_listing.set_churn_environment('churn', 'postgres', 'churn', '/usr/src/churn_output', host='YOUR_CLOUD_SQL_IP')
+run_churn_listing.set_churn_environment('churn', 'postgres', 'churn', '/usr/src/churn_output', host='YOUR_DB-INSTANCE_PUBLIC_IP')
 run_churn_listing.run_standard_simulation(schema='crm5', n_parallel=16)
 ```
 
 Choose `crm5` when prompted. Wait for the simulation to finish.
 
-   ![](./images/simulation-result.png)
+   ![](./readme_files/advanced-data-generation/image24.png)
+
+Now your database is populated. 
+
+   ![](./readme_files/advanced-data-generation/image6.png)
+
 
 ---
 
-## 🛫 Export the Data to Local PostgreSQL
+## 🛫 Export the Data to Local PostgreSQL (If you want)
 
 ### 1. On GCP:
 
-- Go to your SQL instance > **Connections** > Add your **local IP address**.
+- Go to your SQL instance > **Connections** > Add your **local IP address**. **[Find out your IP Address here](https://whatismyipaddress.com)**
 
 ### 2. On your PC (pgAdmin4):
 
-- Create a new Server and connect to your GCP instance using IP, username, and password.
+- Create a new Server and connect to your GCP instance using Public IP from Database instance, username (e.g. 'postgres'), and password (e.g. 'churn').
+   ![](./readme_files/advanced-data-generation/image8.png)
+   ![](./readme_files/advanced-data-generation/image2.png)
+
+
 - Right-click `churn` DB > **Backup** → Format: `Custom` → Save the file.
 
 ### 3. Create a Local DB:
