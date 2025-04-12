@@ -179,8 +179,8 @@ Now your database is populated.
    ![](./readme_files/advanced-data-generation/image8.png)
    ![](./readme_files/advanced-data-generation/image2.png)
 
-
-- Right-click `churn` DB > **Backup** → Format: `Custom` → Save the file.
+This will create a connection from your PC to your Database on GCP. Now you can backup the data. 
+- Right-click `churn` DB on pgAdmin4 > **Backup** → Format: `Custom` → Save the file.
 
 ### 3. Create a Local DB:
 
@@ -188,20 +188,22 @@ Now your database is populated.
 
 ### 4. Restore:
 
-- Right-click `churn-local` > Restore > select the `.backup` file → Run.
-- Some warnings (e.g. `google_vacuum_mgmt`) can be ignored.
+- Right-click `churn-local` > Restore > select the `.backup` file (sometimes it will no appear as a '.backup', so search for "All files (*.*)"  → Run.
+- Some warnings (e.g. `google_vacuum_mgmt`) and/or "Failed" status can be ignored.
 
-   ![](./images/pgadmin-restore.png)
+   ![](./readme_files/advanced-data-generation/image19.png)
 
 ---
 
 ## ⚠️ Cleanup to Avoid Charges
 
-After completing your setup, **stop and delete your SQL and VM instances** on GCP to avoid billing.
+After completing your setup, **stop and delete your SQL and VM instances** on GCP to avoid billing (If you are not going to use it anymore).
 
 ---
 
 ## ❓ Questions?
 
-If you need help, open an issue on GitHub or contact the project maintainer. Happy simulating! 🚀
+If you need help, open an issue on GitHub or contact me on andrefeitosa9@gmail.com or **[my LinkedIn](https://www.linkedin.com/in/andrefeitosa/)**
+
+Happy simulating! 🚀
 
