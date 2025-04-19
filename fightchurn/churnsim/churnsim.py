@@ -441,8 +441,8 @@ class ChurnSimulation:
         :param todays_date:
         :return:
         """
-        live_sim_file = os.path.join(self.save_path,'live_sim_customers.joblib')
-
+        live_sim_file = os.path.join(self.save_path,f'{self.model_name}_livesim_customers.joblib')
+        Customer.ID_FILE = os.path.join(self.save_path,f'{self.model_name}_customer_id.txt')
         # Load an existing simulation
         if os.path.exists(live_sim_file):
             print(f"Loading saved live sim customer file {live_sim_file}")
