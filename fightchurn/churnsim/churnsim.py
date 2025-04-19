@@ -443,6 +443,7 @@ class ChurnSimulation:
         """
         live_sim_file = os.path.join(self.save_path,f'{self.model_name}_livesim_customers.joblib')
         Customer.ID_FILE = os.path.join(self.save_path,f'{self.model_name}_customer_id.txt')
+        print(f"Using Custom ID File {Customer.ID_FILE}")
         # Load an existing simulation
         if os.path.exists(live_sim_file):
             print(f"Loading saved live sim customer file {live_sim_file}")
