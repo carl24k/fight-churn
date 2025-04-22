@@ -12,7 +12,8 @@ from fightchurn.churnsim import churndb
 class TestFightChurnWithDataSocialNet(unittest.TestCase):
     @unittest.skip("TestFightChurnWithDataSocialNet Slow test - comment line 13 to run")
     def test_socialnet_run_entire_book(self):
-        database=username=password='churn'
+        database='churn'
+        username=password='postgres'
         test_ouput_dir = os.path.join(tempfile.gettempdir(),'fightchurn_test_output')
         print(f'TestFightChurnWIthData writing to temporary output directory {test_ouput_dir}')
         run_churn_listing.set_churn_environment(database,username,password)

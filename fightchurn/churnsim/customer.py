@@ -65,7 +65,7 @@ class Customer:
 
         if 'users' in behavior_rates['behavior'].values:
             bidx= self.behavior_rates['behavior'] == 'users'
-            self.users = max(int( round(self.behavior_rates.loc[bidx,'monthly_rate'])),1)
+            self.users = max(int( round(self.behavior_rates.loc[bidx,'monthly_rate'].iloc[0])),1)
             self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
         else:
             self.users = None
