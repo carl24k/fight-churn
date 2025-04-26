@@ -6,6 +6,7 @@ import numpy as np
 import os
 import pandas as pd
 import psycopg2 as post
+import re
 import tempfile
 
 from datetime import timedelta, datetime
@@ -495,6 +496,13 @@ class ChurnSimulation:
             else:
                 retained_customers.append(customer)
 
+        ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'),
+                                                column_names=['account_id','event_time', 'event_type', 'event_value','user_id'])
+        ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'),
+                                                column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'billing_period', 'discount'])
+        ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_account.csv'),
+                                                column_names=['account_id','channel','date_of_birth','geography'],
+                                                force=True)
 
         sim_data = {
             'start_date': self.start_date,
@@ -504,6 +512,47 @@ class ChurnSimulation:
         print(f"Saving live sim file {live_sim_file} with {len(retained_customers)} customers")
         joblib.dump(sim_data, live_sim_file)
         print(f"Finished churn sim live update {todays_date}")
+
+
+    @staticmethod
+    def convert_csvs_to_parquet(pattern:str, column_names:list[str], force:bool=False):
+        """
+        Convert all CSV files matching the given regex pattern to Parquet format,
+        but only if a corresponding Parquet file doesn't already exist.
+        Assumes CSV files have no headers.
+
+        Args:
+            pattern (str): Regular expression pattern to match CSV files
+        """
+        # Find all CSV files matching the pattern
+        csv_files = []
+        for file in glob.glob(pattern):
+            csv_files.append(file)
+
+        if not csv_files:
+            print(f"No CSV files found matching pattern: {pattern}")
+            return
+
+        # Process each matching CSV file
+        for csv_file in csv_files:
+            # Define the expected Parquet file name
+            parquet_file = os.path.splitext(csv_file)[0] + ".parquet"
+
+            # Skip if Parquet file already exists
+            if os.path.exists(parquet_file) and not force:
+                continue
+
+            # Convert CSV to Parquet
+            try:
+                # Read CSV without header
+                df = pd.read_csv(csv_file, header=None, names=column_names)
+
+                # Write to Parquet
+                df.to_parquet(parquet_file, engine='pyarrow')
+                print(f"Successfully converted {csv_file} to {parquet_file}")
+
+            except Exception as e:
+                print(f"Error converting {csv_file}: {str(e)}")
 
 
 @hydra.main(version_base=None, config_path="conf", config_name="socialnet7")
