@@ -15,7 +15,7 @@ def crossvalidate(data_set_path,n_test_split):
 
     X,y = prepare_data(data_set_path,as_retention=False)
     tscv = TimeSeriesSplit(n_splits=n_test_split)
-    score_models = {'lift': make_scorer(calc_lift, needs_proba=True), 'AUC': 'roc_auc'}
+    score_models = {'lift': make_scorer(calc_lift, response_method='predict_proba'), 'AUC': 'roc_auc'}
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
     test_params = {'C' : [0.64, 0.32, 0.16, 0.08, 0.04, 0.02, 0.01, 0.005, 0.0025]}
     gsearch = GridSearchCV(estimator=retain_reg,scoring=score_models, cv=tscv, verbose=1,
