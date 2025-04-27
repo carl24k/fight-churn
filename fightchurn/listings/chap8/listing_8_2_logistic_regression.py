@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import os
 from sklearn.linear_model import LogisticRegression
-from math import exp
 import pickle
 
 def logistic_regression(data_set_path,as_retention=True):
@@ -30,7 +29,7 @@ def calculate_impacts(retain_reg):
     return one_stdev_impact, average_retain
 
 def s_curve(x):
-    return 1.0 - (1.0/(1.0+exp(-x)))
+    return 1.0 - (1.0/(1.0+np.exp(-x)))
 
 def save_regression_summary(data_set_path,retain_reg,ext=''):
     one_stdev_impact,average_retain = calculate_impacts(retain_reg)
