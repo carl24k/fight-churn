@@ -22,3 +22,4 @@ def cohort_plot(data_set_path, metric_to_plot='',ncohort=10, exclude_zeros=False
     save_path = data_set_path.replace('.csv', '_' + metric_to_plot + '_churn_cohort.png')
     plt.savefig(save_path)
     print('Saving plot to %s' % save_path)
+    plt.close()
