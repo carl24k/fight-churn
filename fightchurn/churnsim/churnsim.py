@@ -497,9 +497,9 @@ class ChurnSimulation:
                 retained_customers.append(customer)
 
         ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'),
-                                                column_names=['account_id','event_time', 'event_type', 'event_value','user_id'])
+                                                column_names=['account_id','event_time', 'event_id', 'event_value','user_id'])
         ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'),
-                                                column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'billing_period', 'discount'])
+                                                column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'bill_period_mths', 'discount'])
         ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_account.csv'),
                                                 column_names=['account_id','channel','date_of_birth','geography'],
                                                 force=True)
