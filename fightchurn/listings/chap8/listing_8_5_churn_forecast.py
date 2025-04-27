@@ -13,7 +13,7 @@ def churn_forecast(data_set_path,model_name='logreg_model'):
 
     current_score_df = reload_churn_data(data_set_path,'current_groupscore','8.4',is_customer_data=True)
 
-    predictions = logreg_model.predict_proba(current_score_df.to_numpy())
+    predictions = logreg_model.predict_proba(current_score_df)
 
     predict_df = pd.DataFrame(predictions, index=current_score_df.index, columns=['churn_prob', 'retain_prob'])
     forecast_save_path = data_set_path.replace('.csv', '_current_predictions.csv')
