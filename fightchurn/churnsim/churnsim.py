@@ -548,7 +548,9 @@ class ChurnSimulation:
                 df = pd.read_csv(csv_file, header=None, names=column_names)
 
                 # Write to Parquet
-                df.to_parquet(parquet_file, engine='pyarrow')
+                df.to_parquet(parquet_file, engine='pyarrow',
+                                index=False,
+                                compression='snappy' )
                 print(f"Successfully converted {csv_file} to {parquet_file}")
 
             except Exception as e:
