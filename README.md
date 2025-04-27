@@ -5,11 +5,13 @@
 
 <a name="top"/>
 
-## **1. _What's New_ : Support for Python 3.10-3.12! (April 2025)**
+## **1. _What's New_ : Support for Python 3.9-3.12! (April 2025)**
 
-Fighting Churn With Data now supports Python 3.10, 3.11 and 3.12! This is in addition to the original supported python 3.9.
+Fighting Churn With Data just got added support for Python 3.10, 3.11 and 3.12! This is in addition to the original supported python, 3.9.
 
-Python 3.13 is still not supported due to shap, which doesn't shipped with precompiled wheels for Python 3.13 yet.
+Python 3.13 is still not supported due to shap, which doesn't have precompiled wheels for Python 3.13 yet.
+
+Note: If you try to updgrade packages, you will need to run pip with `--force-reinstall` or you may get errors about numpy not being compiled with the current version.
 
 Please file issues if you notice problems with any supported python version, 3.9-3.12.
 
