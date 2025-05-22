@@ -51,10 +51,12 @@ class ChurnSimulation:
         self.monthly_growth_rate = args.growth_rate
         self.devmode= args.dev
         self.n_parallel = args.n_parallel
-        self.save_files = args.save_files
         self.utility_dist = []
         print(f'Simulating with {self.n_parallel} parallel processes...')
         self.util_mod=UtilityModel(self.model_name,args)
+        self.live_sim_type = args.live_sim
+        if self.live_sim_type is not None and self.live_sim_type not in ('csv','parquet'):
+            raise ValueError(f"live_sim_type should be csv|parquet got {self.live_sim_type}")
 
         self.min_age = args.min_age
         self.max_age = args.max_age
@@ -286,7 +288,7 @@ class ChurnSimulation:
         :param customer:
         :return:
         """
-        if not self.save_files:
+        if self.live_sime_type is None:
             db = Postgres(self.con_string())
             sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
                                                                     customer.date_of_birth.isoformat(),
@@ -307,7 +309,7 @@ class ChurnSimulation:
         :return:
         '''
 
-        if not self.save_files:
+        if self.live_sime_type is None:
             sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
             event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
             file_access_mode = 'w'
@@ -331,7 +333,7 @@ class ChurnSimulation:
                     tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
 
-        if not self.save_files:
+        if self.live_sime_type is None:
             con = post.connect( database= os.environ['CHURN_DB'],
                                      user= os.environ['CHURN_DB_USER'],
                                      password=os.environ['CHURN_DB_PASS'],
@@ -377,7 +379,7 @@ class ChurnSimulation:
 
 
     def first_sim_setup(self,force):
-        if not self.save_files:
+        if self.live_sime_type is None:
             # database setup
             if not self.truncate_old_sim(force):
                 return
@@ -397,7 +399,16 @@ class ChurnSimulation:
             for file in files_to_delete:
                 os.remove(file)
 
+
     def run_simulation(self, force=False):
+        """Branches to either a standard end-to-end simulationk or a live simulation"""
+        if self.live_sim_type is None:
+            self.end_to_end_simulation(force=False)
+        else:
+            self.live_simulation()
+
+
+    def end_to_end_simulation(self, force=False):
         '''
         Simulation main function. First it prepares the database by truncating any old events and subscriptions, and
         inserting the event types into the database.  Next it creeates the initial customers by calling
@@ -569,10 +580,8 @@ def run_churn_simulation(cfg : DictConfig):
     if cfg.random_seed is not None:
         random.seed(cfg.random_seed) # for random
     churn_sim = ChurnSimulation(cfg)
-    if not cfg.live_sim:
-        churn_sim.run_simulation(force=cfg.force)
-    else:
-        churn_sim.live_simulation()
+    churn_sim.run_simulation(force=cfg.force)
+
 
 
 if __name__ == "__main__":
