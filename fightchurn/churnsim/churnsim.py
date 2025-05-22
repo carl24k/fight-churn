@@ -288,7 +288,7 @@ class ChurnSimulation:
         :param customer:
         :return:
         """
-        if self.live_sime_type is None:
+        if self.live_sim_type is None:
             db = Postgres(self.con_string())
             sql = "INSERT INTO {}.account VALUES({},'{}','{}',{})".format(self.model_name, customer.id, customer.channel,
                                                                     customer.date_of_birth.isoformat(),
@@ -309,7 +309,7 @@ class ChurnSimulation:
         :return:
         '''
 
-        if self.live_sime_type is None:
+        if self.live_sim_type is None:
             sub_file_name = self.tmp_sub_file_name.replace('.csv', f'{customer.id}.csv')
             event_file_name = self.tmp_event_file_name.replace('.csv', f'{customer.id}.csv')
             file_access_mode = 'w'
@@ -333,7 +333,7 @@ class ChurnSimulation:
                     tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
 
-        if self.live_sime_type is None:
+        if self.live_sim_type is None:
             con = post.connect( database= os.environ['CHURN_DB'],
                                      user= os.environ['CHURN_DB_USER'],
                                      password=os.environ['CHURN_DB_PASS'],
@@ -379,7 +379,7 @@ class ChurnSimulation:
 
 
     def first_sim_setup(self,force):
-        if self.live_sime_type is None:
+        if self.live_sim_type is None:
             # database setup
             if not self.truncate_old_sim(force):
                 return
@@ -389,16 +389,15 @@ class ChurnSimulation:
             db = Postgres(self.con_string())
             self.behavior_models[next(iter(self.behavior_models))].insert_event_types(self.model_name,db)
         else:
-            files_to_delete = glob.glob(os.path.join(self.save_path,f'{self.model_name}_account.csv'))
-            for file in files_to_delete:
-                os.remove(file)
-            files_to_delete = glob.glob(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'))
-            for file in files_to_delete:
-                os.remove(file)
-            files_to_delete = glob.glob(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'))
-            for file in files_to_delete:
-                os.remove(file)
+            self.delete_live_sim_local_files('account.csv')
+            self.delete_live_sim_local_files('subscriptions_*.csv')
+            self.delete_live_sim_local_files('events_*.csv')
 
+
+    def delete_live_sim_local_files(self,file_pattern):
+        files_to_delete = glob.glob(os.path.join(self.save_path, f'{self.model_name}_{file_pattern}'))
+        for file in files_to_delete:
+            os.remove(file)
 
     def run_simulation(self, force=False):
         """Branches to either a standard end-to-end simulationk or a live simulation"""
@@ -465,6 +464,11 @@ class ChurnSimulation:
             self.start_date = sim_data['start_date']  #  Reset class start_date, overriding the config
             todays_date = last_date + timedelta(days=1)
             print(f"Loaded {len(customers)} with last date {last_date}, running for {todays_date}")
+            account_master_file = os.path.join(self.save_path,f'{self.model_name}_account.csv')
+            # If the old account sim file was deleted, recreate the csv
+            if not os.path.exists(account_master_file):
+                for c in customers:
+                    self.add_customer_to_database(c)
         else:
             # Set the simulation start date to today
             self.start_date = todays_date = datetime.today().date()
@@ -507,13 +511,17 @@ class ChurnSimulation:
             else:
                 retained_customers.append(customer)
 
-        ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'),
-                                                column_names=['account_id','event_time', 'event_id', 'event_value','user_id'])
-        ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'),
-                                                column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'bill_period_mths', 'discount'])
-        ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_account.csv'),
-                                                column_names=['account_id','channel','date_of_birth','geography'],
-                                                force=True)
+        if self.live_sim_type == 'parquet':
+            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'),
+                                                    column_names=['account_id','event_time', 'event_id', 'event_value','user_id'])
+            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'),
+                                                    column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'bill_period_mths', 'discount'])
+            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_account.csv'),
+                                                    column_names=['account_id','channel','date_of_birth','geography'],
+                                                    force=True)
+            self.delete_live_sim_local_files('account.csv')
+            self.delete_live_sim_local_files('subscriptions_*.csv')
+            self.delete_live_sim_local_files('events_*.csv')
 
         sim_data = {
             'start_date': self.start_date,
