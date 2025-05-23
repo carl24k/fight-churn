@@ -1,5 +1,7 @@
+import boto3
 import hydra
 import glob
+import fnmatch
 import joblib
 import random
 import numpy as np
@@ -18,6 +20,7 @@ from math import ceil
 from omegaconf import DictConfig, OmegaConf
 from postgres import Postgres
 from shutil import copyfile
+from urllib.parse import urlparse
 
 from fightchurn.churnsim.behavior import LogNormalBehaviorModel
 from fightchurn.churnsim.churndb import drop_schema, setup_churn_db
@@ -75,18 +78,23 @@ class ChurnSimulation:
         local_dir = os.path.join(f'{os.path.abspath(os.path.dirname(__file__))}','conf')
 
         self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
+        if not self.save_path.startswith("s3"):
+            self.sim_path = self.save_path
+            os.makedirs(self.save_path, exist_ok=True)
+        else:
+            self.sim_path = tempfile.gettempdir()
+            print(f"Using temp directory {self.sim_path} for temp local file storage")
 
         plans_path =  os.path.join(local_dir, self.model_name + '_plans.csv')
         self.plans = pd.read_csv(plans_path,index_col=0)
-        os.makedirs(self.save_path, exist_ok=True)
-        copy_path = os.path.join(self.save_path,  f'{self.model_name}_plans.csv')
+        copy_path = os.path.join(self.sim_path,  f'{self.model_name}_plans.csv')
         copyfile(plans_path, copy_path)
 
         # self.plans = self.plans.sort_values('mrr',ascending=True) # Make sure its sorted by increasing MRR - wait, why?
         add_on_file = os.path.join(local_dir, self.model_name + '_addons.csv')
         if os.path.exists(add_on_file):
             self.add_ons = pd.read_csv(add_on_file)
-            copy_path = os.path.join(self.save_path,  f'{self.model_name}_addons.csv')
+            copy_path = os.path.join(self.sim_path,  f'{self.model_name}_addons.csv')
             copyfile(add_on_file, copy_path)
         else:
             self.add_ons = pd.DataFrame()
@@ -98,7 +106,7 @@ class ChurnSimulation:
         self.tmp_event_file_name=os.path.join(tempfile.gettempdir(),f'{self.model_name}_tmp_event.csv')
 
         copyfile(plans_path, copy_path)
-        arg_path = os.path.join(self.save_path, f'{self.model_name}_conf.yaml')
+        arg_path = os.path.join(self.sim_path, f'{self.model_name}_conf.yaml')
         OmegaConf.save(self.args,arg_path)
 
 
@@ -278,9 +286,9 @@ class ChurnSimulation:
             util_names = list(self.util_mod.behave_names)
             util_names.extend(['mrr','utility'])
             utility_obs = pd.DataFrame(self.utility_dist, columns=util_names)
-            utility_obs.to_csv( os.path.join(self.save_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}.csv'))
+            utility_obs.to_csv( os.path.join(self.sim_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}.csv'))
             utility_desc=pd.DataFrame(utility_obs.describe())
-            utility_desc.to_csv( os.path.join(self.save_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}_summary.csv'))
+            utility_desc.to_csv( os.path.join(self.sim_path,f'utility_contribs_{datetime.strftime(month_date,"%Y%m%d")}_summary.csv'))
 
     def add_customer_to_database(self,customer):
         """
@@ -297,7 +305,7 @@ class ChurnSimulation:
 
             db.run(sql)
         else:
-            account_master_file = os.path.join(self.save_path,f'{self.model_name}_account.csv')
+            account_master_file = os.path.join(self.sim_path,f'{self.model_name}_account.csv')
             with open(account_master_file, "a") as amf:
                 amf.write(f"{customer.id},{customer.channel},{customer.date_of_birth.isoformat()},{customer.country}\n")
 
@@ -316,8 +324,8 @@ class ChurnSimulation:
         else:
             if file_date is None:
                 raise ValueError(f"Must call customer_events_subs_to_database with a date to write files")
-            sub_file_name = os.path.join(self.save_path,f'{self.model_name}_subscriptions_{file_date}.csv')
-            event_file_name = os.path.join(self.save_path,f'{self.model_name}_events_{file_date}.csv')
+            sub_file_name = os.path.join(self.sim_path,f'{self.model_name}_subscriptions_{file_date}.csv')
+            event_file_name = os.path.join(self.sim_path,f'{self.model_name}_events_{file_date}.csv')
             file_access_mode = 'a'
 
         if len(customer.subscriptions)>0:
@@ -395,7 +403,7 @@ class ChurnSimulation:
 
 
     def delete_live_sim_local_files(self,file_pattern):
-        files_to_delete = glob.glob(os.path.join(self.save_path, f'{self.model_name}_{file_pattern}'))
+        files_to_delete = glob.glob(os.path.join(self.sim_path, f'{self.model_name}_{file_pattern}'))
         for file in files_to_delete:
             os.remove(file)
 
@@ -452,8 +460,8 @@ class ChurnSimulation:
         :param todays_date:
         :return:
         """
-        live_sim_file = os.path.join(self.save_path,f'{self.model_name}_livesim_customers.joblib')
-        Customer.ID_FILE = os.path.join(self.save_path,f'{self.model_name}_customer_id.txt')
+        live_sim_file = os.path.join(self.sim_path,f'{self.model_name}_livesim_customers.joblib')
+        Customer.ID_FILE = os.path.join(self.sim_path,f'{self.model_name}_customer_id.txt')
         print(f"Using Custom ID File {Customer.ID_FILE}")
         # Load an existing simulation
         if os.path.exists(live_sim_file):
@@ -464,7 +472,7 @@ class ChurnSimulation:
             self.start_date = sim_data['start_date']  #  Reset class start_date, overriding the config
             todays_date = last_date + timedelta(days=1)
             print(f"Loaded {len(customers)} with last date {last_date}, running for {todays_date}")
-            account_master_file = os.path.join(self.save_path,f'{self.model_name}_account.csv')
+            account_master_file = os.path.join(self.sim_path,f'{self.model_name}_account.csv')
             # If the old account sim file was deleted, recreate the csv
             if not os.path.exists(account_master_file):
                 for c in customers:
@@ -512,11 +520,11 @@ class ChurnSimulation:
                 retained_customers.append(customer)
 
         if self.live_sim_type == 'parquet':
-            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_events_*.csv'),
+            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.sim_path,f'{self.model_name}_events_*.csv'),
                                                     column_names=['account_id','event_time', 'event_id', 'event_value','user_id'])
-            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_subscriptions_*.csv'),
+            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.sim_path,f'{self.model_name}_subscriptions_*.csv'),
                                                     column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'bill_period_mths', 'discount'])
-            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.save_path,f'{self.model_name}_account.csv'),
+            ChurnSimulation.convert_csvs_to_parquet(os.path.join(self.sim_path,f'{self.model_name}_account.csv'),
                                                     column_names=['account_id','channel','date_of_birth','geography'],
                                                     force=True)
             self.delete_live_sim_local_files('account.csv')
@@ -531,6 +539,54 @@ class ChurnSimulation:
         print(f"Saving live sim file {live_sim_file} with {len(retained_customers)} customers")
         joblib.dump(sim_data, live_sim_file)
         print(f"Finished churn sim live update {todays_date}")
+
+        if self.save_path.startswith("s3"):
+            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.parquet", s3_prefix=self.model_name)
+            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.csv",s3_prefix=self.model_name)
+            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.joblib",s3_prefix=self.model_name)
+            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.yaml",s3_prefix=self.model_name)
+            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.txt",s3_prefix=self.model_name)
+
+    @staticmethod
+    def upload_files_to_s3(local_directory, s3_uri, file_pattern, s3_prefix=''):
+        """
+        Copies files from a local directory to an S3 bucket if their names match a given pattern.
+
+        Args:
+            local_directory (str): The path to the local directory containing the files.
+            bucket_name (str): The name of the S3 bucket to upload to.
+            file_pattern (str): The Unix shell-style wildcard pattern (e.g., '*.txt', 'data_*.csv').
+            s3_prefix (str, optional): The S3 prefix (folder path) where the files should be uploaded.
+                                        Defaults to an empty string (root of the bucket).
+        """
+        s3_client = boto3.client('s3')
+
+        parsed_uri = urlparse(s3_uri)
+        if parsed_uri.scheme != 's3':
+            raise ValueError(f"Invalid S3 URI scheme: {parsed_uri.scheme}. Expected 's3://'")
+        bucket_name = parsed_uri.netloc
+        s3_object_key = parsed_uri.path.lstrip('/')  # Remove leading slash if present
+        if not bucket_name:
+            raise ValueError("S3 URI must specify a bucket name (e.g., 's3://my-bucket/')")
+
+        uploaded_count = 0
+
+        print(f"Scanning local directory: {local_directory}")
+        print(f"Looking for files matching pattern: '{file_pattern}'")
+
+        try:
+            for entry_name in os.listdir(local_directory):
+                if fnmatch.fnmatch(entry_name, file_pattern):
+                    local_file_path = os.path.join(local_directory, entry_name)
+                    s3_object_key = os.path.join(s3_prefix, entry_name).replace(os.sep, '/')
+                    print(f"Uploading '{local_file_path}' to 's3://{bucket_name}/{s3_object_key}'...")
+                    s3_client.upload_file(local_file_path, bucket_name, s3_object_key)
+                    print(f"Successfully uploaded: {entry_name}")
+                    uploaded_count += 1
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+        print(f"\nFinished. Uploaded {uploaded_count} files matching the pattern {file_pattern}")
 
 
     @staticmethod
