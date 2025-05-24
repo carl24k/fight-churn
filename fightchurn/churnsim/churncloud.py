@@ -1,5 +1,6 @@
 import boto3
 import fnmatch
+import glob
 import os
 
 from botocore.exceptions import ClientError
@@ -95,3 +96,45 @@ def download_cloud_file_if_exists(s3_file_path, local_file_path):
         # Handle other potential errors (e.g., local file system issues)
         print(f"An unexpected error occurred: {e}")
         raise
+
+
+def convert_csvs_to_parquet(pattern:str, column_names:list[str], force:bool=False):
+    """
+    Convert all CSV files matching the given regex pattern to Parquet format,
+    but only if a corresponding Parquet file doesn't already exist.
+    Assumes CSV files have no headers.
+
+    Args:
+        pattern (str): Regular expression pattern to match CSV files
+    """
+    # Find all CSV files matching the pattern
+    csv_files = []
+    for file in glob.glob(pattern):
+        csv_files.append(file)
+
+    if not csv_files:
+        print(f"No CSV files found matching pattern: {pattern}")
+        return
+
+    # Process each matching CSV file
+    for csv_file in csv_files:
+        # Define the expected Parquet file name
+        parquet_file = os.path.splitext(csv_file)[0] + ".parquet"
+
+        # Skip if Parquet file already exists
+        if os.path.exists(parquet_file) and not force:
+            continue
+
+        # Convert CSV to Parquet
+        try:
+            # Read CSV without header
+            df = pd.read_csv(csv_file, header=None, names=column_names)
+
+            # Write to Parquet
+            df.to_parquet(parquet_file, engine='pyarrow',
+                            index=False,
+                            compression='snappy' )
+            print(f"Successfully converted {csv_file} to {parquet_file}")
+
+        except Exception as e:
+            print(f"Error converting {csv_file}: {str(e)}")
