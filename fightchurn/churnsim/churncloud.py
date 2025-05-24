@@ -2,6 +2,7 @@ import boto3
 import fnmatch
 import glob
 import os
+import pandas as pd
 
 from botocore.exceptions import ClientError
 from urllib.parse import urlparse

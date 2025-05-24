@@ -101,13 +101,11 @@ class NormalBehaviorModel(BehaviorModel):
         if corr_scale:
             self.scale_correlation_to_covariance()
 
-        # Save to a csv
-        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
-        os.makedirs(save_path, exist_ok=True)
-        copy_path = os.path.join(save_path,  f'{name}_{version}_simulation_model.csv')
-        copyfile(model_path, copy_path)
-
         # For debugging
+        # save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        # os.makedirs(save_path, exist_ok=True)
+        # copy_path = os.path.join(save_path,  f'{name}_{version}_simulation_model.csv')
+        # copyfile(model_path, copy_path)
         # np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
         # std_ = np.sqrt(np.diag(self.behave_cov))
         # corr = self.behave_cov / np.outer(std_, std_)

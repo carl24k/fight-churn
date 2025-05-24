@@ -53,12 +53,13 @@ class UtilityModel:
         self.expected_contributions = None
         self.avg_n_user = 0
 
-        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
-        os.makedirs(save_path, exist_ok=True)
-        copy_path = os.path.join(save_path,  f'{name}_utility.csv')
-        self.util_df.to_csv(copy_path)
-        copy_path = os.path.join(save_path,  f'{name}_updownchurn.csv')
-        self.transition_df.to_csv(copy_path)
+        # For debugging
+        # save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        # os.makedirs(save_path, exist_ok=True)
+        # copy_path = os.path.join(save_path,  f'{name}_utility.csv')
+        # self.util_df.to_csv(copy_path)
+        # copy_path = os.path.join(save_path,  f'{name}_updownchurn.csv')
+        # self.transition_df.to_csv(copy_path)
 
     def setExpectations(self, chan_mod_dict, model_weights):
         """
