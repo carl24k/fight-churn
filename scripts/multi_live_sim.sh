@@ -2,7 +2,7 @@
 
 CONF=socialnet7
 CHURN_ROOT="Documents/churn"
-CHURN_OUT_DIR="$HOME/Documents/churn/fight-churn-output"
+CHURN_OUT_DIR="s3://gold-churn"
 
 PYTHONPATH="$PYTHONPATH:$HOME/$CHURN_ROOT/fight-churn/fightchurn:"\
 "$HOME/$CHURN_ROOT/fight-churn/fightchurn/churnsim:"\
@@ -17,11 +17,10 @@ export CHURN_OUT_DIR
 export PYTHONPATH
 
 cd "$HOME/$CHURN_ROOT/fight-churn/fightchurn/churnsim/" || exit 1
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-python churnsim.py --config-name=$CONF live_sim=True save_files=True
-
+python churnsim.py --config-name=$CONF live_sim=parquet
+python churnsim.py --config-name=$CONF live_sim=parquet
+python churnsim.py --config-name=$CONF live_sim=parquet
+python churnsim.py --config-name=$CONF live_sim=parquet
+python churnsim.py --config-name=$CONF live_sim=parquet
+python churnsim.py --config-name=$CONF live_sim=parquet
+python churnsim.py --config-name=$CONF live_sim=parquet
