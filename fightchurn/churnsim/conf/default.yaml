@@ -5,8 +5,7 @@ n_parallel: 1
 random_seed: null
 
 # For live simulation of data pipelines
-live_sim: False
-save_files: False
+live_sim: null
 
 # Number of customers, growth and churn
 init_customers: 10000
