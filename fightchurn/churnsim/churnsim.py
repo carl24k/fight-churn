@@ -43,6 +43,15 @@ class ChurnSimulation:
         - Section 3.4.2 Product Channels
         - Section 3.4.5 Customer Location
 
+        Notes regarding live simulations and save data:
+        live_sim_type agument is None if not live, or else 'csv' or 'parquet' to save data day bay in the type of file
+        save_path is an argument which could be a local directory, or a cloud storage URI. If its clouds storage,
+            then the results like simulation files will be saved to cloud storage on a live simulation.
+            # TODO Add support for GCP, Azure - currently only supporting Amazon s3
+        sim_path is a local path where any local results will be saved. If its not a live simulation, these are just
+            some debugging files. But if is a live simulation, then these are the output files. If the save_path is
+            cloud storage, then the files at the sim_path will be copied to the cloud storage save_path at the end.
+
         :param model: name of the behavior/utility model parameters
         :param start: start date for simulation
         :param end: end date for simulation
@@ -294,7 +303,7 @@ class ChurnSimulation:
 
     def add_customer_to_database(self,customer):
         """
-        Add a single customer to the database
+        Add a single customer to the database. If its a live simulation, it append to the account csv file.
         :param customer:
         :return:
         """
@@ -314,7 +323,11 @@ class ChurnSimulation:
 
     def customer_events_subs_to_database(self, customer, file_date=None):
         '''
-        Copy one customers data to the database, by first writing it to temp files and then using the sql COPY command
+        Write one customers data to the database
+
+        If it is a standard simulation, first write it to temp files and then using the sql COPY command.
+        If it is a live simulation, the customers data is added to the csv files which are not permanent.
+
         :param customer: a Customer object that has already had its simulation run
         :return:
         '''
@@ -342,7 +355,7 @@ class ChurnSimulation:
                 for e in customer.events:
                     tmp_file.write(f'{customer.id},{e[0]},{e[1]},{e[2]},{e[3] if e[3] is not None else "NULL"}\n') # event time, event type id, user id, value
 
-
+        # For standard simulation, but not live, copy the data into the Postgres database
         if self.live_sim_type is None:
             con = post.connect( database= os.environ['CHURN_DB'],
                                      user= os.environ['CHURN_DB_USER'],
@@ -389,6 +402,15 @@ class ChurnSimulation:
 
 
     def first_sim_setup(self,force):
+        """
+        Some cleanup of past simulation runs.
+
+        For standard simulation, truncate the database, remove temp files, and insert the event types.
+        For a live simulation, cleanup any local files from past runs.
+
+        :param force:
+        :return:
+        """
         if self.live_sim_type is None:
             # database setup
             if not self.truncate_old_sim(force):
@@ -457,7 +479,8 @@ class ChurnSimulation:
         are loaded - it must be the file from yesterday or an error is raised. If no file, a new file will be created.
         Customers are created and added to the database one by one, and new events for the customers are generated
         for today's date, added to the customer's monthly count variable, and saved to the database. If a customer
-        passes their month end date, it does the month end routine on that customer.
+        passes their month end date, it does the month end routine on that customer. At the end of the simulation,
+        options to convert to parquet and upload to cloud storage are executed out.
 
         :param todays_date:
         :return:
