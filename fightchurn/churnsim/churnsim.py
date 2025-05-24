@@ -1,7 +1,5 @@
-import boto3
 import hydra
 import glob
-import fnmatch
 import joblib
 import random
 import numpy as np
@@ -11,7 +9,6 @@ import psycopg2 as post
 import re
 import tempfile
 
-from botocore.exceptions import ClientError
 from datetime import timedelta, datetime
 from dateutil import parser
 from dateutil.relativedelta import *
@@ -21,10 +18,10 @@ from math import ceil
 from omegaconf import DictConfig, OmegaConf
 from postgres import Postgres
 from shutil import copyfile
-from urllib.parse import urlparse
 
 from fightchurn.churnsim.behavior import LogNormalBehaviorModel
 from fightchurn.churnsim.churndb import drop_schema, setup_churn_db
+from fightchurn.churnsim.churncloud import upload_files_to_cloud_storage, download_cloud_file_if_exists
 from fightchurn.churnsim.utility import UtilityModel
 from fightchurn.churnsim.customer import  Customer
 
@@ -467,9 +464,9 @@ class ChurnSimulation:
         # check if there are files on s3 and download them for local use
         if self.save_path.startswith('s3'):
             s3_sim_file = os.path.join(self.save_path,f'{self.model_name}_livesim_customers.joblib')
-            ChurnSimulation.download_s3_file_if_exists(s3_sim_file, live_sim_file)
+            download_cloud_file_if_exists(s3_sim_file, live_sim_file)
             s3_id_file = os.path.join(self.save_path,f'{self.model_name}_customer_id.txt')
-            ChurnSimulation.download_s3_file_if_exists(s3_id_file, Customer.ID_FILE)
+            download_cloud_file_if_exists(s3_id_file, Customer.ID_FILE)
 
         # Load an existing simulation
         if os.path.exists(live_sim_file):
@@ -549,113 +546,20 @@ class ChurnSimulation:
         print(f"Finished churn sim live update {todays_date}")
 
         if self.save_path.startswith("s3"):
-            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.parquet", s3_prefix=self.model_name)
-            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.csv",s3_prefix=self.model_name)
-            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.joblib",s3_prefix=self.model_name)
-            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.yaml",s3_prefix=self.model_name)
-            ChurnSimulation.upload_files_to_s3(self.sim_path,s3_uri=self.save_path, file_pattern=f"{self.model_name}*.txt",s3_prefix=self.model_name)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.parquet", s3_prefix=self.model_name)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.csv", s3_prefix=self.model_name)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.joblib", s3_prefix=self.model_name)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.yaml", s3_prefix=self.model_name)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.txt", s3_prefix=self.model_name)
             self.delete_live_sim_local_files('*.parquet')
             self.delete_live_sim_local_files('*.csv')
             self.delete_live_sim_local_files('*.joblib')
             self.delete_live_sim_local_files('*.yaml')
             self.delete_live_sim_local_files('*.txt')
 
-    @staticmethod
-    def download_s3_file_if_exists(s3_file_path, local_file_path):
-        """
-        Downloads a file from an S3 bucket to a local path if it exists.
-
-        Args:
-            bucket_name (str): The name of the S3 bucket.
-            s3_file_key (str): The full path (key) of the file in the S3 bucket.
-            local_file_path (str): The local path where the file should be saved.
-
-        Returns:
-            str or None: The local_file_path if the file was downloaded successfully,
-                         None if the file does not exist in the S3 bucket.
-                         Raises other ClientError exceptions for other issues.
-        """
-        s3_client = boto3.client('s3')
-
-        parsed_uri = urlparse(s3_file_path)
-
-        if parsed_uri.scheme != 's3':
-            raise ValueError(f"Invalid S3 URI scheme: Expected 's3', got '{parsed_uri.scheme}'")
-        if not parsed_uri.netloc:
-            raise ValueError("Invalid S3 URI: Bucket name is missing.")
-
-        bucket_name = parsed_uri.netloc
-        # The path will have a leading '/', so we remove it
-        object_key = parsed_uri.path.lstrip('/')
-
-        try:
-            # First, check if the file exists using head_object
-            s3_client.head_object(Bucket=bucket_name, Key=object_key)
-
-            # If head_object doesn't raise a 404, the file exists, so proceed to download
-            s3_client.download_file(bucket_name, object_key, local_file_path)
-            print(f"Successfully downloaded '{object_key}' to '{local_file_path}'")
-            return local_file_path
-
-        except ClientError as e:
-            error_code = e.response['Error']['Code']
-            if error_code == '404':
-                print(f"File '{object_key}' does not exist in bucket '{bucket_name}'.")
-                return None  # File not found
-            else:
-                # Handle other AWS-related errors (e.g., permissions, invalid bucket name)
-                print(f"An AWS error occurred while trying to download '{object_key}': {e}")
-                raise  # Re-raise the exception for other critical errors
-        except Exception as e:
-            # Handle other potential errors (e.g., local file system issues)
-            print(f"An unexpected error occurred: {e}")
-            raise
 
 
 
-    @staticmethod
-    def upload_files_to_s3(local_directory, s3_uri, file_pattern, s3_prefix=''):
-        """
-        Copies files from a local directory to an S3 bucket if their names match a given pattern.
-
-        Args:
-            local_directory (str): The path to the local directory containing the files.
-            bucket_name (str): The name of the S3 bucket to upload to.
-            file_pattern (str): The Unix shell-style wildcard pattern (e.g., '*.txt', 'data_*.csv').
-            s3_prefix (str, optional): The S3 prefix (folder path) where the files should be uploaded.
-                                        Defaults to an empty string (root of the bucket).
-        """
-        s3_client = boto3.client('s3')
-
-        parsed_uri = urlparse(s3_uri)
-        if parsed_uri.scheme != 's3':
-            raise ValueError(f"Invalid S3 URI scheme: {parsed_uri.scheme}. Expected 's3://'")
-        bucket_name = parsed_uri.netloc
-        s3_object_key = parsed_uri.path.lstrip('/')  # Remove leading slash if present
-        if not bucket_name:
-            raise ValueError("S3 URI must specify a bucket name (e.g., 's3://my-bucket/')")
-
-        uploaded_count = 0
-
-        print(f"Scanning local directory: {local_directory}")
-        print(f"Looking for files matching pattern: '{file_pattern}'")
-
-        try:
-            for entry_name in os.listdir(local_directory):
-                if fnmatch.fnmatch(entry_name, file_pattern):
-                    local_file_path = os.path.join(local_directory, entry_name)
-                    s3_object_key = os.path.join(s3_prefix, entry_name).replace(os.sep, '/')
-                    print(f"Uploading '{local_file_path}' to 's3://{bucket_name}/{s3_object_key}'...")
-                    s3_client.upload_file(local_file_path, bucket_name, s3_object_key)
-                    print(f"Successfully uploaded: {entry_name}")
-                    uploaded_count += 1
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-        print(f"\nFinished. Uploaded {uploaded_count} files matching the pattern {file_pattern}")
-
-
-    @staticmethod
     def convert_csvs_to_parquet(pattern:str, column_names:list[str], force:bool=False):
         """
         Convert all CSV files matching the given regex pattern to Parquet format,
