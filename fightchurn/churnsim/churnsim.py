@@ -88,7 +88,7 @@ class ChurnSimulation:
 
         local_dir = os.path.join(f'{os.path.abspath(os.path.dirname(__file__))}','conf')
 
-        self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name )
+        self.save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.model_name, "churnsim_data" )
         if not self.save_path.startswith("s3"):
             self.sim_path = self.save_path
             os.makedirs(self.save_path, exist_ok=True)
@@ -511,7 +511,7 @@ class ChurnSimulation:
                     self.add_customer_to_database(c)
         else:
             # Set the simulation start date to today
-            self.start_date = todays_date = datetime.today().date()
+            todays_date = self.start_date
             # Starting a simulation from scratch - first wipe the database
             self.first_sim_setup(force=True)
             customers = [None]*self.init_customers
@@ -573,11 +573,12 @@ class ChurnSimulation:
         print(f"Finished churn sim live update {todays_date}")
 
         if self.save_path.startswith("s3"):
-            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.parquet", s3_prefix=self.model_name)
-            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.csv", s3_prefix=self.model_name)
-            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.joblib", s3_prefix=self.model_name)
-            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.yaml", s3_prefix=self.model_name)
-            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.txt", s3_prefix=self.model_name)
+            prefix = os.path.join(self.model_name,"churnsim_data")
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.parquet", s3_prefix=prefix)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.csv", s3_prefix=prefix)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.joblib", s3_prefix=prefix)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.yaml", s3_prefix=prefix)
+            upload_files_to_cloud_storage(self.sim_path, s3_uri=self.save_path, file_pattern=f"{self.model_name}*.txt", s3_prefix=prefix)
             self.delete_live_sim_local_files('*.parquet')
             self.delete_live_sim_local_files('*.csv')
             self.delete_live_sim_local_files('*.joblib')
