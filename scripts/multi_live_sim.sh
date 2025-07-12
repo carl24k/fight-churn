@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Set which config to run
-CONF=crm6
+CONF=socialnet7
 # Set the number of repetitions
 NUM_REPEATS=7
 
