@@ -553,7 +553,7 @@ class ChurnSimulation:
 
         if self.live_sim_type == 'parquet':
             convert_csvs_to_parquet(os.path.join(self.sim_path,f'{self.model_name}_events_*.csv'),
-                                                    column_names=['account_id','event_time', 'event_id', 'event_value','user_id'])
+                                                    column_names=['account_id','event_time', 'event_id','user_id', 'event_value'])
             convert_csvs_to_parquet(os.path.join(self.sim_path,f'{self.model_name}_subscriptions_*.csv'),
                                                     column_names=['account_id','plan','start_date','end_date','mrr','quantity', 'units', 'bill_period_mths', 'discount'])
             convert_csvs_to_parquet(os.path.join(self.sim_path,f'{self.model_name}_account.csv'),
