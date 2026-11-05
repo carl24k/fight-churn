@@ -1,5 +1,6 @@
 defaults:
   - default
+  - _self_
 
 model: 'socialnet7'
 start_date: '2020-01-01'

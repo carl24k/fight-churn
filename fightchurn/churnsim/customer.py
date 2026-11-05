@@ -16,7 +16,7 @@ class Customer:
     ID_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id.txt')
     ID_LOCK_FILE = os.path.join(tempfile.gettempdir(), f'churn_customer_id_lock.txt')
 
-    def __init__(self,behavior_rates,start_of_month,args,channel_name='NA'):
+    def __init__(self, behavior_rates, start_date, args, channel_name='NA'):
         '''
         Creates a customer for simulation, given an ndarray of behavior rates, which are converted to daily.
         Each customer also has a unique integer id which will become the account_id in the database, and holds its
@@ -36,7 +36,7 @@ class Customer:
         - Section 3.5.7. Discounts
 
         :param behavior_rates: ndarray of behavior rates, which are assumed to be PER MONTH
-        :param start_of_month: The date of the month the customer starts
+        :param start_date: The date of the month the customer starts
         :param args: OmegaConf with the program args
         :param channel_name: string name of the channel this customers behavior was drawn from
         '''
@@ -65,7 +65,7 @@ class Customer:
 
         if 'users' in behavior_rates['behavior'].values:
             bidx= self.behavior_rates['behavior'] == 'users'
-            self.users = max(int( round(self.behavior_rates.loc[bidx,'monthly_rate'])),1)
+            self.users = max(int( round(self.behavior_rates.loc[bidx,'monthly_rate'].iloc[0])),1)
             self.behavior_rates = self.behavior_rates.drop(self.behavior_rates[bidx].index,axis=0)
         else:
             self.users = None
@@ -76,11 +76,12 @@ class Customer:
 
         age_range =self.args.max_age - self.args.min_age
         avg_age = age_range/2.0
-        if start_of_month:
+        if start_date:
+            self.start_date = start_date
             self.age=random.uniform(self.args.min_age,self.args.max_age)
-            self.date_of_birth = start_of_month + relativedelta.relativedelta(years=-int(self.age),
-                                                                              months=-int( (self.age % 1)*12 ),
-                                                                              days=-random.uniform(1,30))
+            self.date_of_birth = start_date + relativedelta.relativedelta(years=-int(self.age),
+                                                                          months=-int( (self.age % 1)*12 ),
+                                                                          days=-random.uniform(1,30))
         else:
             self.date_of_birth=None
             self.age = avg_age
@@ -100,10 +101,18 @@ class Customer:
                                                 random.uniform(-self.args.satisfy_scale, self.args.satisfy_scale) \
                                                 + self.age_satisfaction_coef )
 
+        # Member variables set by the simulation
         self.subscriptions=[]
         self.events=[]
         self.current_utility = None
         self.utility_contribs = None
+        self.event_counts = None # monthly event counts
+
+        self.next_renewal = None # next renewal date
+        self.churn_intent_count = 0  # churn intent count for multi-month billing churn
+        self.num_months = 0  # how many months this customer has been a customer
+        self.num_bill_periods = 1  # how many bill cycles the customer has been on this billing period
+        self.bill_period_start = self.start_date
 
     def get_behavior_rate(self,behavior):
         if behavior == 'users':
@@ -294,6 +303,12 @@ class Customer:
         return Customer.date_multipliers[the_date]
 
 
+    def reset_event_counts(self):
+        if self.users is None:
+            self.event_counts = [0] * len(self.behavior_rates)
+        else:
+            self.event_counts = [0] * (len(self.behavior_rates) + 1)  # Plus one for number of users
+
     def generate_events(self,start_date,end_date):
         '''
         Generate a sequence of events at the customers daily rates.  Each count for an event on a day is droing from
@@ -317,11 +332,9 @@ class Customer:
         delta = end_date - start_date
 
         events=[]
+        if self.event_counts is None:
+            self.reset_event_counts()
 
-        if self.users is None:
-            counts=[0]*len(self.behavior_rates)
-        else:
-            counts=[0]*(len(self.behavior_rates)+1) # Plus one for number of users
         limit_counts = {b : 0 for b in self.limits.keys()}
         for i in range(delta.days):
             the_date = start_date + timedelta(days=i)
@@ -349,19 +362,50 @@ class Customer:
                         user_id = randint(0, todays_users-1)
                     if row[1]['mean_value'] is not None:
                         event_value = round(np.exp(np.random.normal(np.log(row[1]['mean_value']) )),2)
-                        counts[row[0]] += event_value
+                        self.event_counts[row[0]] += event_value
                     else:
                         event_value = None
-                        counts[row[0]] += 1
+                        self.event_counts[row[0]] += 1
                     new_event=(event_time, row[0], user_id, event_value)
                     events.append(new_event )
 
             if self.users is not None:
-                counts[-1] += todays_users
+                self.event_counts[-1] += todays_users
 
         if self.users is not None:
-            counts[-1] = int(ceil( counts[-1]/delta.days)) # user count is returned as average, not total
+            self.event_counts[-1] = int(ceil( self.event_counts[-1]/delta.days)) # user count is returned as average, not total
 
         self.events.extend(events)
 
-        return counts
+        return self.event_counts
+
+    @staticmethod
+    def get_unit_quantity(plan, plans, add_ons):
+        if plan in plans.index.values:
+            if plans.shape[1] > 2:
+                limit_col = plans.columns.values[2]
+                return limit_col, plans.loc[plan, limit_col]
+
+        if len(add_ons) > 0 and plan in add_ons['plan'].values:
+            if add_ons.shape[1] > 3:
+                add_on = add_ons[add_ons['plan'] == plan]
+                for limit_col in add_ons.columns.values[3:]:
+                    if add_on[limit_col].values[0] > 0:
+                        return limit_col, add_on[limit_col].values[0]
+
+        return None, None
+
+    def add_subscriptions(self, start_date, plans, add_ons):
+        plan_units, plan_quantity = Customer.get_unit_quantity(self.plan , plans, add_ons)
+        self.subscriptions.append( (self.plan, start_date,
+                                            self.next_renewal,
+                                            self.base_mrr, plan_quantity, plan_units, self.bill_period, self.discount ))
+        for add_on in add_ons.iterrows():
+            add_units, add_quantity = Customer.get_unit_quantity(add_on[1]['plan'], plans, add_ons)
+            self.subscriptions.append( (add_on[1]['plan'],start_date, self.next_renewal, add_on[1]['mrr'],
+                                                add_quantity,add_units, self.bill_period, self.discount) )
+
+
+    def clear_history(self):
+        self.subscriptions=[]
+        self.events=[]
