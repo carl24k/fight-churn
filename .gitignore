@@ -4,3 +4,4 @@ venv/
 build**
 dist**
 fightchurn.egg-info**
+__pycache__/

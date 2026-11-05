@@ -1,5 +1,6 @@
 defaults:
   - default
+  - _self_
 
 model: 'crm5'
 start_date: '2022-01-01'

@@ -22,12 +22,12 @@ def find_groups_skip_cats(data_set_path,group_corr_thresh=0.5):
     n_bin = len(binary_cols)
     new_label_rows = pd.DataFrame(data=list(zip(range(n_non_bin,n_non_bin+n_bin),binary_cols)),
                                   columns=labeled_column_df.columns)
-    labeled_column_df = labeled_column_df.append(new_label_rows)
+    labeled_column_df = pd.concat([labeled_column_df, new_label_rows])
 
     for c in binary_cols:
         loadmat_df[c]=0.0
     new_mat_rows = pd.DataFrame(data=0.0,index=binary_cols,columns=loadmat_df.columns)
-    loadmat_df = loadmat_df.append(new_mat_rows)
+    loadmat_df = pd.concat([loadmat_df, new_mat_rows])
     for c in binary_cols:
         loadmat_df.at[c,c]=1.0
 
