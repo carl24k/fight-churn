@@ -25,11 +25,11 @@ def relabel_clusters(labels,metric_columns):
 def make_load_matrix(labeled_column_df,metric_columns,relabled_count,corr):
     load_mat = np.zeros((len(metric_columns), len(relabled_count)))
     for row in labeled_column_df.iterrows():
-        orig_col = metric_columns.index(row[1][1])
-        if relabled_count[row[1][0]]>1:
-            load_mat[orig_col, row[1][0]] = 1.0/  (np.sqrt(corr) * float(relabled_count[row[1][0]])  )
+        orig_col = metric_columns.index(row[1].iloc[1])
+        if relabled_count[row[1].iloc[0]]>1:
+            load_mat[orig_col, row[1].iloc[0]] = 1.0/  (np.sqrt(corr) * float(relabled_count[row[1].iloc[0]])  )
         else:
-            load_mat[orig_col, row[1][0]] = 1.0
+            load_mat[orig_col, row[1].iloc[0]] = 1.0
 
     is_group = load_mat.astype(bool).sum(axis=0) > 1
     column_names=['metric_group_{}'.format(d + 1) if is_group[d]

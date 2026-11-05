@@ -13,7 +13,7 @@ def backtest(data_set_path,n_test_split):
 
     tscv = TimeSeriesSplit(n_splits=n_test_split)
 
-    lift_scorer = make_scorer(calc_lift, needs_proba=True)
+    lift_scorer = make_scorer(calc_lift, response_method='predict_proba')
     score_models = {'lift': lift_scorer, 'AUC': 'roc_auc'}
 
     retain_reg = LogisticRegression(penalty='l1', solver='liblinear', fit_intercept=True)
