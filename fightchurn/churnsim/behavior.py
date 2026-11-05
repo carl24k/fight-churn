@@ -101,13 +101,11 @@ class NormalBehaviorModel(BehaviorModel):
         if corr_scale:
             self.scale_correlation_to_covariance()
 
-        # Save to a csv
-        save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
-        os.makedirs(save_path, exist_ok=True)
-        copy_path = os.path.join(save_path,  f'{name}_{version}_simulation_model.csv')
-        copyfile(model_path, copy_path)
-
         # For debugging
+        # save_path = os.path.join(os.getenv('CHURN_OUT_DIR') , self.name )
+        # os.makedirs(save_path, exist_ok=True)
+        # copy_path = os.path.join(save_path,  f'{name}_{version}_simulation_model.csv')
+        # copyfile(model_path, copy_path)
         # np.savetxt('../conf/'+name+ '_behavior_cov.csv', self.behave_cov,delimiter=',')
         # std_ = np.sqrt(np.diag(self.behave_cov))
         # corr = self.behave_cov / np.outer(std_, std_)
@@ -191,6 +189,6 @@ class LogNormalBehaviorModel(NormalBehaviorModel):
         if self.behave_maxs is not None:
             customer_rates = customer_rates.clip(max=self.behave_maxs).to_numpy()
         new_customer= Customer(pd.DataFrame({'behavior' : self.behave_names, 'monthly_rate': customer_rates}),
-                               start_of_month=start_of_month,args=args,channel_name=self.version)
+                               start_date=start_of_month, args=args, channel_name=self.version)
         # print(customer_rates)
         return new_customer
