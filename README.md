@@ -5,7 +5,17 @@
 
 <a name="top"/>
 
-## **_What's New_ : ChurnSim White Paper & Advanced Simulation (August 2023)**
+## **1. _What's New_ : Support for Python 3.9-3.12! (April 2025)**
+
+Fighting Churn With Data just got added support for Python 3.10, 3.11 and 3.12! This is in addition to the original supported python, 3.9.
+
+Python 3.13 is still not supported due to shap, which doesn't have precompiled wheels for Python 3.13 yet.
+
+Note: If you try to updgrade packages, you will need to run pip with `--force-reinstall` or you may get errors about numpy not being compiled with the current version.
+
+Please file issues if you notice problems with any supported python version, 3.9-3.12.
+
+## **2. _Not So New Anymore_ : ChurnSim White Paper & Advanced Simulation (August 2023)**
 
 ### New ChurnSim White Paper
 There is now a white paper describing the inner workings of the Fighting Churn 
@@ -30,7 +40,7 @@ crm5` to the `churnsim.py` command line, or  set the argument `schema='crm5'` to
 installation. The simulation will take an hour or so on a typical computer and produce around 
 30GB of data in your PostgreSQL database. See the Setup Instructions for more details.
 
-## What's This
+## 3. What is this repository?
 
 This is code for the book "***Fighting Churn With Data: Science and strategy for keeping your customers***"; the book serves as a detailed guide to the code.  You can get more information at:
 
@@ -43,7 +53,7 @@ This page contains the most up to date setup instructions.
 
 
 
-## **Setup Instructions**  
+## **4. Setup Instructions**  
 
 *WARNING TO PYPI USERS: None of the internal links in this document work on the pypi.org website! [To use the internal links in this README view it on github](https://github.com/carl24k/fight-churn).*
 
@@ -68,7 +78,7 @@ After the pre-requesisites, you have a choice on how to run the Fighting Churn W
   the code line by line in a debugger, or change it. (If you are a professional developer 
   planning to really use the code for your company, this is for you.)
 
-## Errata for the 1st Printing
+## 5. Errata for the 1st Printing
 
 This version of the README is for the the code released with the fightchurn pip package in 
 September 2021. In this version there have been some modifications to the paths described in the 

@@ -1,5 +1,6 @@
 defaults:
   - default
+  - _self_
 
 model: 'crm6'
 start_date: '2022-01-01'

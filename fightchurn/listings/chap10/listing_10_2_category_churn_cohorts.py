@@ -12,7 +12,7 @@ def category_churn_cohorts(data_set_path, cat_col):
 def prepare_category_data(data_set_path,cat_col):
     assert os.path.isfile(data_set_path),'"{}" is not a valid dataset path'.format(data_set_path)
     churn_data = pd.read_csv(data_set_path,index_col=[0,1])
-    churn_data[cat_col].fillna('-na-',inplace=True)
+    churn_data[cat_col] = churn_data[cat_col].fillna('-na-')
     return churn_data
 
 def category_churn_summary(churn_data, cat_col,data_set_path):
